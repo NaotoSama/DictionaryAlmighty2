@@ -1,0 +1,160 @@
+<resources>
+
+    <string-array name="EN_dictionary_providers_spinner_array">
+        <item>@string/Select_one_of_the_following</item>
+        <item>@string/Yahoo_Dictionary</item>
+        <item>@string/Cambridge_EN_CH</item>
+        <item>@string/Merriam_Webster</item>
+        <item>@string/Collins</item>
+        <item>@string/Oxford</item>
+        <item>@string/Vocabulary</item>
+        <item>@string/Dictionary</item>
+        <item>@string/The_Free_Dictionary</item>
+        <item>@string/Your_Dictionary</item>
+        <item>@string/Longman_Dictionary</item>
+        <item>@string/Dict_site</item>
+        <item>@string/Wiki_Dictionary</item>
+        <item>@string/Word_Hippo</item>
+        <item>@string/Onelook</item>
+        <item>@string/Business_Dictionary</item>
+        <item>@string/Automotive_Dictionary</item>
+        <item>@string/National_Academy_for_Educational_Research</item>
+        <item>@string/Slang</item>
+    </string-array>
+
+
+    <string-array name="JP_dictionary_providers_spinner_array">
+        <item>@string/Select_one_of_the_following</item>
+        <item>@string/Weblio_JP</item>
+        <item>@string/Weblio_CN</item>
+        <item>@string/Weblio_EN</item>
+        <item>@string/Weblio_Synonym</item>
+        <item>@string/Tangorin_Word</item>
+        <item>@string/Tangorin_Kanji</item>
+        <item>@string/Tangorin_Names</item>
+        <item>@string/Tangorin_Sentence</item>
+        <item>@string/Sanseido</item>
+        <item>@string/Kotoba_Bank</item>
+        <item>@string/Japanese_Industry_Terms</item>
+        <item>@string/Kanji_Dictionary_Online</item>
+        <item>@string/Eijirou</item>
+        <item>@string/How_do_you_say_this_in_English</item>
+        <item>@string/goo</item>
+        <item>@string/Jisho</item>
+        <item>@string/J_Logos</item>
+
+    </string-array>
+
+
+    <string-array name="Google_word_searcher_spinner_array">
+        <item>@string/Select_one_of_the_following</item>
+        <item>@string/Word_Plus_Chinese</item>
+        <item>@string/Word_Plus_English1</item>
+        <item>@string/Word_Plus_English2</item>
+        <item>@string/Word_Plus_Translation</item>
+        <item>@string/Word_Plus_Japanese1</item>
+        <item>@string/Word_Plus_Japanese2</item>
+        <item>@string/Word_Plus_Japanese3</item>
+        <item>@string/Word_Plus_Meaning1</item>
+        <item>@string/Word_Plus_Meaning2</item>
+    </string-array>
+
+
+    <string-array name="Sentence_searcher_spinner_array">
+        <item>@string/Select_one_of_the_following</item>
+        <item>@string/Ludwig</item>
+        <item>@string/Your_Dictionary_Example_Sentences</item>
+        <item>@string/Word_Cool_EN_CH</item>
+        <item>@string/Word_Cool_EN_JP</item>
+        <item>@string/Word_Cool_JP_CH</item>
+    </string-array>
+
+
+    <string-array name="Miscellaneous_searcher_spinner_array">
+        <item>@string/Select_one_of_the_following</item>
+        <item>@string/Wikipedia</item>
+        <item>@string/Forvo</item>
+        <item>@string/Wiki_Diff</item>
+        <item>@string/Net_Speak</item>
+        <item>@string/Yomikata</item>
+        <item>@string/Chigai</item>
+        <item>@string/OJAD</item>
+        <item>@string/Google_TW_CN</item>
+        <item>@string/Google_CN_TW</item>
+        <item>@string/Google_Image</item>
+    </string-array>
+
+
+    <string name="Yahoo_Dictionary">Yahoo Dictionary</string>
+    <string name="Cambridge_EN_CH">Cambridge EN-CH</string>
+    <string name="Merriam_Webster">Merriam Webster</string>
+    <string name="Collins">Collins</string>
+    <string name="Oxford">Oxford</string>
+    <string name="Vocabulary">Vocabulary</string>
+    <string name="Dictionary">Dictionary</string>
+    <string name="The_Free_Dictionary">The Free Dictionary</string>
+    <string name="Your_Dictionary">Your Dictionary</string>
+    <string name="Longman_Dictionary">Longman Dictionary</string>
+    <string name="Dict_site">Dict.site</string>
+    <string name="Business_Dictionary">Business Dictionary</string>
+    <string name="Automotive_Dictionary">Automotive Dictionary</string>
+    <string name="National_Academy_for_Educational_Research">National Academy for Educational Research</string>
+    <string name="Slang">俚語網</string>
+    <string name="Weblio_JP">Weblio JP</string>
+    <string name="Weblio_CN">Weblio CN</string>
+    <string name="Weblio_EN">Weblio EN</string>
+    <string name="Sanseido">三省堂</string>
+    <string name="Japanese_Industry_Terms">訳語翻訳--専門産業</string>
+    <string name="Kanji_Dictionary_Online">漢字辞典オンライン</string>
+    <string name="Eijirou">英辞郎</string>
+    <string name="How_do_you_say_this_in_English">英語でなんて言うの？</string>
+    <string name="Word_Plus_Chinese">Word + 中文</string>
+    <string name="Word_Plus_English1">Word + 英文</string>
+    <string name="Word_Plus_English2">Word + 英語</string>
+    <string name="Word_Plus_Translation">Word + 翻譯</string>
+    <string name="Word_Plus_Japanese1">Word + 日文</string>
+    <string name="Word_Plus_Japanese2">Word + 日語</string>
+    <string name="Word_Plus_Japanese3">Word + 日本語</string>
+    <string name="Word_Plus_Meaning1">Word + 意思</string>
+    <string name="Word_Plus_Meaning2">Word + meaning</string>
+    <string name="Ludwig">Ludwig</string>
+    <string name="Your_Dictionary_Example_Sentences">Your Dictionary Example Sentences</string>
+    <string name="Word_Cool_EN_CH">Word Cool EN_CH</string>
+    <string name="Word_Cool_EN_JP">Word Cool EN_JP</string>
+    <string name="Word_Cool_JP_CH">Word Cool JP_CH</string>
+    <string name="Wikipedia">Wikipedia</string>
+    <string name="Forvo">Forvo</string>
+    <string name="Wiki_Diff">Wiki Diff</string>
+    <string name="Net_Speak">Net Speak</string>
+    <string name="Yomikata">読み方は？</string>
+    <string name="Chigai">違いは？</string>
+    <string name="OJAD">OJAD鈴木君</string>
+    <string name="Google_TW_CN">Google繁體轉簡體</string>
+    <string name="Google_CN_TW">Google簡體轉繁體</string>
+    <string name="Google_Image">Google Image</string>
+    <string name="Word_Input">Word Input</string>
+    <string name="Select_EN_Dictionary_Provider">Select EN Dictionary Provider</string>
+    <string name="Select_JP_Dictionary_Provider">Select JP Dictionary Provider</string>
+    <string name="Select_Google_Word_Searcher">Select Google Word Searcher</string>
+    <string name="Select_Sentence_Searcher">Select Sentence Searcher</string>
+    <string name="Miscellaneous">Miscellaneous</string>
+    <string name="Click_To_Scroll">Click to scroll</string>
+    <string name="Search">Search</string>
+    <string name="Put_in_your_search_keyword_here">Put in your search keyword here</string>
+    <string name="app_name">Dictionary Almighty 2</string>
+    <string name="Tangorin_Word">Tangorin Word</string>
+    <string name="Tangorin_Kanji">Tangorin Kanji</string>
+    <string name="Tangorin_Names">Tangorin Names</string>
+    <string name="Tangorin_Sentence">Tangorin Sentence</string>
+    <string name="Kotoba_Bank">Kotoba Bank</string>
+    <string name="Wiki_Dictionary">Wiki Dictionary</string>
+    <string name="Onelook">Onelook</string>
+    <string name="Word_Hippo">Word Hippo</string>
+    <string name="Weblio_Synonym">Weblio Synonym</string>
+    <string name="Jisho">Jisho</string>
+    <string name="goo">Goo Dictionary</string>
+    <string name="Select_one_of_the_following">Select one of the following</string>
+    <string name="J_Logos">J Logos</string>
+
+
+</resources>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <EditText
+        android:id="@+id/Word_Input_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/Word_Input"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
+
+
+    <TextView
+        android:id="@+id/Select_EN_Dictionary_Provider_View"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/Select_EN_Dictionary_Provider"
+        app:layout_constraintStart_toStartOf="@+id/Word_Input_View"
+        app:layout_constraintTop_toBottomOf="@+id/Word_Input_View" />
+
+
+    <TextView
+        android:id="@+id/Select_JP_Dictionary_Provider_View"
+        android:layout_width="188dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Select_JP_Dictionary_Provider"
+        app:layout_constraintStart_toStartOf="@+id/Select_EN_Dictionary_Provider_View"
+        app:layout_constraintTop_toBottomOf="@+id/Select_EN_Dictionary_Provider_View" />
+
+    <TextView
+        android:id="@+id/Select_Sentence_Searcher_View"
+        android:layout_width="188dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Select_Sentence_Searcher"
+        app:layout_constraintStart_toStartOf="@+id/Select_Google_Word_Searcher_View"
+        app:layout_constraintTop_toBottomOf="@+id/Select_Google_Word_Searcher_View" />
+
+
+    <TextView
+        android:id="@+id/Select_Google_Word_Searcher_View"
+        android:layout_width="188dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Select_Google_Word_Searcher"
+        app:layout_constraintStart_toStartOf="@+id/Select_JP_Dictionary_Provider_View"
+        app:layout_constraintTop_toBottomOf="@+id/Select_JP_Dictionary_Provider_View" />
+
+
+    <TextView
+        android:id="@+id/Miscellaneous_View"
+        android:layout_width="188dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Miscellaneous"
+        app:layout_constraintStart_toStartOf="@+id/Select_Sentence_Searcher_View"
+        app:layout_constraintTop_toBottomOf="@+id/Select_Sentence_Searcher_View" />
+
+
+    <Spinner
+        android:id="@+id/EN_dictionary_providers_spinner"
+        android:layout_width="162dp"
+        android:layout_height="23dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Select_EN_Dictionary_Provider_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View" />
+
+
+    <Spinner
+        android:id="@+id/JP_dictionary_providers_spinner"
+        android:layout_width="157dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Select_JP_Dictionary_Provider_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View" />
+
+
+    <Spinner
+        android:id="@+id/Sentence_searcher_spinner"
+        android:layout_width="157dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Select_Sentence_Searcher_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View" />
+
+
+    <Spinner
+        android:id="@+id/Google_word_searcher_spinner"
+        android:layout_width="157dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Select_Google_Word_Searcher_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View" />
+
+
+    <Spinner
+        android:id="@+id/Miscellaneous_searcher_spinner"
+        android:layout_width="157dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/Miscellaneous_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View" />
+
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:max="50"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+    <WebView
+        android:id="@+id/webview_browser"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/progressBar"
+        app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View"
+        tools:layout_editor_absoluteX="30dp" />
+
+
+</android.support.constraint.ConstraintLayout>
