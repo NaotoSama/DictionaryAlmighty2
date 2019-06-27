@@ -20,6 +20,8 @@
         <item>@string/Automotive_Dictionary</item>
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Slang</item>
+        <item>@string/VoiceTube</item>
+        <item>@string/YouGlish</item>
     </string-array>
 
 
@@ -155,6 +157,10 @@
     <string name="goo">Goo Dictionary</string>
     <string name="Select_one_of_the_following">Select one of the following</string>
     <string name="J_Logos">J Logos</string>
+    <string name="Search_Result_Display">Search result will be displayed here</string>
+    <string name="VoiceTube">VoiceTube</string>
+    <string name="YouGlish">YouGlish</string>
+    <string name="Exit_app">Exit App</string>
 
 
 </resources>

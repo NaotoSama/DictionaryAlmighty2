@@ -70,4 +70,8 @@
     <string name="Word_Cool_JP_CH">句酷 日中中日</string>
     <string name="Select_one_of_the_following">請選擇一項</string>
     <string name="J_Logos">J Logos</string>
+    <string name="Search_Result_Display">搜尋結果將顯示於此</string>
+    <string name="VoiceTube">VoiceTube英漢字典</string>
+    <string name="YouGlish">YouGlish</string>
+    <string name="Exit_app">退出程式</string>
 </resources>
