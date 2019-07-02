@@ -69,9 +69,14 @@
     <string name="Tangorin_Sentence">單語林--句子</string>
     <string name="Word_Cool_JP_CH">句酷 日中中日</string>
     <string name="Select_one_of_the_following">請選擇一項</string>
-    <string name="J_Logos">J Logos</string>
+    <string name="J_Logos">J Logos日文字典</string>
     <string name="Search_Result_Display">搜尋結果將顯示於此</string>
     <string name="VoiceTube">VoiceTube英漢字典</string>
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">退出程式</string>
+    <string name="Change_background">更換背景</string>
+    <string name="External_storage_permission">必須允許存取照片的權限才可更換背景圖</string>
+    <string name="SCI_Dictionary">SCI學術字典</string>
+    <string name="DA_JP_TW_Dictionary">DA日中字典</string>
+    <string name="DA_TW_JP_Dictionary">DA中日字典</string>
 </resources>

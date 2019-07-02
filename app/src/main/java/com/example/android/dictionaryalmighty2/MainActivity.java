@@ -1,9 +1,21 @@
 package com.example.android.dictionaryalmighty2;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,45 +30,88 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+import pl.droidsonroids.gif.GifImageView;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText wordInputView;
-    String searchKeyword;
-    WebView webViewBrowser;
-    ProgressBar progressBar;
+    GifImageView gifImageView; //用來準備給用戶更換背景圖
+    EditText wordInputView;    //關鍵字輸入框
+    String searchKeyword;      //用戶輸入的關鍵字
+    WebView webViewBrowser;    //網頁框
+    ProgressBar progressBar;   //網頁載入的進度條
     TextView searchResultWillBeDisplayedHere;
-    ImageView exitApp;
+    ImageView exitApp;         //退出程式鈕
+    ImageView changeBackground;//更換背景鈕
+    private static int RESULT_LOAD_IMAGE = 1;
+    private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
+    String LOG_TAG;  //Log tag for the external storage permission request error message
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        requestWritePermission();  //在程式運行中要求存取的權限
 
+        gifImageView = findViewById(R.id.GIF_imageView);
         wordInputView = findViewById(R.id.Word_Input_View);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         exitApp = findViewById(R.id.Exit_app_imageView);
+        changeBackground = findViewById(R.id.Change_background_imageView);
 
+
+        /**
+         * 設置背景圖的更換
+         */
+        changeBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {    //點擊更換背景鈕時觸發監聽器
+                //打開相簿讓用戶選圖
+                Intent i = new
+                        Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            }
+        });
+
+
+        String picturePath = DataManager.getInstance().getImageUrl();  //獲取圖片位址
+        if(picturePath == null || picturePath.trim().equals("")){
+            //Set some default image that will be visible before selecting image
+        }else{
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);  //讀取圖片
+            BitmapDrawable background = new BitmapDrawable(bitmap);
+            gifImageView.setBackgroundDrawable(background);         //把用戶選擇的圖片設置為新的背景
+        }
+
+
+
+        /**
+         * 設置程式的退出鈕
+         */
         exitApp.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view) {        //點擊退出程式鈕時觸發監聽器
                 //Finish method is used to close all open activities.
-                finish();
+                finish();                            //退出畫面 (關閉程式)
             }
         });
 
 
 
-        webViewBrowser = null;
+        /**
+         * 設置網頁框
+         */
+        webViewBrowser = null;  //預設網頁框為空
 
         //Get a reference to the WebView//
         webViewBrowser = findViewById(R.id.webview_browser);
         progressBar = findViewById(R.id.progressBar);
 
-        webViewBrowser.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.GONE);
+        webViewBrowser.setVisibility(View.INVISIBLE);  //預設程式開啟時隱藏網頁框 (才能看到背景圖)
+        progressBar.setVisibility(View.GONE);  ////預設程式開啟時隱藏進度條
 
         WebSettings webSettings = webViewBrowser.getSettings(); //WebSettings 是用來設定 WebView 屬性的類別
         webSettings.setJavaScriptEnabled(true); //針對 WebSettings 去做設定，WebView 預設下是限制 JavaScript 的，若要啟用需要做此設定
@@ -68,6 +123,10 @@ public class MainActivity extends AppCompatActivity {
         //需要在java裡面給webview設置一下requestFocus() 就行了。
 
 
+
+        /**
+         * 設置下拉式選單
+         */
 
         /**
          * EnDictionarySpinner & Spinner Adapters
@@ -211,6 +270,12 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 21) {
+                    String url60= "http://www.scidict.org/index.aspx?word="+searchKeyword;
+                    webViewBrowser.loadUrl(url60);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
                 }
 
                 EnDictionarySpinner.setAdapter(EnDictionarySpinnerAdapter);
@@ -342,11 +407,21 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }
-
-                else if (position == 17) {
+                }else if (position == 17) {
                     String url59= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
                     webViewBrowser.loadUrl(url59);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 18) {
+                    String url61= "http://dict.asia/jc/"+searchKeyword;
+                    webViewBrowser.loadUrl(url61);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 19) {
+                    String url62= "http://dict.asia/cj/"+searchKeyword;
+                    webViewBrowser.loadUrl(url62);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -610,7 +685,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * 在OnCreate外面另外設置用戶選取背景圖時的相關設定
+     */
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+            cursor.moveToFirst();
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            DataManager.getInstance().setImageUrl(picturePath);
+            cursor.close();
+        }
 
+        //Recreate this Activity
+        recreate();// 直接調用Activity的recreate()方法重啟Activity
+
+    }
+
+
+
+    /**
+     * 在OnCreate外面另外設置網頁框的相關設定
+     */
     //Inner class for WebViewClientImpl.
     //在 WebView 畫面中，用戶無論點選了什麼超連結，都會開啟新的瀏覽器，想在自己的 WebView 中跳轉頁面，就必須建立一個 WebViewClient，同時若想知道接下來將前往哪個連結，也必須透過這個方法
     //By default, whenever the user clicks a hyperlink within a WebView, the system will respond by launching the user’s preferred web browser app and then loading the URL inside this browser.
@@ -628,9 +729,9 @@ public class MainActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             super.onPageStarted(view, url, favicon);
 
-            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);   //在啟動網頁框時顯示網頁框
 
-            //設置進度條加載進度
+            //設置啟動網頁框時的進度條加載進度
             new Thread(){
                 @Override
                 public void run() {
@@ -654,7 +755,7 @@ public class MainActivity extends AppCompatActivity {
             // TODO Auto-generated method stub
             super.onPageFinished(view, url);
 
-            progressBar.setVisibility(View.GONE);
+            progressBar.setVisibility(View.GONE);   //網頁框內容加載完成時隱藏進度條
         }
 
     }
@@ -685,6 +786,28 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    /**
+     * 在OnCreate外面另外設置存取相簿的相關設定
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if(requestCode == WRITE_PERMISSION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG_TAG, "Write Permission Failed");
+                Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M) //要加上這條限定Api等級才不會報錯
+    private void requestWritePermission(){
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_PERMISSION);
+        }
     }
 
 

@@ -2,11 +2,13 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Dictionary_almighty_contraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
     <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/GIF_imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/universe2" />
@@ -165,8 +167,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View"
-        tools:layout_editor_absoluteX="30dp" >
-    </WebView>
+        tools:layout_editor_absoluteX="30dp"></WebView>
 
     <TextView
         android:id="@+id/search_result_textView"
@@ -202,6 +203,32 @@
         app:layout_constraintEnd_toEndOf="@+id/Exit_app_imageView"
         app:layout_constraintStart_toStartOf="@+id/Exit_app_imageView"
         app:layout_constraintTop_toBottomOf="@+id/Exit_app_imageView" />
+
+    <ImageView
+        android:id="@+id/Change_background_imageView"
+        android:layout_width="47dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/Exit_app_textView"
+        app:layout_constraintEnd_toStartOf="@+id/Exit_app_imageView"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
+        app:layout_constraintTop_toTopOf="@+id/Exit_app_imageView"
+        app:srcCompat="@drawable/change_background" />
+
+    <TextView
+        android:id="@+id/Change_background_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Change_background"
+        android:textColor="#FFEB3B"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/Change_background_imageView"
+        app:layout_constraintStart_toStartOf="@+id/Change_background_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/Change_background_imageView" />
 
 
 </android.support.constraint.ConstraintLayout>

@@ -22,6 +22,7 @@
         <item>@string/Slang</item>
         <item>@string/VoiceTube</item>
         <item>@string/YouGlish</item>
+        <item>@string/SCI_Dictionary</item>
     </string-array>
 
 
@@ -44,6 +45,8 @@
         <item>@string/goo</item>
         <item>@string/Jisho</item>
         <item>@string/J_Logos</item>
+        <item>@string/DA_JP_TW_Dictionary</item>
+        <item>@string/DA_TW_JP_Dictionary</item>
 
     </string-array>
 
@@ -161,6 +164,11 @@
     <string name="VoiceTube">VoiceTube</string>
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">Exit App</string>
+    <string name="Change_background">Change Background</string>
+    <string name="External_storage_permission">You must allow permission write external storage to change the app\'s background</string>
+    <string name="SCI_Dictionary">SCI Dictionary</string>
+    <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
+    <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
 
 
 </resources>
