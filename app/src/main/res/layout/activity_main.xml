@@ -38,6 +38,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/Select_EN_Dictionary_Provider"
         android:textColor="#FFC107"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/Word_Input_View"
         app:layout_constraintTop_toBottomOf="@+id/Word_Input_View" />
 
@@ -49,6 +50,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/Select_JP_Dictionary_Provider"
         android:textColor="#FFC107"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/Select_EN_Dictionary_Provider_View"
         app:layout_constraintTop_toBottomOf="@+id/Select_EN_Dictionary_Provider_View" />
 
@@ -59,6 +61,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/Select_Sentence_Searcher"
         android:textColor="#FFC107"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/Select_Google_Word_Searcher_View"
         app:layout_constraintTop_toBottomOf="@+id/Select_Google_Word_Searcher_View" />
 
@@ -70,6 +73,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/Select_Google_Word_Searcher"
         android:textColor="#FFC107"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/Select_JP_Dictionary_Provider_View"
         app:layout_constraintTop_toBottomOf="@+id/Select_JP_Dictionary_Provider_View" />
 
@@ -81,6 +85,7 @@
         android:layout_marginTop="24dp"
         android:text="@string/Miscellaneous"
         android:textColor="#FFC107"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="@+id/Select_Sentence_Searcher_View"
         app:layout_constraintTop_toBottomOf="@+id/Select_Sentence_Searcher_View" />
 
@@ -169,6 +174,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View"
         tools:layout_editor_absoluteX="30dp"></WebView>
 
+
     <TextView
         android:id="@+id/search_result_textView"
         android:layout_width="wrap_content"
@@ -184,13 +190,32 @@
         app:layout_constraintStart_toStartOf="@+id/webview_browser"
         app:layout_constraintTop_toTopOf="@+id/webview_browser" />
 
+
+    <ImageView
+        android:id="@+id/btnSpeak"
+        android:layout_width="47dp"
+        android:layout_height="38dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+        android:onClick="getSpeechInput"
+        android:src="@drawable/ic_mic"
+        app:layout_constraintEnd_toStartOf="@+id/Change_background_imageView"
+        app:layout_constraintHorizontal_bias="0.29"
+        app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
+        app:layout_constraintTop_toTopOf="@+id/Change_background_imageView" />
+
+
     <ImageView
         android:id="@+id/Exit_app_imageView"
         android:layout_width="44dp"
         android:layout_height="37dp"
-        app:layout_constraintBottom_toBottomOf="@+id/Word_Input_View"
         app:layout_constraintEnd_toEndOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Word_Input_View"
+        app:layout_constraintTop_toTopOf="@+id/GIF_imageView"
         app:srcCompat="@drawable/exit_app" />
 
     <TextView
@@ -199,7 +224,7 @@
         android:layout_height="wrap_content"
         android:text="@string/Exit_app"
         android:textColor="#F44336"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/Exit_app_imageView"
         app:layout_constraintStart_toStartOf="@+id/Exit_app_imageView"
         app:layout_constraintTop_toBottomOf="@+id/Exit_app_imageView" />
@@ -214,21 +239,30 @@
         android:layout_marginRight="8dp"
         app:layout_constraintBottom_toTopOf="@+id/Exit_app_textView"
         app:layout_constraintEnd_toStartOf="@+id/Exit_app_imageView"
-        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintHorizontal_bias="0.77"
         app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
         app:layout_constraintTop_toTopOf="@+id/Exit_app_imageView"
         app:srcCompat="@drawable/change_background" />
 
     <TextView
-        android:id="@+id/Change_background_textView"
+        android:id="@+id/change_background_textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Change_background"
         android:textColor="#FFEB3B"
-        android:textSize="10sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/Change_background_imageView"
         app:layout_constraintStart_toStartOf="@+id/Change_background_imageView"
         app:layout_constraintTop_toBottomOf="@+id/Change_background_imageView" />
+
+    <Spinner
+        android:id="@+id/Speech_recognition_spinner"
+        android:layout_width="83dp"
+        android:layout_height="22dp"
+        android:background="#bec2be"
+        app:layout_constraintEnd_toEndOf="@+id/btnSpeak"
+        app:layout_constraintStart_toStartOf="@+id/btnSpeak"
+        app:layout_constraintTop_toBottomOf="@+id/btnSpeak" />
 
 
 </android.support.constraint.ConstraintLayout>

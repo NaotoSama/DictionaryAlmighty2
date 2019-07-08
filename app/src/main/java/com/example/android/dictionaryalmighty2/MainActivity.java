@@ -9,7 +9,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
@@ -31,6 +33,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.ArrayList;
+import java.util.Locale;
 import pl.droidsonroids.gif.GifImageView;
 
 
@@ -47,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
@@ -127,6 +132,334 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 設置下拉式選單
          */
+
+        /**
+         * Speech Recognition Spinner & Spinner Adapters
+         */
+        final Spinner SpeechRecognitionSpinner = findViewById(R.id.Speech_recognition_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        final ArrayAdapter<CharSequence> SpeechRecognitionAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Speech_recognition_spinner_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        SpeechRecognitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
+
+        SpeechRecognitionSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){     //此行以下設置語音辨識選單
+                    return;
+
+                }
+                if (position == 1){
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else if (position == 2) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en_US");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else if (position == 3){
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_CN");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else if (position == 4) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja_JP");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else if (position == 5) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko_KR");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else if (position == 6) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es_ES");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else if (position == 7) {    //此行以下設置語音辨識 + 自動翻譯
+                    return;
+
+                }else if (position == 8) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    //設置run()並讓自動翻譯的網頁延遲10秒載入
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    //設置Handler來延後執行run()
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000); //延後10秒執行
+
+                }else if (position == 9) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }else if (position == 10) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }else if (position == 11) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }else if (position == 12) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en_US");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }else if (position == 13) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja_JP");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }else if (position == 14) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko_KR");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }else if (position == 15) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "es_ES");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            searchKeyword = wordInputView.getText().toString();
+                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
+                            webViewBrowser.loadUrl(url63);
+                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                        }
+                    };
+
+                    Handler h =new Handler();
+                    h.postDelayed(r, 10000);
+
+                }
+
+                SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
+
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+
 
         /**
          * EnDictionarySpinner & Spinner Adapters
@@ -512,6 +845,54 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 10) {
+                    String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url63);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 11) {
+                    String url64 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url64);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 12) {
+                    String url65 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url65);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 13) {
+                    String url66 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url66);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 14) {
+                    String url67 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url67);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 15) {
+                    String url68 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url68);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 16) {
+                    String url69 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url69);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 17) {
+                    String url70 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
+                    webViewBrowser.loadUrl(url70);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
                 }
 
                 GoogleWordSearchSpinner.setAdapter(GoogleWordSearchSpinnerAdapter);
@@ -686,11 +1067,42 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * 在OnCreate外面另外設置用戶選取背景圖時的相關設定
+     * 在OnCreate外面設置語音辨識與的相關設定
      */
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void getSpeechInput(View view) {
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, 10);
+        } else {
+            Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * 在OnCreate外面設置語音輸入的相關設定
+     * 以及在OnCreate外面另外設置用戶選取背景圖時的相關設定
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //設置語音輸入的相關設定
+        switch (requestCode) {
+            case 10:    //必須等同上面getSpeechInput方法中的requestCode:10
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    wordInputView.setText(result.get(0));
+                }
+                break;
+        }
+
+
+        //設置用戶選取背景圖時的相關設定
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
             String[] filePathColumn = { MediaStore.Images.Media.DATA };
@@ -700,13 +1112,34 @@ public class MainActivity extends AppCompatActivity {
             String picturePath = cursor.getString(columnIndex);
             DataManager.getInstance().setImageUrl(picturePath);
             cursor.close();
-        }
 
-        //Recreate this Activity
-        recreate();// 直接調用Activity的recreate()方法重啟Activity
+            //Recreate this Activity after the user selects the new background
+            recreate();// 直接調用Activity的recreate()方法重啟Activity
+        }
 
     }
 
+
+    /**
+     * 在OnCreate外面另外設置存取相簿的相關設定
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if(requestCode == WRITE_PERMISSION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG_TAG, "Write Permission Failed");
+                Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M) //要加上這條限定Api等級才不會報錯
+    private void requestWritePermission(){
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_PERMISSION);
+        }
+    }
 
 
     /**
@@ -789,26 +1222,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * 在OnCreate外面另外設置存取相簿的相關設定
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        if(requestCode == WRITE_PERMISSION){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(LOG_TAG, "Write Permission Failed");
-                Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
 
-    @RequiresApi(api = Build.VERSION_CODES.M) //要加上這條限定Api等級才不會報錯
-    private void requestWritePermission(){
-        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_PERMISSION);
-        }
-    }
 
 
 }

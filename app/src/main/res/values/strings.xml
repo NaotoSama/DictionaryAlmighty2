@@ -1,5 +1,25 @@
 <resources>
 
+    <string-array name="Speech_recognition_spinner_array">
+        <item>@string/Speech_input</item>
+        <item>@string/Chinese_speech</item>
+        <item>@string/English_speech</item>
+        <item>@string/Simplified_chinese_speech</item>
+        <item>@string/Japanese_speech</item>
+        <item>@string/Korean_speech</item>
+        <item>@string/Spanish_speech</item>
+        <item>@string/Speech_recognition_plus_Auto_Translation</item>
+        <item>@string/CH_speech_auto_translate_to_EN</item>
+        <item>@string/CH_speech_auto_translate_to_JP</item>
+        <item>@string/CH_speech_auto_translate_to_KR</item>
+        <item>@string/CH_speech_auto_translate_to_ES</item>
+        <item>@string/EN_speech_auto_translate_to_CH</item>
+        <item>@string/JP_speech_auto_translate_to_CH</item>
+        <item>@string/KR_speech_auto_translate_to_CH</item>
+        <item>@string/ES_speech_auto_translate_to_CH</item>
+    </string-array>
+
+
     <string-array name="EN_dictionary_providers_spinner_array">
         <item>@string/Select_one_of_the_following</item>
         <item>@string/Yahoo_Dictionary</item>
@@ -62,6 +82,14 @@
         <item>@string/Word_Plus_Japanese3</item>
         <item>@string/Word_Plus_Meaning1</item>
         <item>@string/Word_Plus_Meaning2</item>
+        <item>@string/Google_translator_CH_EN</item>
+        <item>@string/Google_translator_EN_CH</item>
+        <item>@string/Google_translator_CH_JP</item>
+        <item>@string/Google_translator_JP_CH</item>
+        <item>@string/Google_translator_CH_KR</item>
+        <item>@string/Google_translator_KR_CH</item>
+        <item>@string/Google_translator_CH_ES</item>
+        <item>@string/Google_translator_ES_CH</item>
     </string-array>
 
 
@@ -163,12 +191,38 @@
     <string name="Search_Result_Display">Search result will be displayed here</string>
     <string name="VoiceTube">VoiceTube</string>
     <string name="YouGlish">YouGlish</string>
-    <string name="Exit_app">Exit App</string>
+    <string name="Exit_app">Exit</string>
     <string name="Change_background">Change Background</string>
     <string name="External_storage_permission">You must allow permission write external storage to change the app\'s background</string>
     <string name="SCI_Dictionary">SCI Dictionary</string>
     <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
     <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
+    <string name="Voice_input">Voice Input</string>
+    <string name="Speech_input">Speech input</string>
+    <string name="Chinese_speech">Chinese speech</string>
+    <string name="English_speech">English speech</string>
+    <string name="Japanese_speech">Japanese speech</string>
+    <string name="Spanish_speech">Spanish speech</string>
+    <string name="Simplified_chinese_speech">Simplified Chinese speech</string>
+    <string name="Korean_speech">Korean speech</string>
+    <string name="Google_translator_CH_EN">Google Translator CH-EN</string>
+    <string name="Google_translator_EN_CH">Google Translator EN-CH</string>
+    <string name="Google_translator_JP_CH">Google Translator JP-CH</string>
+    <string name="Google_translator_CH_JP">Google Translator CH-JP</string>
+    <string name="Google_translator_ES_CH">Google Translator ES-CH</string>
+    <string name="Google_translator_CH_ES">Google Tanslator CH-ES</string>
+    <string name="Google_translator_KR_CH">Google Translator KR-CH</string>
+    <string name="Google_translator_CH_KR">Google Translator CH-KR</string>
+    <string name="Speech_recognition_plus_Auto_Translation">Speech recognition + Auto translation</string>
+    <string name="CH_speech_auto_translate_to_EN">CH speech auto translate to EN</string>
+    <string name="EN_speech_auto_translate_to_CH">EN speech auto translate to CH</string>
+    <string name="CH_speech_auto_translate_to_JP">CH speech auto translate to JP</string>
+    <string name="JP_speech_auto_translate_to_CH">JP speech auto translate to CH</string>
+    <string name="CH_speech_auto_translate_to_KR">CH speech auto translate to KR</string>
+    <string name="KR_speech_auto_translate_to_CH">KR speech auto translate to CH</string>
+    <string name="CH_speech_auto_translate_to_ES">CH speech auto translate to ES</string>
+    <string name="ES_speech_auto_translate_to_CH">ES speech auto translate to CH</string>
+    <string name="Please_finish_speaking_in_10_seconds">Please finish speaking in 10 seconds.</string>
 
 
 </resources>
