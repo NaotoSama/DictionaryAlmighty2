@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
+    String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
 
 
 
@@ -229,28 +229,33 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    //設置run()並讓自動翻譯的網頁延遲10秒載入
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
+                    speechAutoTranslationCode="CHtoEN"; //設定一個特定代碼，在下面的onActivityResult執行完畢後，再以此代碼加載其所屬網址，因此不用再設定10秒延遲載入網頁
 
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
 
-                        }
-                    };
+                                                                    /*  ↓ ↓ ↓ 此作法已取消，不必使用↓ ↓ ↓
+                                                                    設置run()並讓自動翻譯的網頁延遲10秒載入
+                                                                    Runnable r = new Runnable() {
+                                                                        @Override
+                                                                        public void run() {
 
-                    //設置Handler來延後執行run()
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000); //延後10秒執行
+                                                                            searchKeyword = wordInputView.getText().toString();
+                                                                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+                                                                            webViewBrowser.loadUrl(url63);
+                                                                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                                                                            webViewBrowser.setVisibility(View.VISIBLE);
+
+                                                                        }
+                                                                    };
+
+                                                                    //設置Handler來延後執行run()
+                                                                    Handler h =new Handler();
+                                                                    h.postDelayed(r, 10000); //延後10秒執行
+                                                                    ↑ ↑ ↑ 此作法已取消，不必使用 ↑ ↑ ↑ */
+
 
                 }else if (position == 9) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -259,26 +264,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="CHtoJP";
 
                 }else if (position == 10) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -287,26 +277,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="CHtoKR";
 
                 }else if (position == 11) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -315,26 +290,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="CHtoES";
 
                 }else if (position == 12) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -343,26 +303,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="ENtoCH";
 
                 }else if (position == 13) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -371,26 +316,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="JPtoCH";
 
                 }else if (position == 14) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -399,26 +329,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="KRtoCH";
 
                 }else if (position == 15) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -427,26 +342,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (intent.resolveActivity(getPackageManager()) != null) {
                         startActivityForResult(intent, 10);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Please_finish_speaking_in_10_seconds), Toast.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
-                    Runnable r = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            searchKeyword = wordInputView.getText().toString();
-                            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
-                            webViewBrowser.loadUrl(url63);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-
-                        }
-                    };
-
-                    Handler h =new Handler();
-                    h.postDelayed(r, 10000);
+                    speechAutoTranslationCode="EStoCH";
 
                 }
 
@@ -1083,7 +983,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
+     /**
      * 在OnCreate外面設置語音輸入的相關設定
      * 以及在OnCreate外面另外設置用戶選取背景圖時的相關設定
      */
@@ -1099,6 +999,64 @@ public class MainActivity extends AppCompatActivity {
                     wordInputView.setText(result.get(0));
                 }
                 break;
+        }
+
+        //抓SpeechRecognitionSpinner中的speechAutoTranslationCode代碼，然後載入自動語音翻譯的網頁
+        if (speechAutoTranslationCode=="CHtoEN") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="CHtoJP") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="CHtoKR") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="CHtoES") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="ENtoCH") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="JPtoCH") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="KRtoCH") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (speechAutoTranslationCode=="EStoCH") {
+            searchKeyword = wordInputView.getText().toString();
+            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(url63);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
         }
 
 
@@ -1133,6 +1091,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M) //要加上這條限定Api等級才不會報錯
     private void requestWritePermission(){
@@ -1220,8 +1179,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
 

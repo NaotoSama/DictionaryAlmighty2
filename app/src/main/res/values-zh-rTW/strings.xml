@@ -104,5 +104,4 @@
     <string name="CH_speech_auto_translate_to_ES">中文辨識 自動西譯</string>
     <string name="ES_speech_auto_translate_to_CH">西文辨識 自動中譯</string>
     <string name="Speech_recognition_plus_Auto_Translation">語音辨識 + 自動翻譯</string>
-    <string name="Please_finish_speaking_in_10_seconds">請在10秒內講完</string>
 </resources>

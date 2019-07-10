@@ -222,7 +222,6 @@
     <string name="KR_speech_auto_translate_to_CH">KR speech auto translate to CH</string>
     <string name="CH_speech_auto_translate_to_ES">CH speech auto translate to ES</string>
     <string name="ES_speech_auto_translate_to_CH">ES speech auto translate to CH</string>
-    <string name="Please_finish_speaking_in_10_seconds">Please finish speaking in 10 seconds.</string>
 
 
 </resources>
