@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
+    ImageView ocr;
 
 
 
@@ -101,6 +102,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {        //點擊退出程式鈕時觸發監聽器
                 //Finish method is used to close all open activities.
                 finish();                            //退出畫面 (關閉程式)
+            }
+        });
+
+
+
+        /**
+         * 設置OCR文字辨識
+         */
+        ocr=findViewById(R.id.ocr_imageView);
+        ocr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, OcrCaptureActivity.class);
+                startActivity(intent);
+
             }
         });
 
@@ -1004,57 +1020,57 @@ public class MainActivity extends AppCompatActivity {
         //抓SpeechRecognitionSpinner中的speechAutoTranslationCode代碼，然後載入自動語音翻譯的網頁
         if (speechAutoTranslationCode=="CHtoEN") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl1 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl1);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="CHtoJP") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl2 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl2);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="CHtoKR") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl3 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl3);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="CHtoES") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl4 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl4);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="ENtoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl5 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl5);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="JPtoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl6 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl6);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="KRtoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl7 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl7);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
 
         }else if (speechAutoTranslationCode=="EStoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String url63 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(url63);
+            String speechUrl8 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
+            webViewBrowser.loadUrl(speechUrl8);
             searchResultWillBeDisplayedHere.setVisibility(View.GONE);
             webViewBrowser.setVisibility(View.VISIBLE);
         }

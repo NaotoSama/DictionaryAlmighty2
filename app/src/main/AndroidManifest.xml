@@ -17,7 +17,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:fullBackupContent="false"
+        android:hardwareAccelerated="true"
         android:usesCleartextTraffic="true"> <!-- 避免WebView加載網頁時出現ERR_CLEARTEXT_NOT_PERMITTED錯誤 -->
+
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.vision.DEPENDENCIES"
+            android:value="ocr" />
+
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -28,6 +39,13 @@
         </activity>
 
         <activity android:name=".DataManager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".OcrCaptureActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

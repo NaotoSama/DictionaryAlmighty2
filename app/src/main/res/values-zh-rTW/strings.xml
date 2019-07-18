@@ -104,4 +104,17 @@
     <string name="CH_speech_auto_translate_to_ES">中文辨識 自動西譯</string>
     <string name="ES_speech_auto_translate_to_CH">西文辨識 自動中譯</string>
     <string name="Speech_recognition_plus_Auto_Translation">語音辨識 + 自動翻譯</string>
+    <string name="auto_focus">自動對焦</string>
+    <string name="low_storage_error">硬碟容量太低</string>
+    <string name="no_camera_permission">未獲相機權限</string>
+    <string name="ocr_error">文字讀取錯誤</string>
+    <string name="ocr_failure">未抓取到文字</string>
+    <string name="ocr_header">點擊識別鈕以識別文字</string>
+    <string name="ocr_success">文字讀取成功</string>
+    <string name="ok">OK</string>
+    <string name="permission_camera_rationale">需要相機權限</string>
+    <string name="read_text">偵測文字</string>
+    <string name="title_activity_main">辨識樣本</string>
+    <string name="use_flash">使用閃光</string>
+    <string name="OCR">OCR文字辨識</string>
 </resources>

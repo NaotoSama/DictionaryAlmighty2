@@ -113,7 +113,7 @@
         android:id="@+id/Select_EN_Dictionary_Provider_View"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="80dp"
         android:text="@string/Select_EN_Dictionary_Provider"
         android:textColor="#FFC107"
         android:textSize="16sp"
@@ -247,7 +247,7 @@
         android:id="@+id/webview_browser"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View"
         tools:layout_editor_absoluteX="30dp"></WebView>
@@ -267,6 +267,26 @@
         app:layout_constraintEnd_toEndOf="@+id/webview_browser"
         app:layout_constraintStart_toStartOf="@+id/webview_browser"
         app:layout_constraintTop_toTopOf="@+id/webview_browser" />
+
+    <ImageView
+        android:id="@+id/ocr_imageView"
+        android:layout_width="46dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/btnSpeak"
+        app:layout_constraintStart_toStartOf="@+id/btnSpeak"
+        app:layout_constraintTop_toBottomOf="@+id/Speech_recognition_spinner"
+        app:srcCompat="@drawable/ocr" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/OCR"
+        android:textColor="#2196F3"
+        app:layout_constraintEnd_toEndOf="@+id/ocr_imageView"
+        app:layout_constraintStart_toStartOf="@+id/ocr_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/ocr_imageView" />
 
 
 </android.support.constraint.ConstraintLayout>
