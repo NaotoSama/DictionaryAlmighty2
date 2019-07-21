@@ -16,7 +16,9 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
 
     private int id;
 
-    private static final int TEXT_COLOR = Color.WHITE;
+    private static final int TEXT_COLOR = Color.YELLOW;
+    private static final int RECT_COLOR = Color.BLACK;
+
 
     private static Paint rectPaint;
     private static Paint textPaint;
@@ -27,13 +29,15 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
 
         textBlock = text;
 
+        //繪製文字辨識的矩形框
         if (rectPaint == null) {
             rectPaint = new Paint();
-            rectPaint.setColor(TEXT_COLOR);
-            rectPaint.setStyle(Paint.Style.STROKE);
+            rectPaint.setColor(RECT_COLOR);
+            rectPaint.setStyle(Paint.Style.FILL);  //FILL是填滿內框；若只要設置外框顏色則用STROKE
             rectPaint.setStrokeWidth(4.0f);
         }
 
+        //繪製矩形框內的文字
         if (textPaint == null) {
             textPaint = new Paint();
             textPaint.setColor(TEXT_COLOR);

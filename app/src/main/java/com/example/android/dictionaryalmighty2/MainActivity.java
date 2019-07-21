@@ -40,7 +40,7 @@ import pl.droidsonroids.gif.GifImageView;
 public class MainActivity extends AppCompatActivity {
 
     GifImageView gifImageView; //用來準備給用戶更換背景圖
-    EditText wordInputView;    //關鍵字輸入框
+    public static EditText wordInputView;    //關鍵字輸入框
     String searchKeyword;      //用戶輸入的關鍵字
     WebView webViewBrowser;    //網頁框
     ProgressBar progressBar;   //網頁載入的進度條

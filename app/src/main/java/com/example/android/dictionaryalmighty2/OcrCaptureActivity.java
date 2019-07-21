@@ -49,7 +49,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
     // Constants used to pass extra data in the intent
     public static final String AutoFocus = "AutoFocus";
     public static final String UseFlash = "UseFlash";
-    public static final String TextBlockObject = "String";
+    public static String TextBlockObject = "String";
 
     private CameraSource cameraSource;
     private CameraSourcePreview preview;
@@ -194,6 +194,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
         // Creates and starts the camera.  Note that this uses a higher resolution in comparison
         // to other detection examples to enable the text recognizer to detect small pieces of text.
+        // Read text live in the camera view.
         cameraSource =
                 new CameraSource.Builder(getApplicationContext(), textRecognizer)
                         .setFacing(CameraSource.CAMERA_FACING_BACK)
@@ -332,6 +333,11 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 Log.d(TAG, "text data is being spoken! " + text.getValue());
                 // Speak the string.
                 tts.speak(text.getValue(), TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                // 抓TextBlock裡的String文字
+                TextBlockObject = text.getValue();
+                // 把抓到的String文字帶入主畫面的單字搜尋框內
+                MainActivity.wordInputView.setText(TextBlockObject);
+                Toast.makeText(getApplicationContext(), getText(R.string.word_captured_message), Toast.LENGTH_LONG).show();
             }
             else {
                 Log.d(TAG, "text data is null");

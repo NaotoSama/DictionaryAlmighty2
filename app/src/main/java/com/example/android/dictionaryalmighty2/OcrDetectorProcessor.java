@@ -2,7 +2,6 @@ package com.example.android.dictionaryalmighty2;
 
 import android.util.Log;
 import android.util.SparseArray;
-
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.text.TextBlock;
 

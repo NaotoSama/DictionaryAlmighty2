@@ -238,6 +238,7 @@
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
     <string name="OCR">OCR</string>
+    <string name="word_captured_message">Pronouncing...(word successfully captured. You can go back to the previous page to look up in dictionaries)</string>
 
 
 </resources>

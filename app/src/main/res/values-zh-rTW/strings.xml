@@ -117,4 +117,5 @@
     <string name="title_activity_main">辨識樣本</string>
     <string name="use_flash">使用閃光</string>
     <string name="OCR">OCR文字辨識</string>
+    <string name="word_captured_message">發音中...(已成功擷取文字，您可返回前一頁查字典)</string>
 </resources>
