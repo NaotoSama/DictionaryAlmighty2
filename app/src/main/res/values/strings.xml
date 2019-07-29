@@ -1,5 +1,16 @@
 <resources>
 
+    <string-array name="OCR_spinner_array">
+        <item>@string/Select_an_OCR_mode</item>
+        <item>@string/Google_optical_recognition</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>
+    </string-array>
+
+
     <string-array name="Speech_recognition_spinner_array">
         <item>@string/Speech_input</item>
         <item>@string/Chinese_speech</item>
@@ -237,8 +248,14 @@
     <string name="ocr_success">Text read successfully</string>
     <string name="ocr_failure">No text captured</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
-    <string name="OCR">OCR</string>
     <string name="word_captured_message">Pronouncing...(word successfully captured. You can go back to the previous page to look up in dictionaries)</string>
+    <string name="Select_an_OCR_mode">Select an OCR mode</string>
+    <string name="Google_optical_recognition">Google OCR (EN/Latin)</string>
+    <string name="Tessearct_opencv_ocr_recognition_CH_TW">Tessearct Traditional Chinese OCR</string>
+    <string name="Tessearct_opencv_ocr_recognition_CH_CN">Tessearct Simplified Chinese OCR</string>
+    <string name="Tessearct_opencv_ocr_recognition_EN">Tessearct English OCR</string>
+    <string name="Tessearct_opencv_ocr_recognition_JP">Tessearct Japanese OCR</string>
+    <string name="Tessearct_opencv_ocr_recognition_KOR">Tessearct Korean OCR</string>
 
 
 </resources>

@@ -278,15 +278,20 @@
         app:layout_constraintTop_toBottomOf="@+id/Speech_recognition_spinner"
         app:srcCompat="@drawable/ocr" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/OCR"
-        android:textColor="#2196F3"
-        app:layout_constraintEnd_toEndOf="@+id/ocr_imageView"
-        app:layout_constraintStart_toStartOf="@+id/ocr_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/ocr_imageView" />
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="162dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="#bec2be"
+        app:layout_constraintBottom_toTopOf="@+id/EN_dictionary_providers_spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ocr_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/change_background_textView2"
+        app:layout_constraintVertical_bias="0.24000001" />
 
 
 </android.support.constraint.ConstraintLayout>

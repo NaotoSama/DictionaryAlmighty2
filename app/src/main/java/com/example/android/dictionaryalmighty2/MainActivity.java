@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     ImageView ocr;
 
+    TextView tesseractText;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
