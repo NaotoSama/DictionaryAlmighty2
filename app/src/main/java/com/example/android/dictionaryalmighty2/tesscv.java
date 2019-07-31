@@ -20,17 +20,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by Administrator on 2016/12/2.
- */
+
 
 public class tesscv {
     private final static String TAG = "TessCV";
     private Bitmap m_phone;                      // The path of phone image
     private TessBaseAPI m_tessApi;               // Tesseract API reference
     private String m_datapath;                   // The path to folder containing language data file
-    private final static String m_lang = "eng";  // The default language of tesseract
     private InputStream m_instream;
+    private String datafilepath;
+    private String resInPath;
+    private String resOutPath;
 
     public tesscv(Bitmap phone, InputStream instream) {
         m_phone = phone;
@@ -42,7 +42,28 @@ public class tesscv {
         checkFile(new File(m_datapath + "/tessdata"));
 
         m_tessApi = new TessBaseAPI();
-        m_tessApi.init(m_datapath, m_lang);
+        switch (MainActivity.tesseract_lang_code) {
+            case "eng":
+                m_tessApi.init(m_datapath, "eng");
+
+                break;
+            case "chi_tra":
+                m_tessApi.init(m_datapath, "chi_tra");
+
+                break;
+            case "chi_sim":
+                m_tessApi.init(m_datapath, "chi_sim");
+
+                break;
+            case "jpn":
+                m_tessApi.init(m_datapath, "jpn");
+
+                break;
+            case "kor":
+                m_tessApi.init(m_datapath, "kor");
+
+                break;
+        }
         // 设置psm模式
         //m_tessApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK);
         // 设置白名单
@@ -134,7 +155,30 @@ public class tesscv {
         }
         //The directory exists, but there is no data file in it
         if(dir.exists()) {
-            String datafilepath = dir.toString() + "/eng.traineddata";
+
+            switch (MainActivity.tesseract_lang_code) {
+                case "eng":
+                    datafilepath = dir.toString() + "/eng.traineddata";
+
+                    break;
+                case "chi_tra":
+                    datafilepath = dir.toString() + "/chi_tra.traineddata";
+
+                    break;
+                case "chi_sim":
+                    datafilepath = dir.toString() + "/chi_sim.traineddata";
+
+                    break;
+                case "jpn":
+                    datafilepath = dir.toString() + "/jpn.traineddata";
+
+                    break;
+                case "kor":
+                    datafilepath = dir.toString() + "/kor.traineddata";
+
+                    break;
+            }
+
             File datafile = new File(datafilepath);
             if (!datafile.exists()) {
                 copyFiles();
@@ -146,13 +190,60 @@ public class tesscv {
     private void copyFiles() {
         try {
             if (m_instream == null) {
-                String resInPath = "/tessdata/eng.traineddata";
+
+                switch (MainActivity.tesseract_lang_code) {
+                    case "eng":
+                        resInPath = "/tessdata/eng.traineddata";
+
+                        break;
+                    case "chi_tra":
+                        resInPath = "/tessdata/chi_tra.traineddata";
+
+                        break;
+                    case "chi_sim":
+                        resInPath = "/tessdata/chi_sim.traineddata";
+
+                        break;
+                    case "jpn":
+                        resInPath = "/tessdata/jpn.traineddata";
+
+                        break;
+                    case "kor":
+                        resInPath = "/tessdata/kor.traineddata";
+
+                        break;
+                }
+
                 //Log.d(TAG, "copyFiles: resInPath " + resInPath);
                 m_instream = new FileInputStream(resInPath);
             }
 
-            //location we want the file to be a
-            String resOutPath = m_datapath + "/tessdata/eng.traineddata";
+
+
+            switch (MainActivity.tesseract_lang_code) {
+                case "eng":
+                    //location we want the file to be a
+                    resOutPath = m_datapath + "/tessdata/eng.traineddata";
+
+                    break;
+                case "chi_tra":
+                    resOutPath = m_datapath + "/tessdata/chi_tra.traineddata";
+
+                    break;
+                case "chi_sim":
+                    resOutPath = m_datapath + "/tessdata/chi_sim.traineddata";
+
+                    break;
+                case "jpn":
+                    resOutPath = m_datapath + "/tessdata/jpn.traineddata";
+
+                    break;
+                case "kor":
+                    resOutPath = m_datapath + "/tessdata/kor.traineddata";
+
+                    break;
+            }
+
 
             //open byte streams for writing
             OutputStream outstream = new FileOutputStream(resOutPath);

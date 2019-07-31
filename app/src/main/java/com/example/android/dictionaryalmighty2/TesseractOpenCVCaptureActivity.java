@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.opencv.android.OpenCVLoader;
 
@@ -45,12 +46,36 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
                 startActivityForResult(intent, PHOTOALBUM);
             }
         });
+        Toast.makeText(this, getString(R.string.performing_OCR_please_wait), Toast.LENGTH_LONG).show();
 
         //get access to AssetManager
         AssetManager assetManager = getAssets();
         //open byte streams for reading/writing
         try {
-            m_instream = assetManager.open("tessdata/eng.traineddata");
+
+            switch (MainActivity.tesseract_lang_code) {
+                case "eng":
+                    m_instream = assetManager.open("tessdata/eng.traineddata");
+
+                    break;
+                case "chi_tra":
+                    m_instream = assetManager.open("tessdata/chi_tra.traineddata");
+
+                    break;
+                case "chi_sim":
+                    m_instream = assetManager.open("tessdata/chi_sim.traineddata");
+
+                    break;
+                case "jpn":
+                    m_instream = assetManager.open("tessdata/jpn.traineddata");
+
+                    break;
+                case "kor":
+                    m_instream = assetManager.open("tessdata/kor.traineddata");
+
+                    break;
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

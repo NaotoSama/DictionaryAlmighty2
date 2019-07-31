@@ -256,6 +256,8 @@
     <string name="Tessearct_opencv_ocr_recognition_EN">Tessearct English OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_JP">Tessearct Japanese OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_KOR">Tessearct Korean OCR</string>
+    <string name="open_photo_album">Open photo album</string>
+    <string name="performing_OCR_please_wait">Attention: The screen will turn black druing image OCR. Please wait.</string>
 
 
 </resources>

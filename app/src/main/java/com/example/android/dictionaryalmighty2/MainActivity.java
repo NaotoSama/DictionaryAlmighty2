@@ -52,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     ImageView ocr;
-
-    TextView tesseractText;
+    public static String tesseract_lang_code;  // The recognition language of tesseract
 
 
 
@@ -150,6 +149,73 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 設置下拉式選單
          */
+
+        /**
+         * OCR Spinner & Spinner Adapters
+         */
+        final Spinner OCRModeSpinner = findViewById(R.id.OCR_mode_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        final ArrayAdapter<CharSequence> OCRModeSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.OCR_spinner_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        OCRModeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        OCRModeSpinner.setAdapter(OCRModeSpinnerAdapter);
+
+        OCRModeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){
+                    return;
+
+                }
+                else if (position == 1) {
+                    Intent GoogleOCRIntent = new Intent();
+                    GoogleOCRIntent.setClass(MainActivity.this, OcrCaptureActivity.class);
+                    startActivity(GoogleOCRIntent);
+
+                }else if (position == 2) {
+                    tesseract_lang_code="eng";
+                    Intent tesscvEnglishIntent = new Intent();
+                    tesscvEnglishIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                    startActivity(tesscvEnglishIntent);
+
+                }else if (position == 3) {
+                    tesseract_lang_code = "chi_tra";
+                    Intent tesscvCHTWIntent = new Intent();
+                    tesscvCHTWIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                    startActivity(tesscvCHTWIntent);
+
+                }else if (position == 4) {
+                    tesseract_lang_code = "chi_sim";
+                    Intent tesscvCHCNIntent = new Intent();
+                    tesscvCHCNIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                    startActivity(tesscvCHCNIntent);
+
+                }else if (position == 5) {
+                    tesseract_lang_code = "jpn";
+                    Intent tesscvJPIntent = new Intent();
+                    tesscvJPIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                    startActivity(tesscvJPIntent);
+
+                }else if (position == 6) {
+                    tesseract_lang_code = "kor";
+                    Intent tesscvKRIntent = new Intent();
+                    tesscvKRIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                    startActivity(tesscvKRIntent);
+
+                }
+
+                OCRModeSpinner.setAdapter(OCRModeSpinnerAdapter);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+
 
         /**
          * Speech Recognition Spinner & Spinner Adapters

@@ -117,11 +117,13 @@
     <string name="title_activity_main">辨識樣本</string>
     <string name="use_flash">使用閃光</string>
     <string name="word_captured_message">發音中...(已成功擷取文字，您可返回前一頁查字典)</string>
-    <string name="Select_an_OCR_mode">選擇圖像文字辨識模式</string>
-    <string name="Google_optical_recognition">Google光學辨識(英文/拉丁文)</string>
+    <string name="Select_an_OCR_mode">圖像文字辨識模式</string>
+    <string name="Google_optical_recognition">Google光學辨識(僅歐美語言)</string>
     <string name="Tessearct_opencv_ocr_recognition_CH_TW">魔力方光學辨識繁體中文</string>
     <string name="Tessearct_opencv_ocr_recognition_CH_CN">魔力方光學辨識簡體中文</string>
     <string name="Tessearct_opencv_ocr_recognition_EN">魔力方光學辨識英文</string>
     <string name="Tessearct_opencv_ocr_recognition_JP">魔力方光學辨識日文</string>
     <string name="Tessearct_opencv_ocr_recognition_KOR">魔力方光學辨識韓文</string>
+    <string name="open_photo_album">開啟相簿</string>
+    <string name="performing_OCR_please_wait">注意:解析圖像時會黑屏，請等候1分鐘</string>
 </resources>
