@@ -257,7 +257,17 @@
     <string name="Tessearct_opencv_ocr_recognition_JP">Tessearct Japanese OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_KOR">Tessearct Korean OCR</string>
     <string name="open_photo_album">Open photo album</string>
-    <string name="performing_OCR_please_wait">Attention: The screen will turn black druing image OCR. Please wait.</string>
+    <string name="performing_crop_and_OCR_please_wait">Attention: The screen will hang or go black for a while during image selection and OCR.</string>
+    <string name="Passed_OcrSelectedText_to_main_page_toast">The following word(s) has been copied and pasted to the search box in the main menu:</string>
+    <string name="paste_to_search_box_in_MainAcitivity">Pass to main page</string>
+    <string name="Pass_to_main_page">Pass to main page</string>
+    <string name="Auto_translate_to_CH_TW">Auto translate to Chinese TW</string>
+    <string name="Auto_translate_to_EN">Auto translate to English</string>
+    <string name="Auto_translate_to_JP">Auto translate to Japanese</string>
+    <string name="Auto_translate_to_KR">Auto translate to Korean</string>
+    <string name="Auto_translate_to_SP">Auto translate to Spanish</string>
+    <string name="Auto_translate_to_CH_CN">Auto translate to Chinese CN</string>
+    <string name="OCR_auto_translating_toast">Auto translating</string>
 
 
 </resources>

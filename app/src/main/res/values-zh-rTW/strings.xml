@@ -125,5 +125,15 @@
     <string name="Tessearct_opencv_ocr_recognition_JP">魔力方光學辨識日文</string>
     <string name="Tessearct_opencv_ocr_recognition_KOR">魔力方光學辨識韓文</string>
     <string name="open_photo_album">開啟相簿</string>
-    <string name="performing_OCR_please_wait">注意:解析圖像時會黑屏，請等候1分鐘</string>
+    <string name="performing_crop_and_OCR_please_wait">注意:載入和解析圖像時將會卡頓與黑屏，請等候片刻</string>
+    <string name="Passed_OcrSelectedText_to_main_page_toast">已選取並貼上以下文字至主頁搜尋框:</string>
+    <string name="paste_to_search_box_in_MainAcitivity">傳送到主頁</string>
+    <string name="Pass_to_main_page">傳送到主頁</string>
+    <string name="Auto_translate_to_CH_TW">自動繁中譯</string>
+    <string name="Auto_translate_to_EN">自動英譯</string>
+    <string name="Auto_translate_to_JP">自動日譯</string>
+    <string name="Auto_translate_to_KR">自動韓譯</string>
+    <string name="Auto_translate_to_SP">自動西譯</string>
+    <string name="Auto_translate_to_CH_CN">自動簡中譯</string>
+    <string name="OCR_auto_translating_toast">自動翻譯中</string>
 </resources>

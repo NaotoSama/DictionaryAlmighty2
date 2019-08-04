@@ -64,9 +64,9 @@ public class tesscv {
 
                 break;
         }
-        // 设置psm模式
+        // 設置psm模式
         //m_tessApi.setPageSegMode(TessBaseAPI.PageSegMode.PSM_SINGLE_BLOCK);
-        // 设置白名单
+        // 設置白名單
         //m_tessApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
         //m_tessApi.setVariable(TessBaseAPI.VAR_CHAR_WHITELIST, "0123456789");
     }

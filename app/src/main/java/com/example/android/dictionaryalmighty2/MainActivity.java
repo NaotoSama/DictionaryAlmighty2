@@ -1047,6 +1047,51 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+        /**
+         * 用戶在OCR識別頁面(TesseractOpenCVCaptureActivity)選取文字並彈跳出客製選單後的跳轉設定
+         */
+        Bundle extras = getIntent().getExtras();
+        if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHTW") {
+            String UrlOcrSelectedTextToCHTW= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHTW);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        } else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHCN") {
+            String UrlOcrSelectedTextToCHCN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHCN);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to EN") {
+            String UrlOcrSelectedTextToEN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToEN);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to JP") {
+            String UrlOcrSelectedTextToJP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToJP);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to KR") {
+            String UrlOcrSelectedTextToKR= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToKR);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to SP") {
+            String UrlOcrSelectedTextToSP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToSP);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }
+
+
+
     }
 
 

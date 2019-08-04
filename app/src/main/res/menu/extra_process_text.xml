@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/Pass_to_main_page"
+        android:title="@string/Pass_to_main_page"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/Auto_translate_to_CH_TW"
+        android:title="@string/Auto_translate_to_CH_TW"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/Auto_translate_to_CH_CN"
+        android:title="@string/Auto_translate_to_CH_CN"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/Auto_translate_to_EN"
+        android:title="@string/Auto_translate_to_EN"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/Auto_translate_to_JP"
+        android:title="@string/Auto_translate_to_JP"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/Auto_translate_to_KR"
+        android:title="@string/Auto_translate_to_KR"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/Auto_translate_to_SP"
+        android:title="@string/Auto_translate_to_SP"
+        app:showAsAction="always"/>
+
+</menu>
