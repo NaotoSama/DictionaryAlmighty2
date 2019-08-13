@@ -3,19 +3,16 @@ package com.example.android.dictionaryalmighty2;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -32,14 +29,22 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.yalantis.ucrop.UCrop;
+import com.yalantis.ucrop.UCropActivity;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
+
 import pl.droidsonroids.gif.GifImageView;
 
 
 public class MainActivity extends AppCompatActivity {
 
     GifImageView gifImageView; //用來準備給用戶更換背景圖
+    ImageView backGroundImageView;
     public static EditText wordInputView;    //關鍵字輸入框
     String searchKeyword;      //用戶輸入的關鍵字
     WebView webViewBrowser;    //網頁框
@@ -54,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
     ImageView ocr;
     public static String tesseract_lang_code;  // The recognition language of tesseract
 
+    File tempOutputFileForBackgroundImage;
+    Uri imageForBackground;                                //相簿中的原始圖檔
+    Bitmap m_phone_for_background;                           // Bitmap圖像
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
@@ -64,34 +73,31 @@ public class MainActivity extends AppCompatActivity {
         requestWritePermission();  //在程式運行中要求存取的權限
 
         gifImageView = findViewById(R.id.GIF_imageView);
+        backGroundImageView = findViewById(R.id.background_image_view);
         wordInputView = findViewById(R.id.Word_Input_View);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         exitApp = findViewById(R.id.Exit_app_imageView);
         changeBackground = findViewById(R.id.Change_background_imageView);
 
 
+
+        backGroundImageView.setVisibility(View.GONE);
+
+
         /**
          * 設置背景圖的更換
          */
-        changeBackground.setOnClickListener(new View.OnClickListener() {
+        changeBackground.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View view) {    //點擊更換背景鈕時觸發監聽器
-                //打開相簿讓用戶選圖
-                Intent i = new
-                        Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK, null);
+                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
+                startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
             }
         });
 
 
-        String picturePath = DataManager.getInstance().getImageUrl();  //獲取圖片位址
-        if(picturePath == null || picturePath.trim().equals("")){
-            //Set some default image that will be visible before selecting image
-        }else{
-            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);  //讀取圖片
-            BitmapDrawable background = new BitmapDrawable(bitmap);
-            gifImageView.setBackgroundDrawable(background);         //把用戶選擇的圖片設置為新的背景
-        }
+
 
 
 
@@ -248,6 +254,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
+                    speechAutoTranslationCode="disabled"; //設定一個無效化的代碼以免被自動翻譯的speechAutoTranslationCode代碼干擾
+
                 }else if (position == 2) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -258,6 +266,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
+
+                    speechAutoTranslationCode="disabled"; //設定一個無效化的代碼以免被自動翻譯的speechAutoTranslationCode代碼干擾
 
                 }else if (position == 3){
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -270,6 +280,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
+                    speechAutoTranslationCode="disabled"; //設定一個無效化的代碼以免被自動翻譯的speechAutoTranslationCode代碼干擾
+
                 }else if (position == 4) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -280,6 +292,8 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
+
+                    speechAutoTranslationCode="disabled"; //設定一個無效化的代碼以免被自動翻譯的speechAutoTranslationCode代碼干擾
 
                 }else if (position == 5) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -292,6 +306,8 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
 
+                    speechAutoTranslationCode="disabled"; //設定一個無效化的代碼以免被自動翻譯的speechAutoTranslationCode代碼干擾
+
                 }else if (position == 6) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -302,6 +318,9 @@ public class MainActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
                     }
+
+                    speechAutoTranslationCode="disabled"; //設定一個無效化的代碼以免被自動翻譯的speechAutoTranslationCode代碼干擾
+
 
                 }else if (position == 7) {    //此行以下設置語音辨識 + 自動翻譯
                     return;
@@ -1112,6 +1131,35 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    public void cropRawPhotoForBackgroundImage (Uri image) {
+
+        // 修改設定
+        UCrop.Options options = new UCrop.Options();
+
+        // 圖片格式
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+
+        // 設定圖片壓縮質量
+        options.setCompressionQuality(100);
+
+        // 允許手指縮放、旋轉圖片，開放所有裁切框的長寬比例
+        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.NONE);
+
+        // 是否讓使用者調整範圍(預設false)，如果開啟，可能會造成剪下的圖片的長寬比不是設定的
+        // 如果不開啟，使用者不能拖動選框，只能縮放圖片
+        options.setFreeStyleCropEnabled(false);
+
+        // 設定原圖及目標暫存位置
+        UCrop.of(image, Uri.fromFile(tempOutputFileForBackgroundImage))
+                // 導入客製化設定
+                .withOptions(options)
+                .withAspectRatio(9, 16)
+                .start(this);
+    }
+
+
+
      /**
      * 在OnCreate外面設置語音輸入的相關設定
      * 以及在OnCreate外面另外設置用戶選取背景圖時的相關設定
@@ -1190,19 +1238,37 @@ public class MainActivity extends AppCompatActivity {
 
 
         //設置用戶選取背景圖時的相關設定
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            DataManager.getInstance().setImageUrl(picturePath);
-            cursor.close();
-
-            //Recreate this Activity after the user selects the new background
-            recreate();// 直接調用Activity的recreate()方法重啟Activity
+        if (resultCode == 0 || data == null) {
+            return;
         }
+        // 相簿
+        if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
+            imageForBackground = data.getData();
+            try {
+                tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");;
+                m_phone_for_background = MediaStore.Images.Media.getBitmap(getContentResolver(), imageForBackground);
+
+                cropRawPhotoForBackgroundImage(imageForBackground);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            final Uri resultUri = UCrop.getOutput(data);
+            try {
+                Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                m_phone_for_background = croppedBitmap;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
+        }
+
+        gifImageView.setVisibility(View.GONE);
+        backGroundImageView.setImageBitmap(m_phone_for_background);
+        backGroundImageView.setVisibility(View.VISIBLE);
 
     }
 

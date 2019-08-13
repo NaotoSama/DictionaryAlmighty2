@@ -34,10 +34,11 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
     ImageView imageView = null;               // 截取圖像
     EditText OcrTextView = null;                 // OCR 識別結果
 
-    Bitmap m_phone;                           // Bitmap圖像
+    Bitmap orginal_photo;                           // Bitmap相簿中的原始圖像
+    Bitmap cropped_photo;                           // 裁切完的圖像
     String m_ocrOfBitmap;                     // Bitmap圖像OCR識別結果
     InputStream m_instream;
-    Uri image;                                //相簿中的原始圖檔
+    Uri image;                                //相簿中的原始圖檔位址
     File tempOutputFile;                      //裁切圖片後的暫存位址
 
     public static String UrlKey;  //用於自動翻譯OcrSelectedText的網址識別key
@@ -203,6 +204,10 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
     }
 
 
+
+    /**
+     * Helper method for photo cropping
+     */
     public void cropRawPhoto(Uri image) {
 
         // 修改設定
@@ -237,10 +242,14 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
         }
         // 相簿
         if (requestCode == PHOTOALBUM) {
+            //開啟相簿時先把原圖與裁切完的圖清空，以免識別多圖之後軟體滿載崩潰
+            orginal_photo = null;
+            cropped_photo = null;
+
             image = data.getData();
             try {
-                tempOutputFile = new File(getExternalCacheDir(), "temp-profile_image.jpg");;
-                m_phone = MediaStore.Images.Media.getBitmap(getContentResolver(), image);
+                tempOutputFile = new File(getExternalCacheDir(), "temp-profile_image.jpg");
+                orginal_photo = MediaStore.Images.Media.getBitmap(getContentResolver(), image);
 
                 cropRawPhoto(image);
             } catch (IOException e) {
@@ -252,7 +261,7 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
             final Uri resultUri = UCrop.getOutput(data);
             try {
                 Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                m_phone = croppedBitmap;
+                cropped_photo = croppedBitmap;
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -261,10 +270,10 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
         }
 
         // 處理結果
-        imageView.setImageBitmap(m_phone);
+        imageView.setImageBitmap(cropped_photo);
         if (OpenCVLoader.initDebug()) {
             // do some opencv stuff
-            tesscv jmi = new tesscv(m_phone, m_instream);
+            tesscv jmi = new tesscv(cropped_photo, m_instream);
             m_ocrOfBitmap = jmi.getOcrOfBitmap();
         }
         OcrTextView.setText(m_ocrOfBitmap);
