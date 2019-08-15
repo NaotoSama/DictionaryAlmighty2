@@ -37,6 +37,14 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <!-- By adding another Intent Filter element as below, we are specifying additional options for launching the app.
+                    Inside the new element, add an Action element specifying the SEND Intent Action -->
+                <action android:name="android.intent.action.SEND" />        <!-- This tells Android that when other apps launch a SEND Intent this app may receive what is being shared. -->
+                <category android:name="android.intent.category.DEFAULT" /> <!-- Give the Intent Filter a category -->
+                <data android:mimeType="text/*" />                          <!-- Indicate the MIME types the app is going to receive -->
+            </intent-filter>
         </activity>
 
         <activity android:name=".DataManager">

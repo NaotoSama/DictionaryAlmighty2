@@ -36,7 +36,7 @@
     <string name="Your_Dictionary_Example_Sentences">Your Dictionary例句搜尋</string>
     <string name="Word_Cool_EN_CH">句酷 中英英中</string>
     <string name="Word_Cool_EN_JP">句酷 日英英日</string>
-    <string name="Wikipedia">維基百科</string>
+    <string name="Wikipedia">英文維基百科</string>
     <string name="Forvo">Forvo發音字典</string>
     <string name="Wiki_Diff">Wiki Diff</string>
     <string name="Net_Speak">Net Speak</string>
@@ -87,14 +87,6 @@
     <string name="Spanish_speech">西文辨識</string>
     <string name="Simplified_chinese_speech">簡中辨識</string>
     <string name="Korean_speech">韓文辨識</string>
-    <string name="Google_translator_CH_EN">Google翻譯機中翻英</string>
-    <string name="Google_translator_EN_CH">Google翻譯機英翻中</string>
-    <string name="Google_translator_JP_CH">Google翻譯機日翻中</string>
-    <string name="Google_translator_CH_JP">Google翻譯機中翻日</string>
-    <string name="Google_translator_ES_CH">Google翻譯機西翻中</string>
-    <string name="Google_translator_CH_ES">Google翻譯機中翻西</string>
-    <string name="Google_translator_KR_CH">Google翻譯機韓翻中</string>
-    <string name="Google_translator_CH_KR">Google翻譯機中翻韓</string>
     <string name="CH_speech_auto_translate_to_EN">中文辨識 自動英譯</string>
     <string name="EN_speech_auto_translate_to_CH">英文辨識 自動中譯</string>
     <string name="CH_speech_auto_translate_to_JP">中文辨識 自動日譯</string>
@@ -136,4 +128,13 @@
     <string name="Auto_translate_to_SP">自動西譯</string>
     <string name="Auto_translate_to_CH_CN">自動簡中譯</string>
     <string name="OCR_auto_translating_toast">自動翻譯中</string>
+    <string name="must_get_TextScanner_app">您必須先安裝第三方的「文字掃描儀」App才能使用此功能，請按上方的安裝鈕</string>
+    <string name="TextScanner_app_OCR_recognition">「文字掃描儀」App光學辨識(推薦)</string>
+    <string name="received_words">接收的文字</string>
+    <string name="Google_translate_to_CHTW">Google譯成繁中</string>
+    <string name="Google_translate_to_CHCN">Google譯成簡中</string>
+    <string name="Google_translate_to_EN">Google譯成英文</string>
+    <string name="Google_translate_to_JP">Google譯成日文</string>
+    <string name="Google_translate_to_KR">Google譯成韓文</string>
+    <string name="Google_translate_to_SP">Google譯成西文</string>
 </resources>

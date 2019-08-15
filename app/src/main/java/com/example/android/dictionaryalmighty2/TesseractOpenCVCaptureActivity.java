@@ -132,7 +132,7 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.OCR_auto_translating_toast), Toast.LENGTH_LONG).show();
                     UrlKey="Translate OcrSelectedText to CHTW";
                     Intent autoTranslateOcrSelectedTextToCHTW = new Intent(TesseractOpenCVCaptureActivity.this, MainActivity.class);
-                    autoTranslateOcrSelectedTextToCHTW.putExtra(UrlKey, "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+OcrSelectedText);
+                    autoTranslateOcrSelectedTextToCHTW.putExtra(UrlKey, "https://translate.googlexx.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+OcrSelectedText);
                     startActivity(autoTranslateOcrSelectedTextToCHTW);
                     return true;
 
