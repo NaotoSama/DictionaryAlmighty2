@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
+    <!--以下功能廢除不使用了-->
+
     <com.example.android.dictionaryalmighty2.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"

@@ -7,6 +7,10 @@ import android.view.View;
 import java.util.HashSet;
 import java.util.Set;
 
+
+/*以下功能廢除不使用了*/
+
+
 /**
  * A view which renders a series of custom graphics to be overlaid on top of an associated preview
  * (i.e., the camera preview).  The creator can add graphics objects, update the objects, and remove

@@ -14,6 +14,10 @@ import android.view.SurfaceView;
 import android.view.ViewGroup;
 import java.io.IOException;
 
+
+/*以下功能廢除不使用了*/
+
+
 public class CameraSourcePreview extends ViewGroup {
     private static final String TAG = "CameraSourcePreview";
 

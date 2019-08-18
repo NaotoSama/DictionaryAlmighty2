@@ -8,6 +8,10 @@ import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.Text;
 import java.util.List;
 
+
+/*以下功能廢除不使用了*/
+
+
 /**
  * Graphic instance for rendering TextBlock position, size, and ID within an associated graphic
  * overlay view.

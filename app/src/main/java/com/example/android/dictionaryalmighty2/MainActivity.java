@@ -36,7 +36,6 @@ import com.yalantis.ucrop.UCropActivity;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -56,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
+    String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
     ImageView ocr;
     public static String tesseract_lang_code;  // The recognition language of tesseract
 
@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         changeBackground.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                changeBackgroundButtonIsPressed="yes";
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
                 intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
                 startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
@@ -110,19 +111,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+                                                            /* 以下功能廢除不使用了
+                                                            // 設置OCR文字辨識
+                                                            ocr=findViewById(R.id.ocr_imageView);
+                                                            ocr.setOnClickListener(new View.OnClickListener() {
+                                                                @Override
+                                                                public void onClick(View v) {
+                                                                    Intent intent = new Intent(MainActivity.this, OcrCaptureActivity.class);
+                                                                    startActivity(intent);
 
-        /**
-         * 設置OCR文字辨識
-         */
-        ocr=findViewById(R.id.ocr_imageView);
-        ocr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, OcrCaptureActivity.class);
-                startActivity(intent);
-
-            }
-        });
+                                                                }
+                                                            });
+                                                            */
 
 
 
@@ -226,46 +226,84 @@ public class MainActivity extends AppCompatActivity {
                         callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         callTextScannerAppIntent.setData(Uri.parse("market://details?id=" + "com.peace.TextScanner"));
                         startActivity(callTextScannerAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.must_get_TextScanner_app), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
                     }
 
                 }
                 else if (position == 2) {
-                    Intent GoogleOCRIntent = new Intent();
-                    GoogleOCRIntent.setClass(MainActivity.this, OcrCaptureActivity.class);
-                    startActivity(GoogleOCRIntent);
-
-                }else if (position == 3) {
-                    tesseract_lang_code="eng";
-                    Intent tesscvEnglishIntent = new Intent();
-                    tesscvEnglishIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                    startActivity(tesscvEnglishIntent);
-
-                }else if (position == 4) {
-                    tesseract_lang_code = "chi_tra";
-                    Intent tesscvCHTWIntent = new Intent();
-                    tesscvCHTWIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                    startActivity(tesscvCHTWIntent);
-
-                }else if (position == 5) {
-                    tesseract_lang_code = "chi_sim";
-                    Intent tesscvCHCNIntent = new Intent();
-                    tesscvCHCNIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                    startActivity(tesscvCHCNIntent);
-
-                }else if (position == 6) {
-                    tesseract_lang_code = "jpn";
-                    Intent tesscvJPIntent = new Intent();
-                    tesscvJPIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                    startActivity(tesscvJPIntent);
-
-                }else if (position == 7) {
-                    tesseract_lang_code = "kor";
-                    Intent tesscvKRIntent = new Intent();
-                    tesscvKRIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                    startActivity(tesscvKRIntent);
+                    //呼叫第三方「Google翻譯」app
+                    Intent callGgoogleTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.apps.translate");
+                    if (callGgoogleTranslateAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callGgoogleTranslateAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callGgoogleTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callGgoogleTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.google.android.apps.translate"));
+                        startActivity(callGgoogleTranslateAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_GoogleTranslate_app), Toast.LENGTH_LONG).show();
+                    }
 
                 }
+                else if (position == 3) {
+                    //呼叫第三方「微軟翻譯」app
+                    Intent callMicrosoftTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.microsoft.translator");
+                    if (callMicrosoftTranslateAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callMicrosoftTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callMicrosoftTranslateAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callMicrosoftTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callMicrosoftTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callMicrosoftTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.microsoft.translator"));
+                        startActivity(callMicrosoftTranslateAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_MicrosoftTranslate_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+
+                                                                /* 以下功能廢除不使用了
+                                                                else if (position == 4) {
+                                                                    Intent GoogleOCRIntent = new Intent();
+                                                                    GoogleOCRIntent.setClass(MainActivity.this, OcrCaptureActivity.class);
+                                                                    startActivity(GoogleOCRIntent);
+
+                                                                }else if (position == 5) {
+                                                                    tesseract_lang_code="eng";
+                                                                    Intent tesscvEnglishIntent = new Intent();
+                                                                    tesscvEnglishIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvEnglishIntent);
+
+                                                                }else if (position == 6) {
+                                                                    tesseract_lang_code = "chi_tra";
+                                                                    Intent tesscvCHTWIntent = new Intent();
+                                                                    tesscvCHTWIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvCHTWIntent);
+
+                                                                }else if (position == 7) {
+                                                                    tesseract_lang_code = "chi_sim";
+                                                                    Intent tesscvCHCNIntent = new Intent();
+                                                                    tesscvCHCNIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvCHCNIntent);
+
+                                                                }else if (position == 8) {
+                                                                    tesseract_lang_code = "jpn";
+                                                                    Intent tesscvJPIntent = new Intent();
+                                                                    tesscvJPIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvJPIntent);
+
+                                                                }else if (position == 9) {
+                                                                    tesseract_lang_code = "kor";
+                                                                    Intent tesscvKRIntent = new Intent();
+                                                                    tesscvKRIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvKRIntent);
+
+                                                                }
+                                                                */
 
                 OCRModeSpinner.setAdapter(OCRModeSpinnerAdapter);
 
@@ -938,6 +976,12 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 16) {
+                    String imageSearchUrl= "http://images.google.com/search?tbm=isch&q="+searchKeyword;
+                    webViewBrowser.loadUrl(imageSearchUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
                 }
 
                 GoogleWordSearchSpinner.setAdapter(GoogleWordSearchSpinnerAdapter);
@@ -1036,63 +1080,57 @@ public class MainActivity extends AppCompatActivity {
                     return;
 
                 }
-                if (position == 1){
-                    String wikipediaUrl= "https://en.wikipedia.org/wiki/"+searchKeyword;
-                    webViewBrowser.loadUrl(wikipediaUrl);
+                else if (position == 1){
+                    String wikipediaTWUrl= "https://zh.wikipedia.org/wiki/"+searchKeyword;
+                    webViewBrowser.loadUrl(wikipediaTWUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 2) {
+                }else if (position == 2){
+                    String wikipediaENUrl= "https://en.wikipedia.org/wiki/"+searchKeyword;
+                    webViewBrowser.loadUrl(wikipediaENUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 3){
+                    String enEncyclopediaUrl= "https://www.encyclo.co.uk/meaning-of-"+searchKeyword;
+                    webViewBrowser.loadUrl(enEncyclopediaUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 4) {
                     String forvoUrl= "https://forvo.com/search/"+searchKeyword;
                     webViewBrowser.loadUrl(forvoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 3){
+                }else if (position == 5){
                     String wikidiffUrl= "https://wikidiff.com/"+searchKeyword;
                     webViewBrowser.loadUrl(wikidiffUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 4) {
+                }else if (position == 6) {
                     String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
                     webViewBrowser.loadUrl(netspeakUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 5) {
+                }else if (position == 7) {
                     String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
                     webViewBrowser.loadUrl(yomikatawaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 6) {
+                }else if (position == 8) {
                     String ChigaihaUrl= "https://cse.google.co.jp/cse?cx=partner-pub-1137871985589263%3A3025760782&ie=UTF-8&q="+searchKeyword;
                     webViewBrowser.loadUrl(ChigaihaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 7) {
+                }else if (position == 9) {
                     String suzukikunUrl= "http://www.gavo.t.u-tokyo.ac.jp/ojad/search/index/sortprefix:accent/narabi1:kata_asc/narabi2:accent_asc/narabi3:mola_asc/yure:visible/curve:invisible/details:invisible/limit:20/word:"+searchKeyword;
                     webViewBrowser.loadUrl(suzukikunUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 8) {
-                    String googleTranslateToCHCN= "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+searchKeyword;
-                    webViewBrowser.loadUrl(googleTranslateToCHCN);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 9) {
-                    String googleTranslateToCHTW= "https://translate.google.com.tw/?hl=zh-CN&tab=TT#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
-                    webViewBrowser.loadUrl(googleTranslateToCHTW);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 10) {
-                    String imageSearchUrl= "http://images.google.com/search?tbm=isch&q="+searchKeyword;
-                    webViewBrowser.loadUrl(imageSearchUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -1159,20 +1197,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 在OnCreate外面設置語音辨識與的相關設定
      */
-    public void getSpeechInput(View view) {
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, 10);
-        } else {
-            Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
 
     public void cropRawPhotoForBackgroundImage (Uri image) {
 
@@ -1280,37 +1304,41 @@ public class MainActivity extends AppCompatActivity {
 
 
         //設置用戶選取背景圖時的相關設定
-        if (resultCode == 0 || data == null) {
+        if (changeBackgroundButtonIsPressed=="yes") {
+            if (resultCode == 0 || data == null) {
+                return;
+            }
+            // 相簿
+            if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
+                imageForBackground = data.getData();
+                try {
+                    tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");;
+                    m_phone_for_background = MediaStore.Images.Media.getBitmap(getContentResolver(), imageForBackground);
+
+                    cropRawPhotoForBackgroundImage(imageForBackground);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+                final Uri resultUri = UCrop.getOutput(data);
+                try {
+                    Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    m_phone_for_background = croppedBitmap;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                final Throwable cropError = UCrop.getError(data);
+            }
+
+            gifImageView.setVisibility(View.GONE);
+            backGroundImageView.setImageBitmap(m_phone_for_background);
+            backGroundImageView.setVisibility(View.VISIBLE);
+        } else {
             return;
         }
-        // 相簿
-        if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
-            imageForBackground = data.getData();
-            try {
-                tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");;
-                m_phone_for_background = MediaStore.Images.Media.getBitmap(getContentResolver(), imageForBackground);
-
-                cropRawPhotoForBackgroundImage(imageForBackground);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-            final Uri resultUri = UCrop.getOutput(data);
-            try {
-                Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                m_phone_for_background = croppedBitmap;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            final Throwable cropError = UCrop.getError(data);
-        }
-
-        gifImageView.setVisibility(View.GONE);
-        backGroundImageView.setImageBitmap(m_phone_for_background);
-        backGroundImageView.setVisibility(View.VISIBLE);
 
     }
 

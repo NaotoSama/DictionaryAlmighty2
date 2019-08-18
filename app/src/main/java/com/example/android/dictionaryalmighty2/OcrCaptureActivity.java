@@ -32,6 +32,10 @@ import com.google.android.gms.vision.text.TextRecognizer;
 import java.io.IOException;
 import java.util.Locale;
 
+
+/*以下功能廢除不使用了*/
+
+
 /**
  * Activity for the Ocr Detecting app.  This app detects text and displays the value with the
  * rear facing camera. During detection overlay graphics are drawn to indicate the position,
@@ -135,9 +139,9 @@ public final class OcrCaptureActivity extends AppCompatActivity {
             }
         };
 
-        Snackbar.make(graphicOverlay, R.string.permission_camera_rationale,
+        Snackbar.make(graphicOverlay, R.string.Permission_camera_rationale,
                 Snackbar.LENGTH_INDEFINITE)
-                .setAction(R.string.ok, listener)
+                .setAction(R.string.OK, listener)
                 .show();
     }
 
@@ -187,8 +191,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
             boolean hasLowStorage = registerReceiver(null, lowstorageFilter) != null;
 
             if (hasLowStorage) {
-                Toast.makeText(this, R.string.low_storage_error, Toast.LENGTH_LONG).show();
-                Log.w(TAG, getString(R.string.low_storage_error));
+                Toast.makeText(this, R.string.Low_storage_error, Toast.LENGTH_LONG).show();
+                Log.w(TAG, getString(R.string.Low_storage_error));
             }
         }
 
@@ -284,8 +288,8 @@ public final class OcrCaptureActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Multitracker sample")
-                .setMessage(R.string.no_camera_permission)
-                .setPositiveButton(R.string.ok, listener)
+                .setMessage(R.string.No_camera_permission)
+                .setPositiveButton(R.string.OK, listener)
                 .show();
     }
 
@@ -337,7 +341,7 @@ public final class OcrCaptureActivity extends AppCompatActivity {
                 TextBlockObject = text.getValue();
                 // 把抓到的String文字帶入主畫面的單字搜尋框內
                 MainActivity.wordInputView.setText(TextBlockObject);
-                Toast.makeText(getApplicationContext(), getText(R.string.word_captured_message), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getText(R.string.Word_captured_message), Toast.LENGTH_LONG).show();
             }
             else {
                 Log.d(TAG, "text data is null");

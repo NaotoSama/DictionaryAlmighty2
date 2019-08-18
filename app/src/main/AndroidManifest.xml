@@ -47,6 +47,9 @@
             </intent-filter>
         </activity>
 
+
+
+        <!--此功能廢除不使用了 -->
         <activity android:name=".DataManager">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,6 +57,7 @@
             </intent-filter>
         </activity>
 
+        <!--此功能廢除不使用了 -->
         <activity android:name=".OcrCaptureActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -61,6 +65,7 @@
             </intent-filter>
         </activity>
 
+        <!--此功能廢除不使用了 -->
         <activity android:name=".TesseractOpenCVCaptureActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -69,6 +74,7 @@
             </intent-filter>
         </activity>
 
+        <!--此功能廢除不使用了 -->
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"

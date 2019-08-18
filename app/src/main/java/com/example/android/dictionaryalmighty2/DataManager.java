@@ -2,6 +2,10 @@ package com.example.android.dictionaryalmighty2;
 
 import android.support.v7.app.AppCompatActivity;
 
+
+/*以下功能廢除不使用了*/
+
+
 public class DataManager extends AppCompatActivity {
     private static DataManager dataManager;
     private String imageUrl;

@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 
+/*以下功能廢除不使用了*/
+
 
 public class tesscv {
     private final static String TAG = "TessCV";

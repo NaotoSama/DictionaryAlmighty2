@@ -1,14 +1,21 @@
 <resources>
 
     <string-array name="OCR_spinner_array">
-        <item>@string/Select_an_OCR_mode</item>
-        <item>@string/TextScanner_app_OCR_recognition</item>
-        <item>@string/Google_optical_recognition</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>
+        <item>@string/Select_an_OCR_third_party_app</item>
+        <item>@string/Call_TextScanner_app</item>
+        <item>@string/Call_google_translate_app</item>
+        <item>@string/Call_microsoft_translator_app_ocr_recognition</item>
+
+
+                                                        <!--以下功能廢除不使用了
+                                                        <item>@string/Google_optical_recognition</item>
+                                                        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>
+                                                        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>
+                                                        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>
+                                                        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>
+                                                        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>
+                                                        -->
+
     </string-array>
 
 
@@ -74,7 +81,7 @@
         <item>@string/Kanji_Dictionary_Online</item>
         <item>@string/Eijirou</item>
         <item>@string/How_do_you_say_this_in_English</item>
-        <item>@string/goo</item>
+        <item>@string/Goo</item>
         <item>@string/Jisho</item>
         <item>@string/J_Logos</item>
         <item>@string/DA_JP_TW_Dictionary</item>
@@ -100,6 +107,7 @@
         <item>@string/Google_translate_to_JP</item>
         <item>@string/Google_translate_to_KR</item>
         <item>@string/Google_translate_to_SP</item>
+        <item>@string/Google_Image</item>
     </string-array>
 
 
@@ -115,17 +123,16 @@
 
     <string-array name="Miscellaneous_searcher_spinner_array">
         <item>@string/Select_one_of_the_following</item>
-        <item>@string/Wikipedia</item>
+        <item>@string/Wikipedia_TW</item>
+        <item>@string/Wikipedia_EN</item>
+        <item>@string/English_Encyclopedia</item>
         <item>@string/Forvo</item>
         <item>@string/Wiki_Diff</item>
         <item>@string/Net_Speak</item>
         <item>@string/Yomikata</item>
         <item>@string/Chigai</item>
         <item>@string/OJAD</item>
-        <item>@string/Google_TW_CN</item>
-        <item>@string/Google_CN_TW</item>
-        <item>@string/Google_Image</item>
-    </string-array>
+        </string-array>
 
 
     <string name="Yahoo_Dictionary">Yahoo Dictionary</string>
@@ -165,15 +172,13 @@
     <string name="Word_Cool_EN_CH">Word Cool EN_CH</string>
     <string name="Word_Cool_EN_JP">Word Cool EN_JP</string>
     <string name="Word_Cool_JP_CH">Word Cool JP_CH</string>
-    <string name="Wikipedia">Wikipedia</string>
+    <string name="Wikipedia_EN">Wikipedia EN</string>
     <string name="Forvo">Forvo</string>
     <string name="Wiki_Diff">Wiki Diff</string>
     <string name="Net_Speak">Net Speak</string>
     <string name="Yomikata">読み方は？</string>
     <string name="Chigai">違いは？</string>
     <string name="OJAD">OJAD鈴木君</string>
-    <string name="Google_TW_CN">Google繁體轉簡體</string>
-    <string name="Google_CN_TW">Google簡體轉繁體</string>
     <string name="Google_Image">Google Image</string>
     <string name="Word_Input">Word Input</string>
     <string name="Select_EN_Dictionary_Provider">Select EN Dictionary Provider</string>
@@ -190,12 +195,12 @@
     <string name="Tangorin_Names">Tangorin Names</string>
     <string name="Tangorin_Sentence">Tangorin Sentence</string>
     <string name="Kotoba_Bank">Kotoba Bank</string>
-    <string name="Wiki_Dictionary">Wiki Dictionary</string>
+    <string name="Wiki_Dictionary">Wiktionary</string>
     <string name="Onelook">Onelook</string>
     <string name="Word_Hippo">Word Hippo</string>
     <string name="Weblio_Synonym">Weblio Synonym</string>
     <string name="Jisho">Jisho</string>
-    <string name="goo">Goo Dictionary</string>
+    <string name="Goo">Goo Dictionary</string>
     <string name="Select_one_of_the_following">Select one of the following</string>
     <string name="J_Logos">J Logos</string>
     <string name="Search_Result_Display">Search result will be displayed here</string>
@@ -209,48 +214,48 @@
     <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
     <string name="Voice_input">Voice Input</string>
     <string name="Speech_input">Speech input</string>
-    <string name="Chinese_speech">Chinese speech</string>
-    <string name="English_speech">English speech</string>
-    <string name="Japanese_speech">Japanese speech</string>
-    <string name="Spanish_speech">Spanish speech</string>
-    <string name="Simplified_chinese_speech">Simplified Chinese speech</string>
-    <string name="Korean_speech">Korean speech</string>
-    <string name="Speech_recognition_plus_Auto_Translation">Speech recognition + Auto translation</string>
-    <string name="CH_speech_auto_translate_to_EN">CH speech auto translate to EN</string>
-    <string name="EN_speech_auto_translate_to_CH">EN speech auto translate to CH</string>
-    <string name="CH_speech_auto_translate_to_JP">CH speech auto translate to JP</string>
-    <string name="JP_speech_auto_translate_to_CH">JP speech auto translate to CH</string>
-    <string name="CH_speech_auto_translate_to_KR">CH speech auto translate to KR</string>
-    <string name="KR_speech_auto_translate_to_CH">KR speech auto translate to CH</string>
-    <string name="CH_speech_auto_translate_to_ES">CH speech auto translate to ES</string>
-    <string name="ES_speech_auto_translate_to_CH">ES speech auto translate to CH</string>
+    <string name="Chinese_speech">Chinese</string>
+    <string name="English_speech">English</string>
+    <string name="Japanese_speech">Japanese</string>
+    <string name="Spanish_speech">Spanish</string>
+    <string name="Simplified_chinese_speech">Simplified Chinese</string>
+    <string name="Korean_speech">Korean</string>
+    <string name="Speech_recognition_plus_Auto_Translation">Speech Translation</string>
+    <string name="CH_speech_auto_translate_to_EN">Chinese to English</string>
+    <string name="EN_speech_auto_translate_to_CH">English to Chinese</string>
+    <string name="CH_speech_auto_translate_to_JP">Chinese to Japanese</string>
+    <string name="JP_speech_auto_translate_to_CH">Japanese to Chinese</string>
+    <string name="CH_speech_auto_translate_to_KR">Chinese to Korean</string>
+    <string name="KR_speech_auto_translate_to_CH">Korean to Chinese</string>
+    <string name="CH_speech_auto_translate_to_ES">Chinese to Spanish</string>
+    <string name="ES_speech_auto_translate_to_CH">Spanish to Chinese</string>
 
 
 
-    <string name="ok">OK</string>
-    <string name="permission_camera_rationale">Access to the camera is needed for detection</string>
-    <string name="no_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
-    <string name="low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
-    <string name="title_activity_main">Ocr Detector Sample</string>
-    <string name="ocr_header">Click &quot;Detect Text&quot; to detect text</string>
-    <string name="read_text">Detect Text</string>
-    <string name="auto_focus">Auto Focus</string>
-    <string name="use_flash">Use Flash</string>
-    <string name="ocr_success">Text read successfully</string>
-    <string name="ocr_failure">No text captured</string>
-    <string name="ocr_error">"Error reading text: %1$s"</string>
-    <string name="word_captured_message">Pronouncing...(word successfully captured. You can go back to the previous page to look up in dictionaries)</string>
-    <string name="Select_an_OCR_mode">Select an OCR mode</string>
+    <string name="OK">OK</string>
+    <string name="Permission_camera_rationale">Access to the camera is needed for detection</string>
+    <string name="No_camera_permission">This application cannot run because it does not have the camera permission.  The application will now exit.</string>
+    <string name="Low_storage_error">Ocr dependencies cannot be downloaded due to low device storage</string>
+    <string name="Title_activity_main">Ocr Detector Sample</string>
+    <string name="Ocr_header">Click &quot;Detect Text&quot; to detect text</string>
+    <string name="Read_text">Detect Text</string>
+    <string name="Auto_focus">Auto Focus</string>
+    <string name="Use_flash">Use Flash</string>
+    <string name="Ocr_success">Text read successfully</string>
+    <string name="Ocr_failure">No text captured</string>
+    <string name="Ocr_error">"Error reading text: %1$s"</string>
+    <string name="Word_captured_message">Pronouncing...(word successfully captured. You can go back to the previous page to look up in dictionaries)</string>
+    <string name="Select_an_OCR_third_party_app">Image Text Recognition</string>
     <string name="Google_optical_recognition">Google OCR (EN/Latin)</string>
     <string name="Tessearct_opencv_ocr_recognition_CH_TW">Tessearct Traditional Chinese OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_CH_CN">Tessearct Simplified Chinese OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_EN">Tessearct English OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_JP">Tessearct Japanese OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_KOR">Tessearct Korean OCR</string>
-    <string name="open_photo_album">Open photo album</string>
-    <string name="performing_crop_and_OCR_please_wait">Attention: The screen will hang or go black for a while during image selection and OCR.</string>
+    <string name="Open_photo_album">Open photo album</string>
+    <string name="Performing_crop_and_OCR_please_wait">Attention: The screen will hang or go black for a while during image selection and OCR.</string>
     <string name="Passed_OcrSelectedText_to_main_page_toast">The following word(s) has been copied and pasted to the search box in the main menu:</string>
-    <string name="paste_to_search_box_in_MainAcitivity">Pass to main page</string>
+    <string name="Paste_to_search_box_in_MainAcitivity">Pass to main page</string>
     <string name="Pass_to_main_page">Pass to main page</string>
     <string name="Auto_translate_to_CH_TW">Auto translate to Chinese TW</string>
     <string name="Auto_translate_to_EN">Auto translate to English</string>
@@ -259,15 +264,21 @@
     <string name="Auto_translate_to_SP">Auto translate to Spanish</string>
     <string name="Auto_translate_to_CH_CN">Auto translate to Chinese CN</string>
     <string name="OCR_auto_translating_toast">Auto translating</string>
-    <string name="must_get_TextScanner_app">The 3rd-party TextScanner App must be installed to proceed with this function</string>
-    <string name="TextScanner_app_OCR_recognition">TextScanner App OCR Recognition (Recommended)</string>
-    <string name="received_words">Received words</string>
+    <string name="Must_get_TextScanner_app">The 3rd-party TextScanner App must be installed to proceed with this function</string>
+    <string name="Call_TextScanner_app">Call TextScanner App</string>
+    <string name="Received_words">Received words</string>
     <string name="Google_translate_to_CHTW">Google translate to Traditional Chinese</string>
     <string name="Google_translate_to_CHCN">Google translate to simplified Chinese</string>
     <string name="Google_translate_to_EN">Google translate to English</string>
     <string name="Google_translate_to_JP">Google translate to Japanese</string>
     <string name="Google_translate_to_KR">Google translate to Korean</string>
     <string name="Google_translate_to_SP">Google translate to Spanish</string>
+    <string name="Wikipedia_TW">Wikipedia TW</string>
+    <string name="English_Encyclopedia">English Encyclopedia</string>
+    <string name="Call_google_translate_app">Call Google Translate App</string>
+    <string name="Must_get_GoogleTranslate_app">The 3rd-party Google Translate App must be installed to proceed with this function</string>
+    <string name="Call_microsoft_translator_app_ocr_recognition">Call Microsoft Translate App</string>
+    <string name="Must_get_MicrosoftTranslate_app">The 3rd-party Microsoft Translate App must be installed to proceed with this function</string>
 
 
 </resources>

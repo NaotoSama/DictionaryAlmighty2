@@ -9,6 +9,8 @@
     android:weightSum="1">
 
 
+    <!--以下功能廢除不使用了-->
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="323dp">
@@ -29,7 +31,7 @@
         android:id="@+id/photo_album"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/open_photo_album" />
+        android:text="@string/Open_photo_album" />
 
     <ImageView
         android:id="@+id/imageID"

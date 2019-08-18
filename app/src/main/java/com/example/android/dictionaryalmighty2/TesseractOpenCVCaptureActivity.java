@@ -27,6 +27,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/*以下功能廢除不使用了*/
+
+
 public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
     public static final String IMAGE_UNSPECIFIED = "image/*";
     public static final int PHOTOALBUM = 1;   // 相簿
@@ -65,7 +68,7 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
                 startActivityForResult(intent, PHOTOALBUM);
             }
         });
-        Toast.makeText(this, getString(R.string.performing_crop_and_OCR_please_wait), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.Performing_crop_and_OCR_please_wait), Toast.LENGTH_LONG).show();
 
         //get access to AssetManager
         AssetManager assetManager = getAssets();
@@ -100,9 +103,11 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
         }
 
 
+
         /**
          * 設定用戶選取OCR識別之文字時彈跳出的客製選單
          */
+
         OcrTextView.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -125,14 +130,16 @@ public class TesseractOpenCVCaptureActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.Passed_OcrSelectedText_to_main_page_toast) + "「"+ OcrSelectedText + "」", Toast.LENGTH_LONG).show();
                     return true;
 
-                }else if (item.getItemId() == R.id.Auto_translate_to_CH_TW) {
+                }
+
+                else if (item.getItemId() == R.id.Auto_translate_to_CH_TW) {
                     int selectionStart = OcrTextView.getSelectionStart();
                     int selectionEnd = OcrTextView.getSelectionEnd();
                     CharSequence OcrSelectedText = OcrTextView.getText().subSequence(selectionStart, selectionEnd);
                     Toast.makeText(getApplicationContext(), getString(R.string.OCR_auto_translating_toast), Toast.LENGTH_LONG).show();
                     UrlKey="Translate OcrSelectedText to CHTW";
                     Intent autoTranslateOcrSelectedTextToCHTW = new Intent(TesseractOpenCVCaptureActivity.this, MainActivity.class);
-                    autoTranslateOcrSelectedTextToCHTW.putExtra(UrlKey, "https://translate.googlexx.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+OcrSelectedText);
+                    autoTranslateOcrSelectedTextToCHTW.putExtra(UrlKey, "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+OcrSelectedText);
                     startActivity(autoTranslateOcrSelectedTextToCHTW);
                     return true;
 

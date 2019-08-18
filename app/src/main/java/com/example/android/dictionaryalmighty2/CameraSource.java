@@ -33,6 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/*以下功能廢除不使用了*/
+
+
 /**
  * Manages the camera in conjunction with an underlying
  * {com.google.android.gms.vision.Detector}.  This receives preview frames from the camera at
