@@ -264,6 +264,23 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                else if (position == 4) {
+                    //呼叫第三方「Yomiwa」app
+                    Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
+                    if (callYomiwaAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callYomiwaAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callYomiwaAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callYomiwaAppIntent.setData(Uri.parse("market://details?id=" + "com.yomiwa.yomiwa"));
+                        startActivity(callYomiwaAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_Yomiwa_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
 
 
                                                                 /* 以下功能廢除不使用了
@@ -657,32 +674,32 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 14) {
+                    String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
+                    webViewBrowser.loadUrl(greensDictionaryOfSlangUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 15) {
                     String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
                     webViewBrowser.loadUrl(wiktionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 15) {
+                }else if (position == 16) {
                     String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(wordHippoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 16) {
+                }else if (position == 17) {
                     String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                     webViewBrowser.loadUrl(onelookUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 17) {
+                }else if (position == 18) {
                     String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(businessDictionaryUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 18) {
-                    String carDictionaryUrl= "http://www.agosto.com.tw/dictionary.aspx?search="+searchKeyword;
-                    webViewBrowser.loadUrl(carDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -701,6 +718,24 @@ public class MainActivity extends AppCompatActivity {
                 }else if (position == 21) {
                     String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
                     webViewBrowser.loadUrl(academiaDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 22) {
+                    String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
+                    webViewBrowser.loadUrl(TechDicoUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 23) {
+                    String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
+                    webViewBrowser.loadUrl(BioMedicalDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 24) {
+                    String carDictionaryUrl= "http://www.agosto.com.tw/dictionary.aspx?search="+searchKeyword;
+                    webViewBrowser.loadUrl(carDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -788,68 +823,68 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 9) {
-                    String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
-                    webViewBrowser.loadUrl(sanseidoUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 10) {
-                    String kotobank= "https://kotobank.jp/word/"+searchKeyword;
-                    webViewBrowser.loadUrl(kotobank);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 11) {
-                    String industryDictionaryUrl= "https://www.sangyo-honyaku.jp/dictionaries/index/search_info:"+searchKeyword+"_ＩＴ・機械・電気電子";
-                    webViewBrowser.loadUrl(industryDictionaryUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 12) {
-                    String KanjiDictionaryUrl= "https://kanji.jitenon.jp/cat/search.php?getdata="+searchKeyword+"&search=fpart&search2=twin";
-                    webViewBrowser.loadUrl(KanjiDictionaryUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 13) {
-                    String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
-                    webViewBrowser.loadUrl(eijiroDictionryUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 14) {
-                    String whatIsItInEnglishUrl= "https://eikaiwa.dmm.com/uknow/search/?keyword="+searchKeyword;
-                    webViewBrowser.loadUrl(whatIsItInEnglishUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 15) {
-                    String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
-                    webViewBrowser.loadUrl(gooDictionaryUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 16) {
-                    String jishoUrl= "https://jisho.org/search/"+searchKeyword;
-                    webViewBrowser.loadUrl(jishoUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 17) {
-                    String jlogosUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
-                    webViewBrowser.loadUrl(jlogosUrl);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-
-                }else if (position == 18) {
                     String DaJPtoCHDictionaryUrl= "http://dict.asia/jc/"+searchKeyword;
                     webViewBrowser.loadUrl(DaJPtoCHDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 19) {
+                }else if (position == 10) {
                     String DaCHtoJPDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
                     webViewBrowser.loadUrl(DaCHtoJPDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 11) {
+                    String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
+                    webViewBrowser.loadUrl(gooDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 12) {
+                    String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                    webViewBrowser.loadUrl(sanseidoUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 13) {
+                    String kotobank= "https://kotobank.jp/word/"+searchKeyword;
+                    webViewBrowser.loadUrl(kotobank);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 14) {
+                    String jlogosUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
+                    webViewBrowser.loadUrl(jlogosUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 15) {
+                    String industryDictionaryUrl= "https://www.sangyo-honyaku.jp/dictionaries/index/search_info:"+searchKeyword+"_ＩＴ・機械・電気電子";
+                    webViewBrowser.loadUrl(industryDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 16) {
+                    String KanjiDictionaryUrl= "https://kanji.jitenon.jp/cat/search.php?getdata="+searchKeyword+"&search=fpart&search2=twin";
+                    webViewBrowser.loadUrl(KanjiDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 17) {
+                    String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
+                    webViewBrowser.loadUrl(eijiroDictionryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 18) {
+                    String whatIsItInEnglishUrl= "https://eikaiwa.dmm.com/uknow/search/?keyword="+searchKeyword;
+                    webViewBrowser.loadUrl(whatIsItInEnglishUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 19) {
+                    String jishoUrl= "https://jisho.org/search/"+searchKeyword;
+                    webViewBrowser.loadUrl(jishoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 

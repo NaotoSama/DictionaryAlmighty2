@@ -24,13 +24,15 @@
     <EditText
         android:id="@+id/Word_Input_View"
         android:layout_width="140dp"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="8dp"
         android:hint="@string/Word_Input"
+        android:textAlignment="center"
         android:importantForAutofill="no"
-        android:inputType="text"
+        android:inputType="textMultiLine"
+        android:lines="4"
+        android:minLines="1"
         android:textColor="#00BCD4"
         android:textColorHint="#00BCD4"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,12 +60,12 @@
 
     <Spinner
         android:id="@+id/Speech_recognition_spinner"
-        android:layout_width="83dp"
+        android:layout_width="85dp"
         android:layout_height="22dp"
-        android:background="#bec2be"
         app:layout_constraintEnd_toEndOf="@+id/btnSpeak"
         app:layout_constraintStart_toStartOf="@+id/btnSpeak"
-        app:layout_constraintTop_toBottomOf="@+id/btnSpeak" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSpeak"
+        style="@style/spinner_press_state_style"/> <!--套用Spinner有無被點擊時對應的兩種自定義顏色，以下同-->
 
 
     <ImageView
@@ -119,7 +121,6 @@
         android:id="@+id/Select_EN_Dictionary_Provider_View"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
         android:text="@string/Select_EN_Dictionary_Provider"
         android:textColor="#FFC107"
         android:textSize="16sp"
@@ -180,10 +181,10 @@
         android:layout_height="23dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="#bec2be"
         app:layout_constraintBottom_toBottomOf="@+id/Select_EN_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View" />
+        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
+        style="@style/spinner_press_state_style"/>
 
 
     <Spinner
@@ -192,11 +193,11 @@
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="#bec2be"
         app:layout_constraintBottom_toBottomOf="@+id/Select_JP_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View" />
+        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View"
+        style="@style/spinner_press_state_style"/>
 
 
     <Spinner
@@ -205,11 +206,11 @@
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="#bec2be"
         app:layout_constraintBottom_toBottomOf="@+id/Select_Sentence_Searcher_View"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View" />
+        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View"
+        style="@style/spinner_press_state_style"/>
 
 
     <Spinner
@@ -218,11 +219,11 @@
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="#bec2be"
         app:layout_constraintBottom_toBottomOf="@+id/Select_Google_Word_Searcher_View"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View" />
+        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View"
+        style="@style/spinner_press_state_style"/>
 
 
     <Spinner
@@ -231,11 +232,11 @@
         android:layout_height="24dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:background="#bec2be"
         app:layout_constraintBottom_toBottomOf="@+id/Miscellaneous_View"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View" />
+        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View"
+        style="@style/spinner_press_state_style"/>
 
 
     <ProgressBar
@@ -286,13 +287,13 @@
 
     <Spinner
         android:id="@+id/OCR_mode_spinner"
-        android:layout_width="162dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="160dp"
         android:layout_height="23dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="#bec2be"
         app:layout_constraintBottom_toTopOf="@+id/EN_dictionary_providers_spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/ocr_imageView"

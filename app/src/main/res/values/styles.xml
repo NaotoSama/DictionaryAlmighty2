@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <!-- 把spinner_press_state.xml佈局檔變成Spinner首選項的Style -->
+    <style name="spinner_press_state_style">
+        <item name="android:background">@drawable/spinner_press_state</item>
+    </style>
+
+
 </resources>

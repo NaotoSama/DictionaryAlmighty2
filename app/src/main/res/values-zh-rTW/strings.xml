@@ -141,4 +141,9 @@
     <string name="Must_get_GoogleTranslate_app">您必須先安裝第三方的「Google翻譯」App才能使用此功能，請按上方的安裝鈕</string>
     <string name="Call_microsoft_translator_app_ocr_recognition">呼叫「微軟翻譯」App</string>
     <string name="Must_get_MicrosoftTranslate_app">您必須先安裝第三方的「微軟翻譯」App才能使用此功能，請按上方的安裝鈕</string>
+    <string name="Greens_dictionary_of_slang">格林俚語英英字典</string>
+    <string name="Call_Yomiwa_app">呼叫「Yomiwa」App(僅日文)</string>
+    <string name="Must_get_Yomiwa_app">您必須先安裝第三方的「Yomiwa」App才能使用此功能，請按上方的安裝鈕</string>
+    <string name="TechDico">TechDico技術用語辭典</string>
+    <string name="BioMedical_dictionary">生物醫藥大辭典</string>
 </resources>

@@ -5,6 +5,7 @@
         <item>@string/Call_TextScanner_app</item>
         <item>@string/Call_google_translate_app</item>
         <item>@string/Call_microsoft_translator_app_ocr_recognition</item>
+        <item>@string/Call_Yomiwa_app</item>
 
 
                                                         <!--以下功能廢除不使用了
@@ -54,14 +55,17 @@
         <item>@string/The_Free_Dictionary</item>
         <item>@string/Your_Dictionary</item>
         <item>@string/Longman_Dictionary</item>
+        <item>@string/Greens_dictionary_of_slang</item>
         <item>@string/Wiki_Dictionary</item>
         <item>@string/Word_Hippo</item>
         <item>@string/Onelook</item>
         <item>@string/Business_Dictionary</item>
-        <item>@string/Automotive_Dictionary</item>
         <item>@string/Slang</item>
         <item>@string/YouGlish</item>
         <item>@string/SCI_Dictionary</item>
+        <item>@string/TechDico</item>
+        <item>@string/BioMedical_dictionary</item>
+        <item>@string/Automotive_Dictionary</item>
     </string-array>
 
 
@@ -75,18 +79,17 @@
         <item>@string/Tangorin_Kanji</item>
         <item>@string/Tangorin_Names</item>
         <item>@string/Tangorin_Sentence</item>
+        <item>@string/DA_JP_TW_Dictionary</item>
+        <item>@string/DA_TW_JP_Dictionary</item>
+        <item>@string/Goo</item>
         <item>@string/Sanseido</item>
         <item>@string/Kotoba_Bank</item>
+        <item>@string/J_Logos</item>
         <item>@string/Japanese_Industry_Terms</item>
         <item>@string/Kanji_Dictionary_Online</item>
         <item>@string/Eijirou</item>
         <item>@string/How_do_you_say_this_in_English</item>
-        <item>@string/Goo</item>
         <item>@string/Jisho</item>
-        <item>@string/J_Logos</item>
-        <item>@string/DA_JP_TW_Dictionary</item>
-        <item>@string/DA_TW_JP_Dictionary</item>
-
     </string-array>
 
 
@@ -279,6 +282,11 @@
     <string name="Must_get_GoogleTranslate_app">The 3rd-party Google Translate App must be installed to proceed with this function</string>
     <string name="Call_microsoft_translator_app_ocr_recognition">Call Microsoft Translate App</string>
     <string name="Must_get_MicrosoftTranslate_app">The 3rd-party Microsoft Translate App must be installed to proceed with this function</string>
+    <string name="Greens_dictionary_of_slang">Green\'s Dictionary of Slang</string>
+    <string name="Call_Yomiwa_app">Call Yomiwa App</string>
+    <string name="Must_get_Yomiwa_app">The 3rd-party Yomiwa App must be installed to proceed with this function</string>
+    <string name="TechDico">TechDico Technical Terms Dictionary</string>
+    <string name="BioMedical_dictionary">Bio-medical Dictionary</string>
 
 
 </resources>
