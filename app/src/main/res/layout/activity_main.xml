@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <ImageView
         android:id="@+id/background_image_view"
         android:layout_width="match_parent"
@@ -21,22 +22,26 @@
         android:background="@drawable/universe2" />
 
 
-    <EditText
+    <!--使用外掛記憶用戶輸入的文字，詳見 https://youtu.be/9x50ga6jLg8-->
+    <cn.zhaiyifan.rememberedittext.RememberEditText
         android:id="@+id/Word_Input_View"
         android:layout_width="140dp"
         android:layout_height="110dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:hint="@string/Word_Input"
-        android:textAlignment="center"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
         android:lines="4"
         android:minLines="1"
+        android:textAlignment="center"
         android:textColor="#00BCD4"
         android:textColorHint="#00BCD4"
+        app:autoFill="true"
+        app:autoSave="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:rememberCount="3"
+        app:rememberId="username"
         tools:targetApi="o" />
 
 
@@ -72,7 +77,8 @@
         android:id="@+id/Exit_app_imageView"
         android:layout_width="44dp"
         android:layout_height="37dp"
-        app:layout_constraintEnd_toEndOf="@+id/EN_dictionary_providers_spinner"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/GIF_imageView"
         app:srcCompat="@drawable/exit_app" />
 
@@ -121,12 +127,13 @@
         android:id="@+id/Select_EN_Dictionary_Provider_View"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/Select_EN_Dictionary_Provider"
         android:textColor="#FFC107"
         android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/Word_Input_View"
-        app:layout_constraintTop_toBottomOf="@+id/Word_Input_View" />
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/OCR_mode_spinner" />
 
     <TextView
         android:id="@+id/Select_JP_Dictionary_Provider_View"
@@ -177,14 +184,13 @@
 
     <Spinner
         android:id="@+id/EN_dictionary_providers_spinner"
-        android:layout_width="162dp"
-        android:layout_height="23dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="157dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_EN_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
-        style="@style/spinner_press_state_style"/>
+        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View" />
 
 
     <Spinner
@@ -280,25 +286,20 @@
         android:layout_width="46dp"
         android:layout_height="38dp"
         android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/OCR_mode_spinner"
         app:layout_constraintEnd_toEndOf="@+id/btnSpeak"
         app:layout_constraintStart_toStartOf="@+id/btnSpeak"
-        app:layout_constraintTop_toBottomOf="@+id/Speech_recognition_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/Exit_app_textView"
         app:srcCompat="@drawable/ocr" />
 
     <Spinner
         android:id="@+id/OCR_mode_spinner"
         style="@style/spinner_press_state_style"
-        android:layout_width="160dp"
+        android:layout_width="85dp"
         android:layout_height="23dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/ocr_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/change_background_textView2"
-        app:layout_constraintVertical_bias="0.24000001" />
+        app:layout_constraintEnd_toEndOf="@+id/ocr_imageView"
+        app:layout_constraintStart_toStartOf="@+id/ocr_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/ocr_imageView" />
 
 
 </android.support.constraint.ConstraintLayout>

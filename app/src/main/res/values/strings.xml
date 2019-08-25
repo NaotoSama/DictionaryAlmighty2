@@ -248,7 +248,7 @@
     <string name="Ocr_failure">No text captured</string>
     <string name="Ocr_error">"Error reading text: %1$s"</string>
     <string name="Word_captured_message">Pronouncing...(word successfully captured. You can go back to the previous page to look up in dictionaries)</string>
-    <string name="Select_an_OCR_third_party_app">Image Text Recognition</string>
+    <string name="Select_an_OCR_third_party_app">Scan Text</string>
     <string name="Google_optical_recognition">Google OCR (EN/Latin)</string>
     <string name="Tessearct_opencv_ocr_recognition_CH_TW">Tessearct Traditional Chinese OCR</string>
     <string name="Tessearct_opencv_ocr_recognition_CH_CN">Tessearct Simplified Chinese OCR</string>
