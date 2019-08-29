@@ -37,6 +37,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import cn.zhaiyifan.rememberedittext.RememberEditText;
 import pl.droidsonroids.gif.GifImageView;
 
 
@@ -50,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;   //網頁載入的進度條
     TextView searchResultWillBeDisplayedHere;
     ImageView exitApp;         //退出程式鈕
-    ImageView changeBackground;//更換背景鈕
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
         wordInputView = findViewById(R.id.Word_Input_View);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         exitApp = findViewById(R.id.Exit_app_imageView);
-        changeBackground = findViewById(R.id.Change_background_imageView);
 
 
 
@@ -87,14 +86,58 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 設置背景圖的更換
          */
-        changeBackground.setOnClickListener(new View.OnClickListener(){
+        final Spinner otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        final ArrayAdapter<CharSequence> OtherFunctionsSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Other_functions_spinner_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        OtherFunctionsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
+
+        otherFunctionsSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                changeBackgroundButtonIsPressed="yes";
-                Intent intent = new Intent(Intent.ACTION_PICK, null);
-                intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
-                startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){
+                    return;
+
+                } else if (position == 1) {
+                    changeBackgroundButtonIsPressed="yes";
+                    Intent intent = new Intent(Intent.ACTION_PICK, null);
+                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
+                    startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
+
+                } else if (position == 2) {
+                    RememberEditText.clearCache(MainActivity.this);  //呼叫外掛的RememberEditText功能並清除wordInputView中的用戶搜尋紀錄
+                    Toast.makeText(getApplicationContext(), getString(R.string.Clear_search_history_after_app_closed), Toast.LENGTH_LONG).show();
+
+                } else if (position == 3) {
+                    webViewBrowser.setVisibility(View.GONE);
+
+                } else if (position == 4) {
+                    //呼叫第三方「日本食物字典」app
+                    Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
+                    if (callJapaneseFoodDcitionaryAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callJapaneseFoodDcitionaryAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callJapaneseFoodDcitionaryAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callJapaneseFoodDcitionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.st.japanfooddictionaryfree"));
+                        startActivity(callJapaneseFoodDcitionaryAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
 
@@ -1078,6 +1121,18 @@ public class MainActivity extends AppCompatActivity {
                 }else if (position == 5) {
                     String jukuuUrlCHJP= "http://www.jukuu.com/jcsearch.php?q="+searchKeyword;
                     webViewBrowser.loadUrl(jukuuUrlCHJP);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 6) {
+                    String LingueeUrlCHEN= "https://cn.linguee.com/中文-英语/search?source=auto&query="+searchKeyword;
+                    webViewBrowser.loadUrl(LingueeUrlCHEN);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 7) {
+                    String LingueeUrlJPEN= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+searchKeyword;
+                    webViewBrowser.loadUrl(LingueeUrlJPEN);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 

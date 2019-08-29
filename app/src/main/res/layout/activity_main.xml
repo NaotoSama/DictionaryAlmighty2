@@ -25,7 +25,7 @@
     <!--使用外掛記憶用戶輸入的文字，詳見 https://youtu.be/9x50ga6jLg8-->
     <cn.zhaiyifan.rememberedittext.RememberEditText
         android:id="@+id/Word_Input_View"
-        android:layout_width="140dp"
+        android:layout_width="135dp"
         android:layout_height="110dp"
         android:layout_marginStart="8dp"
         android:hint="@string/Word_Input"
@@ -40,7 +40,7 @@
         app:autoSave="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rememberCount="3"
+        app:rememberCount="5"
         app:rememberId="username"
         tools:targetApi="o" />
 
@@ -51,16 +51,14 @@
         android:layout_height="38dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:gravity="center"
         android:src="@drawable/ic_mic"
-        app:layout_constraintEnd_toStartOf="@+id/Change_background_imageView"
+        app:layout_constraintEnd_toStartOf="@+id/Other_functions_image"
         app:layout_constraintHorizontal_bias="0.29"
         app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
-        app:layout_constraintTop_toTopOf="@+id/Change_background_imageView" />
+        app:layout_constraintTop_toTopOf="@+id/Other_functions_image" />
 
 
     <Spinner
@@ -96,31 +94,27 @@
 
 
     <ImageView
-        android:id="@+id/Change_background_imageView"
+        android:id="@+id/Other_functions_image"
         android:layout_width="47dp"
         android:layout_height="38dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         app:layout_constraintBottom_toTopOf="@+id/Exit_app_textView"
         app:layout_constraintEnd_toStartOf="@+id/Exit_app_imageView"
-        app:layout_constraintHorizontal_bias="0.77"
+        app:layout_constraintHorizontal_bias="0.78"
         app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
         app:layout_constraintTop_toTopOf="@+id/Exit_app_imageView"
         app:srcCompat="@drawable/change_background" />
 
 
-    <TextView
-        android:id="@+id/change_background_textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Change_background"
-        android:textColor="#FFEB3B"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/Change_background_imageView"
-        app:layout_constraintStart_toStartOf="@+id/Change_background_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/Change_background_imageView" />
+    <Spinner
+        android:id="@+id/Other_functions_spinner"
+        android:layout_width="85dp"
+        android:layout_height="22dp"
+        app:layout_constraintEnd_toEndOf="@+id/Other_functions_image"
+        app:layout_constraintStart_toStartOf="@+id/Other_functions_image"
+        app:layout_constraintTop_toBottomOf="@+id/Other_functions_image"
+        style="@style/spinner_press_state_style"/>
 
 
     <TextView
@@ -184,13 +178,13 @@
 
     <Spinner
         android:id="@+id/EN_dictionary_providers_spinner"
-        style="@style/spinner_press_state_style"
         android:layout_width="157dp"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_EN_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View" />
+        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
+        style="@style/spinner_press_state_style"/>
 
 
     <Spinner

@@ -1,5 +1,15 @@
 <resources>
 
+    <string-array name="Other_functions_spinner_array">
+        <item>@string/Other_functions</item>
+        <item>@string/Change_background</item>
+        <item>@string/Clear_search_input</item>
+        <item>@string/Close_the_browser</item>
+        <item>@string/Japanese_food_dictionary</item>
+
+    </string-array>
+
+
     <string-array name="OCR_spinner_array">
         <item>@string/Select_an_OCR_third_party_app</item>
         <item>@string/Call_TextScanner_app</item>
@@ -121,6 +131,8 @@
         <item>@string/Word_Cool_EN_CH</item>
         <item>@string/Word_Cool_EN_JP</item>
         <item>@string/Word_Cool_JP_CH</item>
+        <item>@string/Linguee_CH_EN</item>
+        <item>@string/Linguee_JP_EN</item>
     </string-array>
 
 
@@ -210,7 +222,7 @@
     <string name="VoiceTube">VoiceTube</string>
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">Exit</string>
-    <string name="Change_background">Change Background</string>
+    <string name="Other_functions">Other Functions</string>
     <string name="External_storage_permission">You must allow permission write external storage to change the app\'s background</string>
     <string name="SCI_Dictionary">SCI Dictionary</string>
     <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
@@ -287,6 +299,13 @@
     <string name="Must_get_Yomiwa_app">The 3rd-party Yomiwa App must be installed to proceed with this function</string>
     <string name="TechDico">TechDico Technical Terms Dictionary</string>
     <string name="BioMedical_dictionary">Bio-medical Dictionary</string>
+    <string name="Change_background">Change background</string>
+    <string name="Clear_search_input">Clear search input</string>
+    <string name="Clear_search_history_after_app_closed">Search history will be cleared after the app is closed</string>
+    <string name="Linguee_CH_EN">Linguee CH-EN</string>
+    <string name="Linguee_JP_EN">Linguee CH-EN</string>
+    <string name="Japanese_food_dictionary">Japanese Food Dictionary</string>
+    <string name="Close_the_browser">Close the browser</string>
 
 
 </resources>

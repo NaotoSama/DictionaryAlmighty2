@@ -72,7 +72,7 @@
     <string name="VoiceTube">VoiceTube英漢字典</string>
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">退出程式</string>
-    <string name="Change_background">更換背景</string>
+    <string name="Other_functions">其他功能</string>
     <string name="External_storage_permission">必須允許存取照片的權限才可更換背景圖</string>
     <string name="SCI_Dictionary">SCI學術字典</string>
     <string name="DA_JP_TW_Dictionary">DA日中字典</string>
@@ -146,4 +146,11 @@
     <string name="Must_get_Yomiwa_app">您必須先安裝第三方的「Yomiwa」App才能使用此功能，請按上方的安裝鈕</string>
     <string name="TechDico">TechDico技術用語辭典</string>
     <string name="BioMedical_dictionary">生物醫藥大辭典</string>
+    <string name="Change_background">更換背景圖</string>
+    <string name="Clear_search_input">清除搜尋紀錄</string>
+    <string name="Clear_search_history_after_app_closed">搜尋紀錄將在您退出程式後清除</string>
+    <string name="Linguee_CH_EN">Linguee中英例句</string>
+    <string name="Linguee_JP_EN">Linguee日英例句</string>
+    <string name="Japanese_food_dictionary">日本食物字典</string>
+    <string name="Close_the_browser">關閉瀏覽器</string>
 </resources>
