@@ -151,6 +151,6 @@
     <string name="Clear_search_history_after_app_closed">搜尋紀錄將在您退出程式後清除</string>
     <string name="Linguee_CH_EN">Linguee中英例句</string>
     <string name="Linguee_JP_EN">Linguee日英例句</string>
-    <string name="Japanese_food_dictionary">日本食物字典</string>
-    <string name="Close_the_browser">關閉瀏覽器</string>
+    <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
+    <string name="Browser_switch">網頁開關</string>
 </resources>

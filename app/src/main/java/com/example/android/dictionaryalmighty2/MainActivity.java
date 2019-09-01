@@ -14,7 +14,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -27,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
     GifImageView gifImageView; //用來準備給用戶更換背景圖
     ImageView backGroundImageView;
+    ImageView browserNavigateBack;
+    ImageView browserNavigateForward;
     public static EditText wordInputView;    //關鍵字輸入框
     String searchKeyword;      //用戶輸入的關鍵字
     WebView webViewBrowser;    //網頁框
+    Switch browserSwitch;      //網頁框的開關
     ProgressBar progressBar;   //網頁載入的進度條
     TextView searchResultWillBeDisplayedHere;
-    ImageView exitApp;         //退出程式鈕
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
@@ -76,11 +78,14 @@ public class MainActivity extends AppCompatActivity {
         backGroundImageView = findViewById(R.id.background_image_view);
         wordInputView = findViewById(R.id.Word_Input_View);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
-        exitApp = findViewById(R.id.Exit_app_imageView);
-
+        browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
+        browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
 
 
         backGroundImageView.setVisibility(View.GONE);
+        browserNavigateBack.setVisibility(View.GONE);
+        browserNavigateForward.setVisibility(View.GONE);
+
 
 
         /**
@@ -113,9 +118,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.Clear_search_history_after_app_closed), Toast.LENGTH_LONG).show();
 
                 } else if (position == 3) {
-                    webViewBrowser.setVisibility(View.GONE);
-
-                } else if (position == 4) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -141,17 +143,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-        /**
-         * 設置程式的退出鈕
-         */
-        exitApp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {        //點擊退出程式鈕時觸發監聽器
-                //Finish method is used to close all open activities.
-                finish();                            //退出畫面 (關閉程式)
-            }
-        });
 
 
                                                             /* 以下功能廢除不使用了
@@ -185,10 +176,61 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true); //針對 WebSettings 去做設定，WebView 預設下是限制 JavaScript 的，若要啟用需要做此設定
         webSettings.setSupportZoom(true); //內部網頁支援縮放
         webSettings.setBuiltInZoomControls(true); //顯示縮放控制項
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setUseWideViewPort(true);
         webViewBrowser.setWebViewClient(new WebViewClientImpl());
         webViewBrowser.requestFocus();
         //Webview裡面的網頁，如果有input需要輸入，但是點上去卻沒反應，輸入法不出來。這種情況是因為webview沒有獲取焦點。
         //需要在java裡面給webview設置一下requestFocus() 就行了。
+
+
+
+        /**
+         * 設置網頁框的開關
+         */
+        browserSwitch = findViewById(R.id.browser_switch);
+
+        browserSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(browserSwitch.isChecked()) {                     //用isChecked()檢視開關的開啟狀態
+                    webViewBrowser.setVisibility(View.VISIBLE);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+                }
+                else {
+                    webViewBrowser.setVisibility(View.INVISIBLE);
+                    browserNavigateBack.setVisibility(View.INVISIBLE);
+                    browserNavigateForward.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
+
+
+
+        /**
+         * 設置網頁框的返回上一頁與前進下一頁按鈕
+         */
+        browserNavigateBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(webViewBrowser.canGoBack()) {
+                    webViewBrowser.goBack();
+                }
+            }
+        });
+
+        browserNavigateForward.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(webViewBrowser.canGoForward()) {
+                    webViewBrowser.goForward();
+                }
+            }
+        });
 
 
 
@@ -490,6 +532,10 @@ public class MainActivity extends AppCompatActivity {
 
                     speechAutoTranslationCode="CHtoEN"; //設定一個特定代碼，在下面的onActivityResult執行完畢後，再以此代碼加載其所屬網址，因此不用再設定10秒延遲載入網頁
 
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
 
                                                                     /*  ↓ ↓ ↓ 此作法已取消，不必使用↓ ↓ ↓
                                                                     設置run()並讓自動翻譯的網頁延遲10秒載入
@@ -525,6 +571,10 @@ public class MainActivity extends AppCompatActivity {
 
                     speechAutoTranslationCode="CHtoJP";
 
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
                 }else if (position == 10) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -537,6 +587,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     speechAutoTranslationCode="CHtoKR";
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
 
                 }else if (position == 11) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -551,6 +605,10 @@ public class MainActivity extends AppCompatActivity {
 
                     speechAutoTranslationCode="CHtoES";
 
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
                 }else if (position == 12) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -563,6 +621,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     speechAutoTranslationCode="ENtoCH";
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
 
                 }else if (position == 13) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -577,6 +639,10 @@ public class MainActivity extends AppCompatActivity {
 
                     speechAutoTranslationCode="JPtoCH";
 
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
                 }else if (position == 14) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -590,6 +656,10 @@ public class MainActivity extends AppCompatActivity {
 
                     speechAutoTranslationCode="KRtoCH";
 
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
                 }else if (position == 15) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
                     intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
@@ -602,6 +672,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     speechAutoTranslationCode="EStoCH";
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
 
                 }
 
@@ -787,6 +861,11 @@ public class MainActivity extends AppCompatActivity {
                 EnDictionarySpinner.setAdapter(EnDictionarySpinnerAdapter);
                 //再生成一次Adapter防止點按過的選項失效無法使用，以下同。
 
+                browserSwitch.setChecked(true);
+                //把網頁框開關狀態設定成"開啟"，以免載入網頁時開關沒有變成開啟的狀態
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
             }
 
             @Override
@@ -935,6 +1014,10 @@ public class MainActivity extends AppCompatActivity {
 
                 JpDictionarySpinner.setAdapter(JpDictionarySpinnerAdapter);
 
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
             }
 
             @Override
@@ -966,55 +1049,56 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 if (position == 1){
-                    String googlePulsChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
-                    webViewBrowser.loadUrl(googlePulsChinese);
+                    String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
+                    webViewBrowser.loadUrl(googlePlusChinese);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 2) {
-                    String googlePulsENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
-                    webViewBrowser.loadUrl(googlePulsENglish1);
+                    String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
+                    webViewBrowser.loadUrl(googlePlusENglish1);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 3){
-                    String googlePulsENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
-                    webViewBrowser.loadUrl(googlePulsENglish2);
+                    String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
+                    webViewBrowser.loadUrl(googlePlusENglish2);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 4) {
-                    String googlePulsTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
-                    webViewBrowser.loadUrl(googlePulsTranslation);
+                    String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
+                    webViewBrowser.loadUrl(googlePlusTranslation);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 5) {
-                    String googlePulsJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
-                    webViewBrowser.loadUrl(googlePulsJapanese1);
+                    String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
+                    webViewBrowser.loadUrl(googlePlusJapanese1);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+
                 }else if (position == 6) {
-                    String googlePulsJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
-                    webViewBrowser.loadUrl(googlePulsJapanese2);
+                    String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
+                    webViewBrowser.loadUrl(googlePlusJapanese2);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 7) {
-                    String googlePulsJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
-                    webViewBrowser.loadUrl(googlePulsJapanese3);
+                    String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
+                    webViewBrowser.loadUrl(googlePlusJapanese3);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 8) {
-                    String googlePulsMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
-                    webViewBrowser.loadUrl(googlePulsMeaning1);
+                    String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
+                    webViewBrowser.loadUrl(googlePlusMeaning1);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 9) {
-                    String googlePulsMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
-                    webViewBrowser.loadUrl(googlePulsMeaning2);
+                    String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
+                    webViewBrowser.loadUrl(googlePlusMeaning2);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -1063,6 +1147,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 GoogleWordSearchSpinner.setAdapter(GoogleWordSearchSpinnerAdapter);
+
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
 
             }
 
@@ -1139,6 +1227,10 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 SentenceSearchSpinner.setAdapter(SentenceSearchSpinnerAdapter);
+
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
 
             }
 
@@ -1228,6 +1320,10 @@ public class MainActivity extends AppCompatActivity {
 
                 MiscellaneousSpinner.setAdapter(MiscellaneousSpinnerAdapter);
 
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
             }
 
             @Override
@@ -1285,7 +1381,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * 在OnCreate外面設置語音辨識與的相關設定
+     * 在OnCreate外面設置語音辨識的相關設定
      */
 
     public void cropRawPhotoForBackgroundImage (Uri image) {
@@ -1507,22 +1603,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    //Check whether there’s any WebView history that the user can navigate back to//
-    @Override
-    public boolean onKeyDown(final int keyCode, final KeyEvent event) {
-
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && webViewBrowser.canGoBack()) {
-            webViewBrowser.goBack();
-            //If there is history, then the canGoBack method will return ‘true’//
-            return true;
-        }
-
-        //If the button that’s been pressed wasn’t the ‘Back’ button, or there’s currently no
-        //WebView history, then the system should resort to its default behavior and return
-        //the user to the previous Activity//
-        return super.onKeyDown(keyCode, event);
-    }
 
 
     @Override

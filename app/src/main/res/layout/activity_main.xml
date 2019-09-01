@@ -26,8 +26,7 @@
     <cn.zhaiyifan.rememberedittext.RememberEditText
         android:id="@+id/Word_Input_View"
         android:layout_width="135dp"
-        android:layout_height="110dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="80dp"
         android:hint="@string/Word_Input"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
@@ -51,12 +50,11 @@
         android:layout_height="38dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:gravity="center"
         android:src="@drawable/ic_mic"
-        app:layout_constraintEnd_toStartOf="@+id/Other_functions_image"
-        app:layout_constraintHorizontal_bias="0.29"
+        app:layout_constraintEnd_toStartOf="@+id/ocr_imageView"
+        app:layout_constraintHorizontal_bias="0.21"
         app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
         app:layout_constraintTop_toTopOf="@+id/Other_functions_image" />
 
@@ -72,40 +70,14 @@
 
 
     <ImageView
-        android:id="@+id/Exit_app_imageView"
-        android:layout_width="44dp"
-        android:layout_height="37dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/GIF_imageView"
-        app:srcCompat="@drawable/exit_app" />
-
-
-    <TextView
-        android:id="@+id/Exit_app_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Exit_app"
-        android:textColor="#F44336"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/Exit_app_imageView"
-        app:layout_constraintStart_toStartOf="@+id/Exit_app_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/Exit_app_imageView" />
-
-
-    <ImageView
         android:id="@+id/Other_functions_image"
         android:layout_width="47dp"
         android:layout_height="38dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/Exit_app_textView"
-        app:layout_constraintEnd_toStartOf="@+id/Exit_app_imageView"
-        app:layout_constraintHorizontal_bias="0.78"
-        app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
-        app:layout_constraintTop_toTopOf="@+id/Exit_app_imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.61"
+        app:layout_constraintStart_toEndOf="@+id/ocr_imageView"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/change_background" />
-
 
     <Spinner
         android:id="@+id/Other_functions_spinner"
@@ -256,7 +228,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
-        app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View"
+        app:layout_constraintTop_toBottomOf="@+id/browser_navigate_back_imageView"
         tools:layout_editor_absoluteX="30dp"></WebView>
 
 
@@ -279,11 +251,10 @@
         android:id="@+id/ocr_imageView"
         android:layout_width="46dp"
         android:layout_height="38dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="120dp"
         app:layout_constraintBottom_toTopOf="@+id/OCR_mode_spinner"
-        app:layout_constraintEnd_toEndOf="@+id/btnSpeak"
-        app:layout_constraintStart_toStartOf="@+id/btnSpeak"
-        app:layout_constraintTop_toBottomOf="@+id/Exit_app_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ocr" />
 
     <Spinner
@@ -294,6 +265,38 @@
         app:layout_constraintEnd_toEndOf="@+id/ocr_imageView"
         app:layout_constraintStart_toStartOf="@+id/ocr_imageView"
         app:layout_constraintTop_toBottomOf="@+id/ocr_imageView" />
+
+    <Switch
+        android:id="@+id/browser_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/Browser_switch"
+        android:textColor="#FF5722"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View" />
+
+    <ImageView
+        android:id="@+id/browser_navigate_back_imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/browser_switch"
+        app:layout_constraintStart_toEndOf="@+id/browser_switch"
+        app:layout_constraintTop_toTopOf="@+id/browser_switch"
+        app:srcCompat="@mipmap/navigate_back" />
+
+    <ImageView
+        android:id="@+id/browser_navigate_forward_imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/browser_navigate_back_imageView"
+        app:layout_constraintEnd_toEndOf="@+id/GIF_imageView"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toEndOf="@+id/browser_navigate_back_imageView"
+        app:layout_constraintTop_toTopOf="@+id/browser_navigate_back_imageView"
+        app:srcCompat="@mipmap/navigate_forward" />
 
 
 </android.support.constraint.ConstraintLayout>
