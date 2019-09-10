@@ -15,18 +15,20 @@
         android:scaleType="centerCrop"
         android:adjustViewBounds="true"/>   <!--adjustViewBounds是調整圖片邊界以維持長寬比，使圖不變形；centerCrop是使圖佔滿畫面並置中-->
 
+
+    <!--使用外掛記憶用戶輸入的文字，詳見 https://youtu.be/9x50ga6jLg8-->
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/GIF_imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/universe2" />
+        android:background="@drawable/universe2"
+        tools:layout_editor_absoluteX="-60dp"
+        tools:layout_editor_absoluteY="121dp" />
 
-
-    <!--使用外掛記憶用戶輸入的文字，詳見 https://youtu.be/9x50ga6jLg8-->
     <cn.zhaiyifan.rememberedittext.RememberEditText
         android:id="@+id/Word_Input_View"
-        android:layout_width="135dp"
-        android:layout_height="80dp"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
         android:hint="@string/Word_Input"
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
@@ -37,6 +39,7 @@
         android:textColorHint="#00BCD4"
         app:autoFill="true"
         app:autoSave="true"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:rememberCount="5"
@@ -46,43 +49,52 @@
 
     <ImageView
         android:id="@+id/btnSpeak"
-        android:layout_width="47dp"
-        android:layout_height="38dp"
+        android:layout_width="54dp"
+        android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:gravity="center"
         android:src="@drawable/ic_mic"
-        app:layout_constraintEnd_toStartOf="@+id/ocr_imageView"
-        app:layout_constraintHorizontal_bias="0.21"
-        app:layout_constraintStart_toEndOf="@+id/Word_Input_View"
-        app:layout_constraintTop_toTopOf="@+id/Other_functions_image" />
+        app:layout_constraintBottom_toBottomOf="@+id/browser_navigate_forward_imageView"
+        app:layout_constraintStart_toEndOf="@+id/browser_navigate_forward_imageView"
+        app:layout_constraintTop_toTopOf="@+id/browser_navigate_forward_imageView" />
 
+    <ImageView
+        android:id="@+id/ocr_imageView"
+        android:layout_width="57dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
+        app:layout_constraintEnd_toStartOf="@+id/Other_functions_image"
+        app:layout_constraintStart_toEndOf="@+id/btnSpeak"
+        app:layout_constraintTop_toTopOf="@+id/btnSpeak"
+        app:srcCompat="@drawable/ocr" />
+
+    <ImageView
+        android:id="@+id/Other_functions_image"
+        android:layout_width="56dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ocr_imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ocr_imageView"
+        app:srcCompat="@drawable/change_background" />
 
     <Spinner
         android:id="@+id/Speech_recognition_spinner"
-        android:layout_width="85dp"
-        android:layout_height="22dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/btnSpeak"
         app:layout_constraintStart_toStartOf="@+id/btnSpeak"
         app:layout_constraintTop_toBottomOf="@+id/btnSpeak"
         style="@style/spinner_press_state_style"/> <!--套用Spinner有無被點擊時對應的兩種自定義顏色，以下同-->
 
 
-    <ImageView
-        android:id="@+id/Other_functions_image"
-        android:layout_width="47dp"
-        android:layout_height="38dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.61"
-        app:layout_constraintStart_toEndOf="@+id/ocr_imageView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/change_background" />
-
     <Spinner
         android:id="@+id/Other_functions_spinner"
-        android:layout_width="85dp"
-        android:layout_height="22dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/Other_functions_image"
         app:layout_constraintStart_toStartOf="@+id/Other_functions_image"
         app:layout_constraintTop_toBottomOf="@+id/Other_functions_image"
@@ -94,12 +106,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
         android:text="@string/Select_EN_Dictionary_Provider"
         android:textColor="#FFC107"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/OCR_mode_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/Word_Input_View" />
 
     <TextView
         android:id="@+id/Select_JP_Dictionary_Provider_View"
@@ -150,65 +161,53 @@
 
     <Spinner
         android:id="@+id/EN_dictionary_providers_spinner"
-        android:layout_width="157dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="170dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_EN_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
-        style="@style/spinner_press_state_style"/>
+        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View" />
 
 
     <Spinner
         android:id="@+id/JP_dictionary_providers_spinner"
-        android:layout_width="157dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="170dp"
+        android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_JP_Dictionary_Provider_View"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View"
-        style="@style/spinner_press_state_style"/>
+        app:layout_constraintEnd_toEndOf="@+id/EN_dictionary_providers_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View" />
 
 
     <Spinner
         android:id="@+id/Sentence_searcher_spinner"
-        android:layout_width="157dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="170dp"
+        android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_Sentence_Searcher_View"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View"
-        style="@style/spinner_press_state_style"/>
+        app:layout_constraintEnd_toEndOf="@+id/Google_word_searcher_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View" />
 
 
     <Spinner
         android:id="@+id/Google_word_searcher_spinner"
-        android:layout_width="157dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="170dp"
+        android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_Google_Word_Searcher_View"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View"
-        style="@style/spinner_press_state_style"/>
+        app:layout_constraintEnd_toEndOf="@+id/JP_dictionary_providers_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View" />
 
 
     <Spinner
         android:id="@+id/Miscellaneous_searcher_spinner"
-        android:layout_width="157dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
+        style="@style/spinner_press_state_style"
+        android:layout_width="170dp"
+        android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Miscellaneous_View"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View"
-        style="@style/spinner_press_state_style"/>
+        app:layout_constraintEnd_toEndOf="@+id/Sentence_searcher_spinner"
+        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View" />
 
 
     <ProgressBar
@@ -229,7 +228,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintTop_toBottomOf="@+id/browser_navigate_back_imageView"
-        tools:layout_editor_absoluteX="30dp"></WebView>
+        tools:layout_editor_absoluteX="30dp"/>
 
 
     <TextView
@@ -247,21 +246,12 @@
         app:layout_constraintStart_toStartOf="@+id/webview_browser"
         app:layout_constraintTop_toTopOf="@+id/webview_browser" />
 
-    <ImageView
-        android:id="@+id/ocr_imageView"
-        android:layout_width="46dp"
-        android:layout_height="38dp"
-        android:layout_marginEnd="120dp"
-        app:layout_constraintBottom_toTopOf="@+id/OCR_mode_spinner"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ocr" />
-
     <Spinner
         android:id="@+id/OCR_mode_spinner"
         style="@style/spinner_press_state_style"
-        android:layout_width="85dp"
-        android:layout_height="23dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ocr_imageView"
         app:layout_constraintStart_toStartOf="@+id/ocr_imageView"
         app:layout_constraintTop_toBottomOf="@+id/ocr_imageView" />
@@ -271,9 +261,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:text="@string/Browser_switch"
         android:textColor="#FF5722"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View" />
 
@@ -281,7 +272,7 @@
         android:id="@+id/browser_navigate_back_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/browser_switch"
         app:layout_constraintStart_toEndOf="@+id/browser_switch"
         app:layout_constraintTop_toTopOf="@+id/browser_switch"
@@ -291,9 +282,8 @@
         android:id="@+id/browser_navigate_forward_imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/browser_navigate_back_imageView"
-        app:layout_constraintEnd_toEndOf="@+id/GIF_imageView"
-        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toEndOf="@+id/browser_navigate_back_imageView"
         app:layout_constraintTop_toTopOf="@+id/browser_navigate_back_imageView"
         app:srcCompat="@mipmap/navigate_forward" />

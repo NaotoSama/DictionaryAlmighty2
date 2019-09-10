@@ -44,6 +44,9 @@ import pl.droidsonroids.gif.GifImageView;
 public class MainActivity extends AppCompatActivity {
 
     GifImageView gifImageView; //用來準備給用戶更換背景圖
+    ImageView voiceRecognitionImageView;
+    ImageView ocrImageView;
+    ImageView otherFunctionsImageView;
     ImageView backGroundImageView;
     ImageView browserNavigateBack;
     ImageView browserNavigateForward;
@@ -65,6 +68,20 @@ public class MainActivity extends AppCompatActivity {
     Uri imageForBackground;                                //相簿中的原始圖檔
     Bitmap m_phone_for_background;                           // Bitmap圖像
 
+    private ArrayList<DictionaryItem> mEnglishDictionarySpinnerItemList;  //客製化Spinner選單列
+    private ArrayList<DictionaryItem> mJapaneseDictionarySpinnerItemList;
+    private ArrayList<DictionaryItem> mGoogleWordSearchSpinnerItemList;
+    private ArrayList<DictionaryItem> mSentenceSearchSpinnerItemList;
+    private ArrayList<DictionaryItem> mMiscellaneousSpinnerItemList;
+    private ArrayList<DictionaryItem> mOcrSpinnerItemList;
+
+    private DictionayItemAdapter mEnglishDictionarySpinnerAdapter; //客製化Spinner的Adapter
+    private DictionayItemAdapter mJapaneseDictionarySpinnerAdapter;
+    private DictionayItemAdapter mGoogleWordSearchSpinnerAdapter;
+    private DictionayItemAdapter mSentenceSearchSpinnerAdapter;
+    private DictionayItemAdapter mMiscellaneousSpinnerAdapter;
+    private DictionayItemAdapter mOcrSpinnerAdapter;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
@@ -75,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
         requestWritePermission();  //在程式運行中要求存取的權限
 
         gifImageView = findViewById(R.id.GIF_imageView);
+        voiceRecognitionImageView = findViewById(R.id.btnSpeak);
+        ocrImageView = findViewById(R.id.ocr_imageView);
+        otherFunctionsImageView =findViewById(R.id.Other_functions_image);
         backGroundImageView = findViewById(R.id.background_image_view);
         wordInputView = findViewById(R.id.Word_Input_View);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
@@ -89,7 +109,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
-         * 設置背景圖的更換
+         * Initialize the ArrayList used for the custom spinners
+         */
+        initList();
+
+
+
+        /**
+         * Other functions spinner
          */
         final Spinner otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -142,6 +169,14 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+        // 透過OnClickListener將ImageView和Spinner綁定
+        otherFunctionsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                otherFunctionsSpinner.performClick();
+            }
+        });
+
 
 
 
@@ -176,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true); //針對 WebSettings 去做設定，WebView 預設下是限制 JavaScript 的，若要啟用需要做此設定
         webSettings.setSupportZoom(true); //內部網頁支援縮放
         webSettings.setBuiltInZoomControls(true); //顯示縮放控制項
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(false);
+        webSettings.setUseWideViewPort(false);
         webViewBrowser.setWebViewClient(new WebViewClientImpl());
         webViewBrowser.requestFocus();
         //Webview裡面的網頁，如果有input需要輸入，但是點上去卻沒反應，輸入法不出來。這種情況是因為webview沒有獲取焦點。
@@ -282,13 +317,10 @@ public class MainActivity extends AppCompatActivity {
          * OCR Spinner & Spinner Adapters
          */
         final Spinner OCRModeSpinner = findViewById(R.id.OCR_mode_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> OCRModeSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.OCR_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        OCRModeSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mOcrSpinnerAdapter = new DictionayItemAdapter (this,mOcrSpinnerItemList);
         // Apply the adapter to the spinner
-        OCRModeSpinner.setAdapter(OCRModeSpinnerAdapter);
+        OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
 
         OCRModeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -407,12 +439,21 @@ public class MainActivity extends AppCompatActivity {
                                                                 }
                                                                 */
 
-                OCRModeSpinner.setAdapter(OCRModeSpinnerAdapter);
+                OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // 透過OnClickListener將ImageView和Spinner綁定
+        ocrImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                OCRModeSpinner.performClick();
+            }
         });
 
 
@@ -688,19 +729,22 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+        voiceRecognitionImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SpeechRecognitionSpinner.performClick();
+            }
+        });
+
 
 
         /**
          * EnDictionarySpinner & Spinner Adapters
          */
         final Spinner EnDictionarySpinner = findViewById(R.id.EN_dictionary_providers_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> EnDictionarySpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.EN_dictionary_providers_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        EnDictionarySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        EnDictionarySpinner.setAdapter(EnDictionarySpinnerAdapter);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mEnglishDictionarySpinnerAdapter = new DictionayItemAdapter(this, mEnglishDictionarySpinnerItemList);
+        EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
 
         EnDictionarySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
@@ -858,7 +902,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                EnDictionarySpinner.setAdapter(EnDictionarySpinnerAdapter);
+                EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
                 //再生成一次Adapter防止點按過的選項失效無法使用，以下同。
 
                 browserSwitch.setChecked(true);
@@ -878,13 +922,9 @@ public class MainActivity extends AppCompatActivity {
          * JpDictionarySpinner & Spinner Adapters
          */
         final Spinner JpDictionarySpinner = findViewById(R.id.JP_dictionary_providers_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> JpDictionarySpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.JP_dictionary_providers_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        JpDictionarySpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        JpDictionarySpinner.setAdapter(JpDictionarySpinnerAdapter);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mJapaneseDictionarySpinnerAdapter = new DictionayItemAdapter(this, mJapaneseDictionarySpinnerItemList);
+        JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
 
         JpDictionarySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -1012,7 +1052,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                JpDictionarySpinner.setAdapter(JpDictionarySpinnerAdapter);
+                JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
 
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1030,13 +1070,9 @@ public class MainActivity extends AppCompatActivity {
          * GoogleWordSearchSpinner & Spinner Adapters
          */
         final Spinner GoogleWordSearchSpinner = findViewById(R.id.Google_word_searcher_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> GoogleWordSearchSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Google_word_searcher_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        GoogleWordSearchSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        GoogleWordSearchSpinner.setAdapter(GoogleWordSearchSpinnerAdapter);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mGoogleWordSearchSpinnerAdapter = new DictionayItemAdapter(this, mGoogleWordSearchSpinnerItemList);
+        GoogleWordSearchSpinner.setAdapter(mGoogleWordSearchSpinnerAdapter);
 
         GoogleWordSearchSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -1146,7 +1182,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                GoogleWordSearchSpinner.setAdapter(GoogleWordSearchSpinnerAdapter);
+                GoogleWordSearchSpinner.setAdapter(mGoogleWordSearchSpinnerAdapter);
 
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1164,13 +1200,9 @@ public class MainActivity extends AppCompatActivity {
          * SentenceSearchSpinner & Spinner Adapters
          */
         final Spinner SentenceSearchSpinner = findViewById(R.id.Sentence_searcher_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> SentenceSearchSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Sentence_searcher_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        SentenceSearchSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        SentenceSearchSpinner.setAdapter(SentenceSearchSpinnerAdapter);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mSentenceSearchSpinnerAdapter = new DictionayItemAdapter(this, mSentenceSearchSpinnerItemList);
+        SentenceSearchSpinner.setAdapter(mSentenceSearchSpinnerAdapter);
 
         SentenceSearchSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -1226,7 +1258,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                SentenceSearchSpinner.setAdapter(SentenceSearchSpinnerAdapter);
+                SentenceSearchSpinner.setAdapter(mSentenceSearchSpinnerAdapter);
 
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1244,13 +1276,9 @@ public class MainActivity extends AppCompatActivity {
          * MiscellaneousSpinner & Spinner Adapters
          */
         final Spinner MiscellaneousSpinner = findViewById(R.id.Miscellaneous_searcher_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> MiscellaneousSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Miscellaneous_searcher_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        MiscellaneousSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        MiscellaneousSpinner.setAdapter(MiscellaneousSpinnerAdapter);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mMiscellaneousSpinnerAdapter = new DictionayItemAdapter(this, mMiscellaneousSpinnerItemList);
+        MiscellaneousSpinner.setAdapter(mMiscellaneousSpinnerAdapter);
 
         MiscellaneousSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -1318,7 +1346,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                MiscellaneousSpinner.setAdapter(MiscellaneousSpinnerAdapter);
+                MiscellaneousSpinner.setAdapter(mMiscellaneousSpinnerAdapter);
 
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1376,6 +1404,117 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+
+    }
+
+
+    /**
+     * 在OnCreate外面設置客製化Spinner選單列的項目(圖+文字)
+     */
+    private void initList() {
+
+        mOcrSpinnerItemList = new ArrayList<>();
+        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Select_an_OCR_third_party_app, R.mipmap.hand_pointing_down));
+        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
+        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
+        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_microsoft_translator_app_ocr_recognition, R.mipmap.microsoft_translator));
+        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
+
+
+        mEnglishDictionarySpinnerItemList = new ArrayList<>();
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Yahoo_Dictionary, R.mipmap.yahoo_dictionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.National_Academy_for_Educational_Research, R.mipmap.national_academy_for_educational_research));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Merriam_Webster, R.mipmap.merriam_wester));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Collins, R.mipmap.collins));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Oxford, R.mipmap.oxford_dictionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Vocabulary, R.mipmap.vocabulary_dot_com));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Dictionary, R.mipmap.dictionary_dot_com));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.The_Free_Dictionary, R.mipmap.the_free_dictionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Your_Dictionary, R.mipmap.your_dictionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Longman_Dictionary, R.mipmap.longman));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Greens_dictionary_of_slang, R.mipmap.greens_dictionary_of_slang));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Wiki_Dictionary, R.mipmap.wikctionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Word_Hippo, R.mipmap.word_hippo));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Onelook, R.mipmap.onelook));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Business_Dictionary, R.mipmap.business_dictionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Slang, R.mipmap.yiym));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.YouGlish, R.mipmap.youglish));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.SCI_Dictionary, R.mipmap.sci_dict));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.TechDico, R.mipmap.tech_dico));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.BioMedical_dictionary, R.mipmap.bio_medical_dictionary));
+        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Automotive_Dictionary, R.mipmap.car_dictionary));
+
+
+        mJapaneseDictionarySpinnerItemList = new ArrayList<>();
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_JP, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_CN, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_EN, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_Synonym, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Word, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Kanji, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Names, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Sentence, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.DA_JP_TW_Dictionary, R.mipmap.da));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.DA_TW_JP_Dictionary, R.mipmap.da));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Goo, R.mipmap.goo_dictionary));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Sanseido, R.mipmap.sanseido));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Kotoba_Bank, R.mipmap.kotoba_bank));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.J_Logos, R.mipmap.jlogos));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Japanese_Industry_Terms, R.mipmap.industry_dictionary));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Kanji_Dictionary_Online, R.mipmap.kanji_dictionary));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Eijirou, R.mipmap.eigiro));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.How_do_you_say_this_in_English, R.mipmap.dmm_eikaiwa));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Jisho, R.mipmap.jisho));
+
+
+        mGoogleWordSearchSpinnerItemList = new ArrayList<>();
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Chinese, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_English1, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_English2, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Translation, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Japanese1, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Japanese2, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Japanese3, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Meaning1, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Meaning2, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_CHTW, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_CHCN, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_EN, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_JP, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_KR, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_SP, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_Image, R.mipmap.google));
+
+
+        mSentenceSearchSpinnerItemList = new ArrayList<>();
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Ludwig, R.mipmap.ludwig));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Your_Dictionary_Example_Sentences, R.mipmap.your_dictionary));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Cool_EN_JP, R.mipmap.jukuu));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Linguee_CH_EN, R.mipmap.linguee));
+        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Linguee_JP_EN, R.mipmap.linguee));
+
+
+        mMiscellaneousSpinnerItemList = new ArrayList<>();
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Wikipedia_TW, R.mipmap.wikipedia));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Wikipedia_EN, R.mipmap.wikipedia));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.English_Encyclopedia, R.mipmap.encyclo));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Forvo, R.mipmap.forvo));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Wiki_Diff, R.mipmap.wikidiff));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Net_Speak, R.mipmap.netspeak));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Yomikata, R.mipmap.yomikatawa));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Chigai, R.mipmap.chigaiwa));
+        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.OJAD, R.mipmap.ojad));
 
     }
 
