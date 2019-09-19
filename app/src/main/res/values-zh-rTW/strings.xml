@@ -153,4 +153,6 @@
     <string name="Linguee_JP_EN">Linguee日英例句</string>
     <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
     <string name="Browser_switch">網頁開關</string>
+    <string name="Return_to_default_background_image">恢復預設背景圖</string>
+    <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
 </resources>

@@ -1,9 +1,12 @@
 package com.example.android.dictionaryalmighty2;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +37,8 @@ import android.widget.Toast;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,12 +50,12 @@ import pl.droidsonroids.gif.GifImageView;
 public class MainActivity extends AppCompatActivity {
 
     GifImageView gifImageView; //用來準備給用戶更換背景圖
-    ImageView voiceRecognitionImageView;
-    ImageView ocrImageView;
-    ImageView otherFunctionsImageView;
-    ImageView backGroundImageView;
-    ImageView browserNavigateBack;
-    ImageView browserNavigateForward;
+    ImageView voiceRecognitionImageView; //語音識別選單鈕
+    ImageView ocrImageView;              //掃描文字選單鈕
+    ImageView otherFunctionsImageView;   //其他功能選單鈕
+    ImageView backGroundImageView;       //背景圖
+    ImageView browserNavigateBack;       //瀏覽器上一頁鈕
+    ImageView browserNavigateForward;    //瀏覽器下一頁鈕
     public static EditText wordInputView;    //關鍵字輸入框
     String searchKeyword;      //用戶輸入的關鍵字
     WebView webViewBrowser;    //網頁框
@@ -109,6 +115,21 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
+         * 頁面生成時存取用戶設定的背景圖
+         */
+        SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+        //第一步:取出字符串形式的Bitmap
+        String imageString=sharedPreferences.getString("image", "");
+        //第二步:利用Base64將字符串轉換為ByteArrayInputStream
+        byte[] byteArray=Base64.decode(imageString, Base64.DEFAULT);
+        ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArray);
+        //第三步:利用ByteArrayInputStream生成Bitmap
+        Bitmap backgroundBitmap= BitmapFactory.decodeStream(byteArrayInputStream);
+        gifImageView.setImageBitmap(backgroundBitmap);
+
+
+
+        /**
          * Initialize the ArrayList used for the custom spinners
          */
         initList();
@@ -141,10 +162,28 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
 
                 } else if (position == 2) {
+                    // 恢復成預設的背景圖
+                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
+                    m_phone_for_background = defaultBackgroundBmp;
+                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //第三步:將String存至SharedPreferences
+                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("image", imageString);
+                    editor.apply();
+
+                    recreate(); //重新生成頁面
+                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
+
+                } else if (position == 3) {
                     RememberEditText.clearCache(MainActivity.this);  //呼叫外掛的RememberEditText功能並清除wordInputView中的用戶搜尋紀錄
                     Toast.makeText(getApplicationContext(), getString(R.string.Clear_search_history_after_app_closed), Toast.LENGTH_LONG).show();
 
-                } else if (position == 3) {
+                } else if (position == 4) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -158,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                         callJapaneseFoodDcitionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.st.japanfooddictionaryfree"));
                         startActivity(callJapaneseFoodDcitionaryAppIntent);
                         Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
-                    }
+                     }
 
                 }
 
@@ -1637,7 +1676,7 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
                 imageForBackground = data.getData();
                 try {
-                    tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");;
+                    tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");
                     m_phone_for_background = MediaStore.Images.Media.getBitmap(getContentResolver(), imageForBackground);
 
                     cropRawPhotoForBackgroundImage(imageForBackground);
@@ -1651,6 +1690,17 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
                     m_phone_for_background = croppedBitmap;
+                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                    m_phone_for_background.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
+                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //第三步:將String保存至SharedPreferences
+                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("image", imageString);
+                    editor.apply();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
