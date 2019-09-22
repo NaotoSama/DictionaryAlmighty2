@@ -26,6 +26,7 @@ import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -43,7 +44,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import cn.zhaiyifan.rememberedittext.RememberEditText;
 import pl.droidsonroids.gif.GifImageView;
 
 
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     ImageView browserNavigateBack;       //瀏覽器上一頁鈕
     ImageView browserNavigateForward;    //瀏覽器下一頁鈕
     public static EditText wordInputView;    //關鍵字輸入框
+    Button userInputHistoryButton;
     String searchKeyword;      //用戶輸入的關鍵字
     WebView webViewBrowser;    //網頁框
     Switch browserSwitch;      //網頁框的開關
@@ -88,6 +89,9 @@ public class MainActivity extends AppCompatActivity {
     private DictionayItemAdapter mMiscellaneousSpinnerAdapter;
     private DictionayItemAdapter mOcrSpinnerAdapter;
 
+    public static final ArrayList<String> userInputArraylist = new ArrayList<>(); //用戶搜尋紀錄的ArrayList
+    SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
@@ -103,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         otherFunctionsImageView =findViewById(R.id.Other_functions_image);
         backGroundImageView = findViewById(R.id.background_image_view);
         wordInputView = findViewById(R.id.Word_Input_View);
+        userInputHistoryButton = findViewById(R.id.user_input_history_button);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
         browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
@@ -111,6 +116,31 @@ public class MainActivity extends AppCompatActivity {
         backGroundImageView.setVisibility(View.GONE);
         browserNavigateBack.setVisibility(View.GONE);
         browserNavigateForward.setVisibility(View.GONE);
+
+
+
+        /**
+         * 讓用戶點擊紀錄鈕時跳轉到搜尋紀錄頁面
+         */
+        userInputHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, UserInputHistory.class);
+                startActivity(intent);
+            }
+        });
+
+
+        /**
+         * 頁面生成時讀取用戶搜尋紀錄userInputArrayList
+         */
+        userInputArrayListSharedPreferences = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE);
+        int userInputArrayListValues = userInputArrayListSharedPreferences.getInt("userInputArrayListValues", 0);
+        for (int i = 0; i < userInputArrayListValues; i++)
+        {
+            String userInputArrayListItem = userInputArrayListSharedPreferences.getString("userInputArrayListItem_"+i, null);
+            userInputArraylist.add(userInputArrayListItem);
+        }
 
 
 
@@ -180,8 +210,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
 
                 } else if (position == 3) {
-                    RememberEditText.clearCache(MainActivity.this);  //呼叫外掛的RememberEditText功能並清除wordInputView中的用戶搜尋紀錄
-                    Toast.makeText(getApplicationContext(), getString(R.string.Clear_search_history_after_app_closed), Toast.LENGTH_LONG).show();
+                    userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                    saveUserInputArrayListToSharedPreferences ();
+                    Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
 
                 } else if (position == 4) {
                     //呼叫第三方「日本食物字典」app
@@ -761,6 +792,9 @@ public class MainActivity extends AppCompatActivity {
 
                 SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
 
+                saveKeywordtoUserInputListView ();            //每次搜尋時把用戶輸入的字放進UserInputArrayList
+                saveUserInputArrayListToSharedPreferences (); //每次搜尋時把UserInputArrayList存到SharedPreferences
+
             }
 
 
@@ -944,6 +978,9 @@ public class MainActivity extends AppCompatActivity {
                 EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
                 //再生成一次Adapter防止點按過的選項失效無法使用，以下同。
 
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+
                 browserSwitch.setChecked(true);
                 //把網頁框開關狀態設定成"開啟"，以免載入網頁時開關沒有變成開啟的狀態
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1093,6 +1130,9 @@ public class MainActivity extends AppCompatActivity {
 
                 JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
 
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
@@ -1223,6 +1263,9 @@ public class MainActivity extends AppCompatActivity {
 
                 GoogleWordSearchSpinner.setAdapter(mGoogleWordSearchSpinnerAdapter);
 
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
@@ -1298,6 +1341,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 SentenceSearchSpinner.setAdapter(mSentenceSearchSpinnerAdapter);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
 
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1386,6 +1432,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 MiscellaneousSpinner.setAdapter(mMiscellaneousSpinnerAdapter);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
 
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
@@ -1556,6 +1605,28 @@ public class MainActivity extends AppCompatActivity {
         mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.OJAD, R.mipmap.ojad));
 
     }
+
+
+
+    /**
+     * Helper methods for saving users' input
+     */
+    // Helper method for saving Keywords to UserInputListView
+    public void saveKeywordtoUserInputListView () {
+        userInputArraylist.add(searchKeyword);
+    }
+
+    // Helper method for saving UserInputArrayList to SharedPreferences
+    public void saveUserInputArrayListToSharedPreferences () {
+        SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
+        editor.putInt("userInputArrayListValues", userInputArraylist.size());
+        for (int i = 0; i < userInputArraylist.size(); i++)
+        {
+            editor.putString("userInputArrayListItem_"+i, userInputArraylist.get(i));
+        }
+        editor.apply();
+    }
+
 
 
     /**

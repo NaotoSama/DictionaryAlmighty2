@@ -49,6 +49,15 @@
 
 
 
+        <activity android:name=".UserInputHistory">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+
+
         <!--此功能廢除不使用了 -->
         <activity android:name=".DataManager">
             <intent-filter>

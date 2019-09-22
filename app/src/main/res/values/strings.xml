@@ -301,13 +301,14 @@
     <string name="BioMedical_dictionary">Bio-medical Dictionary</string>
     <string name="Change_background">Change background</string>
     <string name="Clear_search_input">Clear search input</string>
-    <string name="Clear_search_history_after_app_closed">Search history will be cleared after the app is closed</string>
+    <string name="Search_records_cleared">Search records have been cleared.</string>
     <string name="Linguee_CH_EN">Linguee CH-EN</string>
     <string name="Linguee_JP_EN">Linguee CH-EN</string>
     <string name="Call_Japanese_food_dictionary">Call Japanese Food Dictionary</string>
     <string name="Browser_switch">Browser Switch</string>
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
+    <string name="Search_records">Below are your search records</string>
 
 
 </resources>

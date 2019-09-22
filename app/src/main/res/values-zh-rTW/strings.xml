@@ -148,11 +148,12 @@
     <string name="BioMedical_dictionary">生物醫藥大辭典</string>
     <string name="Change_background">更換背景圖</string>
     <string name="Clear_search_input">清除搜尋紀錄</string>
-    <string name="Clear_search_history_after_app_closed">搜尋紀錄將在您退出程式後清除</string>
     <string name="Linguee_CH_EN">Linguee中英例句</string>
     <string name="Linguee_JP_EN">Linguee日英例句</string>
     <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
     <string name="Browser_switch">網頁開關</string>
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
+    <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
+    <string name="Search_records">您的搜尋紀錄 (可點擊您查詢過的文字)</string>
 </resources>

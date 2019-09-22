@@ -26,8 +26,7 @@
         tools:layout_editor_absoluteY="121dp" />
 
 
-    <!--使用外掛記憶用戶輸入的文字，詳見 https://youtu.be/9x50ga6jLg8-->
-    <cn.zhaiyifan.rememberedittext.RememberEditText
+    <EditText
         android:id="@+id/Word_Input_View"
         android:layout_width="0dp"
         android:layout_height="70dp"
@@ -39,13 +38,9 @@
         android:textAlignment="center"
         android:textColor="#00BCD4"
         android:textColorHint="#00BCD4"
-        app:autoFill="true"
-        app:autoSave="true"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/user_input_history_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:rememberCount="5"
-        app:rememberId="username"
         tools:targetApi="o" />
 
 
@@ -289,6 +284,15 @@
         app:layout_constraintStart_toEndOf="@+id/browser_navigate_back_imageView"
         app:layout_constraintTop_toTopOf="@+id/browser_navigate_back_imageView"
         app:srcCompat="@mipmap/navigate_forward" />
+
+    <Button
+        android:id="@+id/user_input_history_button"
+        android:layout_width="37dp"
+        android:layout_height="70dp"
+        android:text="▶"
+        app:layout_constraintBottom_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Word_Input_View" />
 
 
 </android.support.constraint.ConstraintLayout>
