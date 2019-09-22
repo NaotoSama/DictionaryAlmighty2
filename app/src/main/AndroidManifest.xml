@@ -49,7 +49,8 @@
 
 
 
-        <activity android:name=".UserInputHistory">
+        <activity android:name=".UserInputHistory"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -59,7 +60,8 @@
 
 
         <!--此功能廢除不使用了 -->
-        <activity android:name=".DataManager">
+        <activity android:name=".DataManager"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
@@ -67,7 +69,8 @@
         </activity>
 
         <!--此功能廢除不使用了 -->
-        <activity android:name=".OcrCaptureActivity">
+        <activity android:name=".OcrCaptureActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />

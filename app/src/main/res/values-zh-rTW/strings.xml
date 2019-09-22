@@ -155,5 +155,6 @@
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records">您的搜尋紀錄 (可點擊您查詢過的文字)</string>
+    <string name="Search_records">您的搜尋紀錄\n(點擊 = 帶入文字；長按 = 刪除文字)</string>
+    <string name="Your_selected_item_has_benn_deleted">您選擇的項目已刪除完畢</string>
 </resources>

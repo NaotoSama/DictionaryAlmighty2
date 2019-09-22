@@ -19,7 +19,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -43,6 +45,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -57,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView browserNavigateBack;       //瀏覽器上一頁鈕
     ImageView browserNavigateForward;    //瀏覽器下一頁鈕
     public static EditText wordInputView;    //關鍵字輸入框
-    Button userInputHistoryButton;
+    Button deleteUserInput;        //關鍵字輸入框清除鈕
+    Button userInputHistoryButton; //用戶搜尋紀錄鈕
     String searchKeyword;      //用戶輸入的關鍵字
     WebView webViewBrowser;    //網頁框
     Switch browserSwitch;      //網頁框的開關
@@ -107,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         otherFunctionsImageView =findViewById(R.id.Other_functions_image);
         backGroundImageView = findViewById(R.id.background_image_view);
         wordInputView = findViewById(R.id.Word_Input_View);
+        deleteUserInput = findViewById(R.id.delete_user_input_button);
         userInputHistoryButton = findViewById(R.id.user_input_history_button);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
@@ -117,6 +123,17 @@ public class MainActivity extends AppCompatActivity {
         browserNavigateBack.setVisibility(View.GONE);
         browserNavigateForward.setVisibility(View.GONE);
 
+
+
+        /**
+         * 讓用戶清除關鍵字輸入框內的字
+         */
+        deleteUserInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wordInputView.setText("");
+            }
+        });
 
 
         /**
@@ -791,9 +808,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
-
-                saveKeywordtoUserInputListView ();            //每次搜尋時把用戶輸入的字放進UserInputArrayList
-                saveUserInputArrayListToSharedPreferences (); //每次搜尋時把UserInputArrayList存到SharedPreferences
 
             }
 
@@ -1543,7 +1557,6 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_CN, R.mipmap.weblio));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_EN, R.mipmap.weblio));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_Synonym, R.mipmap.weblio));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Word, R.mipmap.tangorin));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Kanji, R.mipmap.tangorin));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Names, R.mipmap.tangorin));
@@ -1613,11 +1626,19 @@ public class MainActivity extends AppCompatActivity {
      */
     // Helper method for saving Keywords to UserInputListView
     public void saveKeywordtoUserInputListView () {
+        if (searchKeyword != null && !searchKeyword.equals("")) {
         userInputArraylist.add(searchKeyword);
+        }
+
+        //透過HashSet自動過濾掉userInputArraylist中重複的字
+        HashSet<String> userInputArraylistHashSet = new HashSet<>();
+        userInputArraylistHashSet.addAll(userInputArraylist);
+        userInputArraylist.clear();
+        userInputArraylist.addAll(userInputArraylistHashSet);
     }
 
     // Helper method for saving UserInputArrayList to SharedPreferences
-    public void saveUserInputArrayListToSharedPreferences () {
+    public void saveUserInputArrayListToSharedPreferences() {
         SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
         editor.putInt("userInputArrayListValues", userInputArraylist.size());
         for (int i = 0; i < userInputArraylist.size(); i++)
@@ -1675,66 +1696,120 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK && data != null) {
                     ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                     wordInputView.setText(result.get(0));
+
+                    searchKeyword = wordInputView.getText().toString();
+                    saveKeywordtoUserInputListView ();
+                    saveUserInputArrayListToSharedPreferences ();
                 }
+
                 break;
         }
 
         //抓SpeechRecognitionSpinner中的speechAutoTranslationCode代碼，然後載入自動語音翻譯的網頁
         if (speechAutoTranslationCode=="CHtoEN") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl1 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl1);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl1 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+                webViewBrowser.loadUrl(speechUrl1);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+            }
+
 
         }else if (speechAutoTranslationCode=="CHtoJP") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl2 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl2);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl2 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl2);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
 
         }else if (speechAutoTranslationCode=="CHtoKR") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl3 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl3);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl3 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl3);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
 
         }else if (speechAutoTranslationCode=="CHtoES") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl4 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl4);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl4 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl4);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
 
         }else if (speechAutoTranslationCode=="ENtoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl5 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl5);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl5 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl5);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
 
         }else if (speechAutoTranslationCode=="JPtoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl6 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl6);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl6 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl6);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
 
         }else if (speechAutoTranslationCode=="KRtoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl7 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl7);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl7 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl7);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
 
         }else if (speechAutoTranslationCode=="EStoCH") {
             searchKeyword = wordInputView.getText().toString();
-            String speechUrl8 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text="+searchKeyword;
-            webViewBrowser.loadUrl(speechUrl8);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl8 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl8);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
         }
 
 
@@ -1873,6 +1948,44 @@ public class MainActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+    /**
+     * The soft keyboard is hidden when a touch is done anywhere outside the "wordInputView" EditText.
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int[] scrcoords = new int[2];
+            if (w != null) {
+                w.getLocationOnScreen(scrcoords);
+            }
+            float x = 0;
+            if (w != null) {
+                x = event.getRawX() + w.getLeft() - scrcoords[0];
+            }
+            float y = 0;
+            if (w != null) {
+                y = event.getRawY() + w.getTop() - scrcoords[1];
+            }
+
+            if (w != null) {
+                Log.d("Activity", "Touch event "+event.getRawX()+","+event.getRawY()+" "+x+","+y+" rect "+w.getLeft()+","+w.getTop()+","+w.getRight()+","+w.getBottom()+" coords "+scrcoords[0]+","+scrcoords[1]);
+            }
+            if (w != null && event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom())) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(getWindow().getCurrentFocus()).getWindowToken(), 0);
+            }
+        }
+        return ret;
     }
 
 
