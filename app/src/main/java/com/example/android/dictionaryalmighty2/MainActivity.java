@@ -45,6 +45,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -381,12 +382,17 @@ public class MainActivity extends AppCompatActivity {
                 //Handle sent text
                 String intentReceivedText = received3rdPartyAppIntent.getStringExtra(Intent.EXTRA_TEXT);  //Get the received text
                 if (intentReceivedText != null) {              //Check we have a string
-                    wordInputView.setText(intentReceivedText); //Set the text to the search box in MainActivity
+                    searchKeyword = intentReceivedText;
+                    wordInputView.setText(searchKeyword); //Set the text to the search box in MainActivity
                     //In the meantime, perform auto translation
-                    String intentAutoTranslationURL= "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+intentReceivedText;
+                    String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
                     webViewBrowser.loadUrl(intentAutoTranslationURL);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+
+                    saveKeywordtoUserInputListView ();
+                    saveUserInputArrayListToSharedPreferences ();
+
                 }
             }
         }
@@ -1140,6 +1146,18 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 20) {
+                    String CambridgeJPtoENUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+searchKeyword;
+                    webViewBrowser.loadUrl(CambridgeJPtoENUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 21) {
+                    String CambridgeENtoJPUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
+                    webViewBrowser.loadUrl(CambridgeENtoJPUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
                 }
 
                 JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
@@ -1572,6 +1590,8 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Eijirou, R.mipmap.eigiro));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.How_do_you_say_this_in_English, R.mipmap.dmm_eikaiwa));
         mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Jisho, R.mipmap.jisho));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Cambridge_JP_EN, R.mipmap.cambridge));
+        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Cambridge_EN_JP, R.mipmap.cambridge));
 
 
         mGoogleWordSearchSpinnerItemList = new ArrayList<>();
@@ -1635,6 +1655,9 @@ public class MainActivity extends AppCompatActivity {
         userInputArraylistHashSet.addAll(userInputArraylist);
         userInputArraylist.clear();
         userInputArraylist.addAll(userInputArraylistHashSet);
+
+        //Alphabetic sorting.
+        Collections.sort(userInputArraylist);
     }
 
     // Helper method for saving UserInputArrayList to SharedPreferences
