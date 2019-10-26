@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--以下功能廢除不使用了-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -9,7 +11,6 @@
     android:weightSum="1">
 
 
-    <!--以下功能廢除不使用了-->
 
     <ScrollView
         android:layout_width="match_parent"

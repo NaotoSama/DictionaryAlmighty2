@@ -81,7 +81,11 @@ public class MainActivity extends AppCompatActivity {
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
-    public static String tesseract_lang_code;  // The recognition language of tesseract
+    public static final String IMAGE_UNSPECIFIED = "image/*";
+
+
+    public static final int PHOTOALBUM = 1;   // 相簿
+    int proOrSimplifiedSwitchCode; //專業版或簡易版切換的代碼
 
     Spinner otherFunctionsSpinner;    //All spinners
     Spinner SpeechRecognitionSpinner;
@@ -109,8 +113,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
-
-    int proOrSimplifiedSwitchCode; //專業版或簡易版切換的代碼
 
     File tempOutputFileForBackgroundImage;
 
@@ -428,50 +430,6 @@ public class MainActivity extends AppCompatActivity {
             proOrSimplifiedLayoutSwitch.setChecked(false);  //設定開關按鈕為關閉的狀態
 
             customActionBarSimplified();                    //加載客製化簡易版ActionBar
-
-        }
-
-
-
-        /**
-         * 用戶在OCR識別頁面(TesseractOpenCVCaptureActivity)選取文字並彈跳出客製選單後的跳轉設定
-         */
-        Bundle extras = getIntent().getExtras();
-        if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHTW") {
-            String UrlOcrSelectedTextToCHTW= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHTW);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        } else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHCN") {
-            String UrlOcrSelectedTextToCHCN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHCN);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to EN") {
-            String UrlOcrSelectedTextToEN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToEN);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to JP") {
-            String UrlOcrSelectedTextToJP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToJP);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to KR") {
-            String UrlOcrSelectedTextToKR= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToKR);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to SP") {
-            String UrlOcrSelectedTextToSP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToSP);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
 
         }
 
@@ -797,7 +755,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             // 相簿
-            if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
+            if (requestCode == PHOTOALBUM) {
                 imageForBackground = data.getData();
                 try {
                     tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");
@@ -1011,8 +969,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (position == 1) {
                     changeBackgroundButtonIsPressed="yes";
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
-                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
-                    startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
+                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
+                    startActivityForResult(intent, PHOTOALBUM);
 
                 } else if (position == 2) {
                     // 恢復成預設的背景圖
@@ -1093,8 +1051,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (position == 1) {
                     changeBackgroundButtonIsPressed="yes";
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
-                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
-                    startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
+                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
+                    startActivityForResult(intent, PHOTOALBUM);
 
                 } else if (position == 2) {
                     // 恢復成預設的背景圖
