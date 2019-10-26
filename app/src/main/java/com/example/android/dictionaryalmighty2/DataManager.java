@@ -18,7 +18,7 @@ public class DataManager extends AppCompatActivity {
         return dataManager;
     }
 
-    private DataManager(){}
+    public DataManager(){}
 
     public String getImageUrl(){
         return imageUrl;

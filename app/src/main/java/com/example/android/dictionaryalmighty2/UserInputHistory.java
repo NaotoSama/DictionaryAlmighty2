@@ -1,15 +1,27 @@
 package com.example.android.dictionaryalmighty2;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class UserInputHistory extends AppCompatActivity {
+
+    RelativeLayout.LayoutParams layoutparams;   //用來客製化修改ActionBar
+    TextView customActionBarTextviewforUserInputHistoryPage;
+    ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +29,15 @@ public class UserInputHistory extends AppCompatActivity {
 
         final ListView userInputListview;
         final ArrayAdapter userInputArrayAdapter;
+
+
+        /**
+         * 設置ActionBar
+         */
+        actionBar = getSupportActionBar();
+        customActionBarTextviewforUserInputHistoryPage = new TextView(this);
+        layoutparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        customActionBarForUserInputHistoryPage();   //Helper Method
 
 
         userInputListview = findViewById(R.id.user_input_listview);
@@ -52,6 +73,7 @@ public class UserInputHistory extends AppCompatActivity {
                 MainActivity.userInputArraylist.remove(position);
                 userInputArrayAdapter.notifyDataSetChanged();
 
+                //將搜尋紀錄的列表存到SharedPreferences
                 SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
                 editor.putInt("userInputArrayListValues", MainActivity.userInputArraylist.size());
                 for (int i = 0; i < MainActivity.userInputArraylist.size(); i++)
@@ -67,6 +89,25 @@ public class UserInputHistory extends AppCompatActivity {
 
         });
 
+
+    }
+
+
+
+    //==============================================================================================
+    // 設置客製化ActionBar的Helper Method
+    //==============================================================================================
+    public void customActionBarForUserInputHistoryPage() {
+
+        customActionBarTextviewforUserInputHistoryPage.setLayoutParams(layoutparams);
+        customActionBarTextviewforUserInputHistoryPage.setText(getString(R.string.Your_search_history));
+        customActionBarTextviewforUserInputHistoryPage.setTextSize(20);
+        customActionBarTextviewforUserInputHistoryPage.setGravity(Gravity.CENTER);
+        customActionBarTextviewforUserInputHistoryPage.setTypeface(Typeface.DEFAULT_BOLD);
+        customActionBarTextviewforUserInputHistoryPage.setTextColor(Color.parseColor("#6ac2eb"));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD700")));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(customActionBarTextviewforUserInputHistoryPage);
 
     }
 

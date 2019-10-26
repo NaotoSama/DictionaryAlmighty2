@@ -214,6 +214,7 @@
         android:layout_height="wrap_content"
         android:indeterminate="false"
         android:max="50"
+        android:minHeight="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
@@ -224,8 +225,10 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
-        app:layout_constraintTop_toBottomOf="@+id/browser_navigate_back_imageView"
-        tools:layout_editor_absoluteX="30dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/browser_switch"
+        tools:layout_editor_absoluteX="30dp">
+
+    </WebView>
 
 
     <TextView
@@ -257,11 +260,24 @@
         android:id="@+id/browser_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/Browser_switch"
         android:textColor="#FF5722"
         android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/pro_or_simplified_layout_switch"
+        app:layout_constraintStart_toStartOf="@+id/pro_or_simplified_layout_switch"
+        app:layout_constraintTop_toBottomOf="@+id/pro_or_simplified_layout_switch" />
+
+    <Switch
+        android:id="@+id/pro_or_simplified_layout_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/Pro_version_switch"
+        android:textColor="#FF0000"
+        android:textOff="@string/Pro_version_switch"
+        android:textOn="@string/Pro_version_is_on"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Miscellaneous_View" />
 
@@ -271,8 +287,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/browser_switch"
-        app:layout_constraintStart_toEndOf="@+id/browser_switch"
-        app:layout_constraintTop_toTopOf="@+id/browser_switch"
+        app:layout_constraintStart_toEndOf="@+id/pro_or_simplified_layout_switch"
+        app:layout_constraintTop_toTopOf="@+id/pro_or_simplified_layout_switch"
         app:srcCompat="@mipmap/navigate_back" />
 
     <ImageView

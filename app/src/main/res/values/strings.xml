@@ -1,11 +1,20 @@
 <resources>
 
-    <string-array name="Other_functions_spinner_array">
+    <string-array name="Other_functions_spinner_array_original">
         <item>@string/Other_functions</item>
         <item>@string/Change_background</item>
         <item>@string/Return_to_default_background_image</item>
         <item>@string/Clear_search_input</item>
         <item>@string/Call_Japanese_food_dictionary</item>
+
+    </string-array>
+
+
+    <string-array name="Other_functions_spinner_array_simplified">
+        <item>@string/Other_functions</item>
+        <item>@string/Change_background</item>
+        <item>@string/Return_to_default_background_image</item>
+        <item>@string/Clear_search_input</item>
 
     </string-array>
 
@@ -30,124 +39,135 @@
     </string-array>
 
 
-    <string-array name="Speech_recognition_spinner_array">
-        <item>@string/Speech_input</item>
-        <item>@string/Chinese_speech</item>
-        <item>@string/English_speech</item>
-        <item>@string/Simplified_chinese_speech</item>
-        <item>@string/Japanese_speech</item>
-        <item>@string/Korean_speech</item>
-        <item>@string/Spanish_speech</item>
+    <string-array name="Speech_recognition_spinner_array_original">
+    <item>@string/Speech_input</item>
+    <item>@string/Chinese_speech</item>
+    <item>@string/English_speech</item>
+    <item>@string/Simplified_chinese_speech</item>
+    <item>@string/Japanese_speech</item>
+    <item>@string/Korean_speech</item>
+    <item>@string/Spanish_speech</item>
+    <item>@string/Speech_recognition_plus_Auto_Translation</item>
+    <item>@string/CH_speech_auto_translate_to_EN</item>
+    <item>@string/CH_speech_auto_translate_to_JP</item>
+    <item>@string/CH_speech_auto_translate_to_KR</item>
+    <item>@string/CH_speech_auto_translate_to_ES</item>
+    <item>@string/EN_speech_auto_translate_to_CH</item>
+    <item>@string/JP_speech_auto_translate_to_CH</item>
+    <item>@string/KR_speech_auto_translate_to_CH</item>
+    <item>@string/ES_speech_auto_translate_to_CH</item>
+</string-array>
+
+
+    <string-array name="Speech_recognition_spinner_array_simplified">
         <item>@string/Speech_recognition_plus_Auto_Translation</item>
         <item>@string/CH_speech_auto_translate_to_EN</item>
         <item>@string/CH_speech_auto_translate_to_JP</item>
-        <item>@string/CH_speech_auto_translate_to_KR</item>
-        <item>@string/CH_speech_auto_translate_to_ES</item>
         <item>@string/EN_speech_auto_translate_to_CH</item>
         <item>@string/JP_speech_auto_translate_to_CH</item>
-        <item>@string/KR_speech_auto_translate_to_CH</item>
-        <item>@string/ES_speech_auto_translate_to_CH</item>
     </string-array>
 
 
-    <string-array name="EN_dictionary_providers_spinner_array">
-        <item>@string/Select_one_of_the_following</item>
-        <item>@string/Yahoo_Dictionary</item>
-        <item>@string/National_Academy_for_Educational_Research</item>
-        <item>@string/Dict_site</item>
-        <item>@string/VoiceTube</item>
-        <item>@string/Cambridge_EN_CH</item>
-        <item>@string/Merriam_Webster</item>
-        <item>@string/Collins</item>
-        <item>@string/Oxford</item>
-        <item>@string/Vocabulary</item>
-        <item>@string/Dictionary</item>
-        <item>@string/The_Free_Dictionary</item>
-        <item>@string/Your_Dictionary</item>
-        <item>@string/Longman_Dictionary</item>
-        <item>@string/Greens_dictionary_of_slang</item>
-        <item>@string/Wiki_Dictionary</item>
-        <item>@string/Word_Hippo</item>
-        <item>@string/Onelook</item>
-        <item>@string/Business_Dictionary</item>
-        <item>@string/Slang</item>
-        <item>@string/YouGlish</item>
-        <item>@string/SCI_Dictionary</item>
-        <item>@string/TechDico</item>
-        <item>@string/BioMedical_dictionary</item>
-        <item>@string/Automotive_Dictionary</item>
-    </string-array>
+                            <!--以下功能廢除不使用了。改用客製化版型，在MainActivity。
+                                <string-array name="EN_dictionary_providers_spinner_array">
+                                    <item>@string/Select_one_of_the_following</item>
+                                    <item>@string/Yahoo_Dictionary</item>
+                                    <item>@string/National_Academy_for_Educational_Research</item>
+                                    <item>@string/Dict_site</item>
+                                    <item>@string/VoiceTube</item>
+                                    <item>@string/Cambridge_EN_CH</item>
+                                    <item>@string/Merriam_Webster</item>
+                                    <item>@string/Collins</item>
+                                    <item>@string/Oxford</item>
+                                    <item>@string/Vocabulary</item>
+                                    <item>@string/Dictionary</item>
+                                    <item>@string/The_Free_Dictionary</item>
+                                    <item>@string/Your_Dictionary</item>
+                                    <item>@string/Longman_Dictionary</item>
+                                    <item>@string/Greens_dictionary_of_slang</item>
+                                    <item>@string/Wiki_Dictionary</item>
+                                    <item>@string/Word_Hippo</item>
+                                    <item>@string/Onelook</item>
+                                    <item>@string/Business_Dictionary</item>
+                                    <item>@string/Slang</item>
+                                    <item>@string/YouGlish</item>
+                                    <item>@string/SCI_Dictionary</item>
+                                    <item>@string/TechDico</item>
+                                    <item>@string/BioMedical_dictionary</item>
+                                    <item>@string/Automotive_Dictionary</item>
+                                </string-array>
 
 
-    <string-array name="JP_dictionary_providers_spinner_array">
-        <item>@string/Select_one_of_the_following</item>
-        <item>@string/Weblio_JP</item>
-        <item>@string/Weblio_CN</item>
-        <item>@string/Weblio_EN</item>
-        <item>@string/Weblio_Synonym</item>
-        <item>@string/Tangorin_Word</item>
-        <item>@string/Tangorin_Kanji</item>
-        <item>@string/Tangorin_Names</item>
-        <item>@string/Tangorin_Sentence</item>
-        <item>@string/DA_JP_TW_Dictionary</item>
-        <item>@string/DA_TW_JP_Dictionary</item>
-        <item>@string/Goo</item>
-        <item>@string/Sanseido</item>
-        <item>@string/Kotoba_Bank</item>
-        <item>@string/J_Logos</item>
-        <item>@string/Japanese_Industry_Terms</item>
-        <item>@string/Kanji_Dictionary_Online</item>
-        <item>@string/Eijirou</item>
-        <item>@string/How_do_you_say_this_in_English</item>
-        <item>@string/Jisho</item>
-    </string-array>
+                                <string-array name="JP_dictionary_providers_spinner_array">
+                                    <item>@string/Select_one_of_the_following</item>
+                                    <item>@string/Weblio_JP</item>
+                                    <item>@string/Weblio_CN</item>
+                                    <item>@string/Weblio_EN</item>
+                                    <item>@string/Weblio_Synonym</item>
+                                    <item>@string/Tangorin_Word</item>
+                                    <item>@string/Tangorin_Kanji</item>
+                                    <item>@string/Tangorin_Names</item>
+                                    <item>@string/Tangorin_Sentence</item>
+                                    <item>@string/DA_JP_TW_Dictionary</item>
+                                    <item>@string/DA_TW_JP_Dictionary</item>
+                                    <item>@string/Goo</item>
+                                    <item>@string/Sanseido</item>
+                                    <item>@string/Kotoba_Bank</item>
+                                    <item>@string/J_Logos</item>
+                                    <item>@string/Japanese_Industry_Terms</item>
+                                    <item>@string/Kanji_Dictionary_Online</item>
+                                    <item>@string/Eijirou</item>
+                                    <item>@string/How_do_you_say_this_in_English</item>
+                                    <item>@string/Jisho</item>
+                                </string-array>
 
 
-    <string-array name="Google_word_searcher_spinner_array">
-        <item>@string/Select_one_of_the_following</item>
-        <item>@string/Word_Plus_Chinese</item>
-        <item>@string/Word_Plus_English1</item>
-        <item>@string/Word_Plus_English2</item>
-        <item>@string/Word_Plus_Translation</item>
-        <item>@string/Word_Plus_Japanese1</item>
-        <item>@string/Word_Plus_Japanese2</item>
-        <item>@string/Word_Plus_Japanese3</item>
-        <item>@string/Word_Plus_Meaning1</item>
-        <item>@string/Word_Plus_Meaning2</item>
-        <item>@string/Google_translate_to_CHTW</item>
-        <item>@string/Google_translate_to_CHCN</item>
-        <item>@string/Google_translate_to_EN</item>
-        <item>@string/Google_translate_to_JP</item>
-        <item>@string/Google_translate_to_KR</item>
-        <item>@string/Google_translate_to_SP</item>
-        <item>@string/Google_Image</item>
-    </string-array>
+                                <string-array name="Google_word_searcher_spinner_array">
+                                    <item>@string/Select_one_of_the_following</item>
+                                    <item>@string/Word_Plus_Chinese</item>
+                                    <item>@string/Word_Plus_English1</item>
+                                    <item>@string/Word_Plus_English2</item>
+                                    <item>@string/Word_Plus_Translation</item>
+                                    <item>@string/Word_Plus_Japanese1</item>
+                                    <item>@string/Word_Plus_Japanese2</item>
+                                    <item>@string/Word_Plus_Japanese3</item>
+                                    <item>@string/Word_Plus_Meaning1</item>
+                                    <item>@string/Word_Plus_Meaning2</item>
+                                    <item>@string/Google_translate_to_CHTW</item>
+                                    <item>@string/Google_translate_to_CHCN</item>
+                                    <item>@string/Google_translate_to_EN</item>
+                                    <item>@string/Google_translate_to_JP</item>
+                                    <item>@string/Google_translate_to_KR</item>
+                                    <item>@string/Google_translate_to_SP</item>
+                                    <item>@string/Google_Image</item>
+                                </string-array>
 
 
-    <string-array name="Sentence_searcher_spinner_array">
-        <item>@string/Select_one_of_the_following</item>
-        <item>@string/Ludwig</item>
-        <item>@string/Your_Dictionary_Example_Sentences</item>
-        <item>@string/Word_Cool_EN_CH</item>
-        <item>@string/Word_Cool_EN_JP</item>
-        <item>@string/Word_Cool_JP_CH</item>
-        <item>@string/Linguee_CH_EN</item>
-        <item>@string/Linguee_JP_EN</item>
-    </string-array>
+                                <string-array name="Sentence_searcher_spinner_array">
+                                    <item>@string/Select_one_of_the_following</item>
+                                    <item>@string/Ludwig</item>
+                                    <item>@string/Your_Dictionary_Example_Sentences</item>
+                                    <item>@string/Word_Cool_EN_CH</item>
+                                    <item>@string/Word_Cool_EN_JP</item>
+                                    <item>@string/Word_Cool_JP_CH</item>
+                                    <item>@string/Linguee_CH_EN</item>
+                                    <item>@string/Linguee_JP_EN</item>
+                                </string-array>
 
 
-    <string-array name="Miscellaneous_searcher_spinner_array">
-        <item>@string/Select_one_of_the_following</item>
-        <item>@string/Wikipedia_TW</item>
-        <item>@string/Wikipedia_EN</item>
-        <item>@string/English_Encyclopedia</item>
-        <item>@string/Forvo</item>
-        <item>@string/Wiki_Diff</item>
-        <item>@string/Net_Speak</item>
-        <item>@string/Yomikata</item>
-        <item>@string/Chigai</item>
-        <item>@string/OJAD</item>
-        </string-array>
+                                <string-array name="Miscellaneous_searcher_spinner_array">
+                                    <item>@string/Select_one_of_the_following</item>
+                                    <item>@string/Wikipedia_TW</item>
+                                    <item>@string/Wikipedia_EN</item>
+                                    <item>@string/English_Encyclopedia</item>
+                                    <item>@string/Forvo</item>
+                                    <item>@string/Wiki_Diff</item>
+                                    <item>@string/Net_Speak</item>
+                                    <item>@string/Yomikata</item>
+                                    <item>@string/Chigai</item>
+                                    <item>@string/OJAD</item>
+                                    </string-array>
+                            -->
 
 
     <string name="Yahoo_Dictionary">Yahoo Dictionary</string>
@@ -162,7 +182,6 @@
     <string name="Longman_Dictionary">Longman Dictionary</string>
     <string name="Dict_site">Dict.site</string>
     <string name="Business_Dictionary">Business Dictionary</string>
-    <string name="Automotive_Dictionary">Automotive Dictionary</string>
     <string name="National_Academy_for_Educational_Research">National Academy for Educational Research</string>
     <string name="Slang">俚語網</string>
     <string name="Weblio_JP">Weblio JP</string>
@@ -308,10 +327,17 @@
     <string name="Browser_switch">Browser Switch</string>
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
-    <string name="Search_records">Below are your search records</string>
+    <string name="Search_records">(Aligned in alphabetical order)\n(Finger tap = search word ; Long press = delete word)</string>
     <string name="Your_selected_item_has_benn_deleted">Your selected item has benn deleted</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
+    <string name="Pro_version_switch">Pro Version Switch</string>
+    <string name="Pro_version_is_on">Pro version is on</string>
+    <string name="You_are_using_pro_version">You are using PRO version</string>
+    <string name="You_are_using_simplified_version">You are using simplified version</string>
+    <string name="Dictionary_almighty_pro">Dictionary Almighty (Pro)</string>
+    <string name="Dictionary_almighty_simplified">Dictionary Almighty (Simplified)</string>
+    <string name="Your_search_history">Your Search History</string>
 
 
 </resources>

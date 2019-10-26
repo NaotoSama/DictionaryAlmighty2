@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -32,6 +35,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -54,6 +59,10 @@ import pl.droidsonroids.gif.GifImageView;
 
 public class MainActivity extends AppCompatActivity {
 
+//==============================================================================================
+// 所有變數Variables
+//==============================================================================================
+
     GifImageView gifImageView; //用來準備給用戶更換背景圖
     ImageView voiceRecognitionImageView; //語音識別選單鈕
     ImageView ocrImageView;              //掃描文字選單鈕
@@ -61,32 +70,67 @@ public class MainActivity extends AppCompatActivity {
     ImageView backGroundImageView;       //背景圖
     ImageView browserNavigateBack;       //瀏覽器上一頁鈕
     ImageView browserNavigateForward;    //瀏覽器下一頁鈕
+    ImageView ocr;
+
     public static EditText wordInputView;    //關鍵字輸入框
+
     Button deleteUserInput;        //關鍵字輸入框清除鈕
     Button userInputHistoryButton; //用戶搜尋紀錄鈕
+
     String searchKeyword;      //用戶輸入的關鍵字
-    WebView webViewBrowser;    //網頁框
-    Switch browserSwitch;      //網頁框的開關
-    ProgressBar progressBar;   //網頁載入的進度條
-    TextView searchResultWillBeDisplayedHere;
-    private static int RESULT_LOAD_IMAGE = 1;
-    private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
-    ImageView ocr;
     public static String tesseract_lang_code;  // The recognition language of tesseract
 
+    Spinner otherFunctionsSpinner;    //All spinners
+    Spinner SpeechRecognitionSpinner;
+    Spinner OCRModeSpinner;
+    Spinner EnDictionarySpinner;
+    Spinner JpDictionarySpinner;
+    Spinner GoogleWordSearchSpinner;
+    Spinner SentenceSearchSpinner;
+    Spinner MiscellaneousSpinner;
+
+    ActionBar actionBar;
+    LayoutParams layoutparams; //用來客製化修改ActionBar
+
+    WebView webViewBrowser;    //網頁框
+
+    Switch browserSwitch;      //網頁框的開關
+    Switch proOrSimplifiedLayoutSwitch; //專業版或簡易版開關
+
+    ProgressBar progressBar;   //網頁載入的進度條
+
+    TextView searchResultWillBeDisplayedHere;
+    TextView selectSentenceSearcherView;
+    TextView miscellaneousView;
+    TextView customActionBarTextview;
+
+    private static int RESULT_LOAD_IMAGE = 1;
+    private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
+
+    int proOrSimplifiedSwitchCode; //專業版或簡易版切換的代碼
+
     File tempOutputFileForBackgroundImage;
+
     Uri imageForBackground;                                //相簿中的原始圖檔
+
     Bitmap m_phone_for_background;                           // Bitmap圖像
 
-    private ArrayList<DictionaryItem> mEnglishDictionarySpinnerItemList;  //客製化Spinner選單列
-    private ArrayList<DictionaryItem> mJapaneseDictionarySpinnerItemList;
-    private ArrayList<DictionaryItem> mGoogleWordSearchSpinnerItemList;
-    private ArrayList<DictionaryItem> mSentenceSearchSpinnerItemList;
-    private ArrayList<DictionaryItem> mMiscellaneousSpinnerItemList;
-    private ArrayList<DictionaryItem> mOcrSpinnerItemList;
+    SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
+    SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
+
+    private ArrayList<DictionaryItem> mOcrSpinnerItemListOriginal;  //客製化Spinner選單列
+    private ArrayList<DictionaryItem> mOcrSpinnerItemListSimplified;
+    private ArrayList<DictionaryItem> mEnglishDictionarySpinnerItemListOriginal;
+    private ArrayList<DictionaryItem> mEnglishDictionarySpinnerItemListSimplified;
+    private ArrayList<DictionaryItem> mJapaneseDictionarySpinnerItemListOriginal;
+    private ArrayList<DictionaryItem> mJapaneseDictionarySpinnerItemListSimplified;
+    private ArrayList<DictionaryItem> mGoogleWordSearchSpinnerItemListOriginal;
+    private ArrayList<DictionaryItem> mGoogleWordSearchSpinnerItemListSimplified;
+    private ArrayList<DictionaryItem> mSentenceSearchSpinnerItemListOriginal;
+    private ArrayList<DictionaryItem> mMiscellaneousSpinnerItemListOriginal;
 
     private DictionayItemAdapter mEnglishDictionarySpinnerAdapter; //客製化Spinner的Adapter
     private DictionayItemAdapter mJapaneseDictionarySpinnerAdapter;
@@ -96,9 +140,12 @@ public class MainActivity extends AppCompatActivity {
     private DictionayItemAdapter mOcrSpinnerAdapter;
 
     public static final ArrayList<String> userInputArraylist = new ArrayList<>(); //用戶搜尋紀錄的ArrayList
-    SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
 
 
+
+//==============================================================================================
+// onCreate
+//==============================================================================================
 
     @RequiresApi(api = Build.VERSION_CODES.M)  //要加上這條限定Api等級，requestWritePermission()才不會報錯
     @Override
@@ -107,6 +154,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         requestWritePermission();  //在程式運行中要求存取的權限
 
+
+        /**
+         * findViewById
+         */
         gifImageView = findViewById(R.id.GIF_imageView);
         voiceRecognitionImageView = findViewById(R.id.btnSpeak);
         ocrImageView = findViewById(R.id.ocr_imageView);
@@ -118,8 +169,24 @@ public class MainActivity extends AppCompatActivity {
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
         browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
+        selectSentenceSearcherView = findViewById(R.id.Select_Sentence_Searcher_View);
+        miscellaneousView = findViewById(R.id.Miscellaneous_View);
 
 
+
+        /**
+         * 設定程式開啟時預設使用簡易版的客製化ActionBar
+         */
+        actionBar = getSupportActionBar();
+        customActionBarTextview = new TextView(MainActivity.this); //宣告客製化ActionBar的新文字框
+        layoutparams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT); //設置客製化ActionBar的Layout
+        customActionBarSimplified(); //Helper method
+
+
+
+        /**
+         * 設定程式開啟時預設遮蔽的物件
+         */
         backGroundImageView.setVisibility(View.GONE);
         browserNavigateBack.setVisibility(View.GONE);
         browserNavigateForward.setVisibility(View.GONE);
@@ -132,9 +199,10 @@ public class MainActivity extends AppCompatActivity {
         deleteUserInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wordInputView.setText("");
+                wordInputView.setText("");  //讓文字框內變成空白字元
             }
         });
+
 
 
         /**
@@ -147,6 +215,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
 
 
         /**
@@ -181,105 +250,6 @@ public class MainActivity extends AppCompatActivity {
          * Initialize the ArrayList used for the custom spinners
          */
         initList();
-
-
-
-        /**
-         * Other functions spinner
-         */
-        final Spinner otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> OtherFunctionsSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Other_functions_spinner_array, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        OtherFunctionsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
-
-        otherFunctionsSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                if (position == 0){
-                    return;
-
-                } else if (position == 1) {
-                    changeBackgroundButtonIsPressed="yes";
-                    Intent intent = new Intent(Intent.ACTION_PICK, null);
-                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
-                    startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
-
-                } else if (position == 2) {
-                    // 恢復成預設的背景圖
-                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
-                    m_phone_for_background = defaultBackgroundBmp;
-                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
-                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
-                    byte[] byteArray=byteArrayOutputStream.toByteArray();
-                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    //第三步:將String存至SharedPreferences
-                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("image", imageString);
-                    editor.apply();
-
-                    recreate(); //重新生成頁面
-                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
-
-                } else if (position == 3) {
-                    userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
-                    saveUserInputArrayListToSharedPreferences ();
-                    Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
-
-                } else if (position == 4) {
-                    //呼叫第三方「日本食物字典」app
-                    Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
-                    if (callJapaneseFoodDcitionaryAppIntent != null) {
-                        // If the TextScanner app is found, start the app.
-                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callJapaneseFoodDcitionaryAppIntent);
-                    } else {
-                        // Bring user to the market or let them choose an app.
-                        callJapaneseFoodDcitionaryAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callJapaneseFoodDcitionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.st.japanfooddictionaryfree"));
-                        startActivity(callJapaneseFoodDcitionaryAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
-                     }
-
-                }
-
-                otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
-
-        // 透過OnClickListener將ImageView和Spinner綁定
-        otherFunctionsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                otherFunctionsSpinner.performClick();
-            }
-        });
-
-
-
-
-                                                            /* 以下功能廢除不使用了
-                                                            // 設置OCR文字辨識
-                                                            ocr=findViewById(R.id.ocr_imageView);
-                                                            ocr.setOnClickListener(new View.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(View v) {
-                                                                    Intent intent = new Intent(MainActivity.this, OcrCaptureActivity.class);
-                                                                    startActivity(intent);
-
-                                                                }
-                                                            });
-                                                            */
 
 
 
@@ -390,8 +360,8 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                    saveKeywordtoUserInputListView ();
-                    saveUserInputArrayListToSharedPreferences ();
+                    saveKeywordtoUserInputListView ();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                    saveUserInputArrayListToSharedPreferences (); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
 
                 }
             }
@@ -402,138 +372,690 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        /**
-         * 設置下拉式選單
-         */
+        //==============================================================================================
+        // 設置專業版或簡易版的開關，以及所有Spinners
+        //==============================================================================================
+
+        spinnersForSimplifiedLayout(); //先讓App啟動時預設加載簡易版面
+
+        proOrSimplifiedLayoutSwitch = findViewById(R.id.pro_or_simplified_layout_switch);
+
+        proOrSimplifiedLayoutSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(proOrSimplifiedLayoutSwitch.isChecked()) {         //用isChecked()檢視開關的開啟狀態
+
+                    spinnersForOriginalLayout();  //加載專業版spinners
+                    customActionBarPro();         //加載專業版ActionBar
+
+                    //把用戶開啟專業版的設定(proOrSimplifiedSwitchCodePreferences=1 已開啟專業版)存入SharedPreferences
+                    proOrSimplifiedSwitchCodePreferences = getSharedPreferences("proOrSimplifiedSwitchCodeSharedPreferences", MODE_PRIVATE);
+                    proOrSimplifiedSwitchCodePreferences.edit().putInt("ProMode", 1).apply();
+
+                    Toast.makeText(MainActivity.this,getString(R.string.You_are_using_pro_version), Toast.LENGTH_SHORT).show();
+
+                }
+                else {
+
+                    spinnersForSimplifiedLayout();  //加載簡易版spinners
+
+                    customActionBarSimplified();    //加載簡易版ActionBar
+
+                    //把用戶開啟簡易版的設定(proOrSimplifiedSwitchCodePreferences=0 已關閉專業版)存入SharedPreferences
+                    proOrSimplifiedSwitchCodePreferences = getSharedPreferences("proOrSimplifiedSwitchCodeSharedPreferences", MODE_PRIVATE);
+                    proOrSimplifiedSwitchCodePreferences.edit().putInt("ProMode", 0).apply();
+
+                    Toast.makeText(MainActivity.this,getString(R.string.You_are_using_simplified_version), Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
+
+        //設置App啟動時檢查代碼為專業版或簡易版，並載入對應的Spinners
+        proOrSimplifiedSwitchCode = getSharedPreferences("proOrSimplifiedSwitchCodeSharedPreferences", MODE_PRIVATE).getInt("ProMode", 2);
+
+        if (proOrSimplifiedSwitchCode==1){                  //若用代碼為1=已開啟專業版
+            spinnersForOriginalLayout();                    //加載專業版spinners
+            proOrSimplifiedLayoutSwitch.setChecked(true);   //設定開關按鈕為開啟的狀態
+
+            customActionBarPro();                           //加載客製化專業版ActionBar
+
+        }else if (proOrSimplifiedSwitchCode==0){            //若用代碼為0=已關閉專業版
+            spinnersForSimplifiedLayout();                  //加載簡易版spinners
+            proOrSimplifiedLayoutSwitch.setChecked(false);  //設定開關按鈕為關閉的狀態
+
+            customActionBarSimplified();                    //加載客製化簡易版ActionBar
+
+        }
+
+
 
         /**
-         * OCR Spinner & Spinner Adapters
+         * 用戶在OCR識別頁面(TesseractOpenCVCaptureActivity)選取文字並彈跳出客製選單後的跳轉設定
          */
-        final Spinner OCRModeSpinner = findViewById(R.id.OCR_mode_spinner);
-        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
-        mOcrSpinnerAdapter = new DictionayItemAdapter (this,mOcrSpinnerItemList);
+        Bundle extras = getIntent().getExtras();
+        if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHTW") {
+            String UrlOcrSelectedTextToCHTW= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHTW);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        } else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHCN") {
+            String UrlOcrSelectedTextToCHCN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHCN);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to EN") {
+            String UrlOcrSelectedTextToEN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToEN);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to JP") {
+            String UrlOcrSelectedTextToJP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToJP);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to KR") {
+            String UrlOcrSelectedTextToKR= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToKR);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to SP") {
+            String UrlOcrSelectedTextToSP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
+            webViewBrowser.loadUrl(UrlOcrSelectedTextToSP);
+            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+            webViewBrowser.setVisibility(View.VISIBLE);
+
+        }
+
+
+
+    }
+
+
+//==============================================================================================
+// 在OnCreate外面設置 客製化Spinner選單列的項目(圖+文字) (包括簡易版與專業版的項目)
+//==============================================================================================
+
+    private void initList() {
+
+        mOcrSpinnerItemListOriginal = new ArrayList<>();
+        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_an_OCR_third_party_app, R.mipmap.hand_pointing_down));
+        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
+        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
+        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_microsoft_translator_app_ocr_recognition, R.mipmap.microsoft_translator));
+        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
+
+
+        mOcrSpinnerItemListSimplified = new ArrayList<>();
+        mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Select_an_OCR_third_party_app, R.mipmap.hand_pointing_down));
+        mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
+        mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
+
+
+        mEnglishDictionarySpinnerItemListOriginal = new ArrayList<>();
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Yahoo_Dictionary, R.mipmap.yahoo_dictionary));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.National_Academy_for_Educational_Research, R.mipmap.national_academy_for_educational_research));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Merriam_Webster, R.mipmap.merriam_wester));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Collins, R.mipmap.collins));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Oxford, R.mipmap.oxford_dictionary));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Vocabulary, R.mipmap.vocabulary_dot_com));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Dictionary, R.mipmap.dictionary_dot_com));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.The_Free_Dictionary, R.mipmap.the_free_dictionary));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Your_Dictionary, R.mipmap.your_dictionary));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Longman_Dictionary, R.mipmap.longman));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Greens_dictionary_of_slang, R.mipmap.greens_dictionary_of_slang));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Wiki_Dictionary, R.mipmap.wikctionary));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Hippo, R.mipmap.word_hippo));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Onelook, R.mipmap.onelook));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Business_Dictionary, R.mipmap.business_dictionary));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Slang, R.mipmap.yiym));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.YouGlish, R.mipmap.youglish));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.SCI_Dictionary, R.mipmap.sci_dict));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.TechDico, R.mipmap.tech_dico));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.BioMedical_dictionary, R.mipmap.bio_medical_dictionary));
+
+
+        mEnglishDictionarySpinnerItemListSimplified = new ArrayList<>();
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Yahoo_Dictionary, R.mipmap.yahoo_dictionary));
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.National_Academy_for_Educational_Research, R.mipmap.national_academy_for_educational_research));
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
+
+
+        mJapaneseDictionarySpinnerItemListOriginal = new ArrayList<>();
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Weblio_JP, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Weblio_CN, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Weblio_EN, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Weblio_Synonym, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Tangorin_Word, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Tangorin_Kanji, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Tangorin_Names, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Tangorin_Sentence, R.mipmap.tangorin));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.DA_JP_TW_Dictionary, R.mipmap.da));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.DA_TW_JP_Dictionary, R.mipmap.da));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Goo, R.mipmap.goo_dictionary));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Sanseido, R.mipmap.sanseido));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Kotoba_Bank, R.mipmap.kotoba_bank));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.J_Logos, R.mipmap.jlogos));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Japanese_Industry_Terms, R.mipmap.industry_dictionary));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Kanji_Dictionary_Online, R.mipmap.kanji_dictionary));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Eijirou, R.mipmap.eigiro));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.How_do_you_say_this_in_English, R.mipmap.dmm_eikaiwa));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Jisho, R.mipmap.jisho));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_JP_EN, R.mipmap.cambridge));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_EN_JP, R.mipmap.cambridge));
+
+
+        mJapaneseDictionarySpinnerItemListSimplified = new ArrayList<>();
+        mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Weblio_JP, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Weblio_CN, R.mipmap.weblio));
+        mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.DA_JP_TW_Dictionary, R.mipmap.da));
+        mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.DA_TW_JP_Dictionary, R.mipmap.da));
+
+
+
+        mGoogleWordSearchSpinnerItemListOriginal = new ArrayList<>();
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Chinese, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_English1, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_English2, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Translation, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Japanese1, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Japanese2, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Japanese3, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Meaning1, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Plus_Meaning2, R.mipmap.google));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_translate_to_CHTW, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_translate_to_CHCN, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_translate_to_EN, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_translate_to_JP, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_translate_to_KR, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_translate_to_SP, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_Image, R.mipmap.google));
+
+
+        mGoogleWordSearchSpinnerItemListSimplified = new ArrayList<>();
+        mGoogleWordSearchSpinnerItemListSimplified.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mGoogleWordSearchSpinnerItemListSimplified.add(new DictionaryItem(R.string.Google_translate_to_CHTW, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListSimplified.add(new DictionaryItem(R.string.Google_translate_to_CHCN, R.mipmap.google_translate));
+        mGoogleWordSearchSpinnerItemListSimplified.add(new DictionaryItem(R.string.Google_Image, R.mipmap.google));
+
+
+        mSentenceSearchSpinnerItemListOriginal = new ArrayList<>();
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Ludwig, R.mipmap.ludwig));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Your_Dictionary_Example_Sentences, R.mipmap.your_dictionary));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Cool_EN_JP, R.mipmap.jukuu));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Linguee_CH_EN, R.mipmap.linguee));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Linguee_JP_EN, R.mipmap.linguee));
+
+
+        mMiscellaneousSpinnerItemListOriginal = new ArrayList<>();
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Wikipedia_TW, R.mipmap.wikipedia));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Wikipedia_EN, R.mipmap.wikipedia));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.English_Encyclopedia, R.mipmap.encyclo));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Forvo, R.mipmap.forvo));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Wiki_Diff, R.mipmap.wikidiff));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Net_Speak, R.mipmap.netspeak));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Yomikata, R.mipmap.yomikatawa));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Chigai, R.mipmap.chigaiwa));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.OJAD, R.mipmap.ojad));
+
+    }
+
+
+
+    //==============================================================================================
+    // 在OnCreate外面設置 裁切背景圖 的相關設定
+    //==============================================================================================
+
+    public void cropRawPhotoForBackgroundImage (Uri image) {
+
+        // 修改設定
+        UCrop.Options options = new UCrop.Options();
+
+        // 圖片格式
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+
+        // 設定圖片壓縮質量
+        options.setCompressionQuality(100);
+
+        // 允許手指縮放、旋轉圖片，開放所有裁切框的長寬比例
+        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.NONE);
+
+        // 是否讓使用者調整範圍(預設false)，如果開啟，可能會造成剪下的圖片的長寬比不是設定的
+        // 如果不開啟，使用者不能拖動選框，只能縮放圖片
+        options.setFreeStyleCropEnabled(false);
+
+        // 設定原圖及目標暫存位置
+        UCrop.of(image, Uri.fromFile(tempOutputFileForBackgroundImage))
+                // 導入客製化設定
+                .withOptions(options)
+                .withAspectRatio(9, 16)
+                .start(this);
+    }
+
+
+
+    //==============================================================================================
+    // 在OnCreate外面設置 語音輸入 的相關設定
+    //==============================================================================================
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //設置語音輸入的相關設定
+        switch (requestCode) {
+            case 10:    //必須等同上面getSpeechInput方法中的requestCode:10
+                if (resultCode == RESULT_OK && data != null) {
+                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    wordInputView.setText(result.get(0));           //讓關鍵字輸入框顯示用戶說的文字。以下同。
+
+                    searchKeyword = wordInputView.getText().toString();
+                    saveKeywordtoUserInputListView ();              //Helper method。把用戶查的單字存到搜尋紀錄頁面。以下同。
+                    saveUserInputArrayListToSharedPreferences ();   //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                }
+
+                break;
+        }
+
+        //抓SpeechRecognitionSpinner中的speechAutoTranslationCode代碼，然後載入自動語音翻譯的網頁
+        if (speechAutoTranslationCode=="CHtoEN") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl1 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
+                webViewBrowser.loadUrl(speechUrl1);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+            }
+
+
+        }else if (speechAutoTranslationCode=="CHtoJP") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl2 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl2);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+
+        }else if (speechAutoTranslationCode=="CHtoKR") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl3 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl3);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+
+        }else if (speechAutoTranslationCode=="CHtoES") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl4 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl4);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+
+        }else if (speechAutoTranslationCode=="ENtoCH") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl5 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl5);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+
+        }else if (speechAutoTranslationCode=="JPtoCH") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl6 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl6);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+
+        }else if (speechAutoTranslationCode=="KRtoCH") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl7 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl7);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+
+        }else if (speechAutoTranslationCode=="EStoCH") {
+            searchKeyword = wordInputView.getText().toString();
+
+            if (searchKeyword != null && !searchKeyword.equals("")) {
+                String speechUrl8 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text=" + searchKeyword;
+                webViewBrowser.loadUrl(speechUrl8);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView();
+                saveUserInputArrayListToSharedPreferences();
+            }
+        }
+
+
+
+        //==============================================================================================
+        // 在OnCreate外面設置 用戶選取背景圖時 的相關設定
+        //==============================================================================================
+
+        if (changeBackgroundButtonIsPressed=="yes") {
+            if (resultCode == 0 || data == null) {
+                return;
+            }
+            // 相簿
+            if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
+                imageForBackground = data.getData();
+                try {
+                    tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");
+                    m_phone_for_background = MediaStore.Images.Media.getBitmap(getContentResolver(), imageForBackground);
+
+                    cropRawPhotoForBackgroundImage(imageForBackground);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+                final Uri resultUri = UCrop.getOutput(data);
+                try {
+                    Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+                    m_phone_for_background = croppedBitmap;
+                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                    m_phone_for_background.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
+                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //第三步:將String保存至SharedPreferences
+                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("image", imageString);
+                    editor.apply();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else if (resultCode == UCrop.RESULT_ERROR) {
+                final Throwable cropError = UCrop.getError(data);
+            }
+
+            gifImageView.setVisibility(View.GONE);
+            backGroundImageView.setImageBitmap(m_phone_for_background);
+            backGroundImageView.setVisibility(View.VISIBLE);
+        } else {
+            return;
+        }
+
+    }
+
+
+
+    //==============================================================================================
+    // 在OnCreate外面設置 存取相簿 的相關設定
+    //==============================================================================================
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if(requestCode == WRITE_PERMISSION){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(LOG_TAG, "Write Permission Failed");
+                Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M) //要加上這條限定Api等級才不會報錯
+    private void requestWritePermission(){
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_PERMISSION);
+        }
+    }
+
+
+
+    //==============================================================================================
+    // 在OnCreate外面另外設置網頁框的相關設定
+
+    //Inner class for WebViewClientImpl.
+    //在 WebView 畫面中，用戶無論點選了什麼超連結，都會開啟新的瀏覽器，想在自己的 WebView 中跳轉頁面，就必須建立一個 WebViewClient，同時若想知道接下來將前往哪個連結，也必須透過這個方法
+    //By default, whenever the user clicks a hyperlink within a WebView, the system will respond by launching the user’s preferred web browser app and then loading the URL inside this browser.
+    //While this is usually the preferred behaviour, there may be certain links that you do want to load inside your WebView.
+    //If there are specific URLs that you want your application to handle internally, then you’ll need to create a subclass of WebViewClient and then use the shouldOverrideUrlLoading method to check whether the user has clicked a “whitelisted” URL.
+    //其實我們沒必要自訂 WebViewClient 並重寫其 shouldOverrideUrlLoading 方法，
+    //也就是說我們需要針對點擊事件添加額外控制時才需要自訂shouldOverrideUrlLoading，設定網址含那些特定文字時需要調用調用流覽器載入。
+    //WebViewClient 源碼中 shouldOverrideUrlLoading 方法已經預設返回 false，
+    //所以只要你設置了上面的WebViewClient 就可以實現在WebView中載入新的連結而不去調用流覽器載入。
+
+    //==============================================================================================
+
+    private class WebViewClientImpl extends WebViewClient {
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            // TODO Auto-generated method stub
+            super.onPageStarted(view, url, favicon);
+
+            progressBar.setVisibility(View.VISIBLE);   //在啟動網頁框時顯示網頁框
+
+            //設置啟動網頁框時的進度條加載進度
+            new Thread(){
+                @Override
+                public void run() {
+                    int i=0;
+                    while(i<100){
+                        i++;
+                        try {
+                            Thread.sleep(80);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        progressBar.setProgress(i);
+                    }
+                }
+            }.start();
+        }
+
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+
+            super.onPageFinished(view, url);
+
+            progressBar.setVisibility(View.GONE);   //網頁框內容加載完成時隱藏進度條
+        }
+
+    }
+
+
+
+    //==============================================================================================
+    // 在OnCreate外面設置 按返回鍵時返回到前一個Activity 而非webView網頁的前一頁
+    //==============================================================================================
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    //==============================================================================================
+    // 在OnCreate外面設置 用戶點擊關鍵字輸入框以外的任一處時 收起軟鍵盤
+    // The soft keyboard is hidden when a touch is done anywhere outside the "wordInputView" EditText.
+    //==============================================================================================
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+
+        View v = getCurrentFocus();
+        boolean ret = super.dispatchTouchEvent(event);
+
+        if (v instanceof EditText) {
+            View w = getCurrentFocus();
+            int[] scrcoords = new int[2];
+            if (w != null) {
+                w.getLocationOnScreen(scrcoords);
+            }
+            float x = 0;
+            if (w != null) {
+                x = event.getRawX() + w.getLeft() - scrcoords[0];
+            }
+            float y = 0;
+            if (w != null) {
+                y = event.getRawY() + w.getTop() - scrcoords[1];
+            }
+
+            if (w != null) {
+                Log.d("Activity", "Touch event "+event.getRawX()+","+event.getRawY()+" "+x+","+y+" rect "+w.getLeft()+","+w.getTop()+","+w.getRight()+","+w.getBottom()+" coords "+scrcoords[0]+","+scrcoords[1]);
+            }
+            if (w != null && event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom())) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(Objects.requireNonNull(getWindow().getCurrentFocus()).getWindowToken(), 0);
+            }
+        }
+        return ret;
+    }
+
+
+
+//==============================================================================================
+// 所有helper methods
+//==============================================================================================
+
+
+    //==========================================================================================
+    // Spinner的helper methods
+    //==========================================================================================
+
+    /**
+     * Other functions spinner & SpinnerAdapter
+     */
+    public void otherFunctionsSpinnerOriginal() {       //專業版
+
+        otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        final ArrayAdapter<CharSequence> OtherFunctionsSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Other_functions_spinner_array_original, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        OtherFunctionsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
-        OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
+        otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
 
-        OCRModeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+        otherFunctionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 if (position == 0){
                     return;
 
-                }
-                else if (position == 1) {
-                    //呼叫第三方「文字掃描儀」app
-                    Intent callTextScannerAppIntent = getPackageManager().getLaunchIntentForPackage("com.peace.TextScanner");
-                    if (callTextScannerAppIntent != null) {
+                } else if (position == 1) {
+                    changeBackgroundButtonIsPressed="yes";
+                    Intent intent = new Intent(Intent.ACTION_PICK, null);
+                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
+                    startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
+
+                } else if (position == 2) {
+                    // 恢復成預設的背景圖
+                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
+                    m_phone_for_background = defaultBackgroundBmp;
+                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //第三步:將String存至SharedPreferences
+                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("image", imageString);
+                    editor.apply();
+
+                    recreate(); //重新生成頁面
+                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
+
+                } else if (position == 3) {
+                    userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                    saveUserInputArrayListToSharedPreferences ();
+                    Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+
+                } else if (position == 4) {
+                    //呼叫第三方「日本食物字典」app
+                    Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
+                    if (callJapaneseFoodDcitionaryAppIntent != null) {
                         // If the TextScanner app is found, start the app.
-                        callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callTextScannerAppIntent);
+                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callJapaneseFoodDcitionaryAppIntent);
                     } else {
                         // Bring user to the market or let them choose an app.
-                        callTextScannerAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callTextScannerAppIntent.setData(Uri.parse("market://details?id=" + "com.peace.TextScanner"));
-                        startActivity(callTextScannerAppIntent);
+                        callJapaneseFoodDcitionaryAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callJapaneseFoodDcitionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.st.japanfooddictionaryfree"));
+                        startActivity(callJapaneseFoodDcitionaryAppIntent);
                         Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
                     }
 
                 }
-                else if (position == 2) {
-                    //呼叫第三方「Google翻譯」app
-                    Intent callGgoogleTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.apps.translate");
-                    if (callGgoogleTranslateAppIntent != null) {
-                        // If the TextScanner app is found, start the app.
-                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callGgoogleTranslateAppIntent);
-                    } else {
-                        // Bring user to the market or let them choose an app.
-                        callGgoogleTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callGgoogleTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.google.android.apps.translate"));
-                        startActivity(callGgoogleTranslateAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_GoogleTranslate_app), Toast.LENGTH_LONG).show();
-                    }
 
-                }
-                else if (position == 3) {
-                    //呼叫第三方「微軟翻譯」app
-                    Intent callMicrosoftTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.microsoft.translator");
-                    if (callMicrosoftTranslateAppIntent != null) {
-                        // If the TextScanner app is found, start the app.
-                        callMicrosoftTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callMicrosoftTranslateAppIntent);
-                    } else {
-                        // Bring user to the market or let them choose an app.
-                        callMicrosoftTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callMicrosoftTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callMicrosoftTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.microsoft.translator"));
-                        startActivity(callMicrosoftTranslateAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_MicrosoftTranslate_app), Toast.LENGTH_LONG).show();
-                    }
-
-                }
-                else if (position == 4) {
-                    //呼叫第三方「Yomiwa」app
-                    Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
-                    if (callYomiwaAppIntent != null) {
-                        // If the TextScanner app is found, start the app.
-                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callYomiwaAppIntent);
-                    } else {
-                        // Bring user to the market or let them choose an app.
-                        callYomiwaAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callYomiwaAppIntent.setData(Uri.parse("market://details?id=" + "com.yomiwa.yomiwa"));
-                        startActivity(callYomiwaAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_Yomiwa_app), Toast.LENGTH_LONG).show();
-                    }
-
-                }
-
-
-                                                                /* 以下功能廢除不使用了
-                                                                else if (position == 4) {
-                                                                    Intent GoogleOCRIntent = new Intent();
-                                                                    GoogleOCRIntent.setClass(MainActivity.this, OcrCaptureActivity.class);
-                                                                    startActivity(GoogleOCRIntent);
-
-                                                                }else if (position == 5) {
-                                                                    tesseract_lang_code="eng";
-                                                                    Intent tesscvEnglishIntent = new Intent();
-                                                                    tesscvEnglishIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                                                                    startActivity(tesscvEnglishIntent);
-
-                                                                }else if (position == 6) {
-                                                                    tesseract_lang_code = "chi_tra";
-                                                                    Intent tesscvCHTWIntent = new Intent();
-                                                                    tesscvCHTWIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                                                                    startActivity(tesscvCHTWIntent);
-
-                                                                }else if (position == 7) {
-                                                                    tesseract_lang_code = "chi_sim";
-                                                                    Intent tesscvCHCNIntent = new Intent();
-                                                                    tesscvCHCNIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                                                                    startActivity(tesscvCHCNIntent);
-
-                                                                }else if (position == 8) {
-                                                                    tesseract_lang_code = "jpn";
-                                                                    Intent tesscvJPIntent = new Intent();
-                                                                    tesscvJPIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                                                                    startActivity(tesscvJPIntent);
-
-                                                                }else if (position == 9) {
-                                                                    tesseract_lang_code = "kor";
-                                                                    Intent tesscvKRIntent = new Intent();
-                                                                    tesscvKRIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
-                                                                    startActivity(tesscvKRIntent);
-
-                                                                }
-                                                                */
-
-                OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
-
+                otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
             }
 
             @Override
@@ -541,23 +1063,90 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 透過OnClickListener將ImageView和Spinner綁定
-        ocrImageView.setOnClickListener(new View.OnClickListener() {
+        otherFunctionsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                OCRModeSpinner.performClick();
+                otherFunctionsSpinner.performClick();
             }
         });
+    }
 
 
+    public void otherFunctionsSpinnerSimplified() {     //簡易版
 
-        /**
-         * Speech Recognition Spinner & Spinner Adapters
-         */
-        final Spinner SpeechRecognitionSpinner = findViewById(R.id.Speech_recognition_spinner);
+        final Spinner otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        final ArrayAdapter<CharSequence> OtherFunctionsSpinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Other_functions_spinner_array_simplified, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        OtherFunctionsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
+
+        otherFunctionsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){
+                    return;
+
+                } else if (position == 1) {
+                    changeBackgroundButtonIsPressed="yes";
+                    Intent intent = new Intent(Intent.ACTION_PICK, null);
+                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, TesseractOpenCVCaptureActivity.IMAGE_UNSPECIFIED);
+                    startActivityForResult(intent, TesseractOpenCVCaptureActivity.PHOTOALBUM);
+
+                } else if (position == 2) {
+                    // 恢復成預設的背景圖
+                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
+                    m_phone_for_background = defaultBackgroundBmp;
+                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //第三步:將String存至SharedPreferences
+                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("image", imageString);
+                    editor.apply();
+
+                    recreate(); //重新生成頁面
+                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
+
+                } else if (position == 3) {
+                    userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                    saveUserInputArrayListToSharedPreferences ();
+                    Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+
+                }
+
+                otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // 透過OnClickListener將ImageView和Spinner綁定
+        otherFunctionsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                otherFunctionsSpinner.performClick();
+            }
+        });
+    }
+
+
+    /**
+     * Speech Recognition Spinner & Spinner Adapters
+     */
+    public void speechRecognitionSpinnerOriginal() {        //專業版
+
+        SpeechRecognitionSpinner = findViewById(R.id.Speech_recognition_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> SpeechRecognitionAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Speech_recognition_spinner_array, android.R.layout.simple_spinner_item);
+                R.array.Speech_recognition_spinner_array_original, android.R.layout.simple_spinner_item);
         // Specify the layout to use when the list of choices appears
         SpeechRecognitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -829,14 +1418,345 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
 
 
-        /**
-         * EnDictionarySpinner & Spinner Adapters
-         */
-        final Spinner EnDictionarySpinner = findViewById(R.id.EN_dictionary_providers_spinner);
+    public void speechRecognitionSpinnerSimplified() {      //簡易版
+
+        final Spinner SpeechRecognitionSpinner = findViewById(R.id.Speech_recognition_spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        final ArrayAdapter<CharSequence> SpeechRecognitionAdapter = ArrayAdapter.createFromResource(this,
+                R.array.Speech_recognition_spinner_array_simplified, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        SpeechRecognitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
+
+        SpeechRecognitionSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0) {    //此行以下設置語音辨識 + 自動翻譯
+                    return;
+
+                }else if (position == 1) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    speechAutoTranslationCode="CHtoEN"; //設定一個特定代碼，在下面的onActivityResult執行完畢後，再以此代碼加載其所屬網址，因此不用再設定10秒延遲載入網頁
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
+                }else if (position == 2) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "zh_TW");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    speechAutoTranslationCode="CHtoJP";
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
+                }else if (position == 3) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en_US");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    speechAutoTranslationCode="ENtoCH";
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
+                }else if (position == 4) {
+                    Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                    intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ja_JP");
+
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(intent, 10);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Your Device Doesn't Support Speech Input", Toast.LENGTH_SHORT).show();
+                    }
+
+                    speechAutoTranslationCode="JPtoCH";
+
+                    browserSwitch.setChecked(true);
+                    browserNavigateBack.setVisibility(View.VISIBLE);
+                    browserNavigateForward.setVisibility(View.VISIBLE);
+
+                }
+
+                SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
+
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        voiceRecognitionImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SpeechRecognitionSpinner.performClick();
+            }
+        });
+
+    }
+
+
+    /**
+     * ORCModeSpinner & Spinner Adapters
+     */
+    public void OCRModeSpinnerOriginal() {      //專業版
+
+        OCRModeSpinner = findViewById(R.id.OCR_mode_spinner);
         // Create an customized Adapter using the specified ArrayList and a customized spinner layout
-        mEnglishDictionarySpinnerAdapter = new DictionayItemAdapter(this, mEnglishDictionarySpinnerItemList);
+        mOcrSpinnerAdapter = new DictionayItemAdapter (this,mOcrSpinnerItemListOriginal);
+        // Apply the adapter to the spinner
+        OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
+
+        OCRModeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){
+                    return;
+
+                }
+                else if (position == 1) {
+                    //呼叫第三方「文字掃描儀」app
+                    Intent callTextScannerAppIntent = getPackageManager().getLaunchIntentForPackage("com.peace.TextScanner");
+                    if (callTextScannerAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callTextScannerAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callTextScannerAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callTextScannerAppIntent.setData(Uri.parse("market://details?id=" + "com.peace.TextScanner"));
+                        startActivity(callTextScannerAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else if (position == 2) {
+                    //呼叫第三方「Google翻譯」app
+                    Intent callGgoogleTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.apps.translate");
+                    if (callGgoogleTranslateAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callGgoogleTranslateAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callGgoogleTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callGgoogleTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.google.android.apps.translate"));
+                        startActivity(callGgoogleTranslateAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_GoogleTranslate_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else if (position == 3) {
+                    //呼叫第三方「微軟翻譯」app
+                    Intent callMicrosoftTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.microsoft.translator");
+                    if (callMicrosoftTranslateAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callMicrosoftTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callMicrosoftTranslateAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callMicrosoftTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callMicrosoftTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callMicrosoftTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.microsoft.translator"));
+                        startActivity(callMicrosoftTranslateAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_MicrosoftTranslate_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else if (position == 4) {
+                    //呼叫第三方「Yomiwa」app
+                    Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
+                    if (callYomiwaAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callYomiwaAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callYomiwaAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callYomiwaAppIntent.setData(Uri.parse("market://details?id=" + "com.yomiwa.yomiwa"));
+                        startActivity(callYomiwaAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_Yomiwa_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+
+                                                                /* 以下功能廢除不使用了
+                                                                else if (position == 4) {
+                                                                    Intent GoogleOCRIntent = new Intent();
+                                                                    GoogleOCRIntent.setClass(MainActivity.this, OcrCaptureActivity.class);
+                                                                    startActivity(GoogleOCRIntent);
+
+                                                                }else if (position == 5) {
+                                                                    tesseract_lang_code="eng";
+                                                                    Intent tesscvEnglishIntent = new Intent();
+                                                                    tesscvEnglishIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvEnglishIntent);
+
+                                                                }else if (position == 6) {
+                                                                    tesseract_lang_code = "chi_tra";
+                                                                    Intent tesscvCHTWIntent = new Intent();
+                                                                    tesscvCHTWIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvCHTWIntent);
+
+                                                                }else if (position == 7) {
+                                                                    tesseract_lang_code = "chi_sim";
+                                                                    Intent tesscvCHCNIntent = new Intent();
+                                                                    tesscvCHCNIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvCHCNIntent);
+
+                                                                }else if (position == 8) {
+                                                                    tesseract_lang_code = "jpn";
+                                                                    Intent tesscvJPIntent = new Intent();
+                                                                    tesscvJPIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvJPIntent);
+
+                                                                }else if (position == 9) {
+                                                                    tesseract_lang_code = "kor";
+                                                                    Intent tesscvKRIntent = new Intent();
+                                                                    tesscvKRIntent.setClass(MainActivity.this, TesseractOpenCVCaptureActivity.class);
+                                                                    startActivity(tesscvKRIntent);
+
+                                                                }
+                                                                */
+
+                OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // 透過OnClickListener將ImageView和Spinner綁定
+        ocrImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                OCRModeSpinner.performClick();
+            }
+        });
+
+    }
+
+
+
+    public void OCRModeSpinnerSimplified() {        //簡易版
+
+        final Spinner OCRModeSpinner = findViewById(R.id.OCR_mode_spinner);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mOcrSpinnerAdapter = new DictionayItemAdapter (this,mOcrSpinnerItemListSimplified);
+        // Apply the adapter to the spinner
+        OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
+
+        OCRModeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){
+                    return;
+
+                }
+                else if (position == 1) {
+                    //呼叫第三方「文字掃描儀」app
+                    Intent callTextScannerAppIntent = getPackageManager().getLaunchIntentForPackage("com.peace.TextScanner");
+                    if (callTextScannerAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callTextScannerAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callTextScannerAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callTextScannerAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callTextScannerAppIntent.setData(Uri.parse("market://details?id=" + "com.peace.TextScanner"));
+                        startActivity(callTextScannerAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                else if (position == 2) {
+                    //呼叫第三方「Google翻譯」app
+                    Intent callGgoogleTranslateAppIntent = getPackageManager().getLaunchIntentForPackage("com.google.android.apps.translate");
+                    if (callGgoogleTranslateAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callGgoogleTranslateAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callGgoogleTranslateAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callGgoogleTranslateAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callGgoogleTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.google.android.apps.translate"));
+                        startActivity(callGgoogleTranslateAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_GoogleTranslate_app), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+
+                OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+        // 透過OnClickListener將ImageView和Spinner綁定
+        ocrImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                OCRModeSpinner.performClick();
+            }
+        });
+
+    }
+
+
+
+    /**
+     * EnDictionarySpinner & Spinner Adapters
+     */
+    public void EnDictionarySpinnerOriginal() {     //專業版
+
+        EnDictionarySpinner = findViewById(R.id.EN_dictionary_providers_spinner);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mEnglishDictionarySpinnerAdapter = new DictionayItemAdapter(this, mEnglishDictionarySpinnerItemListOriginal);
         EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
 
         EnDictionarySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -987,9 +1907,72 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 24) {
-                    String carDictionaryUrl= "http://www.agosto.com.tw/dictionary.aspx?search="+searchKeyword;
-                    webViewBrowser.loadUrl(carDictionaryUrl);
+                }
+
+                EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
+                //再生成一次Adapter防止點按過的選項失效無法使用，以下同。
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+
+                browserSwitch.setChecked(true);
+                //把網頁框開關狀態設定成"開啟"，以免載入網頁時開關沒有變成開啟的狀態
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+    }
+
+
+    public void EnDictionarySpinnerSimplified() {       //簡易版
+
+        final Spinner EnDictionarySpinner = findViewById(R.id.EN_dictionary_providers_spinner);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mEnglishDictionarySpinnerAdapter = new DictionayItemAdapter(this, mEnglishDictionarySpinnerItemListSimplified);
+        EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
+
+        EnDictionarySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                searchKeyword = wordInputView.getText().toString(); //EditText的getText()方法只能在監聽事件(例如onItemSelected或onCLick)中才能夠實現，若放在外面就會獲取不到EditText中你輸入的值。以下同。
+
+                if (position == 0){
+                    return;
+
+                }else if (position == 1){
+                    String yahooDictionaryUrl= "https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXGoL8vtcAQoAnHV9rolQ;_ylc=X1MDMTM1MTIwMDM4MQRfcgMyBGZyA3NmcARncHJpZAN0RjJnMS51MlNWU3NDZ1pfVC4zNUFBBG5fcnNsdAMwBG5fc3VnZwM0BG9yaWdpbgN0dy5kaWN0aW9uYXJ5LnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMEcXN0cmwDMwRxdWVyeQNHQVkEdF9zdG1wAzE1NjAwMTU0MTE-?p="+searchKeyword+"&fr2=sb-top-tw.dictionary.search&fr=sfp";
+                    webViewBrowser.loadUrl(yahooDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 2) {
+                    String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                    webViewBrowser.loadUrl(naerUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 3) {
+                    String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
+                    webViewBrowser.loadUrl(dictDotSiteUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 4) {
+                    String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
+                    webViewBrowser.loadUrl(voicetubeUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 5) {
+                    String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
+                    webViewBrowser.loadUrl(cambridgeDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -1012,14 +1995,17 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+    }
 
 
-        /**
-         * JpDictionarySpinner & Spinner Adapters
-         */
+    /**
+     * JpDictionarySpinner & Spinner Adapters
+     */
+    public void JpDictionarySpinnerOriginal() {     //專業版
+
         final Spinner JpDictionarySpinner = findViewById(R.id.JP_dictionary_providers_spinner);
         // Create an customized Adapter using the specified ArrayList and a customized spinner layout
-        mJapaneseDictionarySpinnerAdapter = new DictionayItemAdapter(this, mJapaneseDictionarySpinnerItemList);
+        mJapaneseDictionarySpinnerAdapter = new DictionayItemAdapter(this, mJapaneseDictionarySpinnerItemListOriginal);
         JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
 
         JpDictionarySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -1174,15 +2160,78 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+
+    public void JpDictionarySpinnerSimplified() {       //簡易版
+
+        JpDictionarySpinner = findViewById(R.id.JP_dictionary_providers_spinner);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mJapaneseDictionarySpinnerAdapter = new DictionayItemAdapter(this, mJapaneseDictionarySpinnerItemListSimplified);
+        JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
+
+        JpDictionarySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                searchKeyword = wordInputView.getText().toString();
+
+                if (position == 0){
+                    return;
+
+                }
+                if (position == 1){
+                    String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
+                    webViewBrowser.loadUrl(weblioJPUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 2) {
+                    String weblioCHUrl= "https://cjjc.weblio.jp/content/"+searchKeyword;
+                    webViewBrowser.loadUrl(weblioCHUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 3) {
+                    String DaJPtoCHDictionaryUrl= "http://dict.asia/jc/"+searchKeyword;
+                    webViewBrowser.loadUrl(DaJPtoCHDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 4) {
+                    String DaCHtoJPDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
+                    webViewBrowser.loadUrl(DaCHtoJPDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }
+
+                JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+    }
 
 
 
-        /**
-         * GoogleWordSearchSpinner & Spinner Adapters
-         */
+    /**
+     * GoogleWordSearchSpinner & Spinner Adapters
+     */
+    public void GoogleWordSearchSpinnerOriginal() {     //專業版
+
         final Spinner GoogleWordSearchSpinner = findViewById(R.id.Google_word_searcher_spinner);
         // Create an customized Adapter using the specified ArrayList and a customized spinner layout
-        mGoogleWordSearchSpinnerAdapter = new DictionayItemAdapter(this, mGoogleWordSearchSpinnerItemList);
+        mGoogleWordSearchSpinnerAdapter = new DictionayItemAdapter(this, mGoogleWordSearchSpinnerItemListOriginal);
         GoogleWordSearchSpinner.setAdapter(mGoogleWordSearchSpinnerAdapter);
 
         GoogleWordSearchSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -1308,14 +2357,72 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+    }
 
 
-        /**
-         * SentenceSearchSpinner & Spinner Adapters
-         */
-        final Spinner SentenceSearchSpinner = findViewById(R.id.Sentence_searcher_spinner);
+    public void GoogleWordSearchSpinnerSimplified() {       //簡易版
+
+        GoogleWordSearchSpinner = findViewById(R.id.Google_word_searcher_spinner);
         // Create an customized Adapter using the specified ArrayList and a customized spinner layout
-        mSentenceSearchSpinnerAdapter = new DictionayItemAdapter(this, mSentenceSearchSpinnerItemList);
+        mGoogleWordSearchSpinnerAdapter = new DictionayItemAdapter(this, mGoogleWordSearchSpinnerItemListSimplified);
+        GoogleWordSearchSpinner.setAdapter(mGoogleWordSearchSpinnerAdapter);
+
+        GoogleWordSearchSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                searchKeyword = wordInputView.getText().toString();
+
+                if (position == 0){
+                    return;
+
+                }
+                if (position == 1) {
+                    String GoogleTranslateToCHTWUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
+                    webViewBrowser.loadUrl(GoogleTranslateToCHTWUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 2) {
+                    String GoogleTranslateToCHCNUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+searchKeyword;
+                    webViewBrowser.loadUrl(GoogleTranslateToCHCNUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 3) {
+                    String imageSearchUrl= "http://images.google.com/search?tbm=isch&q="+searchKeyword;
+                    webViewBrowser.loadUrl(imageSearchUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }
+
+                GoogleWordSearchSpinner.setAdapter(mGoogleWordSearchSpinnerAdapter);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+
+    }
+
+
+    /**
+     * SentenceSearchSpinner & Spinner Adapters
+     */
+    public void sentenceSearchSpinnerOriginal() {       //專業版
+
+        SentenceSearchSpinner = findViewById(R.id.Sentence_searcher_spinner);
+        // Create an customized Adapter using the specified ArrayList and a customized spinner layout
+        mSentenceSearchSpinnerAdapter = new DictionayItemAdapter(this, mSentenceSearchSpinnerItemListOriginal);
         SentenceSearchSpinner.setAdapter(mSentenceSearchSpinnerAdapter);
 
         SentenceSearchSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -1387,14 +2494,17 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+    }
 
 
-        /**
-         * MiscellaneousSpinner & Spinner Adapters
-         */
-        final Spinner MiscellaneousSpinner = findViewById(R.id.Miscellaneous_searcher_spinner);
+    /**
+     * MiscellaneousSpinner & Spinner Adapters
+     */
+    public void MiscellaneousSpinnerOriginal() {        //專業版
+
+        MiscellaneousSpinner = findViewById(R.id.Miscellaneous_searcher_spinner);
         // Create an customized Adapter using the specified ArrayList and a customized spinner layout
-        mMiscellaneousSpinnerAdapter = new DictionayItemAdapter(this, mMiscellaneousSpinnerItemList);
+        mMiscellaneousSpinnerAdapter = new DictionayItemAdapter(this, mMiscellaneousSpinnerItemListOriginal);
         MiscellaneousSpinner.setAdapter(mMiscellaneousSpinnerAdapter);
 
         MiscellaneousSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -1478,176 +2588,132 @@ public class MainActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
+    }
 
 
 
-        /**
-         * 用戶在OCR識別頁面(TesseractOpenCVCaptureActivity)選取文字並彈跳出客製選單後的跳轉設定
-         */
-        Bundle extras = getIntent().getExtras();
-        if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHTW") {
-            String UrlOcrSelectedTextToCHTW= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHTW);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+    //==============================================================================================
+    // 把作為helper method的Spinners都統包起來
+    //==============================================================================================
 
-        } else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to CHCN") {
-            String UrlOcrSelectedTextToCHCN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToCHCN);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+    /**
+     * 專業版的Spinners
+     */
+    public void spinnersForOriginalLayout() {
 
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to EN") {
-            String UrlOcrSelectedTextToEN= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToEN);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
+        otherFunctionsSpinnerOriginal();
+        speechRecognitionSpinnerOriginal();
+        OCRModeSpinnerOriginal();
+        EnDictionarySpinnerOriginal();
+        JpDictionarySpinnerOriginal();
+        GoogleWordSearchSpinnerOriginal();
+        sentenceSearchSpinnerOriginal();
+        MiscellaneousSpinnerOriginal();
 
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to JP") {
-            String UrlOcrSelectedTextToJP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToJP);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to KR") {
-            String UrlOcrSelectedTextToKR= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToKR);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }else if (TesseractOpenCVCaptureActivity.UrlKey=="Translate OcrSelectedText to SP") {
-            String UrlOcrSelectedTextToSP= extras.getString(TesseractOpenCVCaptureActivity.UrlKey);
-            webViewBrowser.loadUrl(UrlOcrSelectedTextToSP);
-            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-            webViewBrowser.setVisibility(View.VISIBLE);
-
-        }
-
-
+        shownItemsInOriginalLayout();  //專業版時要顯示的物件
 
     }
 
 
     /**
-     * 在OnCreate外面設置客製化Spinner選單列的項目(圖+文字)
+     * 簡易版的Spinners
      */
-    private void initList() {
+    public void spinnersForSimplifiedLayout() {
 
-        mOcrSpinnerItemList = new ArrayList<>();
-        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Select_an_OCR_third_party_app, R.mipmap.hand_pointing_down));
-        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
-        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
-        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_microsoft_translator_app_ocr_recognition, R.mipmap.microsoft_translator));
-        mOcrSpinnerItemList.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
+        otherFunctionsSpinnerSimplified();
+        OCRModeSpinnerSimplified();
+        EnDictionarySpinnerSimplified();
+        JpDictionarySpinnerSimplified();
+        GoogleWordSearchSpinnerSimplified();
+        speechRecognitionSpinnerSimplified();
 
+        hiddenItemsInSimplifiedLayout(); //簡易版時要隱藏的物件
 
-        mEnglishDictionarySpinnerItemList = new ArrayList<>();
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Yahoo_Dictionary, R.mipmap.yahoo_dictionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.National_Academy_for_Educational_Research, R.mipmap.national_academy_for_educational_research));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Merriam_Webster, R.mipmap.merriam_wester));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Collins, R.mipmap.collins));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Oxford, R.mipmap.oxford_dictionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Vocabulary, R.mipmap.vocabulary_dot_com));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Dictionary, R.mipmap.dictionary_dot_com));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.The_Free_Dictionary, R.mipmap.the_free_dictionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Your_Dictionary, R.mipmap.your_dictionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Longman_Dictionary, R.mipmap.longman));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Greens_dictionary_of_slang, R.mipmap.greens_dictionary_of_slang));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Wiki_Dictionary, R.mipmap.wikctionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Word_Hippo, R.mipmap.word_hippo));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Onelook, R.mipmap.onelook));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Business_Dictionary, R.mipmap.business_dictionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Slang, R.mipmap.yiym));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.YouGlish, R.mipmap.youglish));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.SCI_Dictionary, R.mipmap.sci_dict));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.TechDico, R.mipmap.tech_dico));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.BioMedical_dictionary, R.mipmap.bio_medical_dictionary));
-        mEnglishDictionarySpinnerItemList.add(new DictionaryItem(R.string.Automotive_Dictionary, R.mipmap.car_dictionary));
+    }
 
 
-        mJapaneseDictionarySpinnerItemList = new ArrayList<>();
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_JP, R.mipmap.weblio));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_CN, R.mipmap.weblio));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_EN, R.mipmap.weblio));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Weblio_Synonym, R.mipmap.weblio));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Word, R.mipmap.tangorin));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Kanji, R.mipmap.tangorin));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Names, R.mipmap.tangorin));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Tangorin_Sentence, R.mipmap.tangorin));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.DA_JP_TW_Dictionary, R.mipmap.da));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.DA_TW_JP_Dictionary, R.mipmap.da));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Goo, R.mipmap.goo_dictionary));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Sanseido, R.mipmap.sanseido));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Kotoba_Bank, R.mipmap.kotoba_bank));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.J_Logos, R.mipmap.jlogos));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Japanese_Industry_Terms, R.mipmap.industry_dictionary));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Kanji_Dictionary_Online, R.mipmap.kanji_dictionary));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Eijirou, R.mipmap.eigiro));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.How_do_you_say_this_in_English, R.mipmap.dmm_eikaiwa));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Jisho, R.mipmap.jisho));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Cambridge_JP_EN, R.mipmap.cambridge));
-        mJapaneseDictionarySpinnerItemList.add(new DictionaryItem(R.string.Cambridge_EN_JP, R.mipmap.cambridge));
+    //==============================================================================================
+    // 設置專業版和簡易版時各自要顯示或隱藏之物件的 helper methods
+    //==============================================================================================
+
+    /**
+     * 專業版介面要顯示的物件
+     */
+    public void shownItemsInOriginalLayout() {
+
+        MiscellaneousSpinner.setVisibility(View.VISIBLE);
+        SentenceSearchSpinner.setVisibility(View.VISIBLE);
+        selectSentenceSearcherView.setVisibility(View.VISIBLE);
+        miscellaneousView.setVisibility(View.VISIBLE);
+
+    }
 
 
-        mGoogleWordSearchSpinnerItemList = new ArrayList<>();
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Chinese, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_English1, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_English2, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Translation, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Japanese1, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Japanese2, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Japanese3, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Meaning1, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Plus_Meaning2, R.mipmap.google));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_CHTW, R.mipmap.google_translate));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_CHCN, R.mipmap.google_translate));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_EN, R.mipmap.google_translate));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_JP, R.mipmap.google_translate));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_KR, R.mipmap.google_translate));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_translate_to_SP, R.mipmap.google_translate));
-        mGoogleWordSearchSpinnerItemList.add(new DictionaryItem(R.string.Google_Image, R.mipmap.google));
+    /**
+     * 專業版介面要隱藏的物件
+     */
+    public void hiddenItemsInSimplifiedLayout() {
+        selectSentenceSearcherView = findViewById(R.id.Select_Sentence_Searcher_View);
+        miscellaneousView = findViewById(R.id.Miscellaneous_View);
+        SentenceSearchSpinner = findViewById(R.id.Sentence_searcher_spinner);
+        MiscellaneousSpinner = findViewById(R.id.Miscellaneous_searcher_spinner);
 
-
-        mSentenceSearchSpinnerItemList = new ArrayList<>();
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Ludwig, R.mipmap.ludwig));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Your_Dictionary_Example_Sentences, R.mipmap.your_dictionary));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Cool_EN_JP, R.mipmap.jukuu));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Linguee_CH_EN, R.mipmap.linguee));
-        mSentenceSearchSpinnerItemList.add(new DictionaryItem(R.string.Linguee_JP_EN, R.mipmap.linguee));
-
-
-        mMiscellaneousSpinnerItemList = new ArrayList<>();
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Wikipedia_TW, R.mipmap.wikipedia));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Wikipedia_EN, R.mipmap.wikipedia));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.English_Encyclopedia, R.mipmap.encyclo));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Forvo, R.mipmap.forvo));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Wiki_Diff, R.mipmap.wikidiff));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Net_Speak, R.mipmap.netspeak));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Yomikata, R.mipmap.yomikatawa));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.Chigai, R.mipmap.chigaiwa));
-        mMiscellaneousSpinnerItemList.add(new DictionaryItem(R.string.OJAD, R.mipmap.ojad));
+        selectSentenceSearcherView.setVisibility(View.GONE);
+        miscellaneousView.setVisibility(View.GONE);
+        SentenceSearchSpinner.setVisibility(View.GONE);
+        MiscellaneousSpinner.setVisibility(View.GONE);
 
     }
 
 
 
+    //==============================================================================================
+    // 客製化轉頁板與簡易版ActionBar的Helper method
+    //==============================================================================================
+
     /**
-     * Helper methods for saving users' input
+     * 專業版ActionBar介面
      */
-    // Helper method for saving Keywords to UserInputListView
+    public void customActionBarPro() {
+
+        customActionBarTextview.setLayoutParams(layoutparams);
+        customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro));
+        customActionBarTextview.setTextSize(20);
+        customActionBarTextview.setTextColor(Color.parseColor("#00ff7b"));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff0000")));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(customActionBarTextview);
+
+    }
+
+
+    /**
+     * 簡易版ActionBar介面
+     */
+    public void customActionBarSimplified() {
+
+        customActionBarTextview.setLayoutParams(layoutparams);
+        customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified));
+        customActionBarTextview.setTextSize(20);
+        customActionBarTextview.setTextColor(Color.parseColor("#ffffff"));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#018577")));
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(customActionBarTextview);
+
+    }
+
+
+
+    //==============================================================================================
+    // Helper method for saving users' input
+    //==============================================================================================
+
+    /**
+     * Helper method for saving Keywords to UserInputListView
+     */
     public void saveKeywordtoUserInputListView () {
         if (searchKeyword != null && !searchKeyword.equals("")) {
-        userInputArraylist.add(searchKeyword);
+            userInputArraylist.add(searchKeyword);
         }
 
         //透過HashSet自動過濾掉userInputArraylist中重複的字
@@ -1656,11 +2722,14 @@ public class MainActivity extends AppCompatActivity {
         userInputArraylist.clear();
         userInputArraylist.addAll(userInputArraylistHashSet);
 
-        //Alphabetic sorting.
+        //Alphabetic sorting
         Collections.sort(userInputArraylist);
     }
 
-    // Helper method for saving UserInputArrayList to SharedPreferences
+
+    /**
+     * Helper method for saving UserInputArrayList to SharedPreferences
+     */
     public void saveUserInputArrayListToSharedPreferences() {
         SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
         editor.putInt("userInputArrayListValues", userInputArraylist.size());
@@ -1669,346 +2738,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("userInputArrayListItem_"+i, userInputArraylist.get(i));
         }
         editor.apply();
-    }
-
-
-
-    /**
-     * 在OnCreate外面設置語音辨識的相關設定
-     */
-
-    public void cropRawPhotoForBackgroundImage (Uri image) {
-
-        // 修改設定
-        UCrop.Options options = new UCrop.Options();
-
-        // 圖片格式
-        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
-
-        // 設定圖片壓縮質量
-        options.setCompressionQuality(100);
-
-        // 允許手指縮放、旋轉圖片，開放所有裁切框的長寬比例
-        options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.NONE);
-
-        // 是否讓使用者調整範圍(預設false)，如果開啟，可能會造成剪下的圖片的長寬比不是設定的
-        // 如果不開啟，使用者不能拖動選框，只能縮放圖片
-        options.setFreeStyleCropEnabled(false);
-
-        // 設定原圖及目標暫存位置
-        UCrop.of(image, Uri.fromFile(tempOutputFileForBackgroundImage))
-                // 導入客製化設定
-                .withOptions(options)
-                .withAspectRatio(9, 16)
-                .start(this);
-    }
-
-
-
-     /**
-     * 在OnCreate外面設置語音輸入的相關設定
-     * 以及在OnCreate外面另外設置用戶選取背景圖時的相關設定
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        //設置語音輸入的相關設定
-        switch (requestCode) {
-            case 10:    //必須等同上面getSpeechInput方法中的requestCode:10
-                if (resultCode == RESULT_OK && data != null) {
-                    ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    wordInputView.setText(result.get(0));
-
-                    searchKeyword = wordInputView.getText().toString();
-                    saveKeywordtoUserInputListView ();
-                    saveUserInputArrayListToSharedPreferences ();
-                }
-
-                break;
-        }
-
-        //抓SpeechRecognitionSpinner中的speechAutoTranslationCode代碼，然後載入自動語音翻譯的網頁
-        if (speechAutoTranslationCode=="CHtoEN") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl1 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=en&text="+searchKeyword;
-                webViewBrowser.loadUrl(speechUrl1);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView ();
-                saveUserInputArrayListToSharedPreferences ();
-            }
-
-
-        }else if (speechAutoTranslationCode=="CHtoJP") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl2 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ja&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl2);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-
-        }else if (speechAutoTranslationCode=="CHtoKR") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl3 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=ko&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl3);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-
-        }else if (speechAutoTranslationCode=="CHtoES") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl4 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=zh-CN&tl=es&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl4);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-
-        }else if (speechAutoTranslationCode=="ENtoCH") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl5 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=en&tl=zh-TW&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl5);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-
-        }else if (speechAutoTranslationCode=="JPtoCH") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl6 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ja&tl=zh-TW&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl6);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-
-        }else if (speechAutoTranslationCode=="KRtoCH") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl7 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=ko&tl=zh-TW&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl7);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-
-        }else if (speechAutoTranslationCode=="EStoCH") {
-            searchKeyword = wordInputView.getText().toString();
-
-            if (searchKeyword != null && !searchKeyword.equals("")) {
-                String speechUrl8 = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=es&tl=zh-TW&text=" + searchKeyword;
-                webViewBrowser.loadUrl(speechUrl8);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                saveKeywordtoUserInputListView();
-                saveUserInputArrayListToSharedPreferences();
-            }
-        }
-
-
-        //設置用戶選取背景圖時的相關設定
-        if (changeBackgroundButtonIsPressed=="yes") {
-            if (resultCode == 0 || data == null) {
-                return;
-            }
-            // 相簿
-            if (requestCode == TesseractOpenCVCaptureActivity.PHOTOALBUM) {
-                imageForBackground = data.getData();
-                try {
-                    tempOutputFileForBackgroundImage = new File(getExternalCacheDir(), "temp-background_image.jpg");
-                    m_phone_for_background = MediaStore.Images.Media.getBitmap(getContentResolver(), imageForBackground);
-
-                    cropRawPhotoForBackgroundImage(imageForBackground);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
-                final Uri resultUri = UCrop.getOutput(data);
-                try {
-                    Bitmap croppedBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
-                    m_phone_for_background = croppedBitmap;
-                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
-                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                    m_phone_for_background.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);
-                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
-                    byte[] byteArray=byteArrayOutputStream.toByteArray();
-                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    //第三步:將String保存至SharedPreferences
-                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("image", imageString);
-                    editor.apply();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else if (resultCode == UCrop.RESULT_ERROR) {
-                final Throwable cropError = UCrop.getError(data);
-            }
-
-            gifImageView.setVisibility(View.GONE);
-            backGroundImageView.setImageBitmap(m_phone_for_background);
-            backGroundImageView.setVisibility(View.VISIBLE);
-        } else {
-            return;
-        }
-
-    }
-
-
-    /**
-     * 在OnCreate外面另外設置存取相簿的相關設定
-     */
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        if(requestCode == WRITE_PERMISSION){
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Log.d(LOG_TAG, "Write Permission Failed");
-                Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-
-    @RequiresApi(api = Build.VERSION_CODES.M) //要加上這條限定Api等級才不會報錯
-    private void requestWritePermission(){
-        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},WRITE_PERMISSION);
-        }
-    }
-
-
-    /**
-     * 在OnCreate外面另外設置網頁框的相關設定
-     */
-    //Inner class for WebViewClientImpl.
-    //在 WebView 畫面中，用戶無論點選了什麼超連結，都會開啟新的瀏覽器，想在自己的 WebView 中跳轉頁面，就必須建立一個 WebViewClient，同時若想知道接下來將前往哪個連結，也必須透過這個方法
-    //By default, whenever the user clicks a hyperlink within a WebView, the system will respond by launching the user’s preferred web browser app and then loading the URL inside this browser.
-    //While this is usually the preferred behaviour, there may be certain links that you do want to load inside your WebView.
-    //If there are specific URLs that you want your application to handle internally, then you’ll need to create a subclass of WebViewClient and then use the shouldOverrideUrlLoading method to check whether the user has clicked a “whitelisted” URL.
-    //其實我們沒必要自訂 WebViewClient 並重寫其 shouldOverrideUrlLoading 方法，
-    //也就是說我們需要針對點擊事件添加額外控制時才需要自訂shouldOverrideUrlLoading，設定網址含那些特定文字時需要調用調用流覽器載入。
-    //WebViewClient 源碼中 shouldOverrideUrlLoading 方法已經預設返回 false，
-    //所以只要你設置了上面的WebViewClient 就可以實現在WebView中載入新的連結而不去調用流覽器載入。
-
-    private class WebViewClientImpl extends WebViewClient {
-
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            // TODO Auto-generated method stub
-            super.onPageStarted(view, url, favicon);
-
-            progressBar.setVisibility(View.VISIBLE);   //在啟動網頁框時顯示網頁框
-
-            //設置啟動網頁框時的進度條加載進度
-            new Thread(){
-                @Override
-                public void run() {
-                    int i=0;
-                    while(i<100){
-                        i++;
-                        try {
-                            Thread.sleep(80);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        progressBar.setProgress(i);
-                    }
-                }
-            }.start();
-        }
-
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            // TODO Auto-generated method stub
-            super.onPageFinished(view, url);
-
-            progressBar.setVisibility(View.GONE);   //網頁框內容加載完成時隱藏進度條
-        }
-
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-    /**
-     * The soft keyboard is hidden when a touch is done anywhere outside the "wordInputView" EditText.
-     */
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-
-        View v = getCurrentFocus();
-        boolean ret = super.dispatchTouchEvent(event);
-
-        if (v instanceof EditText) {
-            View w = getCurrentFocus();
-            int[] scrcoords = new int[2];
-            if (w != null) {
-                w.getLocationOnScreen(scrcoords);
-            }
-            float x = 0;
-            if (w != null) {
-                x = event.getRawX() + w.getLeft() - scrcoords[0];
-            }
-            float y = 0;
-            if (w != null) {
-                y = event.getRawY() + w.getTop() - scrcoords[1];
-            }
-
-            if (w != null) {
-                Log.d("Activity", "Touch event "+event.getRawX()+","+event.getRawY()+" "+x+","+y+" rect "+w.getLeft()+","+w.getTop()+","+w.getRight()+","+w.getBottom()+" coords "+scrcoords[0]+","+scrcoords[1]);
-            }
-            if (w != null && event.getAction() == MotionEvent.ACTION_UP && (x < w.getLeft() || x >= w.getRight() || y < w.getTop() || y > w.getBottom())) {
-
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(Objects.requireNonNull(getWindow().getCurrentFocus()).getWindowToken(), 0);
-            }
-        }
-        return ret;
     }
 
 

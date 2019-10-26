@@ -12,7 +12,6 @@
     <string name="Longman_Dictionary">朗文英英字典</string>
     <string name="Dict_site">Dict.site英漢漢英字典</string>
     <string name="Business_Dictionary">商業英英字典</string>
-    <string name="Automotive_Dictionary">汽車用語字典</string>
     <string name="National_Academy_for_Educational_Research">國教院</string>
     <string name="Slang">英文俚語網</string>
     <string name="Weblio_JP">Weblio日日字典</string>
@@ -151,12 +150,19 @@
     <string name="Linguee_CH_EN">Linguee中英例句</string>
     <string name="Linguee_JP_EN">Linguee日英例句</string>
     <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
-    <string name="Browser_switch">網頁開關</string>
+    <string name="Browser_switch">網頁 開關</string>
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records">您的搜尋紀錄\n(依首字母與首注音順序排列)\n(點擊 = 帶入文字；長按 = 刪除文字)</string>
+    <string name="Search_records">(依首字母與首注音順序排列)\n(點擊 = 帶入文字；長按 = 刪除文字)</string>
     <string name="Your_selected_item_has_benn_deleted">您選擇的項目已刪除完畢</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
+    <string name="Pro_version_switch">專業版開關</string>
+    <string name="Pro_version_is_on">正使用專業版</string>
+    <string name="You_are_using_pro_version">您正使用專業版</string>
+    <string name="You_are_using_simplified_version">您正使用簡易版</string>
+    <string name="Dictionary_almighty_pro">字典譯指通 (專業版)</string>
+    <string name="Dictionary_almighty_simplified">字典譯指通 (簡易版)</string>
+    <string name="Your_search_history">您的搜尋紀錄</string>
 </resources>
