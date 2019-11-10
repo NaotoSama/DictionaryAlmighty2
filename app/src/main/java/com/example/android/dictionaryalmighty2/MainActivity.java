@@ -2,6 +2,7 @@ package com.example.android.dictionaryalmighty2;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +19,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -76,13 +78,19 @@ public class MainActivity extends AppCompatActivity {
 
     Button deleteUserInput;        //關鍵字輸入框清除鈕
     Button userInputHistoryButton; //用戶搜尋紀錄鈕
+    Button defaultSearchButton;
+    Button comboSearchButton;
 
     String searchKeyword;      //用戶輸入的關鍵字
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
+    String defaultSingleSearchCode; //用以設定預設快搜字典
+    String[] defaultDictionaryListOriginal; //專業版自訂預設字典的名單
+    String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
     public static final String IMAGE_UNSPECIFIED = "image/*";
 
+    AlertDialog.Builder defaultSearchAlertDialog; //專業版自訂預設字典名單的對話方塊
 
     public static final int PHOTOALBUM = 1;   // 相簿
     int proOrSimplifiedSwitchCode; //專業版或簡易版切換的代碼
@@ -122,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
+    SharedPreferences defaultDictionarySearchSharedPreferences;//儲存預設字典的SharedPreferences
 
     private ArrayList<DictionaryItem> mOcrSpinnerItemListOriginal;  //客製化Spinner選單列
     private ArrayList<DictionaryItem> mOcrSpinnerItemListSimplified;
@@ -168,6 +177,8 @@ public class MainActivity extends AppCompatActivity {
         wordInputView = findViewById(R.id.Word_Input_View);
         deleteUserInput = findViewById(R.id.delete_user_input_button);
         userInputHistoryButton = findViewById(R.id.user_input_history_button);
+        defaultSearchButton = findViewById(R.id.default_search_button);
+        comboSearchButton = findViewById(R.id.combo_search_button);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
         browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
@@ -230,6 +241,16 @@ public class MainActivity extends AppCompatActivity {
             String userInputArrayListItem = userInputArrayListSharedPreferences.getString("userInputArrayListItem_"+i, null);
             userInputArraylist.add(userInputArrayListItem);
         }
+
+
+
+        /**
+         * 頁面生成時讀取用戶設定的預設字典，點選快搜按鈕時會搜尋預設字典
+         */
+        defaultDictionarySearchSharedPreferences = getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
+        defaultSingleSearchCode = defaultDictionarySearchSharedPreferences.getString("DefaultSingleDictionaryCode", ""); //Here we need to specify a defaultValue for the 2nd argument in case the data we are trying to retrieve does not exist, and the defaultValue will be used as a fallBack.
+
+        loadDefaultDictionaries(); //載入預設字典的網址
 
 
 
@@ -996,6 +1017,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
 
                 } else if (position == 4) {
+
+                    setDefaultDictionariesOriginal(); //設置專業版預設字典
+
+                } else if (position == 5) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -1073,6 +1098,10 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
 
                 } else if (position == 3) {
+
+                    setDefaultDictionariesSimplified();  //設置簡易版預設字典
+
+                } else if (position == 4) {
                     userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
                     saveUserInputArrayListToSharedPreferences ();
                     Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
@@ -2696,6 +2725,916 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("userInputArrayListItem_"+i, userInputArraylist.get(i));
         }
         editor.apply();
+    }
+
+
+
+    //==============================================================================================
+    // 設置並載入預設字典的 Helper Methods
+    //==============================================================================================
+
+    /**
+     * 設置預設字典與其AlertDialog
+     */
+    public void setDefaultDictionariesOriginal() {
+
+        /**
+         * 讓用戶快速搜尋預設字典
+         */
+        //這邊設置第一層AlertDialog讓用戶選擇"設置一個預設字典"或"設置同時搜尋三個預設字典"
+        AlertDialog.Builder chooseSingleOrComboDefaultDictionaryAlertDialog = new AlertDialog.Builder(MainActivity.this);
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setTitle(R.string.Set_default_dictionary);
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers);
+
+        //這邊設置第二層AlertDialog讓用戶細部設置預設字典。checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setSingleChoiceItems(new String[]{getString(R.string.Set_a_single_default_dictionary), getString(R.string.Set_combo_default_dictionaries)}, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface chooseSingleOrComboDefaultDictionaryDialogInterface, int position) {
+
+                //若用戶點選"設置一個預設字典"
+                if (position==0){
+
+                    defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
+
+                    defaultSearchAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    defaultSearchAlertDialog.setTitle(R.string.Choose_one_default_dictionary);
+                    defaultSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+
+                    setDefaultSingleSearchCodeOriginal();   //設置專業版單一預設字典的代碼
+
+                    defaultSearchAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            //把選取的字典代碼存到sharedPreferences
+                            defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
+                            editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode);
+                            editor.apply();
+                        }
+                    });
+
+                    defaultSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
+                            editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode = defaultDictionarySearchSharedPreferences.getString("DefaultSingleDictionaryCode", ""));
+                            editor.apply();
+
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    //把第二層的AlertDialog顯示出來
+                    defaultSearchAlertDialog.create();
+                    defaultSearchAlertDialog.show();
+                    //同時讓第一層的AlertDialog消失
+                    chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
+
+
+                }
+                //若用戶點選"設置同時搜尋三個預設字典"
+                else if (position==1){
+
+                    defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);
+
+                    final boolean[] checkedItems = new boolean[defaultDictionaryListOriginal.length];
+
+
+                    AlertDialog.Builder comboSearchAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    comboSearchAlertDialog.setTitle(R.string.Choose_3_default_dictionaries);
+                    comboSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+
+                    comboSearchAlertDialog.setMultiChoiceItems(defaultDictionaryListOriginal, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                        int count = 0;  //等等用於限制用戶勾選數量
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+
+                            //限制用戶勾選3個字典
+                            count += isChecked ? 1 : -1;
+                            checkedItems[position] = isChecked;
+
+                            if (count > 3) {
+                                Toast.makeText(MainActivity.this, R.string.You_can_only_choose_3_dictionaries, Toast.LENGTH_LONG).show();
+                                checkedItems[position] = false;
+                                count--;
+                                ((AlertDialog) dialog).getListView().setItemChecked(position, false);
+                            }
+
+                            if (position==0) {
+                                checkedItems[position] = false;
+                                ((AlertDialog) dialog).getListView().setItemChecked(position, false);
+
+                            }
+
+                        }
+                    });
+
+
+                    comboSearchAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+
+                        }
+                    });
+
+                    comboSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    //把第二層的AlertDialog顯示出來
+                    comboSearchAlertDialog.create();
+                    comboSearchAlertDialog.show();
+                    //同時讓第一層的AlertDialog消失
+                    chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
+
+                }
+
+            }
+        });
+
+
+        //第一層AlertDialog的取消鈕
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //把第一層的AlertDialog顯示出來
+        chooseSingleOrComboDefaultDictionaryAlertDialog.create();
+        chooseSingleOrComboDefaultDictionaryAlertDialog.show();
+
+    }
+
+
+    public void setDefaultDictionariesSimplified() {
+
+        /**
+         * 讓用戶快速搜尋預設字典
+         */
+        //這邊設置第一層AlertDialog讓用戶選擇"設置一個預設字典"或"設置同時搜尋三個預設字典"
+        AlertDialog.Builder chooseSingleOrComboDefaultDictionaryAlertDialog = new AlertDialog.Builder(MainActivity.this);
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setTitle(R.string.Set_default_dictionary);
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers);
+
+        //這邊設置第二層AlertDialog讓用戶細部設置預設字典。checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setSingleChoiceItems(new String[]{getString(R.string.Set_a_single_default_dictionary), getString(R.string.Set_combo_default_dictionaries)}, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface chooseSingleOrComboDefaultDictionaryDialogInterface, int position) {
+
+                //若用戶點選"設置一個預設字典"
+                if (position==0){
+
+                    defaultDictionaryListSimplified = getResources().getStringArray(R.array.default_dictionary_list_simplified);  //初始化簡易版預設字典名單
+
+                    defaultSearchAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    defaultSearchAlertDialog.setTitle(R.string.Choose_one_default_dictionary);
+                    defaultSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+
+                    setDefaultSingleSearchCodeSimplified();   //設置專業版單一預設字典的代碼
+
+                    defaultSearchAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            //把選取的字典代碼存到sharedPreferences
+                            defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
+                            editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode);
+                            editor.apply();
+                        }
+                    });
+
+                    defaultSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
+                            editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode = defaultDictionarySearchSharedPreferences.getString("DefaultSingleDictionaryCode", ""));
+                            editor.apply();
+
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    //把第二層的AlertDialog顯示出來
+                    defaultSearchAlertDialog.create();
+                    defaultSearchAlertDialog.show();
+                    //同時讓第一層的AlertDialog消失
+                    chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
+
+
+                }
+                //若用戶點選"設置同時搜尋三個預設字典"
+                else if (position==1){
+
+                    defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);
+
+                    final boolean[] checkedItems = new boolean[defaultDictionaryListOriginal.length];
+
+
+                    AlertDialog.Builder comboSearchAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    comboSearchAlertDialog.setTitle(R.string.Choose_3_default_dictionaries);
+                    comboSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+
+                    comboSearchAlertDialog.setMultiChoiceItems(defaultDictionaryListOriginal, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                        int count = 0;  //等等用於限制用戶勾選數量
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int position, boolean isChecked) {
+
+                            //限制用戶勾選3個字典
+                            count += isChecked ? 1 : -1;
+                            checkedItems[position] = isChecked;
+
+                            if (count > 3) {
+                                Toast.makeText(MainActivity.this, R.string.You_can_only_choose_3_dictionaries, Toast.LENGTH_LONG).show();
+                                checkedItems[position] = false;
+                                count--;
+                                ((AlertDialog) dialog).getListView().setItemChecked(position, false);
+                            }
+
+                            if (position==0) {
+                                checkedItems[position] = false;
+                                ((AlertDialog) dialog).getListView().setItemChecked(position, false);
+
+                            }
+
+                        }
+                    });
+
+
+                    comboSearchAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+
+                        }
+                    });
+
+                    comboSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                        }
+                    });
+
+
+                    //把第二層的AlertDialog顯示出來
+                    comboSearchAlertDialog.create();
+                    comboSearchAlertDialog.show();
+                    //同時讓第一層的AlertDialog消失
+                    chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
+
+                }
+
+            }
+        });
+
+
+        //第一層AlertDialog的取消鈕
+        chooseSingleOrComboDefaultDictionaryAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        //把第一層的AlertDialog顯示出來
+        chooseSingleOrComboDefaultDictionaryAlertDialog.create();
+        chooseSingleOrComboDefaultDictionaryAlertDialog.show();
+
+    }
+
+
+    /**
+     * 設置單一預設字典的代碼
+     */
+    public void setDefaultSingleSearchCodeOriginal(){
+
+        defaultSearchAlertDialog.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+                switch (position) {
+                    case 0:
+                        defaultSingleSearchCode= "Yahoo Dictionary";
+                        break;
+                    case 1:
+                        defaultSingleSearchCode= "National Academy for Educational Research";
+                        break;
+                    case 2:
+                        defaultSingleSearchCode= "Dict Site";
+                        break;
+                    case 3:
+                        defaultSingleSearchCode= "VoiceTube";
+                        break;
+                    case 4:
+                        defaultSingleSearchCode= "Cambridge EN-CH";
+                        break;
+                    case 5:
+                        defaultSingleSearchCode= "Merriam Webster";
+                        break;
+                    case 6:
+                        defaultSingleSearchCode= "Collins";
+                        break;
+                    case 7:
+                        defaultSingleSearchCode= "Oxford";
+                        break;
+                    case 8:
+                        defaultSingleSearchCode= "Vocabulary";
+                        break;
+                    case 9:
+                        defaultSingleSearchCode= "Dictionary.com";
+                        break;
+                    case 10:
+                        defaultSingleSearchCode= "The Free Dictionary";
+                        break;
+                    case 11:
+                        defaultSingleSearchCode= "Your_Dictionary";
+                        break;
+                    case 12:
+                        defaultSingleSearchCode= "Longman Dictionary";
+                        break;
+                    case 13:
+                        defaultSingleSearchCode= "Greens dictionary of slang";
+                        break;
+                    case 14:
+                        defaultSingleSearchCode= "Wiki Dictionary";
+                        break;
+                    case 15:
+                        defaultSingleSearchCode= "Word Hippo";
+                        break;
+                    case 16:
+                        defaultSingleSearchCode= "Onelook";
+                        break;
+                    case 17:
+                        defaultSingleSearchCode= "Business Dictionary";
+                        break;
+                    case 18:
+                        defaultSingleSearchCode= "Slang";
+                        break;
+                    case 19:
+                        defaultSingleSearchCode= "YouGlish";
+                        break;
+                    case 20:
+                        defaultSingleSearchCode= "SCI Dictionary";
+                        break;
+                    case 21:
+                        defaultSingleSearchCode= "TechDico";
+                        break;
+                    case 22:
+                        defaultSingleSearchCode= "BioMedical Dictionary";
+                        break;
+                    case 23:
+                        defaultSingleSearchCode= "Weblio JP";
+                        break;
+                    case 24:
+                        defaultSingleSearchCode= "Weblio CN";
+                        break;
+                    case 25:
+                        defaultSingleSearchCode= "Weblio EN";
+                        break;
+                    case 26:
+                        defaultSingleSearchCode= "Weblio Synonym";
+                        break;
+                    case 27:
+                        defaultSingleSearchCode= "Tangorin Word";
+                        break;
+                    case 28:
+                        defaultSingleSearchCode= "Tangorin Kanji";
+                        break;
+                    case 29:
+                        defaultSingleSearchCode= "Tangorin Names";
+                        break;
+                    case 30:
+                        defaultSingleSearchCode= "Tangorin Sentence";
+                        break;
+                    case 31:
+                        defaultSingleSearchCode= "DA JP-TW Dictionary";
+                        break;
+                    case 32:
+                        defaultSingleSearchCode= "DA TW-JP Dictionary";
+                        break;
+                    case 33:
+                        defaultSingleSearchCode= "Goo";
+                        break;
+                    case 34:
+                        defaultSingleSearchCode= "Sanseido";
+                        break;
+                    case 35:
+                        defaultSingleSearchCode= "Kotoba Bank";
+                        break;
+                    case 36:
+                        defaultSingleSearchCode= "J Logos";
+                        break;
+                    case 37:
+                        defaultSingleSearchCode= "Japanese Industry Terms";
+                        break;
+                    case 38:
+                        defaultSingleSearchCode= "Kanji Dictionary Online";
+                        break;
+                    case 39:
+                        defaultSingleSearchCode= "Eijirou";
+                        break;
+                    case 40:
+                        defaultSingleSearchCode= "How do you say this in English";
+                        break;
+                    case 41:
+                        defaultSingleSearchCode= "Jisho";
+                        break;
+                    case 42:
+                        defaultSingleSearchCode= "Word Plus Chinese";
+                        break;
+                    case 43:
+                        defaultSingleSearchCode= "Word Plus English 1";
+                        break;
+                    case 44:
+                        defaultSingleSearchCode= "Word Plus English 2";
+                        break;
+                    case 45:
+                        defaultSingleSearchCode= "Word Plus Translation";
+                        break;
+                    case 46:
+                        defaultSingleSearchCode= "Word Plus Japanese 1";
+                        break;
+                    case 47:
+                        defaultSingleSearchCode= "Word Plus Japanese 2";
+                        break;
+                    case 48:
+                        defaultSingleSearchCode= "Word Plus Japanese 3";
+                        break;
+                    case 49:
+                        defaultSingleSearchCode= "Word Plus Meaning 1";
+                        break;
+                    case 50:
+                        defaultSingleSearchCode= "Word Plus Meaning 2";
+                        break;
+                    case 51:
+                        defaultSingleSearchCode= "Google translate to CHTW";
+                        break;
+                    case 52:
+                        defaultSingleSearchCode= "Google translate to CHCN";
+                        break;
+                    case 53:
+                        defaultSingleSearchCode= "Google translate to EN";
+                        break;
+                    case 54:
+                        defaultSingleSearchCode= "Google translate to JP";
+                        break;
+                    case 55:
+                        defaultSingleSearchCode= "Google translate to KR";
+                        break;
+                    case 56:
+                        defaultSingleSearchCode= "Google translate to SP";
+                        break;
+                    case 57:
+                        defaultSingleSearchCode= "Google Image";
+                        break;
+                    case 58:
+                        defaultSingleSearchCode= "Ludwig";
+                        break;
+                    case 59:
+                        defaultSingleSearchCode= "Your Dictionary Example Sentences";
+                        break;
+                    case 60:
+                        defaultSingleSearchCode= "Word Cool EN-CH";
+                        break;
+                    case 61:
+                        defaultSingleSearchCode= "Word Cool EN-JP";
+                        break;
+                    case 62:
+                        defaultSingleSearchCode= "Word Cool JP-CH";
+                        break;
+                    case 63:
+                        defaultSingleSearchCode= "Linguee CH-EN";
+                        break;
+                    case 64:
+                        defaultSingleSearchCode= "Linguee JP-EN";
+                        break;
+                    case 65:
+                        defaultSingleSearchCode= "Wikipedia TW";
+                        break;
+                    case 66:
+                        defaultSingleSearchCode= "Wikipedia EN";
+                        break;
+                    case 67:
+                        defaultSingleSearchCode= "English Encyclopedia";
+                        break;
+                    case 68:
+                        defaultSingleSearchCode= "Forvo";
+                        break;
+                    case 69:
+                        defaultSingleSearchCode= "Wiki Diff";
+                        break;
+                    case 70:
+                        defaultSingleSearchCode= "Net Speak";
+                        break;
+                    case 71:
+                        defaultSingleSearchCode= "Yomikata";
+                        break;
+                    case 72:
+                        defaultSingleSearchCode= "Chigai";
+                        break;
+                    case 73:
+                        defaultSingleSearchCode= "OJAD";
+                        break;
+                }
+
+            }
+        });
+
+    }
+
+
+    public void setDefaultSingleSearchCodeSimplified(){
+
+        defaultSearchAlertDialog.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int position) {
+                switch (position) {
+                    case 0:
+                        defaultSingleSearchCode= "Yahoo Dictionary";
+                        break;
+                    case 1:
+                        defaultSingleSearchCode= "National Academy for Educational Research";
+                        break;
+                    case 2:
+                        defaultSingleSearchCode= "Dict Site";
+                        break;
+                    case 3:
+                        defaultSingleSearchCode= "VoiceTube";
+                        break;
+                    case 4:
+                        defaultSingleSearchCode= "Cambridge EN-CH";
+                        break;
+                    case 5:
+                        defaultSingleSearchCode= "Weblio JP";
+                        break;
+                    case 6:
+                        defaultSingleSearchCode= "Weblio CN";
+                        break;
+                    case 7:
+                        defaultSingleSearchCode= "DA JP-TW Dictionary";
+                        break;
+                    case 8:
+                        defaultSingleSearchCode= "DA TW-JP Dictionary";
+                        break;
+                    case 9:
+                        defaultSingleSearchCode= "Google translate to CHTW";
+                        break;
+                    case 10:
+                        defaultSingleSearchCode= "Google translate to CHCN";
+                        break;
+                    case 11:
+                        defaultSingleSearchCode= "Google Image";
+                        break;
+                }
+
+            }
+        });
+
+    }
+
+
+    /**
+     * 載入預設字典
+     */
+    public void loadDefaultDictionaries() {
+
+        defaultSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                searchKeyword=wordInputView.getText().toString(); //抓用戶輸入的關鍵字
+
+                switch(defaultSingleSearchCode){
+                    case "":  //若用戶尚未設置任何預設字典
+                        if(proOrSimplifiedLayoutSwitch.isChecked()) {
+                            setDefaultDictionariesOriginal();
+                        } else {
+                            setDefaultDictionariesSimplified();
+                        }
+                        Toast.makeText(getApplicationContext(),R.string.Please_set_a_default_dictionary,Toast.LENGTH_LONG).show();
+                        return;
+                    case "Yahoo Dictionary":
+                        String yahooDictionaryUrl= "https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXGoL8vtcAQoAnHV9rolQ;_ylc=X1MDMTM1MTIwMDM4MQRfcgMyBGZyA3NmcARncHJpZAN0RjJnMS51MlNWU3NDZ1pfVC4zNUFBBG5fcnNsdAMwBG5fc3VnZwM0BG9yaWdpbgN0dy5kaWN0aW9uYXJ5LnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMEcXN0cmwDMwRxdWVyeQNHQVkEdF9zdG1wAzE1NjAwMTU0MTE-?p="+searchKeyword+"&fr2=sb-top-tw.dictionary.search&fr=sfp";
+                        webViewBrowser.loadUrl(yahooDictionaryUrl);
+                        break;
+                    case "National Academy for Educational Research":
+                        String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                        webViewBrowser.loadUrl(naerUrl);
+                        break;
+                    case "Dict Site":
+                        String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
+                        webViewBrowser.loadUrl(dictDotSiteUrl);
+                        break;
+                    case "VoiceTube":
+                        String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
+                        webViewBrowser.loadUrl(voicetubeUrl);
+                        break;
+                    case "Cambridge EN-CH":
+                        String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
+                        webViewBrowser.loadUrl(cambridgeDictionaryUrl);
+                        break;
+                    case "Merriam Webster":
+                        String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
+                        webViewBrowser.loadUrl(merriamDictionaryUrl);
+                        break;
+                    case "Collins":
+                        String collinsDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
+                        webViewBrowser.loadUrl(collinsDictionaryUrl);
+                        break;
+                    case "Oxford":
+                        String oxfordDictionaryUrl= "https://en.oxforddictionaries.com/definition/"+searchKeyword;
+                        webViewBrowser.loadUrl(oxfordDictionaryUrl);
+                        break;
+                    case "Vocabulary":
+                        String vocabularyDotComUrl= "https://www.vocabulary.com/dictionary/"+searchKeyword;
+                        webViewBrowser.loadUrl(vocabularyDotComUrl);
+                        break;
+                    case "Dictionary.com":
+                        String dictionaryDotComUrl= "https://www.dictionary.com/browse/"+searchKeyword;
+                        webViewBrowser.loadUrl(dictionaryDotComUrl);
+                        break;
+                    case "The Free Dictionary":
+                        String theFreeDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
+                        webViewBrowser.loadUrl(theFreeDictionaryUrl);
+                        break;
+                    case "Your_Dictionary":
+                        String yourDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
+                        webViewBrowser.loadUrl(yourDictionaryUrl);
+                        break;
+                    case "Longman Dictionary":
+                        String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
+                        webViewBrowser.loadUrl(longmanDictionaryUrl);
+                        break;
+                    case "Greens dictionary of slang":
+                        String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
+                        webViewBrowser.loadUrl(greensDictionaryOfSlangUrl);
+                        break;
+                    case "Wiki Dictionary":
+                        String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
+                        webViewBrowser.loadUrl(wiktionaryUrl);
+                        break;
+                    case "Word Hippo":
+                        String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
+                        webViewBrowser.loadUrl(wordHippoUrl);
+                        break;
+                    case "Onelook":
+                        String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
+                        webViewBrowser.loadUrl(onelookUrl);
+                        break;
+                    case "Business Dictionary":
+                        String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
+                        webViewBrowser.loadUrl(businessDictionaryUrl);
+                        break;
+                    case "Slang":
+                        String slangDictionary= "http://www.yiym.com/?s="+searchKeyword;
+                        webViewBrowser.loadUrl(slangDictionary);
+                        break;
+                    case "YouGlish":
+                        String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
+                        webViewBrowser.loadUrl(youglishUrl);
+                        break;
+                    case "SCI Dictionary":
+                        String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
+                        webViewBrowser.loadUrl(academiaDictionaryUrl);
+                        break;
+                    case "TechDico":
+                        String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
+                        webViewBrowser.loadUrl(TechDicoUrl);
+                        break;
+                    case "BioMedical Dictionary":
+                        String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
+                        webViewBrowser.loadUrl(BioMedicalDictionaryUrl);
+                        break;
+                    case "Weblio JP":
+                        String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
+                        webViewBrowser.loadUrl(weblioJPUrl);
+                        break;
+                    case "Weblio CN":
+                        String weblioCHUrl= "https://cjjc.weblio.jp/content/"+searchKeyword;
+                        webViewBrowser.loadUrl(weblioCHUrl);
+                        break;
+                    case "Weblio EN":
+                        String weblioENUrl= "https://ejje.weblio.jp/content/"+searchKeyword;
+                        webViewBrowser.loadUrl(weblioENUrl);
+                        break;
+                    case "Weblio Synonym":
+                        String weblioThesaurusUrl= "https://thesaurus.weblio.jp/content/"+searchKeyword;
+                        webViewBrowser.loadUrl(weblioThesaurusUrl);
+                        break;
+                    case "Tangorin Word":
+                        String tangorinDictionaryUrl= "https://tangorin.com/words?search="+searchKeyword;
+                        webViewBrowser.loadUrl(tangorinDictionaryUrl);
+                        break;
+                    case "Tangorin Kanji":
+                        String tangorinKanjiUrl= "https://tangorin.com/kanji?search="+searchKeyword;
+                        webViewBrowser.loadUrl(tangorinKanjiUrl);
+                        break;
+                    case "Tangorin Names":
+                        String tangorinNamesUrl= "https://tangorin.com/names?search="+searchKeyword;
+                        webViewBrowser.loadUrl(tangorinNamesUrl);
+                        break;
+                    case "Tangorin Sentence":
+                        String tangorinSentencesUrl= "https://tangorin.com/sentences?search="+searchKeyword;
+                        webViewBrowser.loadUrl(tangorinSentencesUrl);
+                        break;
+                    case "DA JP-TW Dictionary":
+                        String DaJPtoCHDictionaryUrl= "http://dict.asia/jc/"+searchKeyword;
+                        webViewBrowser.loadUrl(DaJPtoCHDictionaryUrl);
+                        break;
+                    case "DA TW-JP Dictionary":
+                        String DaCHtoJPDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
+                        webViewBrowser.loadUrl(DaCHtoJPDictionaryUrl);
+                        break;
+                    case "Goo":
+                        String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
+                        webViewBrowser.loadUrl(gooDictionaryUrl);
+                        break;
+                    case "Sanseido":
+                        String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                        webViewBrowser.loadUrl(sanseidoUrl);
+                        break;
+                    case "Kotoba Bank":
+                        String kotobank= "https://kotobank.jp/word/"+searchKeyword;
+                        webViewBrowser.loadUrl(kotobank);
+                        break;
+                    case "J Logos":
+                        String jlogosUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
+                        webViewBrowser.loadUrl(jlogosUrl);
+                        break;
+                    case "Japanese Industry Terms":
+                        String industryDictionaryUrl= "https://www.sangyo-honyaku.jp/dictionaries/index/search_info:"+searchKeyword+"_ＩＴ・機械・電気電子";
+                        webViewBrowser.loadUrl(industryDictionaryUrl);
+                        break;
+                    case "Kanji Dictionary Online":
+                        String KanjiDictionaryUrl= "https://kanji.jitenon.jp/cat/search.php?getdata="+searchKeyword+"&search=fpart&search2=twin";
+                        webViewBrowser.loadUrl(KanjiDictionaryUrl);
+                        break;
+                    case "Eijirou":
+                        String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
+                        webViewBrowser.loadUrl(eijiroDictionryUrl);
+                        break;
+                    case "How do you say this in English":
+                        String whatIsItInEnglishUrl= "https://eikaiwa.dmm.com/uknow/search/?keyword="+searchKeyword;
+                        webViewBrowser.loadUrl(whatIsItInEnglishUrl);
+                        break;
+                    case "Jisho":
+                        String jishoUrl= "https://jisho.org/search/"+searchKeyword;
+                        webViewBrowser.loadUrl(jishoUrl);
+                        break;
+                    case "Word Plus Chinese":
+                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
+                        webViewBrowser.loadUrl(googlePlusChinese);
+                        break;
+                    case "Word Plus English 1":
+                        String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
+                        webViewBrowser.loadUrl(googlePlusENglish1);
+                        break;
+                    case "Word Plus English 2":
+                        String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
+                        webViewBrowser.loadUrl(googlePlusENglish2);
+                        break;
+                    case "Word Plus Translation":
+                        String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
+                        webViewBrowser.loadUrl(googlePlusTranslation);
+                        break;
+                    case "Word Plus Japanese 1":
+                        String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
+                        webViewBrowser.loadUrl(googlePlusJapanese1);
+                        break;
+                    case "Word Plus Japanese 2":
+                        String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
+                        webViewBrowser.loadUrl(googlePlusJapanese2);
+                        break;
+                    case "Word Plus Japanese 3":
+                        String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
+                        webViewBrowser.loadUrl(googlePlusJapanese3);
+                        break;
+                    case "Word Plus Meaning 1":
+                        String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
+                        webViewBrowser.loadUrl(googlePlusMeaning1);
+                        break;
+                    case "Word Plus Meaning 2":
+                        String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
+                        webViewBrowser.loadUrl(googlePlusMeaning2);
+                        break;
+                    case "Google translate to CHTW":
+                        String GoogleTranslateToCHTWUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
+                        webViewBrowser.loadUrl(GoogleTranslateToCHTWUrl);
+                        break;
+                    case "Google translate to CHCN":
+                        String GoogleTranslateToCHCNUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+searchKeyword;
+                        webViewBrowser.loadUrl(GoogleTranslateToCHCNUrl);
+                        break;
+                    case "Google translate to EN":
+                        String GoogleTranslateToENUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=en&text="+searchKeyword;
+                        webViewBrowser.loadUrl(GoogleTranslateToENUrl);
+                        break;
+                    case "Google translate to JP":
+                        String GoogleTranslateToJPUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=ja&text="+searchKeyword;
+                        webViewBrowser.loadUrl(GoogleTranslateToJPUrl);
+                        break;
+                    case "Google translate to KR":
+                        String GoogleTranslateToKRUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=ko&text="+searchKeyword;
+                        webViewBrowser.loadUrl(GoogleTranslateToKRUrl);
+                        break;
+                    case "Google translate to SP":
+                        String GoogleTranslateToSPUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=es&text="+searchKeyword;
+                        webViewBrowser.loadUrl(GoogleTranslateToSPUrl);
+                        break;
+                    case "Google Image":
+                        String imageSearchUrl= "http://images.google.com/search?tbm=isch&q="+searchKeyword;
+                        webViewBrowser.loadUrl(imageSearchUrl);
+                        break;
+                    case "Ludwig":
+                        String ludwigUrl= "https://ludwig.guru/s/"+searchKeyword;
+                        webViewBrowser.loadUrl(ludwigUrl);
+                        break;
+                    case "Your Dictionary Example Sentences":
+                        String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
+                        webViewBrowser.loadUrl(yourDictionarySentenceUrl);
+                        break;
+                    case "Word Cool EN-CH":
+                        String jukuuUrlCHEN= "http://www.jukuu.com/search.php?q="+searchKeyword;
+                        webViewBrowser.loadUrl(jukuuUrlCHEN);
+                        break;
+                    case "Word Cool EN-JP":
+                        String jukuuUrlJPEN= "http://www.jukuu.com/jsearch.php?q="+searchKeyword;
+                        webViewBrowser.loadUrl(jukuuUrlJPEN);
+                        break;
+                    case "Word Cool JP-CH":
+                        String jukuuUrlCHJP= "http://www.jukuu.com/jcsearch.php?q="+searchKeyword;
+                        webViewBrowser.loadUrl(jukuuUrlCHJP);
+                        break;
+                    case "Linguee CH-EN":
+                        String LingueeUrlCHEN= "https://cn.linguee.com/中文-英语/search?source=auto&query="+searchKeyword;
+                        webViewBrowser.loadUrl(LingueeUrlCHEN);
+                        break;
+                    case "Linguee JP-EN":
+                        String LingueeUrlJPEN= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+searchKeyword;
+                        webViewBrowser.loadUrl(LingueeUrlJPEN);
+                        break;
+                    case "Wikipedia TW":
+                        String wikipediaTWUrl= "https://zh.wikipedia.org/wiki/"+searchKeyword;
+                        webViewBrowser.loadUrl(wikipediaTWUrl);
+                        break;
+                    case "Wikipedia EN":
+                        String wikipediaENUrl= "https://en.wikipedia.org/wiki/"+searchKeyword;
+                        webViewBrowser.loadUrl(wikipediaENUrl);
+                        break;
+                    case "English Encyclopedia":
+                        String enEncyclopediaUrl= "https://www.encyclo.co.uk/meaning-of-"+searchKeyword;
+                        webViewBrowser.loadUrl(enEncyclopediaUrl);
+                        break;
+                    case "Forvo":
+                        String forvoUrl= "https://forvo.com/search/"+searchKeyword;
+                        webViewBrowser.loadUrl(forvoUrl);
+                        break;
+                    case "Wiki Diff":
+                        String wikidiffUrl= "https://wikidiff.com/"+searchKeyword;
+                        webViewBrowser.loadUrl(wikidiffUrl);
+                        break;
+                    case "Net Speak":
+                        String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
+                        webViewBrowser.loadUrl(netspeakUrl);
+                        break;
+                    case "Yomikata":
+                        String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
+                        webViewBrowser.loadUrl(yomikatawaUrl);
+                        break;
+                    case "Chigai":
+                        String ChigaihaUrl= "https://cse.google.co.jp/cse?cx=partner-pub-1137871985589263%3A3025760782&ie=UTF-8&q="+searchKeyword;
+                        webViewBrowser.loadUrl(ChigaihaUrl);
+                        break;
+                    case "OJAD":
+                        String suzukikunUrl= "http://www.gavo.t.u-tokyo.ac.jp/ojad/search/index/sortprefix:accent/narabi1:kata_asc/narabi2:accent_asc/narabi3:mola_asc/yure:visible/curve:invisible/details:invisible/limit:20/word:"+searchKeyword;
+                        webViewBrowser.loadUrl(suzukikunUrl);
+                        break;
+                }
+
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+
+                browserSwitch.setChecked(true);
+                browserNavigateBack.setVisibility(View.VISIBLE);
+                browserNavigateForward.setVisibility(View.VISIBLE);
+
+                saveKeywordtoUserInputListView ();
+                saveUserInputArrayListToSharedPreferences ();
+            }
+        });
+
     }
 
 

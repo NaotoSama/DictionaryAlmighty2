@@ -63,6 +63,13 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
 
+        <activity android:name=".ComboSearchActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
 
         <!--這些功能廢除不使用了
 

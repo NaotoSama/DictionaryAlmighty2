@@ -8,6 +8,29 @@
     tools:context=".MainActivity">
 
 
+    <Button
+        android:id="@+id/combo_search_button"
+        android:layout_width="37dp"
+        android:layout_height="70dp"
+        android:text="⚡⚡⚡"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Word_Input_View"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/default_search_button"
+        android:layout_width="37dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="8dp"
+        android:text="⚡"
+        android:textSize="27sp"
+        app:layout_constraintBottom_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
+        app:layout_constraintEnd_toStartOf="@+id/combo_search_button"
+        app:layout_constraintTop_toTopOf="@+id/Word_Input_View"
+        app:layout_constraintVertical_bias="0.0" />
+
     <ImageView
         android:id="@+id/background_image_view"
         android:layout_width="match_parent"
@@ -38,7 +61,7 @@
         android:textAlignment="center"
         android:textColor="#00BCD4"
         android:textColorHint="#00BCD4"
-        app:layout_constraintEnd_toStartOf="@+id/user_input_history_button"
+        app:layout_constraintEnd_toStartOf="@+id/default_search_button"
         app:layout_constraintStart_toEndOf="@+id/delete_user_input_button"
         app:layout_constraintTop_toTopOf="parent"
         tools:targetApi="o" />
@@ -305,21 +328,23 @@
         android:id="@+id/delete_user_input_button"
         android:layout_width="37dp"
         android:layout_height="70dp"
+        android:layout_marginStart="8dp"
         android:text="X"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/user_input_history_button"
         app:layout_constraintTop_toTopOf="@+id/Word_Input_View"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/user_input_history_button"
         android:layout_width="37dp"
         android:layout_height="70dp"
-        android:text="▶"
+        android:text="▲"
         app:layout_constraintBottom_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Word_Input_View" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Word_Input_View"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>
