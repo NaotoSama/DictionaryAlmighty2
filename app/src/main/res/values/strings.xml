@@ -74,6 +74,7 @@
         <item>@string/Yahoo_Dictionary</item>
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Dict_site</item>
+        <item>@string/Cidian8</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
         <item>@string/Merriam_Webster</item>
@@ -94,6 +95,7 @@
         <item>@string/SCI_Dictionary</item>
         <item>@string/TechDico</item>
         <item>@string/BioMedical_dictionary</item>
+        <item>@string/Is_plural_dictionary</item>
 
         <item>@string/Weblio_JP</item>
         <item>@string/Weblio_CN</item>
@@ -105,6 +107,7 @@
         <item>@string/Tangorin_Sentence</item>
         <item>@string/DA_JP_TW_Dictionary</item>
         <item>@string/DA_TW_JP_Dictionary</item>
+        <item>@string/Cidianwang</item>
         <item>@string/Goo</item>
         <item>@string/Sanseido</item>
         <item>@string/Kotoba_Bank</item>
@@ -350,6 +353,12 @@
     <string name="Cancel">Cancel</string>
     <string name="Choose_3_default_dictionaries">Choose 3 default dictionaries</string>
     <string name="You_can_only_choose_3_dictionaries">You can only choose 3 dictionaries and no more</string>
+    <string name="Is_plural_dictionary">Is Plural Dictionary</string>
+    <string name="Cidian8">Cidian8  EC CE</string>
+    <string name="Cidianwang">Cidianwang CJ JC</string>
+    <string name="Use_default_settings">Use Default Settings</string>
+    <string name="Settings_complete">Settings complete</string>
+    <string name="Please_set_3_default_dictionaries">Please set 3 default dictionaries</string>
 
 
 </resources>

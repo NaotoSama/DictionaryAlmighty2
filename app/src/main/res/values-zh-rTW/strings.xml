@@ -165,7 +165,7 @@
     <string name="Dictionary_almighty_simplified">字典譯指通 (簡易版)</string>
     <string name="Your_search_history">您的搜尋紀錄</string>
     <string name="Set_default_dictionary">設置預設字典</string>
-    <string name="Please_set_a_default_dictionary">請先設置預設字典</string>
+    <string name="Please_set_a_default_dictionary">請先設置一個預設字典(點選快搜模式)</string>
     <string name="Set_a_single_default_dictionary">設置一個預設字典(快搜模式)</string>
     <string name="Set_combo_default_dictionaries">設置同時搜尋三個預設字典 (3連搜模式)</string>
     <string name="Choose_one_default_dictionary">請點選一個預設字典</string>
@@ -173,4 +173,10 @@
     <string name="Cancel">取消</string>
     <string name="Choose_3_default_dictionaries">請勾選三個預設字典</string>
     <string name="You_can_only_choose_3_dictionaries">太多了，只能選三個喔</string>
+    <string name="Is_plural_dictionary">單複數形字典</string>
+    <string name="Cidian8">詞典吧英漢漢英字典</string>
+    <string name="Cidianwang">詞典王中日日中字典</string>
+    <string name="Use_default_settings">使用建議的設定</string>
+    <string name="Settings_complete">設定成功</string>
+    <string name="Please_set_3_default_dictionaries">請先設置三個預設字典(點選3連搜模式)</string>
 </resources>

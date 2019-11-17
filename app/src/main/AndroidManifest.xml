@@ -64,7 +64,8 @@
 
 
         <activity android:name=".ComboSearchActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"> <!--透過引用NoActionBar讓頭標消失-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
