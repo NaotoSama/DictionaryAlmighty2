@@ -3,12 +3,13 @@ package com.example.android.dictionaryalmighty2;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultComboSearchCodeFirstDictionary;
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultComboSearchCodeSecondDictionary;

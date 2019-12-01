@@ -15,12 +15,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
@@ -43,6 +37,13 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
 
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
-    SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
+    SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences//儲存三個預設字典的SharedPreferences
 
     private ArrayList<DictionaryItem> mOcrSpinnerItemListOriginal;  //客製化Spinner選單列
     private ArrayList<DictionaryItem> mOcrSpinnerItemListSimplified;
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
     private DictionayItemAdapter mOcrSpinnerAdapter;
 
     public static final ArrayList<String> userInputArraylist = new ArrayList<>(); //用戶搜尋紀錄的ArrayList
+    public static final ArrayList<String> myVocabularyArrayList = new ArrayList<>();
 
 
 
@@ -247,6 +249,19 @@ public class MainActivity extends AppCompatActivity {
         {
             String userInputArrayListItem = userInputArrayListSharedPreferences.getString("userInputArrayListItem_"+i, null);
             userInputArraylist.add(userInputArrayListItem);
+        }
+
+
+
+        /**
+         * 頁面生成時讀取用戶搜尋紀錄myVocabularyArrayList
+         */
+        SharedPreferences wordsToMemorizeSharedPreferences = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE);
+        int myVocabularyArrayListValues = wordsToMemorizeSharedPreferences.getInt("myVocabularyArrayListValues", 0);
+        for (int i = 0; i < myVocabularyArrayListValues; i++)
+        {
+            String myVocabularyArrayListItem = wordsToMemorizeSharedPreferences.getString("myVocabularyArrayListValues"+i, null);
+            myVocabularyArrayList.add(myVocabularyArrayListItem);
         }
 
 

@@ -333,7 +333,7 @@
     <string name="Browser_switch">Browser Switch</string>
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
-    <string name="Search_records">(Aligned in alphabetical order)\n(Finger tap = search word ; Long press = delete word)</string>
+    <string name="Search_records">(Aligned in alphabetical order) (Finger tap = search word ; Long press = memorize this word ; Swipe = delete word)</string>
     <string name="Your_selected_item_has_benn_deleted">Your selected item has benn deleted</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
@@ -359,6 +359,20 @@
     <string name="Use_default_settings">Use Default Settings</string>
     <string name="Settings_complete">Settings complete</string>
     <string name="Please_set_3_default_dictionaries">Please set 3 default dictionaries</string>
+    <string name="Notification_title">Dictionary Almighty App---Your memory track</string>
+    <string name="All_notifications_cancelled">All notifications cancelled</string>
+    <string name="Choose_the_timing_to_recall_a_word">Choose the timing to recall a word</string>
+    <string name="Customize_timing">Customize timing</string>
+    <string name="Use_predefined_timing">Use predefined timing</string>
+    <string name="All_notifications_of_this_word_cancelled">All notifications of this word cancelled</string>
+    <string name="Words_to_memorize">Words to Memorize</string>
+    <string name="Hey_thats_too_early">Hey that\'s too early</string>
+    <string name="Will_send_the_notification_at">Will send the notification(s) at</string>
+    <string name="blank_space"></string>
+    <string name="You_can_cancel_the_notifications_any_time">You can cancel the notification(s) any time</string>
+    <string name="Will_send_the_notification_after_an_hour_halfDay_day_week_month_year">Will send the notification(s) after an hour / half a day / day / week / month / year</string>
+    <string name="Go_to_words_to_memorize_page">Go to \"Words to Memorize\" page</string>
+    <string name="Cancel_all_notifications_for_all_words">Cancel all notifications for all words</string>
 
 
 </resources>

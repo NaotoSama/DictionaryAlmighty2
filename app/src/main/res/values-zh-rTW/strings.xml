@@ -153,7 +153,7 @@
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records">(依首字母與首注音順序排列)\n(點擊 = 帶入文字；長按 = 刪除文字)</string>
+    <string name="Search_records">(依首字母與首注音順序排列) (點擊 = 帶入單字；長按 = 記憶單字 ； 滑動 = 刪除單字)</string>
     <string name="Your_selected_item_has_benn_deleted">您選擇的項目已刪除完畢</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
@@ -179,4 +179,18 @@
     <string name="Use_default_settings">使用建議的設定</string>
     <string name="Settings_complete">設定成功</string>
     <string name="Please_set_3_default_dictionaries">請先設置三個預設字典(點選3連搜模式)</string>
+    <string name="Notification_title">字典譯指通App---您的記憶軌跡</string>
+    <string name="All_notifications_cancelled">已取消所有單字的通知</string>
+    <string name="Choose_the_timing_to_recall_a_word">選擇回憶單字的時機點</string>
+    <string name="Customize_timing">自定義通知的時機</string>
+    <string name="Use_predefined_timing">預設的通知時機</string>
+    <string name="All_notifications_of_this_word_cancelled">已取消此單字的所有通知</string>
+    <string name="Hey_thats_too_early">時間設定的太早囉!</string>
+    <string name="Words_to_memorize">我的單字記憶軌跡</string>
+    <string name="blank_space">發送提醒</string>
+    <string name="You_can_cancel_the_notifications_any_time">您可隨時取消提醒</string>
+    <string name="Will_send_the_notification_after_an_hour_halfDay_day_week_month_year">將在經過1小時、半天、一天、一周、一個月以及一年時發送提醒</string>
+    <string name="Will_send_the_notification_at">將在</string>
+    <string name="Go_to_words_to_memorize_page">前往我的單字記憶軌跡</string>
+    <string name="Cancel_all_notifications_for_all_words">取消所有單字的通知</string>
 </resources>
