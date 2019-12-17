@@ -18,7 +18,7 @@
     <ListView
         android:id="@+id/user_input_listview"
         android:layout_width="match_parent"
-        android:layout_height="626dp"
+        android:layout_height="555dp"
         android:divider="@android:drawable/divider_horizontal_textfield"
         android:textAlignment="center">
 
@@ -28,7 +28,7 @@
         android:id="@+id/cancel_all_notifications_button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
+        android:layout_gravity="center"
         android:background="@android:drawable/button_onoff_indicator_on"
         android:text="@string/Go_to_words_to_memorize_page"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />

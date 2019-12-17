@@ -25,9 +25,9 @@ public class ComboSearchActivity extends AppCompatActivity {
 // 所有變數Variables
 //==============================================================================================
 
-    WebView comboSearchWebViewBrowser1;    //網頁框
-    WebView comboSearchWebViewBrowser2;
-    WebView comboSearchWebViewBrowser3;
+    static WebView comboSearchWebViewBrowser1;    //網頁框
+    static WebView comboSearchWebViewBrowser2;
+    static WebView comboSearchWebViewBrowser3;
 
     ProgressBar comboSearchProgressBar1;   //網頁載入的進度條
     ProgressBar comboSearchProgressBar2;

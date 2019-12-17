@@ -8,7 +8,7 @@
     <ListView
         android:id="@+id/my_vocabulary_listview"
         android:layout_width="match_parent"
-        android:layout_height="689dp" />
+        android:layout_height="636dp" />
 
     <Button
         android:id="@+id/cancel_all_notifications_button"

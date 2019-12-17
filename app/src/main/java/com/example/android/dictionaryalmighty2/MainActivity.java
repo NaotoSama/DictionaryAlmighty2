@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     Button deleteUserInput;        //關鍵字輸入框清除鈕
     Button userInputHistoryButton; //用戶搜尋紀錄鈕
     Button defaultSearchButton;
-    Button comboSearchButton;
+    static Button comboSearchButton;
 
     static String searchKeyword;      //用戶輸入的關鍵字
     String LOG_TAG;  //Log tag for the external storage permission request error message
@@ -426,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
         //Make sure it's an action and type we can handle.
         //Now we have 2 possibilities: the app has been launched from the device in the default fashion and is not receiving any incoming data;
         //the app has been launched to share content. Add the conditional statement as below to handle these two scenarios.
-        if(receivedAction.equals(Intent.ACTION_SEND)){
+        if(Objects.equals(receivedAction, Intent.ACTION_SEND)){
             //Content is being shared. Handle received data of the MIME types.
             if(receivedType.startsWith("text/")){
                 //Handle sent text
@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
-        else if(receivedAction.equals(Intent.ACTION_MAIN)){
+        else if(Objects.equals(receivedAction, Intent.ACTION_MAIN)){
             //app has been launched directly, not from share list
         }
 

@@ -28,17 +28,19 @@ import androidx.work.WorkManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
+import static com.example.android.dictionaryalmighty2.NotificationReceiver.wordToMemorize;
 
 public class WordsToMemorize extends AppCompatActivity {
 
     RelativeLayout.LayoutParams layoutparams;   //用來客製化修改ActionBar
     TextView customActionBarTextviewforUserInputHistoryPage;
     androidx.appcompat.app.ActionBar actionBar;
-    String vocabularyToBeMemorized;
+    static LinkedList<String> vocabulariesToBeMemorized = new LinkedList<>();
     Button cancelAllNotifications;
 
     Calendar c;
@@ -70,7 +72,6 @@ public class WordsToMemorize extends AppCompatActivity {
         //Initialize the WorkManager
         mWorkManager = WorkManager.getInstance();
 
-        vocabularyToBeMemorized = MainActivity.wordInputView.getText().toString();
 
         //Initialize the adapter
         myVocabularyArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myVocabularyArrayList);
@@ -156,8 +157,8 @@ public class WordsToMemorize extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                mWorkManager.cancelAllWorkByTag("UserDefinedNotificationTag" + " for " + vocabularyToBeMemorized);
-                mWorkManager.cancelAllWorkByTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized);
+                mWorkManager.cancelAllWorkByTag("UserDefinedNotificationTag" + " for " + wordToMemorize);
+                mWorkManager.cancelAllWorkByTag("preDefinedNotificationTag" + " for " + wordToMemorize);
 
                 Toast.makeText(getApplicationContext(), getString(R.string.All_notifications_of_this_word_cancelled), Toast.LENGTH_SHORT).show();
 
@@ -259,6 +260,8 @@ public class WordsToMemorize extends AppCompatActivity {
     //==============================================================================================
     public void setCustomizedNotificationTiming() {
 
+        vocabulariesToBeMemorized.add(MainActivity.wordInputView.getText().toString());
+
         // on Time
         new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
@@ -282,7 +285,7 @@ public class WordsToMemorize extends AppCompatActivity {
 
                             //排程要發送的通知
                             OneTimeWorkRequest UserDefinedNotificationRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                                    .addTag("UserDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                                    .addTag("UserDefinedNotificationTag" + " for " + wordToMemorize)
                                     .setInitialDelay(millis, TimeUnit.MILLISECONDS)
                                     .build();
                             mWorkManager.enqueue(UserDefinedNotificationRequest);
@@ -321,36 +324,56 @@ public class WordsToMemorize extends AppCompatActivity {
 
     public void setPreDefinedNotificationTimings() {
 
+        vocabulariesToBeMemorized.add(MainActivity.wordInputView.getText().toString());
+
+        OneTimeWorkRequest preDefinedNotification1 = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
+                .setInitialDelay(1, TimeUnit.SECONDS)
+                .build();
+
+        OneTimeWorkRequest preDefinedNotification5 = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
+                .setInitialDelay(30, TimeUnit.SECONDS)
+                .build();
+
+        OneTimeWorkRequest preDefinedNotification60 = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
+                .setInitialDelay(1, TimeUnit.HOURS)
+                .build();
+
         OneTimeWorkRequest preDefinedNotificationRequestOneHour = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .addTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
                 .setInitialDelay(1, TimeUnit.HOURS)
                 .build();
 
         OneTimeWorkRequest preDefinedNotificationRequestTwelveHours = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .addTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
                 .setInitialDelay(12, TimeUnit.HOURS)
                 .build();
 
         OneTimeWorkRequest preDefinedNotificationRequestOneDay = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .addTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
                 .setInitialDelay(1, TimeUnit.DAYS)
                 .build();
 
         OneTimeWorkRequest preDefinedNotificationRequestOneWeek = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .addTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
                 .setInitialDelay(7, TimeUnit.DAYS)
                 .build();
 
         OneTimeWorkRequest preDefinedNotificationRequestOneMonth = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .addTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
                 .setInitialDelay(30, TimeUnit.DAYS)
                 .build();
 
         OneTimeWorkRequest preDefinedNotificationRequestOneYear = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                .addTag("preDefinedNotificationTag" + " for " + vocabularyToBeMemorized)
+                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
                 .setInitialDelay(365, TimeUnit.DAYS)
                 .build();
 
+        mWorkManager.enqueue(preDefinedNotification1);
+        mWorkManager.enqueue(preDefinedNotification5);
+        mWorkManager.enqueue(preDefinedNotification60);
         mWorkManager.enqueue(preDefinedNotificationRequestOneHour);
         mWorkManager.enqueue(preDefinedNotificationRequestTwelveHours);
         mWorkManager.enqueue(preDefinedNotificationRequestOneDay);

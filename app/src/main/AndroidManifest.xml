@@ -30,6 +30,9 @@
             android:value="ocr" />
 
 
+        <receiver android:name=".NotificationReceiver"/> <!-- Used for Broadcast Receiver -->
+
+
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -59,6 +62,14 @@
 
         <activity android:name=".WordsToMemorize"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+
+        <activity android:name=".NotificationReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
