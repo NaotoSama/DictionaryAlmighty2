@@ -59,6 +59,8 @@ import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
 
+import static com.example.android.dictionaryalmighty2.WordsToMemorize.*;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
     String[] defaultDictionaryListOriginal; //專業版自訂預設字典的名單
     String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
     public static final String IMAGE_UNSPECIFIED = "image/*";
+    static String wordToMemorize1;
+    static String wordToMemorize2;
+    static String wordToMemorize3;
 
     AlertDialog.Builder defaultSearchAlertDialog; //專業版自訂單一預設字典名單的對話方塊
     AlertDialog.Builder defaultComboSearchAlertDialogFirstDictionary; //專業版自訂第一個預設字典名單的對話方塊
@@ -308,6 +313,16 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+        /**
+         * 頁面生成時讀取wordToMemorize
+         */
+        wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
+        wordToMemorize1 = wordToMemorizeSharedPreferences.getString("memoryTree1", null);
+        wordToMemorize2 = wordToMemorizeSharedPreferences.getString("memoryTree2", null);
+        wordToMemorize3 = wordToMemorizeSharedPreferences.getString("memoryTree3", null);
 
 
 

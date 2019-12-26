@@ -193,4 +193,9 @@
     <string name="Will_send_the_notification_at">將在</string>
     <string name="Go_to_words_to_memorize_page">前往我的單字記憶軌跡</string>
     <string name="Cancel_all_notifications_for_all_words">取消所有單字的通知</string>
+    <string name="Do_you_remember_this_word">還記得這個字嗎：</string>
+    <string name="Choose_a_memory_tree">選擇一顆記憶樹</string>
+    <string name="Memory_tree_1">記憶樹1</string>
+    <string name="Memory_tree_2">記憶樹2</string>
+    <string name="Memory_tree_3">記憶樹3</string>
 </resources>
