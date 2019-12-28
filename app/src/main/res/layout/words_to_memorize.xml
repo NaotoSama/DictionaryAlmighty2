@@ -8,40 +8,41 @@
     <ListView
         android:id="@+id/my_vocabulary_listview"
         android:layout_width="match_parent"
-        android:layout_height="373dp" />
+        android:layout_height="598dp" />
 
-    <TextView
-        android:id="@+id/memory_tree_1"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@drawable/memory_tree_1"
-        android:gravity="center"
-        android:text="Memory Tree 1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/red"
-        android:textStyle="bold" />
+                                                            <!--用不到了-->
+                                                            <!--    <TextView-->
+                                                            <!--        android:id="@+id/memory_tree_1"-->
+                                                            <!--        android:layout_width="70dp"-->
+                                                            <!--        android:layout_height="70dp"-->
+                                                            <!--        android:background="@drawable/memory_tree_1"-->
+                                                            <!--        android:gravity="center"-->
+                                                            <!--        android:text="Memory Tree 1"-->
+                                                            <!--        android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+                                                            <!--        android:textColor="@color/red"-->
+                                                            <!--        android:textStyle="bold" />-->
 
-    <TextView
-        android:id="@+id/memory_tree_2"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@drawable/memory_tree_2"
-        android:gravity="center"
-        android:text="Memory Tree 2"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/red"
-        android:textStyle="bold" />
+                                                            <!--    <TextView-->
+                                                            <!--        android:id="@+id/memory_tree_2"-->
+                                                            <!--        android:layout_width="70dp"-->
+                                                            <!--        android:layout_height="70dp"-->
+                                                            <!--        android:background="@drawable/memory_tree_2"-->
+                                                            <!--        android:gravity="center"-->
+                                                            <!--        android:text="Memory Tree 2"-->
+                                                            <!--        android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+                                                            <!--        android:textColor="@color/red"-->
+                                                            <!--        android:textStyle="bold" />-->
 
-    <TextView
-        android:id="@+id/memory_tree_3"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:background="@drawable/memory_tree_3"
-        android:gravity="center"
-        android:text="Memory Tree 3"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/red"
-        android:textStyle="bold" />
+                                                            <!--    <TextView-->
+                                                            <!--        android:id="@+id/memory_tree_3"-->
+                                                            <!--        android:layout_width="70dp"-->
+                                                            <!--        android:layout_height="70dp"-->
+                                                            <!--        android:background="@drawable/memory_tree_3"-->
+                                                            <!--        android:gravity="center"-->
+                                                            <!--        android:text="Memory Tree 3"-->
+                                                            <!--        android:textAppearance="@style/TextAppearance.AppCompat.Medium"-->
+                                                            <!--        android:textColor="@color/red"-->
+                                                            <!--        android:textStyle="bold" />-->
 
     <Button
         android:id="@+id/cancel_all_notifications_button"

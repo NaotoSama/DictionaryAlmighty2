@@ -1,18 +1,18 @@
 package com.example.android.dictionaryalmighty2;
 
 import android.app.DatePickerDialog;
-import android.app.Notification;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.CalendarContract;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -23,22 +23,15 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.WorkManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.Locale;
-
-import br.com.goncalves.pugnotification.notification.PugNotification;
+import java.util.Objects;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
-import static com.example.android.dictionaryalmighty2.MainActivity.wordInputView;
-import static com.example.android.dictionaryalmighty2.MainActivity.wordToMemorize1;
-import static com.example.android.dictionaryalmighty2.MainActivity.wordToMemorize2;
-import static com.example.android.dictionaryalmighty2.MainActivity.wordToMemorize3;
 
 public class WordsToMemorize extends AppCompatActivity {
 
@@ -46,14 +39,14 @@ public class WordsToMemorize extends AppCompatActivity {
     TextView customActionBarTextviewforUserInputHistoryPage;
     androidx.appcompat.app.ActionBar actionBar;
 
-    static LinkedList<String> vocabulariesToBeMemorized = new LinkedList<>();
     Button cancelAllNotifications;
 
     String selectedMyVocabularyListviewItemValue;
 
-    TextView memoryTree1;
-    TextView memoryTree2;
-    TextView memoryTree3;
+                                                            //用不到了
+                                                            //    TextView memoryTree1;
+                                                            //    TextView memoryTree2;
+                                                            //    TextView memoryTree3;
 
     Boolean wordToMemorize1NotificationIsOn;
     Boolean wordToMemorize2NotificationIsOn;
@@ -87,22 +80,24 @@ public class WordsToMemorize extends AppCompatActivity {
         //findViewById
         myVocabularyListview = findViewById(R.id.my_vocabulary_listview);
         cancelAllNotifications = findViewById(R.id.cancel_all_notifications_button);
-        memoryTree1 = findViewById(R.id.memory_tree_1);
-        memoryTree2 = findViewById(R.id.memory_tree_2);
-        memoryTree3 = findViewById(R.id.memory_tree_3);
+                                                            //        目前用不到
+                                                            //        memoryTree1 = findViewById(R.id.memory_tree_1);
+                                                            //        memoryTree2 = findViewById(R.id.memory_tree_2);
+                                                            //        memoryTree3 = findViewById(R.id.memory_tree_3);
 
 
-        if (wordToMemorize1 != null) {
-            memoryTree1.setText(wordToMemorize1);
-        } else {memoryTree1.setText("Memory Tree 1");}
-
-        if (wordToMemorize2 != null) {
-            memoryTree2.setText(wordToMemorize2);
-        } else {memoryTree2.setText("Memory Tree 2");}
-
-        if (wordToMemorize3 != null) {
-            memoryTree3.setText(wordToMemorize3);
-        }else {memoryTree3.setText("Memory Tree 3");}
+                                                            //        目前用不到
+                                                            //        if (wordToMemorize1 != null && !wordToMemorize1.equals("")) {
+                                                            //            memoryTree1.setText(wordToMemorize1);
+                                                            //        } else {memoryTree1.setText("Memory Tree 1");}
+                                                            //
+                                                            //        if (wordToMemorize2 != null && !wordToMemorize1.equals("")) {
+                                                            //            memoryTree2.setText(wordToMemorize2);
+                                                            //        } else {memoryTree2.setText("Memory Tree 2");}
+                                                            //
+                                                            //        if (wordToMemorize3 != null && !wordToMemorize1.equals("")) {
+                                                            //            memoryTree3.setText(wordToMemorize3);
+                                                            //        }else {memoryTree3.setText("Memory Tree 3");}
 
 
         //Initialize the WorkManager
@@ -116,113 +111,138 @@ public class WordsToMemorize extends AppCompatActivity {
 
 
         /**
-         * 讓用戶取消所有通知
+         * 讓用戶清空列表
          */
         cancelAllNotifications.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                WorkManager.getInstance().cancelAllWork();
+                                            myVocabularyArrayList.clear();
+                                            myVocabularyArrayAdapter.notifyDataSetChanged();
 
-                Toast.makeText(getApplicationContext(), getString(R.string.All_notifications_cancelled),Toast.LENGTH_SHORT).show();
+                                            //將搜尋紀錄的列表存到SharedPreferences
+                                            SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
+                                            editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
+                                            for (int i = 0; i < myVocabularyArrayList.size(); i++)
+                                            {
+                                                editor.putString("myVocabularyArrayListItem_"+i, myVocabularyArrayList.get(i));
+                                            }
+                                            editor.apply();
 
-            }
-        });
+                                            Toast.makeText(getApplicationContext(), R.string.Your_selected_item_has_benn_deleted, Toast.LENGTH_SHORT).show();
 
-
-        /**
-         * Let the user click on an item and set notification timings
-         */
-        myVocabularyListview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
-                selectedMyVocabularyListviewItemValue=myVocabularyListview.getItemAtPosition(position).toString();
-
-                //這邊設置AlertDialog讓用戶選擇一顆記憶樹
-                final AlertDialog.Builder chooseMemoryTreeAlertDialog = new AlertDialog.Builder(WordsToMemorize.this);
-                chooseMemoryTreeAlertDialog.setTitle(getString(R.string.Choose_a_memory_tree));
-                chooseMemoryTreeAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                chooseMemoryTreeAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
-
-                //checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
-                chooseMemoryTreeAlertDialog.setSingleChoiceItems((R.array.memory_tree), -1, new DialogInterface.OnClickListener() {
-
-                    SharedPreferences.Editor editor = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE).edit();
-
-                    @Override
-                    public void onClick(DialogInterface chooseMemoryTreeAlertDialogInterface, int position) {
-
-                        if (position == 0) {  //若用戶點選記憶樹1
-                            wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
-                            editor.putString("memoryTree1", selectedMyVocabularyListviewItemValue);
-                            editor.apply();
-                            wordToMemorize1 = wordToMemorizeSharedPreferences.getString("memoryTree1", null);
-
-                            memoryTree1.setText(wordToMemorize1);
-                            wordToMemorize1NotificationIsOn = true;
-                            setCustomizedNotificationTiming();
-                            Toast.makeText(getApplicationContext(),wordToMemorize1,Toast.LENGTH_SHORT).show();
-                        } else if (position == 1) { //若用戶點選記憶樹2
-                            wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
-                            editor.putString("memoryTree2", selectedMyVocabularyListviewItemValue);
-                            editor.apply();
-                            wordToMemorize2 = wordToMemorizeSharedPreferences.getString("memoryTree2", null);
-
-                            memoryTree2.setText(wordToMemorize2);
-                            wordToMemorize2NotificationIsOn = true;
-                            setCustomizedNotificationTiming();
-                            Toast.makeText(getApplicationContext(),wordToMemorize2,Toast.LENGTH_SHORT).show();
-
-                        } else if (position == 2) { //若用戶點選記憶樹3
-                            wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
-                            editor.putString("memoryTree3", selectedMyVocabularyListviewItemValue);
-                            editor.apply();
-                            wordToMemorize3 = wordToMemorizeSharedPreferences.getString("memoryTree3", null);
-
-                            memoryTree3.setText(wordToMemorize3);
-                            wordToMemorize3NotificationIsOn = true;
-                            setCustomizedNotificationTiming();
-                            Toast.makeText(getApplicationContext(),wordToMemorize3,Toast.LENGTH_SHORT).show();
-                        }
-
-                        chooseMemoryTreeAlertDialogInterface.dismiss();  //點選記憶樹後讓AlertDialog的介面消失
-                    }
-                });
-
-                //第一層AlertDialog的取消鈕
-                chooseMemoryTreeAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-                //把第一層的AlertDialog顯示出來
-                chooseMemoryTreeAlertDialog.create().show();
-            }
-        });
+                                        }
 
 
 
-        /**
-         * Let the user long click on an item to cancel notification timings
-         */
-        myVocabularyListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-//                mWorkManager.cancelAllWorkByTag("UserDefinedNotificationTag" + " for " + wordToMemorize);
-//                mWorkManager.cancelAllWorkByTag("preDefinedNotificationTag" + " for " + wordToMemorize);
-
-                Toast.makeText(getApplicationContext(), getString(R.string.All_notifications_of_this_word_cancelled), Toast.LENGTH_SHORT).show();
-
-                return true;
-            }
+                                                            //本來要用來刪除Calendar event但沒用
+                                                            //                Uri deleteUri;
+                                                            //                deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);  //Doesn't work
+                                                            //                getContentResolver().delete(deleteUri, null, null);
+                                                            //
+                                                            //                Toast.makeText(getApplicationContext(), getString(R.string.All_notifications_cancelled),Toast.LENGTH_SHORT).show();
 
         });
+
+
+
+                                                            //用不到了
+                                                            //        /**
+                                                            //         * Let the user click on an item and set notification timings
+                                                            //         */
+                                                            //        myVocabularyListview.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                                                            //
+                                                            //            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+                                                            //
+                                                            //                selectedMyVocabularyListviewItemValue=myVocabularyListview.getItemAtPosition(position).toString();
+                                                            //
+                                                            //                //這邊設置AlertDialog讓用戶選擇一顆記憶樹
+                                                            //                final AlertDialog.Builder chooseMemoryTreeAlertDialog = new AlertDialog.Builder(WordsToMemorize.this);
+                                                            //                chooseMemoryTreeAlertDialog.setTitle(getString(R.string.Choose_a_memory_tree));
+                                                            //                chooseMemoryTreeAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                                            //                chooseMemoryTreeAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                                                            //
+                                                            //                //checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
+                                                            //                chooseMemoryTreeAlertDialog.setSingleChoiceItems((R.array.memory_tree), -1, new DialogInterface.OnClickListener() {
+                                                            //
+                                                            //                    SharedPreferences.Editor editor = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE).edit();
+                                                            //
+                                                            //                    @Override
+                                                            //                    public void onClick(DialogInterface chooseMemoryTreeAlertDialogInterface, int position) {
+                                                            //
+                                                            //                        if (position == 0) {  //若用戶點選記憶樹1
+                                                            //                            wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
+                                                            //                            editor.putString("memoryTree1", selectedMyVocabularyListviewItemValue);
+                                                            //                            editor.apply();
+                                                            //                            wordToMemorize1 = wordToMemorizeSharedPreferences.getString("memoryTree1", null);
+                                                            //
+                                                            //                            memoryTree1.setText(wordToMemorize1);
+                                                            //                            wordToMemorize1NotificationIsOn = true;
+                                                            //                            setPreDefinedNotificationTimings1Minute();
+                                                            //                            setPreDefinedNotificationTimings2Minutes();
+                                                            //                            Toast.makeText(getApplicationContext(),wordToMemorize1,Toast.LENGTH_SHORT).show();
+                                                            //                        } else if (position == 1) { //若用戶點選記憶樹2
+                                                            //                            wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
+                                                            //                            editor.putString("memoryTree2", selectedMyVocabularyListviewItemValue);
+                                                            //                            editor.apply();
+                                                            //                            wordToMemorize2 = wordToMemorizeSharedPreferences.getString("memoryTree2", null);
+                                                            //
+                                                            //                            memoryTree2.setText(wordToMemorize2);
+                                                            //                            wordToMemorize2NotificationIsOn = true;
+                                                            //                            setPreDefinedNotificationTimings1Minute();
+                                                            //                            setPreDefinedNotificationTimings2Minutes();
+                                                            //                            Toast.makeText(getApplicationContext(),wordToMemorize2,Toast.LENGTH_SHORT).show();
+                                                            //
+                                                            //                        } else if (position == 2) { //若用戶點選記憶樹3
+                                                            //                            wordToMemorizeSharedPreferences = getSharedPreferences("memoryTreeSharedPreference", MODE_PRIVATE);
+                                                            //                            editor.putString("memoryTree3", selectedMyVocabularyListviewItemValue);
+                                                            //                            editor.apply();
+                                                            //                            wordToMemorize3 = wordToMemorizeSharedPreferences.getString("memoryTree3", null);
+                                                            //
+                                                            //                            memoryTree3.setText(wordToMemorize3);
+                                                            //                            wordToMemorize3NotificationIsOn = true;
+                                                            //                            setCustomizedNotificationTiming();
+                                                            //                            Toast.makeText(getApplicationContext(),wordToMemorize3,Toast.LENGTH_SHORT).show();
+                                                            //                        }
+                                                            //
+                                                            //                        chooseMemoryTreeAlertDialogInterface.dismiss();  //點選記憶樹後讓AlertDialog的介面消失
+                                                            //                    }
+                                                            //                });
+                                                            //
+                                                            //                //第一層AlertDialog的取消鈕
+                                                            //                chooseMemoryTreeAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                                            //
+                                                            //                    @Override
+                                                            //                    public void onClick(DialogInterface dialog, int which) {
+                                                            //                        dialog.dismiss();
+                                                            //                    }
+                                                            //                });
+                                                            //
+                                                            //                //把第一層的AlertDialog顯示出來
+                                                            //                chooseMemoryTreeAlertDialog.create().show();
+                                                            //            }
+                                                            //        });
+
+
+
+                                                            //        /**
+                                                            //         * Let the user long click on an item to cancel notification timings (目前用不到)
+                                                            //         */
+                                                            //        myVocabularyListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                                            //
+                                                            //            @Override
+                                                            //            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            //
+                                                            //                mWorkManager.cancelAllWorkByTag("UserDefinedNotificationTag" + " for " + wordToMemorize);
+                                                            //                mWorkManager.cancelAllWorkByTag("preDefinedNotificationTag" + " for " + wordToMemorize);
+                                                            //
+                                                            //                Toast.makeText(getApplicationContext(), getString(R.string.All_notifications_of_this_word_cancelled), Toast.LENGTH_SHORT).show();
+                                                            //
+                                                            //                return true;
+                                                            //            }
+                                                            //
+                                                            //        });
 
 
 
@@ -262,10 +282,6 @@ public class WordsToMemorize extends AppCompatActivity {
                             }
                         });
         myVocabularyListview.setOnTouchListener(touchListener);
-
-
-
-
 
     }
 
@@ -317,8 +333,6 @@ public class WordsToMemorize extends AppCompatActivity {
     //==============================================================================================
     public void setCustomizedNotificationTiming() {
 
-        vocabulariesToBeMemorized.add(wordInputView.getText().toString());
-
         // on Time
         new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
@@ -340,67 +354,27 @@ public class WordsToMemorize extends AppCompatActivity {
                             String FormattedScheduledDate = dateFormat.format(scheduledDateInMilliSeconds);
                             Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + FormattedScheduledDate + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
 
-                            //排程要發送的通知
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    if (wordToMemorize1NotificationIsOn = true) {
 
-                                        PugNotification.with(getApplicationContext())
-                                                .load()
-                                                .identifier(1)
-                                                .title("1")
-                                                .message("HHHH")
-                                                .smallIcon(R.mipmap.ic_launcher)
-                                                .largeIcon(R.mipmap.ic_launcher)
-                                                .flags(Notification.DEFAULT_ALL)
-                                                .color(R.color.blue)
-                                                .autoCancel(true)
-                                                .simple()
-                                                .build();
+                            //設置單字的通知事件
+                            ContentResolver cr = getContentResolver();
+                            ContentValues values = new ContentValues();
+                            values.put(CalendarContract.Events.DTSTART, c.getTimeInMillis());
+                            values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+                            values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedMyVocabularyListviewItemValue);
+                            values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+                            values.put(CalendarContract.Events.ALL_DAY, false);
+                            values.put(CalendarContract.Events.CALENDAR_ID, 3);
+                            values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
 
-                                        wordInputView.setText(wordToMemorize1);
-                                    }
 
-                                    else if (wordToMemorize2NotificationIsOn = true) {
-
-                                        PugNotification.with(getApplicationContext())
-                                                .load()
-                                                .identifier(2)
-                                                .title("2")
-                                                .message("AAAA")
-                                                .smallIcon(R.mipmap.ic_launcher)
-                                                .largeIcon(R.mipmap.ic_launcher)
-                                                .flags(Notification.DEFAULT_ALL)
-                                                .color(R.color.blue)
-                                                .autoCancel(true)
-                                                .simple()
-                                                .build();
-
-                                        wordInputView.setText(wordToMemorize2);
-                                    }
-
-                                    else if (wordToMemorize3NotificationIsOn = true) {
-
-                                        PugNotification.with(getApplicationContext())
-                                                .load()
-                                                .identifier(3)
-                                                .title("3")
-                                                .message("GGGG")
-                                                .smallIcon(R.mipmap.ic_launcher)
-                                                .largeIcon(R.mipmap.ic_launcher)
-                                                .flags(Notification.DEFAULT_ALL)
-                                                .color(R.color.blue)
-                                                .autoCancel(true)
-                                                .simple()
-                                                .build();
-
-                                        wordInputView.setText(wordToMemorize3);
-                                    }
-
-                                }
-                            }, millis);
-
+                            // get the event ID that is the last element in the Uri
+                            Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+                            assert uri != null;
+                            long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment()));
+                            //
+                            // ... do something with event ID
+                            //
+                            //
                         }
 
                     }
@@ -433,69 +407,49 @@ public class WordsToMemorize extends AppCompatActivity {
     // 設置預設通知時機的Helper Method
     //==============================================================================================
 
-//    public void setPreDefinedNotificationTimings() {
-//
-//        vocabulariesToBeMemorized.add(MainActivity.wordInputView.getText().toString());
-//
-//        OneTimeWorkRequest preDefinedNotification1 = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(1, TimeUnit.SECONDS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotification5 = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(30, TimeUnit.SECONDS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotification60 = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(1, TimeUnit.HOURS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotificationRequestOneHour = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(1, TimeUnit.HOURS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotificationRequestTwelveHours = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(12, TimeUnit.HOURS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotificationRequestOneDay = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(1, TimeUnit.DAYS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotificationRequestOneWeek = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(7, TimeUnit.DAYS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotificationRequestOneMonth = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(30, TimeUnit.DAYS)
-//                .build();
-//
-//        OneTimeWorkRequest preDefinedNotificationRequestOneYear = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-//                .addTag("preDefinedNotificationTag" + " for " + wordToMemorize)
-//                .setInitialDelay(365, TimeUnit.DAYS)
-//                .build();
-//
-//        mWorkManager.enqueue(preDefinedNotification1);
-//        mWorkManager.enqueue(preDefinedNotification5);
-//        mWorkManager.enqueue(preDefinedNotification60);
-//        mWorkManager.enqueue(preDefinedNotificationRequestOneHour);
-//        mWorkManager.enqueue(preDefinedNotificationRequestTwelveHours);
-//        mWorkManager.enqueue(preDefinedNotificationRequestOneDay);
-//        mWorkManager.enqueue(preDefinedNotificationRequestOneWeek);
-//        mWorkManager.enqueue(preDefinedNotificationRequestOneMonth);
-//        mWorkManager.enqueue(preDefinedNotificationRequestOneYear);
-//
-//        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-//        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-//
-//    }
+    public void setPreDefinedNotificationTimings1Minute() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
+        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedMyVocabularyListviewItemValue);
+        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+        values.put(CalendarContract.Events.ALL_DAY, false);
+        values.put(CalendarContract.Events.CALENDAR_ID, 3);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+        assert uri != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimings2Minutes() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
+        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedMyVocabularyListviewItemValue);
+        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+        values.put(CalendarContract.Events.ALL_DAY, false);
+        values.put(CalendarContract.Events.CALENDAR_ID, 3);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+        assert uri != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
 
 
 

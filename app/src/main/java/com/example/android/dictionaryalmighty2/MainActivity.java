@@ -45,6 +45,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 
+import com.sachinvarma.easypermission.EasyPermissionInit;
+import com.sachinvarma.easypermission.EasyPermissionList;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
@@ -55,11 +57,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
 
-import static com.example.android.dictionaryalmighty2.WordsToMemorize.*;
+import static com.example.android.dictionaryalmighty2.WordsToMemorize.wordToMemorizeSharedPreferences;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -178,6 +181,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestWritePermission();  //在程式運行中要求存取的權限
+
+
+
+        /**
+         * 要求讀取月曆的權限
+         */
+        List<String> permission = new ArrayList<>();
+        permission.add(EasyPermissionList.READ_CALENDAR);
+        permission.add(EasyPermissionList.WRITE_CALENDAR);
+        new EasyPermissionInit(this, permission);
 
 
         /**
