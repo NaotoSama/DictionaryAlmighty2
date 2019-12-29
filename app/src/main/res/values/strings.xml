@@ -174,12 +174,6 @@
     </string-array>
 
 
-    <string-array name="memory_tree">
-        <item>@string/Memory_tree_1</item>
-        <item>@string/Memory_tree_2</item>
-        <item>@string/Memory_tree_3</item>
-
-    </string-array>
 
 
 
@@ -378,12 +372,12 @@
     <string name="You_can_cancel_the_notifications_any_time">You can cancel the notification(s) any time</string>
     <string name="Will_send_the_notification_after_an_hour_halfDay_day_week_month_year">Will send the notification(s) after an hour / half a day / day / week / month / year</string>
     <string name="Go_to_words_to_memorize_page">Go to \"Words to Memorize\" page</string>
-    <string name="Cancel_all_notifications_for_all_words">Cancel all notifications for all words</string>
     <string name="Do_you_remember_this_word">Do you remember this word</string>
-    <string name="Choose_a_memory_tree">Choose a me memory tree</string>
-    <string name="Memory_tree_1">Memory Tree 1</string>
-    <string name="Memory_tree_2">Memory Tree 2</string>
-    <string name="Memory_tree_3">Memory Tree 3</string>
+    <string name="Do_you_want_to">Do you want to:</string>
+    <string name="Clear_my_vocabulary_list_button">Clear my vocabulary list</string>
+    <string name="Memorize_this_word">Memorize this word</string>
+    <string name="Choose_customized_or_predefined_notification_timings">Choose one of the following recall timings</string>
+    <string name="Send_to_WordInputView">Lookup this word</string>
 
 
 </resources>

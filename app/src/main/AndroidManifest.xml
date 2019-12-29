@@ -34,8 +34,6 @@
             android:value="ocr" />
 
 
-                                                            <!--        <receiver android:name=".NotificationReceiver"/> -->     <!-- Used for Broadcast Receiver 用不到了-->
-
 
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
@@ -73,14 +71,6 @@
         </activity>
 
 
-                                                            <!--        <activity android:name=".NotificationReceiver">-->  <!--用不到了-->
-                                                            <!--            <intent-filter>-->
-                                                            <!--                <action android:name="android.intent.action.MAIN" />-->
-                                                            <!--                <action android:name="android.intent.action.VIEW" />-->
-                                                            <!--            </intent-filter>-->
-                                                            <!--        </activity>-->
-
-
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -95,34 +85,6 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-
-        <!--這些功能廢除不使用了
-
-        <activity android:name=".DataManager"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".OcrCaptureActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".TesseractOpenCVCaptureActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-
-        -->
 
 
     </application>

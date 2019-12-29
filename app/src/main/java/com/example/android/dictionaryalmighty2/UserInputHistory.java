@@ -29,7 +29,7 @@ public class UserInputHistory extends AppCompatActivity {
     RelativeLayout.LayoutParams layoutparams;   //用來客製化修改ActionBar
     TextView customActionBarTextviewforUserInputHistoryPage;
     androidx.appcompat.app.ActionBar actionBar;
-    Button wordToMemorizeButton;
+    Button goToWordsToMemorizePageButton;
 
 
 
@@ -43,7 +43,7 @@ public class UserInputHistory extends AppCompatActivity {
 
 
         //findViewById
-        wordToMemorizeButton = findViewById(R.id.cancel_all_notifications_button);
+        goToWordsToMemorizePageButton = findViewById(R.id.go_to_words_to_memorize_page);
         userInputListview = findViewById(R.id.user_input_listview);
 
         //Initialize the adapter
@@ -61,7 +61,7 @@ public class UserInputHistory extends AppCompatActivity {
         customActionBarForUserInputHistoryPage();   //Helper Method
 
 
-        wordToMemorizeButton.setOnClickListener(new View.OnClickListener() {
+        goToWordsToMemorizePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
