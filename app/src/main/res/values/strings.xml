@@ -333,7 +333,7 @@
     <string name="Browser_switch">Browser Switch</string>
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
-    <string name="Search_records">(Aligned in alphabetical order) (Finger tap = search word ; Long press = memorize this word ; Swipe = delete word)</string>
+    <string name="Search_records">(Aligned in alphabetical order) (Finger tap = search memorize word ; Long press = save to word bank ; Swipe = delete word)</string>
     <string name="Your_selected_item_has_benn_deleted">Your selected item has benn deleted</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
@@ -378,6 +378,11 @@
     <string name="Memorize_this_word">Memorize this word</string>
     <string name="Choose_customized_or_predefined_notification_timings">Choose one of the following recall timings</string>
     <string name="Send_to_WordInputView">Lookup this word</string>
+    <string name="List_cleared">List cleared</string>
+    <string name="Quick_lookup">Quick Lookup</string>
+    <string name="Combo_search">Combo Search</string>
+    <string name="Google_translate">Google Translate</string>
+    <string name="About_memorizing_words">About Memorizing Words</string>
 
 
 </resources>

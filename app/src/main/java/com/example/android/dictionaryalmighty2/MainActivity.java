@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button deleteUserInput;        //關鍵字輸入框清除鈕
     Button userInputHistoryButton; //用戶搜尋紀錄鈕
-    Button defaultSearchButton;
-    static Button comboSearchButton;
+    static Button defaultSearchButton;      //快搜按鈕
+    static Button comboSearchButton; //三連搜按鈕
 
     static String searchKeyword;      //用戶輸入的關鍵字
     String LOG_TAG;  //Log tag for the external storage permission request error message
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     String[] defaultDictionaryListOriginal; //專業版自訂預設字典的名單
     String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
     public static final String IMAGE_UNSPECIFIED = "image/*";
+    static String intentReceivedText;  //接收其他外部App傳來的文字
 
     AlertDialog.Builder defaultSearchAlertDialog; //專業版自訂單一預設字典名單的對話方塊
     AlertDialog.Builder defaultComboSearchAlertDialogFirstDictionary; //專業版自訂第一個預設字典名單的對話方塊
@@ -117,14 +118,14 @@ public class MainActivity extends AppCompatActivity {
     ActionBar actionBar;
     LayoutParams layoutparams; //用來客製化修改ActionBar
 
-    WebView webViewBrowser;    //網頁框
+    static WebView webViewBrowser;    //網頁框
 
     Switch browserSwitch;      //網頁框的開關
     Switch proOrSimplifiedLayoutSwitch; //專業版或簡易版開關
 
     ProgressBar progressBar;   //網頁載入的進度條
 
-    TextView searchResultWillBeDisplayedHere;
+    static TextView searchResultWillBeDisplayedHere;
     TextView selectSentenceSearcherView;
     TextView miscellaneousView;
     TextView customActionBarTextview;
@@ -443,15 +444,12 @@ public class MainActivity extends AppCompatActivity {
             //Content is being shared. Handle received data of the MIME types.
             if(receivedType.startsWith("text/")){
                 //Handle sent text
-                String intentReceivedText = received3rdPartyAppIntent.getStringExtra(Intent.EXTRA_TEXT);  //Get the received text
+                intentReceivedText = received3rdPartyAppIntent.getStringExtra(Intent.EXTRA_TEXT);  //Get the received text
                 if (intentReceivedText != null) {              //Check we have a string
                     searchKeyword = intentReceivedText;
                     wordInputView.setText(searchKeyword); //Set the text to the search box in MainActivity
-                    //In the meantime, perform auto translation
-                    String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
-                    webViewBrowser.loadUrl(intentAutoTranslationURL);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                    setChooseQuickSearchOrComboSearchAlertDialog();
 
                     saveKeywordtoUserInputListView ();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
                     saveUserInputArrayListToSharedPreferences (); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
@@ -4862,6 +4860,52 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    public void setChooseQuickSearchOrComboSearchAlertDialog() {
+        //這邊設置AlertDialog讓用戶選擇快搜模式或三連搜模式，或估狗翻譯
+        AlertDialog.Builder chooseQuickSearchOrComboSearchAlertDialog = new AlertDialog.Builder(this);
+        chooseQuickSearchOrComboSearchAlertDialog.setTitle(getString(R.string.Do_you_want_to));
+        chooseQuickSearchOrComboSearchAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+        chooseQuickSearchOrComboSearchAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+
+        //AlertDialog的確定鈕，使用快搜模式
+        chooseQuickSearchOrComboSearchAlertDialog.setPositiveButton(R.string.Quick_lookup, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                defaultSearchButton.performClick();
+            }
+        });
+
+        //AlertDialog的中立鈕，使用三連搜模式
+        chooseQuickSearchOrComboSearchAlertDialog.setNeutralButton(R.string.Combo_search, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                comboSearchButton.performClick();
+            }
+        });
+
+        //AlertDialog的取消鈕，使用估狗翻譯
+        chooseQuickSearchOrComboSearchAlertDialog.setNegativeButton(R.string.Google_translate, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
+                webViewBrowser.loadUrl(intentAutoTranslationURL);
+                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                webViewBrowser.setVisibility(View.VISIBLE);
+            }
+        });
+
+
+        //將AlertDialog顯示出來
+        chooseQuickSearchOrComboSearchAlertDialog.create().show();
     }
 
 

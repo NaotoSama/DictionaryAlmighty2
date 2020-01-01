@@ -8,16 +8,30 @@
     <ListView
         android:id="@+id/my_vocabulary_listview"
         android:layout_width="match_parent"
-        android:layout_height="598dp" />
+        android:layout_height="535dp" />
 
 
     <Button
         android:id="@+id/clear_my_vocabulary_list_button"
-        android:layout_width="200dp"
+        android:layout_width="252dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_gravity="center|bottom"
+        android:background="@color/red"
+        android:text="@string/Clear_my_vocabulary_list_button"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:id="@+id/about_memorizing_words_button"
+        android:layout_width="252dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:background="@android:drawable/bottom_bar"
-        android:text="@string/Clear_my_vocabulary_list_button"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:layout_marginTop="16dp"
+        android:background="@android:color/darker_gray"
+        android:text="@string/About_memorizing_words"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@android:color/black" />
 
 </LinearLayout>

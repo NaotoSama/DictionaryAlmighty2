@@ -145,7 +145,7 @@
     <string name="TechDico">TechDico技術用語辭典</string>
     <string name="BioMedical_dictionary">生物醫藥大辭典</string>
     <string name="Change_background">更換背景圖</string>
-    <string name="Clear_search_input">清除搜尋紀錄</string>
+    <string name="Clear_search_input">清除搜尋紀錄 (慎用！)</string>
     <string name="Linguee_CH_EN">Linguee中英例句</string>
     <string name="Linguee_JP_EN">Linguee日英例句</string>
     <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
@@ -153,7 +153,7 @@
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records">(依首字母與首注音順序排列) (點擊 = 帶入單字；長按 = 記憶單字 ； 滑動 = 刪除單字)</string>
+    <string name="Search_records">(依首字母與首注音順序排列) (點擊 = 帶入或記憶單字；長按 = 存入單字庫 ； 滑動 = 刪除單字)</string>
     <string name="Your_selected_item_has_benn_deleted">您選擇的項目已刪除完畢</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
@@ -194,8 +194,13 @@
     <string name="Go_to_words_to_memorize_page">前往我的單字記憶庫</string>
     <string name="Do_you_remember_this_word">記得這個字嗎：</string>
     <string name="Do_you_want_to">您想要：</string>
-    <string name="Clear_my_vocabulary_list_button">清除我的記憶庫列表</string>
+    <string name="Clear_my_vocabulary_list_button">清空我的記憶庫列表 (慎用！)</string>
     <string name="Memorize_this_word">記憶單字</string>
     <string name="Choose_customized_or_predefined_notification_timings">選擇回憶單字的時機點</string>
     <string name="Send_to_WordInputView">查此單字</string>
+    <string name="List_cleared">表單已清空</string>
+    <string name="Quick_lookup">快搜</string>
+    <string name="Combo_search">三連搜</string>
+    <string name="Google_translate">Google翻譯</string>
+    <string name="About_memorizing_words">有關記憶單字</string>
 </resources>
