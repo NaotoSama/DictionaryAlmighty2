@@ -179,8 +179,15 @@ public class UserInputHistory extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                setPreDefinedNotificationTimings1Minute();
-                                setPreDefinedNotificationTimings2Minutes();
+                                setPreDefinedNotificationTimings20Minutes();
+                                setPreDefinedNotificationTimings1Hour();
+                                setPreDefinedNotificationTimings9Hours();
+                                setPreDefinedNotificationTimings1Day();
+                                setPreDefinedNotificationTimings2Days();
+                                setPreDefinedNotificationTimings6Days();
+                                setPreDefinedNotificationTimings1Month();
+                                setPreDefinedNotificationTimingsHalfYear();
+                                setPreDefinedNotificationTimingsOneYear();
 
                             }
                         });
@@ -432,57 +439,58 @@ public class UserInputHistory extends AppCompatActivity {
     // 設置預設通知時機的Helper Method
     //==============================================================================================
 
-    public void setPreDefinedNotificationTimings1Minute() {
-
-        //設置單字的通知事件
-        ContentResolver cr = getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
-        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
-        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
-        values.put(CalendarContract.Events.ALL_DAY, false);
-        values.put(CalendarContract.Events.CALENDAR_ID, 3);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-
-        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-        assert uri != null;
-        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
-
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-
-    }
-
-    public void setPreDefinedNotificationTimings2Minutes() {
-
-        //設置單字的通知事件
-        ContentResolver cr = getContentResolver();
-        ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
-        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
-        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
-        values.put(CalendarContract.Events.ALL_DAY, false);
-        values.put(CalendarContract.Events.CALENDAR_ID, 3);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-
-        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-        assert uri != null;
-        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
-
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-
-    }
+//    實驗用
+//    public void setPreDefinedNotificationTimings1Minute() {
+//
+//        //設置單字的通知事件
+//        ContentResolver cr = getContentResolver();
+//        ContentValues values = new ContentValues();
+//        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
+//        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*1*1000+60*60*1000);
+//        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
+//        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+//        values.put(CalendarContract.Events.ALL_DAY, false);
+//        values.put(CalendarContract.Events.CALENDAR_ID, 3);
+//        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+//
+//        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+//        assert uri != null;
+//        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+//
+//        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+//        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+//
+//    }
+//
+//    public void setPreDefinedNotificationTimings2Minutes() {
+//
+//        //設置單字的通知事件
+//        ContentResolver cr = getContentResolver();
+//        ContentValues values = new ContentValues();
+//        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
+//        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*2*1000+60*60*1000);
+//        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
+//        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+//        values.put(CalendarContract.Events.ALL_DAY, false);
+//        values.put(CalendarContract.Events.CALENDAR_ID, 3);
+//        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+//
+//        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+//        assert uri != null;
+//        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+//
+//        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+//        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+//
+//    }
 
     public void setPreDefinedNotificationTimings20Minutes() {
 
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*20*1000);  //抓現在系統的時間的20分鐘後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*20*1000);  //抓現在系統的時間的20分鐘後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*20*1000+60*60*1000); //抓DTSTART開始時間的再一小時後結束
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -494,7 +502,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -503,8 +511,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*1000);  //抓現在系統的時間的1小時後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*1000);  //抓現在系統的時間的1小時後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*1000+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -516,7 +524,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -525,8 +533,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*9*1000);  //抓現在系統的時間的9小時後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*9*1000);  //抓現在系統的時間的9小時後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*9*1000+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -538,7 +546,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -547,8 +555,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*1000);  //抓現在系統的時間的1天後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*1000);  //抓現在系統的時間的1天後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*1000+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -560,7 +568,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -569,8 +577,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*2*1000);  //抓現在系統的時間的2天後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*2*1000);  //抓現在系統的時間的2天後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*2*1000+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -582,7 +590,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -591,8 +599,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*6*1000);  //抓現在系統的時間的6天後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*6*1000);  //抓現在系統的時間的6天後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*6*1000+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -604,7 +612,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -616,8 +624,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond);  //抓現在系統的時間的1個月後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond);  //抓現在系統的時間的1個月後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -629,7 +637,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -641,8 +649,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond);  //抓現在系統的時間的半年後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond);  //抓現在系統的時間的半年後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -654,7 +662,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -666,8 +674,8 @@ public class UserInputHistory extends AppCompatActivity {
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond);  //抓現在系統的時間的一年後
-        values.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond);  //抓現在系統的時間的一年後開始
+        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond+60*60*1000);
         values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
         values.put(CalendarContract.Events.ALL_DAY, false);
@@ -679,7 +687,7 @@ public class UserInputHistory extends AppCompatActivity {
         long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-        Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 

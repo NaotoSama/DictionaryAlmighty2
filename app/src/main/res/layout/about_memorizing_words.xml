@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5faaf">
+
+    <TextView
+        android:id="@+id/forgetting_curve_textView_1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="艾賓浩斯遺忘曲線，是說記憶內容會隨著時間的推移不斷遺忘，剛記憶的內容，20分鐘後只剩下58%，8-9小時後只剩下35.8%，2天之後只剩下27.8%，一個月之後只剩下21.1%。為了抗遺忘，就要不斷複習和重複記憶之前記過的內容。"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/forgetting_curve_1"
+        android:layout_width="0dp"
+        android:layout_height="236dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forgetting_curve_textView_1"
+        app:srcCompat="@drawable/forgetting_curve_1" />
+
+    <TextView
+        android:id="@+id/forgetting_curve_textView_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="譯指通App根據遺忘曲線，在即將遺忘單字前發送複習通知，讓大腦牢牢抓住學過的字。有了貼心提醒，不怕學了又弄丟，只怕你懶得複習！"
+        android:textColor="@color/orange"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forgetting_curve_1" />
+
+    <ImageView
+        android:id="@+id/forgetting_curve_2"
+        android:layout_width="0dp"
+        android:layout_height="272dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/forgetting_curve_1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/forgetting_curve_1"
+        app:layout_constraintTop_toBottomOf="@+id/forgetting_curve_textView_2"
+        app:srcCompat="@drawable/forgetting_curve_2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

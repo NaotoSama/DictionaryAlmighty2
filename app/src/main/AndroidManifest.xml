@@ -26,6 +26,25 @@
         android:usesCleartextTraffic="true"> <!-- 避免WebView加載網頁時出現ERR_CLEARTEXT_NOT_PERMITTED錯誤 -->
 
 
+
+        <service android:name=".FireBaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+            <!-- Set custom default icon. This is used when no icon is set for incoming Firebase notification messages.
+            See README(https://goo.gl/l4GJaQ) for more. -->
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/ic_launcher_foreground" />
+            <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+                 notification message. See README(https://goo.gl/6BKBk7) for more. -->
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/blue" />
+
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -50,6 +69,16 @@
                 <category android:name="android.intent.category.DEFAULT" /> <!-- Give the Intent Filter a category -->
                 <data android:mimeType="text/*" />                          <!-- Indicate the MIME types the app is going to receive -->
             </intent-filter>
+
+            <intent-filter>
+                <!-- Intent filter for firebase dynamic links -->
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+                <data android:host="example.com"  android:scheme="http"/>
+                <data android:host="example.com"  android:scheme="https"/>
+            </intent-filter>
+
         </activity>
 
 

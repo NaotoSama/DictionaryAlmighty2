@@ -38,6 +38,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -45,6 +46,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.sachinvarma.easypermission.EasyPermissionInit;
 import com.sachinvarma.easypermission.EasyPermissionList;
 import com.yalantis.ucrop.UCrop;
@@ -97,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
     public static final String IMAGE_UNSPECIFIED = "image/*";
     static String intentReceivedText;  //接收其他外部App傳來的文字
+    String FriebaseUrl; //接收Firebase傳來的URL
 
     AlertDialog.Builder defaultSearchAlertDialog; //專業版自訂單一預設字典名單的對話方塊
     AlertDialog.Builder defaultComboSearchAlertDialogFirstDictionary; //專業版自訂第一個預設字典名單的對話方塊
@@ -142,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
-    SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences//儲存三個預設字典的SharedPreferences
+    SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
 
     private ArrayList<DictionaryItem> mOcrSpinnerItemListOriginal;  //客製化Spinner選單列
     private ArrayList<DictionaryItem> mOcrSpinnerItemListSimplified;
@@ -179,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         requestWritePermission();  //在程式運行中要求存取的權限
 
 
-
         /**
          * 要求讀取月曆的權限
          */
@@ -195,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         gifImageView = findViewById(R.id.GIF_imageView);
         voiceRecognitionImageView = findViewById(R.id.btnSpeak);
         ocrImageView = findViewById(R.id.ocr_imageView);
-        otherFunctionsImageView =findViewById(R.id.Other_functions_image);
+        otherFunctionsImageView = findViewById(R.id.Other_functions_image);
         backGroundImageView = findViewById(R.id.background_image_view);
         wordInputView = findViewById(R.id.Word_Input_View);
         deleteUserInput = findViewById(R.id.delete_user_input_button);
@@ -209,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
         miscellaneousView = findViewById(R.id.Miscellaneous_View);
 
 
-
         /**
          * 設定程式開啟時預設使用簡易版的客製化ActionBar
          */
@@ -219,14 +223,12 @@ public class MainActivity extends AppCompatActivity {
         customActionBarSimplified(); //Helper method
 
 
-
         /**
          * 設定程式開啟時預設遮蔽的物件
          */
         backGroundImageView.setVisibility(View.GONE);
         browserNavigateBack.setVisibility(View.GONE);
         browserNavigateForward.setVisibility(View.GONE);
-
 
 
         /**
@@ -238,7 +240,6 @@ public class MainActivity extends AppCompatActivity {
                 wordInputView.setText("");  //讓文字框內變成空白字元
             }
         });
-
 
 
         /**
@@ -253,18 +254,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         /**
          * 頁面生成時讀取用戶搜尋紀錄userInputArrayList
          */
         userInputArrayListSharedPreferences = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE);
         int userInputArrayListValues = userInputArrayListSharedPreferences.getInt("userInputArrayListValues", 0);
-        for (int i = 0; i < userInputArrayListValues; i++)
-        {
-            String userInputArrayListItem = userInputArrayListSharedPreferences.getString("userInputArrayListItem_"+i, null);
+        for (int i = 0; i < userInputArrayListValues; i++) {
+            String userInputArrayListItem = userInputArrayListSharedPreferences.getString("userInputArrayListItem_" + i, null);
             userInputArraylist.add(userInputArrayListItem);
         }
-
 
 
         /**
@@ -272,12 +270,10 @@ public class MainActivity extends AppCompatActivity {
          */
         SharedPreferences wordsToMemorizeSharedPreferences = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE);
         int myVocabularyArrayListValues = wordsToMemorizeSharedPreferences.getInt("myVocabularyArrayListValues", 0);
-        for (int i = 0; i < myVocabularyArrayListValues; i++)
-        {
-            String myVocabularyArrayListItem = wordsToMemorizeSharedPreferences.getString("myVocabularyArrayListValues"+i, null);
+        for (int i = 0; i < myVocabularyArrayListValues; i++) {
+            String myVocabularyArrayListItem = wordsToMemorizeSharedPreferences.getString("myVocabularyArrayListValues" + i, null);
             myVocabularyArrayList.add(myVocabularyArrayListItem);
         }
-
 
 
         /**
@@ -289,14 +285,13 @@ public class MainActivity extends AppCompatActivity {
         loadDefaultDictionaries(); //載入預設字典的網址
 
 
-
         /**
          * 頁面生成時讀取用戶設定的三連搜預設字典
          */
-        defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-        defaultComboSearchCodeFirstDictionary=defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", "");
-        defaultComboSearchCodeSecondDictionary=defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForSecondDictionary", "");
-        defaultComboSearchCodeThirdDictionary=defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForThirdDictionary", "");
+        defaultComboDictionarySearchSharedPreferences = getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
+        defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", "");
+        defaultComboSearchCodeSecondDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForSecondDictionary", "");
+        defaultComboSearchCodeThirdDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForThirdDictionary", "");
 
         /**
          * 點選快搜按鈕時會搜尋三個預設字典
@@ -305,14 +300,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //若用戶未設定預設字典(三個預設字典的代碼是空的)
-                if (defaultComboSearchCodeFirstDictionary == "" || defaultComboSearchCodeSecondDictionary == "" ||defaultComboSearchCodeThirdDictionary == "") {
+                if (defaultComboSearchCodeFirstDictionary == "" || defaultComboSearchCodeSecondDictionary == "" || defaultComboSearchCodeThirdDictionary == "") {
 
-                    if(proOrSimplifiedLayoutSwitch.isChecked()) { //檢查若已已啟動專業版版面
+                    if (proOrSimplifiedLayoutSwitch.isChecked()) { //檢查若已已啟動專業版版面
                         setDefaultDictionariesOriginal();         //則載入專業版預設字典選單
                     } else {
                         setDefaultDictionariesSimplified();       //反之，載入簡易版預設字典選單
                     }
-                    Toast.makeText(getApplicationContext(),R.string.Please_set_3_default_dictionaries,Toast.LENGTH_LONG).show(); //通知須設定預設字典
+                    Toast.makeText(getApplicationContext(), R.string.Please_set_3_default_dictionaries, Toast.LENGTH_LONG).show(); //通知須設定預設字典
 
                 } else {
                     Intent fireComboSearchActivity = new Intent();  //若三個代碼不是空的，載入三連搜頁面
@@ -324,27 +319,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         /**
          * 頁面生成時存取用戶設定的背景圖
          */
-        SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("testSP", Context.MODE_PRIVATE);
         //第一步:取出字符串形式的Bitmap
-        String imageString=sharedPreferences.getString("image", "");
+        String imageString = sharedPreferences.getString("image", "");
         //第二步:利用Base64將字符串轉換為ByteArrayInputStream
-        byte[] byteArray=Base64.decode(imageString, Base64.DEFAULT);
-        ByteArrayInputStream byteArrayInputStream=new ByteArrayInputStream(byteArray);
+        byte[] byteArray = Base64.decode(imageString, Base64.DEFAULT);
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArray);
         //第三步:利用ByteArrayInputStream生成Bitmap
-        Bitmap backgroundBitmap= BitmapFactory.decodeStream(byteArrayInputStream);
+        Bitmap backgroundBitmap = BitmapFactory.decodeStream(byteArrayInputStream);
         gifImageView.setImageBitmap(backgroundBitmap);
-
 
 
         /**
          * Initialize the ArrayList used for the custom spinners
          */
         initList();
-
 
 
         /**
@@ -371,7 +363,6 @@ public class MainActivity extends AppCompatActivity {
         //需要在java裡面給webview設置一下requestFocus() 就行了。
 
 
-
         /**
          * 設置網頁框的開關
          */
@@ -381,19 +372,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(browserSwitch.isChecked()) {                     //用isChecked()檢視開關的開啟狀態
+                if (browserSwitch.isChecked()) {                     //用isChecked()檢視開關的開啟狀態
                     webViewBrowser.setVisibility(View.VISIBLE);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     webViewBrowser.setVisibility(View.INVISIBLE);
                     browserNavigateBack.setVisibility(View.INVISIBLE);
                     browserNavigateForward.setVisibility(View.INVISIBLE);
                 }
             }
         });
-
 
 
         /**
@@ -403,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(webViewBrowser.canGoBack()) {
+                if (webViewBrowser.canGoBack()) {
                     webViewBrowser.goBack();
                 }
             }
@@ -413,12 +402,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(webViewBrowser.canGoForward()) {
+                if (webViewBrowser.canGoForward()) {
                     webViewBrowser.goForward();
                 }
             }
         });
-
 
 
         /**
@@ -440,9 +428,9 @@ public class MainActivity extends AppCompatActivity {
         //Make sure it's an action and type we can handle.
         //Now we have 2 possibilities: the app has been launched from the device in the default fashion and is not receiving any incoming data;
         //the app has been launched to share content. Add the conditional statement as below to handle these two scenarios.
-        if(Objects.equals(receivedAction, Intent.ACTION_SEND)){
+        if (Objects.equals(receivedAction, Intent.ACTION_SEND)) {
             //Content is being shared. Handle received data of the MIME types.
-            if(receivedType.startsWith("text/")){
+            if (receivedType.startsWith("text/")) {
                 //Handle sent text
                 intentReceivedText = received3rdPartyAppIntent.getStringExtra(Intent.EXTRA_TEXT);  //Get the received text
                 if (intentReceivedText != null) {              //Check we have a string
@@ -451,16 +439,20 @@ public class MainActivity extends AppCompatActivity {
 
                     setChooseQuickSearchOrComboSearchAlertDialog();
 
-                    saveKeywordtoUserInputListView ();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                    saveUserInputArrayListToSharedPreferences (); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
 
                 }
             }
-        }
-        else if(Objects.equals(receivedAction, Intent.ACTION_MAIN)){
+        } else if (Objects.equals(receivedAction, Intent.ACTION_MAIN)) {
             //app has been launched directly, not from share list
         }
 
+
+        /**
+         * 設置接收Firebase dynamic links
+         */
+        checkForDynamicLinks();
 
 
         //==============================================================================================
@@ -475,7 +467,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(proOrSimplifiedLayoutSwitch.isChecked()) {         //用isChecked()檢視開關的開啟狀態
+                if (proOrSimplifiedLayoutSwitch.isChecked()) {         //用isChecked()檢視開關的開啟狀態
 
                     spinnersForOriginalLayout();  //加載專業版spinners
                     customActionBarPro();         //加載專業版ActionBar
@@ -484,10 +476,9 @@ public class MainActivity extends AppCompatActivity {
                     proOrSimplifiedSwitchCodePreferences = getSharedPreferences("proOrSimplifiedSwitchCodeSharedPreferences", MODE_PRIVATE);
                     proOrSimplifiedSwitchCodePreferences.edit().putInt("ProMode", 1).apply();
 
-                    Toast.makeText(MainActivity.this,getString(R.string.You_are_using_pro_version), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.You_are_using_pro_version), Toast.LENGTH_SHORT).show();
 
-                }
-                else {
+                } else {
 
                     spinnersForSimplifiedLayout();  //加載簡易版spinners
 
@@ -497,7 +488,7 @@ public class MainActivity extends AppCompatActivity {
                     proOrSimplifiedSwitchCodePreferences = getSharedPreferences("proOrSimplifiedSwitchCodeSharedPreferences", MODE_PRIVATE);
                     proOrSimplifiedSwitchCodePreferences.edit().putInt("ProMode", 0).apply();
 
-                    Toast.makeText(MainActivity.this,getString(R.string.You_are_using_simplified_version), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.You_are_using_simplified_version), Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -508,13 +499,13 @@ public class MainActivity extends AppCompatActivity {
         //設置App啟動時檢查代碼為專業版或簡易版，並載入對應的Spinners
         proOrSimplifiedSwitchCode = getSharedPreferences("proOrSimplifiedSwitchCodeSharedPreferences", MODE_PRIVATE).getInt("ProMode", 2);
 
-        if (proOrSimplifiedSwitchCode==1){                  //若用代碼為1=已開啟專業版
+        if (proOrSimplifiedSwitchCode == 1) {                  //若用代碼為1=已開啟專業版
             spinnersForOriginalLayout();                    //加載專業版spinners
             proOrSimplifiedLayoutSwitch.setChecked(true);   //設定開關按鈕為開啟的狀態
 
             customActionBarPro();                           //加載客製化專業版ActionBar
 
-        }else if (proOrSimplifiedSwitchCode==0){            //若用代碼為0=已關閉專業版
+        } else if (proOrSimplifiedSwitchCode == 0) {            //若用代碼為0=已關閉專業版
             spinnersForSimplifiedLayout();                  //加載簡易版spinners
             proOrSimplifiedLayoutSwitch.setChecked(false);  //設定開關按鈕為關閉的狀態
 
@@ -523,11 +514,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-
     }
 
 
-//==============================================================================================
+
+
+    /**
+     * 設置接收Firebase dynamic links
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        checkForDynamicLinks();
+    }
+
+
+    //==============================================================================================
 // 在OnCreate外面設置 客製化Spinner選單列的項目(圖+文字) (包括簡易版與專業版的項目)
 //==============================================================================================
 
@@ -1974,6 +1977,18 @@ public class MainActivity extends AppCompatActivity {
                 }else if (position == 25) {
                     String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                     webViewBrowser.loadUrl(IsPluralDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 26) {
+                    String LingoHelpPrepositionUrl= "https://lingohelp.me/q/?w="+searchKeyword;
+                    webViewBrowser.loadUrl(LingoHelpPrepositionUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 27) {
+                    String WordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                    webViewBrowser.loadUrl(WordWebUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -4906,6 +4921,55 @@ public class MainActivity extends AppCompatActivity {
 
         //將AlertDialog顯示出來
         chooseQuickSearchOrComboSearchAlertDialog.create().show();
+    }
+
+
+
+    //==============================================================================================
+    // 設置接收Firebase dynamic links
+    //==============================================================================================
+    private void checkForDynamicLinks() {
+        FirebaseDynamicLinks.getInstance()
+                .getDynamicLink(getIntent())
+                .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
+                    @Override
+                    public void onSuccess(PendingDynamicLinkData pendingDynamicLinkData) {
+                        Log.i("MainActivity","We have a dynamic link!");
+                        // Get deep link from result (may be null if no link is found)
+                        Uri deepLink = null;
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.getLink();
+                        }
+
+
+                        // Handle the deep link.
+                        if (deepLink != null) {
+                            Log.i("MainActivity","Here's the deep link url:\n" + deepLink.toString());
+                        }
+
+                        //順便利用此接收功能打開透過Firebase傳送的普通URL(若放在其他位置會導致proOrSimplifiedLayoutSwitch功能失效，原因未知)
+                        if (getIntent().getExtras() != null && getIntent().getExtras().getString("URL", null) != null && !getIntent().getExtras().getString("URL", null).equals("")) {
+                            //檢查URL有沒有含http或Https，否則Intent會報錯
+                            if (Objects.requireNonNull(getIntent().getExtras().getString("URL")).contains("http")) {
+                                FriebaseUrl = getIntent().getExtras().getString("URL");
+                            } else {
+                                FriebaseUrl = "http://" + getIntent().getExtras().getString("URL");
+                            }
+                            if (FriebaseUrl != null && !FriebaseUrl.startsWith("https://") && !FriebaseUrl.startsWith("http://")) {
+                                FriebaseUrl = "http://" + FriebaseUrl;
+                            }
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FriebaseUrl)));
+                        }
+
+
+                    }
+                })
+                .addOnFailureListener(this, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("MainActivity", "Oops, we couldn't retrive that dynamic link data.", e);
+                    }
+                });
     }
 
 

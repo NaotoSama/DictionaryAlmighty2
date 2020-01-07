@@ -5,10 +5,22 @@
     android:background="@color/grey"
     android:orientation="vertical">
 
+
+    <TextView
+        android:id="@+id/words_to_memorize_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Words_to_memorize_page_instructions"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="#013220"
+        android:textStyle="bold" />
+
+
     <ListView
         android:id="@+id/my_vocabulary_listview"
         android:layout_width="match_parent"
-        android:layout_height="535dp" />
+        android:layout_height="460dp" />
 
 
     <Button

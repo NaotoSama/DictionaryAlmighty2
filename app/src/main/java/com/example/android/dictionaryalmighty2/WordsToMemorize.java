@@ -23,10 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.comboSearchButton;
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultSearchButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.intentReceivedText;
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
-import static com.example.android.dictionaryalmighty2.MainActivity.searchResultWillBeDisplayedHere;
-import static com.example.android.dictionaryalmighty2.MainActivity.webViewBrowser;
 import static com.example.android.dictionaryalmighty2.MainActivity.wordInputView;
 
 public class WordsToMemorize extends AppCompatActivity {
@@ -202,7 +199,7 @@ public class WordsToMemorize extends AppCompatActivity {
         customActionBarTextviewforUserInputHistoryPage.setGravity(Gravity.CENTER);
         customActionBarTextviewforUserInputHistoryPage.setTypeface(Typeface.DEFAULT_BOLD);
         customActionBarTextviewforUserInputHistoryPage.setTextColor(Color.parseColor("#58BE1B"));
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD700")));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(customActionBarTextviewforUserInputHistoryPage);
 
@@ -214,7 +211,7 @@ public class WordsToMemorize extends AppCompatActivity {
         //這邊設置AlertDialog讓用戶選擇快搜模式或三連搜模式，或估狗翻譯
         AlertDialog.Builder chooseQuickSearchOrComboSearchAlertDialog = new AlertDialog.Builder(this);
         chooseQuickSearchOrComboSearchAlertDialog.setTitle(getString(R.string.Do_you_want_to));
-        chooseQuickSearchOrComboSearchAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+        chooseQuickSearchOrComboSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog不會消失
         chooseQuickSearchOrComboSearchAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
 
         //AlertDialog的確定鈕，使用快搜模式
@@ -242,21 +239,13 @@ public class WordsToMemorize extends AppCompatActivity {
             }
         });
 
-        //AlertDialog的取消鈕，使用估狗翻譯
-        chooseQuickSearchOrComboSearchAlertDialog.setNegativeButton(R.string.Google_translate, new DialogInterface.OnClickListener() {
+        //AlertDialog的取消鈕
+        chooseQuickSearchOrComboSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
-                webViewBrowser.loadUrl(intentAutoTranslationURL);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
-
-                //Bring MainActivity to the top of the stack
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
+                dialog.dismiss();
             }
         });
 

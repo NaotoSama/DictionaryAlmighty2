@@ -153,7 +153,7 @@
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records">(依首字母與首注音順序排列) (點擊 = 帶入或記憶單字；長按 = 存入單字庫 ； 滑動 = 刪除單字)</string>
+    <string name="Search_records_page_instructions">(點按 = 帶入單字到首頁或記憶單字；長按 = 存入單字庫 ； 滑動 = 刪除單字)</string>
     <string name="Your_selected_item_has_benn_deleted">您選擇的項目已刪除完畢</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
@@ -203,4 +203,7 @@
     <string name="Combo_search">三連搜</string>
     <string name="Google_translate">Google翻譯</string>
     <string name="About_memorizing_words">有關記憶單字</string>
+    <string name="Words_to_memorize_page_instructions">(點按 = 帶入單字到主頁 ； 長按 = 快搜或三連搜模式 ； 滑動 = 刪除單字)</string>
+    <string name="Lingo_help_prepositions">Lingo Help介係詞字典</string>
+    <string name="WordWeb_dictionary">WordWeb英英字典</string>
 </resources>
