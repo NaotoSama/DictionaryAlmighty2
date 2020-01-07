@@ -96,6 +96,8 @@
         <item>@string/TechDico</item>
         <item>@string/BioMedical_dictionary</item>
         <item>@string/Is_plural_dictionary</item>
+        <item>@string/Lingo_help_prepositions</item>
+        <item>@string/WordWeb_dictionary</item>
 
         <item>@string/Weblio_JP</item>
         <item>@string/Weblio_CN</item>

@@ -307,6 +307,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(IsPluralDictionaryUrl);
                         break;
+                    case "LingoHelpPrepositions":
+                        String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(lingoHelpPrepositionsUrl);
+                        break;
+                    case "WordWeb":
+                        String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordWebUrl);
+                        break;
                     case "Weblio JP":
                         String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(weblioJPUrl);
@@ -629,6 +637,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(IsPluralDictionaryUrl);
                 break;
+            case "LingoHelpPrepositions":
+                String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(lingoHelpPrepositionsUrl);
+                break;
+            case "WordWeb":
+                String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordWebUrl);
+                break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(weblioJPUrl);
@@ -950,6 +966,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "IsPlural Dictionary":
                 String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(IsPluralDictionaryUrl);
+                break;
+            case "LingoHelpPrepositions":
+                String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(lingoHelpPrepositionsUrl);
+                break;
+            case "WordWeb":
+                String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordWebUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
