@@ -38,7 +38,7 @@
     <string name="Wikipedia_EN">英文維基百科</string>
     <string name="Forvo">Forvo發音字典</string>
     <string name="Wiki_Diff">Wiki Diff</string>
-    <string name="Net_Speak">Net Speak</string>
+    <string name="Net_Speak">Net Speak英文語料庫</string>
     <string name="Yomikata">読み方は？</string>
     <string name="Chigai">違いは？</string>
     <string name="OJAD">OJAD鈴木君</string>
@@ -206,4 +206,14 @@
     <string name="Words_to_memorize_page_instructions">(點按 = 帶入單字到主頁 ； 長按 = 快搜或三連搜模式 ； 滑動 = 刪除單字)</string>
     <string name="Lingo_help_prepositions">Lingo Help介係詞字典</string>
     <string name="WordWeb_dictionary">WordWeb英英字典</string>
+    <string name="Learn_with_kak">(網誌) 小格子教英文</string>
+    <string name="Home_of_english">(網誌) 英語之家</string>
+    <string name="BBC_learning_english">(網誌) BBC英語教學</string>
+    <string name="Voice_of_america">(網誌) 美國之音</string>
+    <string name="Teacher_sammy_english_training">Sammy 老師教英文</string>
+    <string name="Michael_chugani_column">又中又英 專欄</string>
+    <string name="Grammarist">Grammarist部落格</string>
+    <string name="Kenny_english">小王子英文</string>
+    <string name="Tatoeba">Tatoeba多國語料庫</string>
+    <string name="Kotonoha_japanese_corpus">小納言日文語料庫(手動)</string>
 </resources>

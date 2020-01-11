@@ -671,9 +671,19 @@ public class MainActivity extends AppCompatActivity {
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Forvo, R.mipmap.forvo));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Wiki_Diff, R.mipmap.wikidiff));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Net_Speak, R.mipmap.netspeak));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Kotonoha_japanese_corpus, R.mipmap.kotonoha_japanese_corpus));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Tatoeba, R.mipmap.tatoeba));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Yomikata, R.mipmap.yomikatawa));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Chigai, R.mipmap.chigaiwa));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.OJAD, R.mipmap.ojad));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Learn_with_kak, R.mipmap.learn_with_kak));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Home_of_english, R.mipmap.home_of_english));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.BBC_learning_english, R.mipmap.bbc_learning_english));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Voice_of_america, R.mipmap.voice_of_america));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Teacher_sammy_english_training, R.mipmap.teacher_sammy_english_training));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Michael_chugani_column, R.mipmap.michael_chugani_column));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Grammarist, R.mipmap.grammarist));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Kenny_english, R.mipmap.kenny_english));
 
     }
 
@@ -1965,32 +1975,32 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 23) {
-                    String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
-                    webViewBrowser.loadUrl(TechDicoUrl);
+                    String techDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
+                    webViewBrowser.loadUrl(techDicoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 24) {
-                    String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
-                    webViewBrowser.loadUrl(BioMedicalDictionaryUrl);
+                    String bioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
+                    webViewBrowser.loadUrl(bioMedicalDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 25) {
-                    String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
-                    webViewBrowser.loadUrl(IsPluralDictionaryUrl);
+                    String isPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
+                    webViewBrowser.loadUrl(isPluralDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 26) {
-                    String LingoHelpPrepositionUrl= "https://lingohelp.me/q/?w="+searchKeyword;
-                    webViewBrowser.loadUrl(LingoHelpPrepositionUrl);
+                    String lingoHelpPrepositionUrl= "https://lingohelp.me/q/?w="+searchKeyword;
+                    webViewBrowser.loadUrl(lingoHelpPrepositionUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 27) {
-                    String WordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
-                    webViewBrowser.loadUrl(WordWebUrl);
+                    String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                    webViewBrowser.loadUrl(wordWebUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -2647,20 +2657,80 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 7) {
+                    String kotonohaJapaneseCorpusUrl= "http://www.kotonoha.gr.jp/shonagon/search_form";
+                    webViewBrowser.loadUrl(kotonohaJapaneseCorpusUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 8) {
+                    String tatoebaUrl= "https://tatoeba.org/eng/sentences/search?query=%3D\"" + searchKeyword + "\"&from=und&to=none&user=&orphans=no&unapproved=no&has_audio=&tags=&list=&native=&trans_filter=limit&trans_to=und&trans_link=&trans_user=&trans_orphan=&trans_unapproved=&trans_has_audio=&sort=relevance&sort_reverse=";
+                    webViewBrowser.loadUrl(tatoebaUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 9) {
                     String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
                     webViewBrowser.loadUrl(yomikatawaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 8) {
+                }else if (position == 10) {
                     String ChigaihaUrl= "https://cse.google.co.jp/cse?cx=partner-pub-1137871985589263%3A3025760782&ie=UTF-8&q="+searchKeyword;
                     webViewBrowser.loadUrl(ChigaihaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 9) {
+                }else if (position == 11) {
                     String suzukikunUrl= "http://www.gavo.t.u-tokyo.ac.jp/ojad/search/index/sortprefix:accent/narabi1:kata_asc/narabi2:accent_asc/narabi3:mola_asc/yure:visible/curve:invisible/details:invisible/limit:20/word:"+searchKeyword;
                     webViewBrowser.loadUrl(suzukikunUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 12) {
+                    String learnWithKakUrl= "https://www.learnwithkak.com/?s="+searchKeyword;
+                    webViewBrowser.loadUrl(learnWithKakUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 13) {
+                    String homeOfEnglishUrl= "https://cse.google.com.tw/cse?cx=partner-pub-2581231837251838:8766161994&ie=UTF-8&q=" +searchKeyword + "&ref=";
+                    webViewBrowser.loadUrl(homeOfEnglishUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 14) {
+                    String bbcLearningEnglishUrl= "https://elt.rti.org.tw/?s=" +searchKeyword;
+                    webViewBrowser.loadUrl(bbcLearningEnglishUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 15) {
+                    String voiceOfAmericaUrl= "https://www.voachinese.com/s?k=" + searchKeyword + "&tab=all&pi=1&r=any&pp=10";
+                    webViewBrowser.loadUrl(voiceOfAmericaUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 16) {
+                    String teacherSammyUrl= "https://www.google.com.tw/search?client=chrome&ei=V1oXXpr3JofY0gTApKWICA&q=" + searchKeyword + "+site%3Ablogs.teachersammy.com&oq=" + searchKeyword + "+site%3Ablogs.teachersammy.com&gs_l=psy-ab.12...375586.375896..377504...0.0..0.46.162.4......0....1..gws-wiz.5Ti7HhS0HMM&ved=0ahUKEwja_o6y_fbmAhUHrJQKHUBSCYEQ4dUDCAo";
+                    webViewBrowser.loadUrl(teacherSammyUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 17) {
+                    String michaelChuganiUrl= "https://www.google.com.tw/search?client=chrome&ei=QFwXXvmxNqGvmAXw86SYAg&q=" + searchKeyword + "+site%3Ahd.stheadline.com%2Fnews%2Fcolumns%2F126%2F&oq=" + searchKeyword + "+site%3Ahd.stheadline.com%2Fnews%2Fcolumns%2F126%2F&gs_l=psy-ab.3...581494.590145..590655...0.0..0.42.186.5......0....2j1..gws-wiz.iK_8eHTvAxM&ved=0ahUKEwj50bSb__bmAhWhF6YKHfA5CSMQ4dUDCAo&uact=5";
+                    webViewBrowser.loadUrl(michaelChuganiUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 18) {
+                    String grammaristUrl= "https://www.google.com.tw/search?client=chrome&ei=K2EXXrXbJ4G0mAWxs6K4DQ&q=" + searchKeyword + "+site%3Agrammarist.com&oq=" + searchKeyword + "+site%3Agrammarist.com&gs_l=psy-ab.3...42452.42877..43383...0.0..0.40.192.5......0....2j1..gws-wiz.1BMyHFH7WrY&ved=0ahUKEwj1nNHzg_fmAhUBGqYKHbGZCNcQ4dUDCAo&uact=5";
+                    webViewBrowser.loadUrl(grammaristUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 19) {
+                    String kennyEnglishUrl= "https://www.google.com.tw/search?client=chrome&hs=4qz&ei=jZ0YXvyACcOsmAX26bLYCA&q=" + searchKeyword + "++site%3Ablog.udn.com%2Feuoy789&oq=" + searchKeyword + "++site%3Ablog.udn.com%2Feuoy789&gs_l=psy-ab.3...9983.10536..10934...0.0..0.36.176.5......0....1..gws-wiz.tZEzxZ6ZaDc&ved=0ahUKEwi8-6vQsfnmAhVDFqYKHfa0DIsQ4dUDCAo&uact=5";
+                    webViewBrowser.loadUrl(kennyEnglishUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
