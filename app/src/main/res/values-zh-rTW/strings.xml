@@ -216,4 +216,10 @@
     <string name="Kenny_english">小王子英文</string>
     <string name="Tatoeba">Tatoeba多國語料庫</string>
     <string name="Kotonoha_japanese_corpus">小納言日文語料庫(手動)</string>
+    <string name="Academic_dictionaries_and_encyclopedias">學術與百科字典</string>
+    <string name="Power_thesaurus_synonym">Power Thesaurus同義詞字典</string>
+    <string name="Power_thesaurus_antonym">Power Thesaurus反義詞字典</string>
+    <string name="WWWJDIC_jp_en">WWWJDIC日英字典</string>
+    <string name="WWWJDIC_en_jp">WWWJDIC英日字典</string>
+    <string name="Kanji_recognizer">漢字手寫字典</string>
 </resources>

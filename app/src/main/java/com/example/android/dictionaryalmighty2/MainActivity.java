@@ -574,11 +574,14 @@ public class MainActivity extends AppCompatActivity {
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Slang, R.mipmap.yiym));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.YouGlish, R.mipmap.youglish));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.SCI_Dictionary, R.mipmap.sci_dict));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Academic_dictionaries_and_encyclopedias, R.mipmap.academic_dictionaries));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.TechDico, R.mipmap.tech_dico));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.BioMedical_dictionary, R.mipmap.bio_medical_dictionary));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Is_plural_dictionary, R.mipmap.is_plural_dictionary));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Lingo_help_prepositions, R.mipmap.lingo_help_prepositions));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WordWeb_dictionary, R.mipmap.word_web));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Power_thesaurus_synonym, R.mipmap.power_thesaurus));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Power_thesaurus_antonym, R.mipmap.power_thesaurus));
 
 
         mEnglishDictionarySpinnerItemListSimplified = new ArrayList<>();
@@ -614,6 +617,9 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Jisho, R.mipmap.jisho));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_JP_EN, R.mipmap.cambridge));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_EN_JP, R.mipmap.cambridge));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WWWJDIC_jp_en, R.mipmap.www_jdic));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WWWJDIC_en_jp, R.mipmap.www_jdic));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Kanji_recognizer, R.mipmap.kanji_recognizer));
 
 
         mJapaneseDictionarySpinnerItemListSimplified = new ArrayList<>();
@@ -622,7 +628,6 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Weblio_CN, R.mipmap.weblio));
         mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.DA_JP_TW_Dictionary, R.mipmap.da));
         mJapaneseDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.DA_TW_JP_Dictionary, R.mipmap.da));
-
 
 
         mGoogleWordSearchSpinnerItemListOriginal = new ArrayList<>();
@@ -1975,32 +1980,50 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 23) {
+                    String academiaDictionaryAndEncyclopediaUrl= "https://en.academic.ru/searchall.php?SWord="+searchKeyword+"&from=xx&to=en&did=&stype=0#";
+                    webViewBrowser.loadUrl(academiaDictionaryAndEncyclopediaUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 24) {
                     String techDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(techDicoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 24) {
+                }else if (position == 25) {
                     String bioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
                     webViewBrowser.loadUrl(bioMedicalDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 25) {
+                }else if (position == 26) {
                     String isPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                     webViewBrowser.loadUrl(isPluralDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 26) {
+                }else if (position == 27) {
                     String lingoHelpPrepositionUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                     webViewBrowser.loadUrl(lingoHelpPrepositionUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 27) {
+                }else if (position == 28) {
                     String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                     webViewBrowser.loadUrl(wordWebUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 29) {
+                    String powerThesaurusSynonymUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
+                    webViewBrowser.loadUrl(powerThesaurusSynonymUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 30) {
+                    String powerThesaurusAntonymsUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
+                    webViewBrowser.loadUrl(powerThesaurusAntonymsUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -2244,6 +2267,24 @@ public class MainActivity extends AppCompatActivity {
                 }else if (position == 22) {
                     String CambridgeENtoJPUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
                     webViewBrowser.loadUrl(CambridgeENtoJPUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 23) {
+                    String wwwjdicJpToEnUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+searchKeyword;
+                    webViewBrowser.loadUrl(wwwjdicJpToEnUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 24) {
+                    String wwwjdicEnToJaUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+searchKeyword;
+                    webViewBrowser.loadUrl(wwwjdicEnToJaUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 25) {
+                    String kanjiRecognizerUrl= "https://kanji.sljfaq.org/draw-canvas.html";
+                    webViewBrowser.loadUrl(kanjiRecognizerUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
