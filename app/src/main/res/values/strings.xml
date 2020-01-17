@@ -404,6 +404,7 @@
     <string name="WWWJDIC_jp_en">WWWJDIC JP to EN</string>
     <string name="WWWJDIC_en_jp">WWWJDIC EN to JP</string>
     <string name="Kanji_recognizer">Kanji Recognizer</string>
+    <string name="Britannica_encyclopedia">Britannica Encyclopedia</string>
 
 
 </resources>

@@ -134,7 +134,7 @@
     <string name="Google_translate_to_KR">Google譯成韓文</string>
     <string name="Google_translate_to_SP">Google譯成西文</string>
     <string name="Wikipedia_TW">中文維基百科</string>
-    <string name="English_Encyclopedia">大英百科全書</string>
+    <string name="English_Encyclopedia">英文百科</string>
     <string name="Call_google_translate_app">呼叫「Google翻譯」App</string>
     <string name="Must_get_GoogleTranslate_app">您必須先安裝第三方的「Google翻譯」App才能使用此功能，請按上方的安裝鈕</string>
     <string name="Call_microsoft_translator_app_ocr_recognition">呼叫「微軟翻譯」App</string>
@@ -222,4 +222,5 @@
     <string name="WWWJDIC_jp_en">WWWJDIC日英字典</string>
     <string name="WWWJDIC_en_jp">WWWJDIC英日字典</string>
     <string name="Kanji_recognizer">漢字手寫字典</string>
+    <string name="Britannica_encyclopedia">大英百科全書</string>
 </resources>
