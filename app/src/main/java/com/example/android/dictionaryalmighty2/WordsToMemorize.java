@@ -7,11 +7,14 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,14 +39,16 @@ public class WordsToMemorize extends AppCompatActivity {
     Button aboutMemorizingWordsButton;
     String selectedMyVocabularyListviewItemValue;
 
+    EditText wordsToMemorizeSearchBox;
+
+    ListView myVocabularyListview;
+    ArrayAdapter myVocabularyArrayAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.words_to_memorize);
-
-        final ListView myVocabularyListview;
-        final ArrayAdapter myVocabularyArrayAdapter;
 
 
         /**
@@ -59,11 +64,33 @@ public class WordsToMemorize extends AppCompatActivity {
         myVocabularyListview = findViewById(R.id.my_vocabulary_listview);
         clearMyVocabularyList = findViewById(R.id.clear_my_vocabulary_list_button);
         aboutMemorizingWordsButton = findViewById(R.id.about_memorizing_words_button);
+        wordsToMemorizeSearchBox = findViewById(R.id.words_to_memorize_search_box);
 
 
         //Initialize the adapter
         myVocabularyArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myVocabularyArrayList);
         myVocabularyListview.setAdapter(myVocabularyArrayAdapter);
+
+
+
+        /**
+         * 讓用戶搜尋列表
+         */
+        wordsToMemorizeSearchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                (WordsToMemorize.this).myVocabularyArrayAdapter.getFilter().filter(charSequence);
+
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
 
 
@@ -74,18 +101,47 @@ public class WordsToMemorize extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                myVocabularyArrayList.clear();
-                myVocabularyArrayAdapter.notifyDataSetChanged();
+                //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(WordsToMemorize.this);
+                doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
 
-                //將搜尋紀錄的列表存到SharedPreferences
-                SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
-                editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
-                for (int i = 0; i < myVocabularyArrayList.size(); i++) {
-                    editor.putString("myVocabularyArrayListItem_" + i, myVocabularyArrayList.get(i));
-                }
-                editor.apply();
+                //AlertDialog的確定鈕，清除列表
+                doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
 
-                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        myVocabularyArrayList.clear();
+                        myVocabularyArrayAdapter.notifyDataSetChanged();
+
+                        //將搜尋紀錄的列表存到SharedPreferences
+                        SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
+                        editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
+                        for (int i = 0; i < myVocabularyArrayList.size(); i++) {
+                            editor.putString("myVocabularyArrayListItem_" + i, myVocabularyArrayList.get(i));
+                        }
+                        editor.apply();
+
+                        Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
+                //AlertDialog的取消鈕
+                doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                //把AlertDialog顯示出來
+                doYouReallyWantToClearListAlertDialog.create().show();
+
             }
 
         });

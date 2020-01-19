@@ -1079,14 +1079,15 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0){
                     return;
 
-                } else if (position == 1) {
+                } else if (position == 1) {  //更換背景圖
+
                     changeBackgroundButtonIsPressed="yes";
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
                     startActivityForResult(intent, PHOTOALBUM);
 
-                } else if (position == 2) {
-                    // 恢復成預設的背景圖
+                } else if (position == 2) {  // 恢復成預設的背景圖
+
                     Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
                     m_phone_for_background = defaultBackgroundBmp;
                     //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
@@ -1103,10 +1104,38 @@ public class MainActivity extends AppCompatActivity {
                     recreate(); //重新生成頁面
                     Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
 
-                } else if (position == 3) {
-                    userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
-                    saveUserInputArrayListToSharedPreferences ();
-                    Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+                } else if (position == 3) {  //清除搜尋紀錄
+
+                    //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                    AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                    doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                    doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+
+                    //AlertDialog的確定鈕，清除列表
+                    doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                            saveUserInputArrayListToSharedPreferences ();
+                            Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+                    //AlertDialog的取消鈕
+                    doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    //把AlertDialog顯示出來
+                    doYouReallyWantToClearListAlertDialog.create().show();
 
                 } else if (position == 4) {
 
@@ -1165,14 +1194,15 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0){
                     return;
 
-                } else if (position == 1) {
+                } else if (position == 1) {  //更換背景圖
+
                     changeBackgroundButtonIsPressed="yes";
                     Intent intent = new Intent(Intent.ACTION_PICK, null);
                     intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
                     startActivityForResult(intent, PHOTOALBUM);
 
-                } else if (position == 2) {
-                    // 恢復成預設的背景圖
+                } else if (position == 2) {  // 恢復成預設的背景圖
+
                     Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
                     m_phone_for_background = defaultBackgroundBmp;
                     //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
@@ -1193,10 +1223,38 @@ public class MainActivity extends AppCompatActivity {
 
                     setDefaultDictionariesSimplified();  //設置簡易版預設字典
 
-                } else if (position == 4) {
-                    userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
-                    saveUserInputArrayListToSharedPreferences ();
-                    Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+                } else if (position == 4) {  //清除搜尋紀錄
+
+                    //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                    AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                    doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                    doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                    doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+
+                    //AlertDialog的確定鈕，清除列表
+                    doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                            saveUserInputArrayListToSharedPreferences ();
+                            Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+                    //AlertDialog的取消鈕
+                    doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    //把AlertDialog顯示出來
+                    doYouReallyWantToClearListAlertDialog.create().show();
 
                 }
 

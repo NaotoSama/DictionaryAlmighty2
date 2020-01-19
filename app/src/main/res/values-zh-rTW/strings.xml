@@ -145,7 +145,7 @@
     <string name="TechDico">TechDico技術用語辭典</string>
     <string name="BioMedical_dictionary">生物醫藥大辭典</string>
     <string name="Change_background">更換背景圖</string>
-    <string name="Clear_search_input">清除搜尋紀錄 (慎用！)</string>
+    <string name="Clear_search_input">清除搜尋紀錄</string>
     <string name="Linguee_CH_EN">Linguee中英例句</string>
     <string name="Linguee_JP_EN">Linguee日英例句</string>
     <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
@@ -189,12 +189,12 @@
     <string name="Words_to_memorize">我的單字記憶庫</string>
     <string name="blank_space">發送提醒</string>
     <string name="You_can_cancel_the_notifications_any_time">您可隨時取消提醒</string>
-    <string name="Will_send_the_notification_after_an_hour_halfDay_day_week_month_year">將在經過1小時、半天、一天、一周、一個月以及一年時發送提醒</string>
+    <string name="Will_send_the_notifications_on_8_preset_timings">將在預設的8個時間點依序發送提醒</string>
     <string name="Will_send_the_notification_at">將在</string>
     <string name="Go_to_words_to_memorize_page">前往我的單字記憶庫</string>
     <string name="Do_you_remember_this_word">記得這個字嗎：</string>
     <string name="Do_you_want_to">您想要：</string>
-    <string name="Clear_my_vocabulary_list_button">清空我的記憶庫列表 (慎用！)</string>
+    <string name="Clear_my_vocabulary_list_button">清空我的記憶庫列表</string>
     <string name="Memorize_this_word">記憶單字</string>
     <string name="Choose_customized_or_predefined_notification_timings">選擇回憶單字的時機點</string>
     <string name="Send_to_WordInputView">查此單字</string>
@@ -223,4 +223,17 @@
     <string name="WWWJDIC_en_jp">WWWJDIC英日字典</string>
     <string name="Kanji_recognizer">漢字手寫字典</string>
     <string name="Britannica_encyclopedia">大英百科全書</string>
+    <string name="Search_text_here">搜尋文字...</string>
+    <string name="Choose_one_preset_timing">選擇一個預設時機點(慎選!選完若反悔須自行在手機日曆中手動刪除通知)</string>
+    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(一鍵打包設定) 1小時,半天,1天,2天,1週,1個月,半年,1年後</string>
+    <string name="In_1_hour">1小時後</string>
+    <string name="In_half_a_day">半天後</string>
+    <string name="In_2_days">2天後</string>
+    <string name="In_1_week">1週後</string>
+    <string name="In_1_month">1個月後</string>
+    <string name="In_6_months">半年後</string>
+    <string name="In_1_year">1年後</string>
+    <string name="In_1_day">1天後</string>
+    <string name="Do_you_really_want_to_clear_the_list">確定清除列表？</string>
 </resources>
+

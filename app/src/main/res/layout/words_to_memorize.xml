@@ -17,19 +17,26 @@
         android:textStyle="bold" />
 
 
+    <EditText
+        android:id="@+id/words_to_memorize_search_box"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/Search_text_here"/>
+
+
     <ListView
         android:id="@+id/my_vocabulary_listview"
         android:layout_width="match_parent"
-        android:layout_height="460dp" />
+        android:layout_height="440dp" />
 
 
     <Button
         android:id="@+id/clear_my_vocabulary_list_button"
-        android:layout_width="252dp"
+        android:layout_width="199dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:layout_gravity="center|bottom"
         android:background="@color/red"
         android:text="@string/Clear_my_vocabulary_list_button"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -37,7 +44,7 @@
 
     <Button
         android:id="@+id/about_memorizing_words_button"
-        android:layout_width="252dp"
+        android:layout_width="197dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:layout_marginTop="16dp"

@@ -29,14 +29,14 @@
         <item>@string/Call_Yomiwa_app</item>
 
 
-                                                        <!--以下功能廢除不使用了
-                                                        <item>@string/Google_optical_recognition</item>
-                                                        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>
-                                                        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>
-                                                        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>
-                                                        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>
-                                                        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>
-                                                        -->
+        <!--以下功能廢除不使用了
+        <item>@string/Google_optical_recognition</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>
+        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>
+        -->
 
     </string-array>
 
@@ -172,6 +172,20 @@
         <item>@string/Google_translate_to_CHTW</item>
         <item>@string/Google_translate_to_CHCN</item>
         <item>@string/Google_Image</item>
+
+    </string-array>
+
+
+    <string-array name="preset_notification_timings">
+        <item>@string/In_an_hour_halfDay_1day_2days_week_month_6months_year</item>
+        <item>@string/In_1_hour</item>
+        <item>@string/In_half_a_day</item>
+        <item>@string/In_1_day</item>
+        <item>@string/In_2_days</item>
+        <item>@string/In_1_week</item>
+        <item>@string/In_1_month</item>
+        <item>@string/In_6_months</item>
+        <item>@string/In_1_year</item>
 
     </string-array>
 
@@ -372,7 +386,7 @@
     <string name="Will_send_the_notification_at">Will send the notification(s) at</string>
     <string name="blank_space"></string>
     <string name="You_can_cancel_the_notifications_any_time">You can cancel the notification(s) any time</string>
-    <string name="Will_send_the_notification_after_an_hour_halfDay_day_week_month_year">Will send the notification(s) after an hour / half a day / day / week / month / year</string>
+    <string name="Will_send_the_notifications_on_8_preset_timings">Will send the notifications on the 8 preset timings sequentially</string>
     <string name="Go_to_words_to_memorize_page">Go to \"Words to Memorize\" page</string>
     <string name="Do_you_remember_this_word">Do you remember this word</string>
     <string name="Do_you_want_to">Do you want to:</string>
@@ -405,6 +419,19 @@
     <string name="WWWJDIC_en_jp">WWWJDIC EN to JP</string>
     <string name="Kanji_recognizer">Kanji Recognizer</string>
     <string name="Britannica_encyclopedia">Britannica Encyclopedia</string>
+    <string name="Search_text_here">Search text here...</string>
+    <string name="Choose_one_preset_timing">Choose one preset timing (Use with caution! To cancel a notitification will require the user to manually delete it on the phone\'s calendar.)</string>
+    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">In 1Hr, half a day, 1 day, 2 days, 1 week, 1 month, 6 months, 1 year sequentially (Package Timings)</string>
+    <string name="In_1_hour">In1 hour</string>
+    <string name="In_half_a_day">In half a day</string>
+    <string name="In_2_days">In 2 days</string>
+    <string name="In_1_week">In 1 week</string>
+    <string name="In_1_month">In 1 month</string>
+    <string name="In_6_months">In 6 months</string>
+    <string name="In_1_year">In a year</string>
+    <string name="In_1_day">In a day</string>
+    <string name="Do_you_really_want_to_clear_the_list">Do you really want to clear the list?</string>
 
 
 </resources>
+

@@ -14,12 +14,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,9 +50,15 @@ public class UserInputHistory extends AppCompatActivity {
     androidx.appcompat.app.ActionBar actionBar;
 
     static String selectedListviewItemValue;
+    String[] presetNotificationTimingsList;
+
+    ListView userInputListview;
+    ArrayAdapter userInputArrayAdapter;
 
     Button clearUserInputList;
     Button goToWordsToMemorizePageButton;
+
+    EditText userInputHistorySearchBox;
 
     Calendar c;
 
@@ -60,14 +69,14 @@ public class UserInputHistory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_input_history);
 
-        final ListView userInputListview;
-        final ArrayAdapter userInputArrayAdapter;
+
 
 
         //findViewById
         goToWordsToMemorizePageButton = findViewById(R.id.go_to_words_to_memorize_page);
         userInputListview = findViewById(R.id.user_input_listview);
         clearUserInputList = findViewById(R.id.clear_user_input_list);
+        userInputHistorySearchBox = findViewById(R.id.user_input_history_search_box);
 
         //Initialize the adapter
         userInputArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userInputArraylist);
@@ -95,6 +104,28 @@ public class UserInputHistory extends AppCompatActivity {
         });
 
 
+
+        /**
+         * 讓用戶搜尋列表
+         */
+        userInputHistorySearchBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                (UserInputHistory.this).userInputArrayAdapter.getFilter().filter(charSequence);
+
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+
         /**
          * 讓用戶清空列表
          */
@@ -102,18 +133,47 @@ public class UserInputHistory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                userInputArraylist.clear();
-                userInputArrayAdapter.notifyDataSetChanged();
+                //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
+                doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
 
-                //將搜尋紀錄的列表存到SharedPreferences
-                SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
-                editor.putInt("userInputArrayListValues", userInputArraylist.size());
-                for (int i = 0; i < userInputArraylist.size(); i++) {
-                    editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
-                }
-                editor.apply();
+                //AlertDialog的確定鈕，清除列表
+                doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
 
-                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        userInputArraylist.clear();
+                        userInputArrayAdapter.notifyDataSetChanged();
+
+                        //將搜尋紀錄的列表存到SharedPreferences
+                        SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
+                        editor.putInt("userInputArrayListValues", userInputArraylist.size());
+                        for (int i = 0; i < userInputArraylist.size(); i++) {
+                            editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
+                        }
+                        editor.apply();
+
+                        Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+
+                //AlertDialog的取消鈕
+                doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                //把AlertDialog顯示出來
+                doYouReallyWantToClearListAlertDialog.create().show();
+
             }
 
         });
@@ -179,14 +239,77 @@ public class UserInputHistory extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                setPreDefinedNotificationTimings1Hour();
-                                setPreDefinedNotificationTimings9Hours();
-                                setPreDefinedNotificationTimings1Day();
-                                setPreDefinedNotificationTimings2Days();
-                                setPreDefinedNotificationTimings6Days();
-                                setPreDefinedNotificationTimings1Month();
-                                setPreDefinedNotificationTimingsHalfYear();
-                                setPreDefinedNotificationTimingsOneYear();
+                                //這邊設置第三層AlertDialog讓用戶選擇個種預設通知的時機點
+                                presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
+
+                                AlertDialog.Builder choosePresetNotificationTimingsAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
+                                choosePresetNotificationTimingsAlertDialog.setTitle(getString(R.string.Choose_one_preset_timing));
+                                choosePresetNotificationTimingsAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+
+                                choosePresetNotificationTimingsAlertDialog.setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
+                                        switch (position) {
+                                            case 0:
+                                                setPreDefinedNotificationTimings1Hour();
+                                                setPreDefinedNotificationTimings9Hours();
+                                                setPreDefinedNotificationTimings1Day();
+                                                setPreDefinedNotificationTimings2Days();
+                                                setPreDefinedNotificationTimings6Days();
+                                                setPreDefinedNotificationTimings1Month();
+                                                setPreDefinedNotificationTimingsHalfYear();
+                                                setPreDefinedNotificationTimingsOneYear();
+                                                //點擊子項目後讓第三層的AlertDialog消失
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 1:
+                                                setPreDefinedNotificationTimings1Hour();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 2:
+                                                setPreDefinedNotificationTimings9Hours();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 3:
+                                                setPreDefinedNotificationTimings1Day();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 4:
+                                                setPreDefinedNotificationTimings2Days();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 5:
+                                                setPreDefinedNotificationTimings6Days();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 6:
+                                                setPreDefinedNotificationTimings1Month();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 7:
+                                                setPreDefinedNotificationTimingsHalfYear();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                            case 8:
+                                                setPreDefinedNotificationTimingsOneYear();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                break;
+                                        }
+
+                                    }
+                                });
+
+                                //第三層AlertDialog的取消鈕
+                                choosePresetNotificationTimingsAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                                //把第三層的AlertDialog顯示出來
+                                choosePresetNotificationTimingsAlertDialog.create().show();
 
                             }
                         });
@@ -444,57 +567,57 @@ public class UserInputHistory extends AppCompatActivity {
     // 設置預設通知時機的Helper Method
     //==============================================================================================
 
-//    實驗用
-//    public void setPreDefinedNotificationTimings1Minute() {
-//
-//        //設置單字的通知事件
-//        ContentResolver cr = getContentResolver();
-//        ContentValues values = new ContentValues();
-//        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
-//        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*1*1000+60*60*1000);
-//        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
-//        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
-//        values.put(CalendarContract.Events.ALL_DAY, false);
-//        values.put(CalendarContract.Events.CALENDAR_ID, 3);
-//        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-//
-//        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-//        assert uri != null;
-//        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
-//
-//        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-//        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-//
-//    }
-//
-//    public void setPreDefinedNotificationTimings2Minutes() {
-//
-//        //設置單字的通知事件
-//        ContentResolver cr = getContentResolver();
-//        ContentValues values = new ContentValues();
-//        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
-//        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*2*1000+60*60*1000);
-//        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
-//        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
-//        values.put(CalendarContract.Events.ALL_DAY, false);
-//        values.put(CalendarContract.Events.CALENDAR_ID, 3);
-//        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-//
-//        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-//        assert uri != null;
-//        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
-//
-//        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-//        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-//
-//    }
+    //    實驗用
+    //    public void setPreDefinedNotificationTimings1Minute() {
+    //
+    //        //設置單字的通知事件
+    //        ContentResolver cr = getContentResolver();
+    //        ContentValues values = new ContentValues();
+    //        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
+    //        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*1*1000+60*60*1000);
+    //        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
+    //        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+    //        values.put(CalendarContract.Events.ALL_DAY, false);
+    //        values.put(CalendarContract.Events.CALENDAR_ID, 3);
+    //        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+    //
+    //        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+    //        assert uri != null;
+    //        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+    //
+    //        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+    //        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+    //
+    //    }
+    //
+    //    public void setPreDefinedNotificationTimings2Minutes() {
+    //
+    //        //設置單字的通知事件
+    //        ContentResolver cr = getContentResolver();
+    //        ContentValues values = new ContentValues();
+    //        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
+    //        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*2*1000+60*60*1000);
+    //        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
+    //        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+    //        values.put(CalendarContract.Events.ALL_DAY, false);
+    //        values.put(CalendarContract.Events.CALENDAR_ID, 3);
+    //        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+    //
+    //        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+    //        assert uri != null;
+    //        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+    //
+    //        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+    //        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+    //
+    //    }
 
     public void setPreDefinedNotificationTimings1Hour() {
 
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues event = new ContentValues();
-        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*1.5*1000);  //抓現在系統的時間的1小時後開始 (寫1.5是因為系統預設半小時前發布提醒)
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+ 60*60*1000);  //抓現在系統的時間的1小時後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*1000+60*60*1000);
         event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
@@ -512,7 +635,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_hour) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -540,7 +663,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_half_a_day) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -568,7 +691,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_day) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -596,7 +719,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_2_days) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -624,7 +747,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_week) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -655,7 +778,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_month) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -686,7 +809,7 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_6_months) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
@@ -717,36 +840,36 @@ public class UserInputHistory extends AppCompatActivity {
         reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
-        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_year) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
         //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
 
-                                                                    //將字母轉換成數字  A-Z ：1-26
-                                                                    //    public long convertStringToLong() {
-                                                                    //        int length = selectedListviewItemValue.length();
-                                                                    //        int num = 0;
-                                                                    //        int number = 0;
-                                                                    //        for(int i = 0; i < length; i++) {
-                                                                    //            char ch = selectedListviewItemValue.charAt(length - i - 1);
-                                                                    //            num = ch - 'A' + 1;
-                                                                    //            num *= Math.pow(26, i);
-                                                                    //            number += num;
-                                                                    //        }
-                                                                    //        return eventID = (long) number;
-                                                                    //    }
-                                                                    //
-                                                                    //
-                                                                    //    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-                                                                    //    void deleteEventById() {
-                                                                    //        ContentResolver cr = getApplicationContext().getContentResolver();
-                                                                    //        ContentValues values = new ContentValues();
-                                                                    //        Uri deleteUri;
-                                                                    //        deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-                                                                    //        int rows = getApplicationContext().getContentResolver().delete(deleteUri, null, null);
-                                                                    //        Log.i("TAG", "Rows deleted: " + rows);
-                                                                    //    }
+    //將字母轉換成數字  A-Z ：1-26
+    //    public long convertStringToLong() {
+    //        int length = selectedListviewItemValue.length();
+    //        int num = 0;
+    //        int number = 0;
+    //        for(int i = 0; i < length; i++) {
+    //            char ch = selectedListviewItemValue.charAt(length - i - 1);
+    //            num = ch - 'A' + 1;
+    //            num *= Math.pow(26, i);
+    //            number += num;
+    //        }
+    //        return eventID = (long) number;
+    //    }
+    //
+    //
+    //    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    //    void deleteEventById() {
+    //        ContentResolver cr = getApplicationContext().getContentResolver();
+    //        ContentValues values = new ContentValues();
+    //        Uri deleteUri;
+    //        deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
+    //        int rows = getApplicationContext().getContentResolver().delete(deleteUri, null, null);
+    //        Log.i("TAG", "Rows deleted: " + rows);
+    //    }
 
 
 

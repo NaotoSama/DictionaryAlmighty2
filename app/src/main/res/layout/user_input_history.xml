@@ -15,10 +15,18 @@
         android:textColor="#3F51B5"
         android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/user_input_history_search_box"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/Search_text_here">
+
+    </EditText>
+
     <ListView
         android:id="@+id/user_input_listview"
         android:layout_width="match_parent"
-        android:layout_height="476dp"
+        android:layout_height="447dp"
         android:divider="@android:drawable/divider_horizontal_textfield"
         android:textAlignment="center">
 
