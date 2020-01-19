@@ -1066,9 +1066,9 @@ public class MainActivity extends AppCompatActivity {
         otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> OtherFunctionsSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Other_functions_spinner_array_original, android.R.layout.simple_spinner_item);
+                R.array.Other_functions_spinner_array_original, R.layout.customized_spinner_item);
         // Specify the layout to use when the list of choices appears
-        OtherFunctionsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        OtherFunctionsSpinnerAdapter.setDropDownViewResource(R.layout.customized_spinner_item);
         // Apply the adapter to the spinner
         otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
 
@@ -1181,9 +1181,9 @@ public class MainActivity extends AppCompatActivity {
         final Spinner otherFunctionsSpinner = findViewById(R.id.Other_functions_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> OtherFunctionsSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Other_functions_spinner_array_simplified, android.R.layout.simple_spinner_item);
+                R.array.Other_functions_spinner_array_simplified, R.layout.customized_spinner_item);
         // Specify the layout to use when the list of choices appears
-        OtherFunctionsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        OtherFunctionsSpinnerAdapter.setDropDownViewResource(R.layout.customized_spinner_item);
         // Apply the adapter to the spinner
         otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
 
@@ -1283,9 +1283,9 @@ public class MainActivity extends AppCompatActivity {
         SpeechRecognitionSpinner = findViewById(R.id.Speech_recognition_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> SpeechRecognitionAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Speech_recognition_spinner_array_original, android.R.layout.simple_spinner_item);
+                R.array.Speech_recognition_spinner_array_original, R.layout.customized_spinner_item);
         // Specify the layout to use when the list of choices appears
-        SpeechRecognitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpeechRecognitionAdapter.setDropDownViewResource(R.layout.customized_spinner_item);
         // Apply the adapter to the spinner
         SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
 
@@ -1563,9 +1563,9 @@ public class MainActivity extends AppCompatActivity {
         final Spinner SpeechRecognitionSpinner = findViewById(R.id.Speech_recognition_spinner);
         // Create an ArrayAdapter using the string array and a default spinner layout
         final ArrayAdapter<CharSequence> SpeechRecognitionAdapter = ArrayAdapter.createFromResource(this,
-                R.array.Speech_recognition_spinner_array_simplified, android.R.layout.simple_spinner_item);
+                R.array.Speech_recognition_spinner_array_simplified, R.layout.customized_spinner_item);
         // Specify the layout to use when the list of choices appears
-        SpeechRecognitionAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        SpeechRecognitionAdapter.setDropDownViewResource(R.layout.customized_spinner_item);
         // Apply the adapter to the spinner
         SpeechRecognitionSpinner.setAdapter(SpeechRecognitionAdapter);
 
