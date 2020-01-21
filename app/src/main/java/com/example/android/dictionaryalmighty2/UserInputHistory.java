@@ -50,7 +50,7 @@ public class UserInputHistory extends AppCompatActivity {
     androidx.appcompat.app.ActionBar actionBar;
 
     static String selectedListviewItemValue;
-    String[] presetNotificationTimingsList;
+    static String[] presetNotificationTimingsList;
 
     ListView userInputListview;
     ArrayAdapter userInputArrayAdapter;
@@ -239,9 +239,9 @@ public class UserInputHistory extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                //這邊設置第三層AlertDialog讓用戶選擇個種預設通知的時機點
                                 presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
 
+                                //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
                                 AlertDialog.Builder choosePresetNotificationTimingsAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
                                 choosePresetNotificationTimingsAlertDialog.setTitle(getString(R.string.Choose_one_preset_timing));
                                 choosePresetNotificationTimingsAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
@@ -261,6 +261,7 @@ public class UserInputHistory extends AppCompatActivity {
                                                 setPreDefinedNotificationTimingsOneYear();
                                                 //點擊子項目後讓第三層的AlertDialog消失
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
                                                 break;
                                             case 1:
                                                 setPreDefinedNotificationTimings1Hour();

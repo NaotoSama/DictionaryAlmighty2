@@ -1,6 +1,11 @@
 package com.example.android.dictionaryalmighty2;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.Base64;
@@ -28,6 +34,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -36,6 +43,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -59,13 +67,18 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
+
+import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -100,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
     static String defaultComboSearchCodeThirdDictionary; //用以設定第三個預設快搜字典
     String[] defaultDictionaryListOriginal; //專業版自訂預設字典的名單
     String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
+    String[] quickSearchComboSearchOrGoogleTranslateList; //讓用戶選擇快搜模式、三連搜模式或估狗翻譯
     public static final String IMAGE_UNSPECIFIED = "image/*";
     static String intentReceivedText;  //接收其他外部App傳來的文字
     String FriebaseUrl; //接收Firebase傳來的URL
@@ -144,6 +158,8 @@ public class MainActivity extends AppCompatActivity {
     Uri imageForBackground;                                //相簿中的原始圖檔
 
     Bitmap m_phone_for_background;                           // Bitmap圖像
+
+    Calendar c;
 
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
@@ -437,7 +453,7 @@ public class MainActivity extends AppCompatActivity {
                     searchKeyword = intentReceivedText;
                     wordInputView.setText(searchKeyword); //Set the text to the search box in MainActivity
 
-                    setChooseQuickSearchOrComboSearchAlertDialog();
+                    chooseActionAlertDialog();
 
                     saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
                     saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
@@ -527,6 +543,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         checkForDynamicLinks();
+
+
+        c = Calendar.getInstance(); // 順便取得目前日期與時間，設置單字記憶通知要用的
     }
 
 
@@ -5088,49 +5107,514 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void setChooseQuickSearchOrComboSearchAlertDialog() {
-        //這邊設置AlertDialog讓用戶選擇快搜模式或三連搜模式，或估狗翻譯
-        AlertDialog.Builder chooseQuickSearchOrComboSearchAlertDialog = new AlertDialog.Builder(this);
-        chooseQuickSearchOrComboSearchAlertDialog.setTitle(getString(R.string.Do_you_want_to));
-        chooseQuickSearchOrComboSearchAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
-        chooseQuickSearchOrComboSearchAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+    public void chooseActionAlertDialog() {
+        //這邊設置第一層AlertDialog讓用戶選擇要查此單字、快搜模式或三連搜模式、估狗翻譯，或記憶單字
+        AlertDialog.Builder chooseActionAlertDialog = new AlertDialog.Builder(this);
+        chooseActionAlertDialog.setTitle(getString(R.string.Do_you_want_to));
+        chooseActionAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+        chooseActionAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
 
-        //AlertDialog的確定鈕，使用快搜模式
-        chooseQuickSearchOrComboSearchAlertDialog.setPositiveButton(R.string.Quick_lookup, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                defaultSearchButton.performClick();
-            }
-        });
-
-        //AlertDialog的中立鈕，使用三連搜模式
-        chooseQuickSearchOrComboSearchAlertDialog.setNeutralButton(R.string.Combo_search, new DialogInterface.OnClickListener() {
+        //第一層AlertDialog的確定鈕，把單字傳送到wordInputView查此單字
+        chooseActionAlertDialog.setPositiveButton(R.string.Send_to_WordInputView, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                comboSearchButton.performClick();
+                MainActivity.wordInputView.setText(intentReceivedText);
             }
         });
 
-        //AlertDialog的取消鈕，使用估狗翻譯
-        chooseQuickSearchOrComboSearchAlertDialog.setNegativeButton(R.string.Google_translate, new DialogInterface.OnClickListener() {
+        //第一層AlertDialog的中立鈕，記憶單字
+        chooseActionAlertDialog.setNeutralButton(R.string.Memorize_this_word, new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
-                webViewBrowser.loadUrl(intentAutoTranslationURL);
-                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                webViewBrowser.setVisibility(View.VISIBLE);
+                //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
+                final AlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                chooseCustomizedOrPredefinedNotificationAlertDialog.setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings));
+                chooseCustomizedOrPredefinedNotificationAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                chooseCustomizedOrPredefinedNotificationAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+
+
+                //第二層AlertDialog的確定鈕，自定義通知時機
+                chooseCustomizedOrPredefinedNotificationAlertDialog.setPositiveButton(R.string.Customize_timing, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        setCustomizedNotificationTiming();
+
+                    }
+                });
+
+                //第二層AlertDialog的中立鈕，預設的通知時機。
+                chooseCustomizedOrPredefinedNotificationAlertDialog.setNeutralButton(R.string.Use_predefined_timing, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface chooseCustomizedOrPredefinedNotificationAlertDialog, int which) {
+
+                        presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
+
+                        //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
+                        AlertDialog.Builder choosePresetNotificationTimingsAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                        choosePresetNotificationTimingsAlertDialog.setTitle(getString(R.string.Choose_one_preset_timing));
+                        choosePresetNotificationTimingsAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+
+                        choosePresetNotificationTimingsAlertDialog.setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
+                                switch (position) {
+                                    case 0:
+                                        setPreDefinedNotificationTimings1Hour();
+                                        setPreDefinedNotificationTimings9Hours();
+                                        setPreDefinedNotificationTimings1Day();
+                                        setPreDefinedNotificationTimings2Days();
+                                        setPreDefinedNotificationTimings6Days();
+                                        setPreDefinedNotificationTimings1Month();
+                                        setPreDefinedNotificationTimingsHalfYear();
+                                        setPreDefinedNotificationTimingsOneYear();
+                                        //點擊子項目後讓第三層的AlertDialog消失
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
+                                        break;
+                                    case 1:
+                                        setPreDefinedNotificationTimings1Hour();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 2:
+                                        setPreDefinedNotificationTimings9Hours();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 3:
+                                        setPreDefinedNotificationTimings1Day();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 4:
+                                        setPreDefinedNotificationTimings2Days();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 5:
+                                        setPreDefinedNotificationTimings6Days();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 6:
+                                        setPreDefinedNotificationTimings1Month();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 7:
+                                        setPreDefinedNotificationTimingsHalfYear();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                    case 8:
+                                        setPreDefinedNotificationTimingsOneYear();
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+
+                        //第三層AlertDialog的取消鈕
+                        choosePresetNotificationTimingsAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        //把第三層的AlertDialog顯示出來
+                        choosePresetNotificationTimingsAlertDialog.create().show();
+                        //同時讓第二層的AlertDialog消失
+                        chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                    }
+                });
+
+                //第二層AlertDialog的取消鈕
+                chooseCustomizedOrPredefinedNotificationAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                //把第二層的AlertDialog顯示出來
+                chooseCustomizedOrPredefinedNotificationAlertDialog.create().show();
+
+            }
+        });
+
+        //第一層AlertDialog的取消鈕，使用快搜模式、三連搜模式或估狗翻譯
+        chooseActionAlertDialog.setNegativeButton(R.string.Quick_search_or_combo_search, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface chooseActionAlertDialog, int which) {
+
+                //這邊設置第二層AlertDialog讓用戶選擇快搜模式、三連搜模式或估狗翻譯
+                quickSearchComboSearchOrGoogleTranslateList = getResources().getStringArray(R.array.quick_search_combo_search_or_google_translate);
+
+                AlertDialog.Builder chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setTitle(getString(R.string.Do_you_want_to));
+                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+
+                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setSingleChoiceItems(quickSearchComboSearchOrGoogleTranslateList, -1, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog, int position) {
+                        switch (position) {
+                            case 0:  //快搜
+                                defaultSearchButton.performClick();
+                                //點擊子項目後讓第三層的AlertDialog消失
+                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                break;
+                            case 1:  //三連搜
+                                comboSearchButton.performClick();
+                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                break;
+                            case 2:  //Google翻譯
+                                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
+                                webViewBrowser.loadUrl(intentAutoTranslationURL);
+                                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                                webViewBrowser.setVisibility(View.VISIBLE);
+                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                break;
+                        }
+                    }
+                });
+
+                //把第二層的AlertDialog顯示出來
+                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.create().show();
+                //同時讓第一層的AlertDialog消失
+                chooseActionAlertDialog.dismiss();
+
             }
         });
 
 
-        //將AlertDialog顯示出來
-        chooseQuickSearchOrComboSearchAlertDialog.create().show();
+        //將第一層的AlertDialog顯示出來
+        chooseActionAlertDialog.create().show();
+
+    }
+
+
+
+    //==============================================================================================
+    // 設置自定義通知時機的Helper Method
+    //==============================================================================================
+    public void setCustomizedNotificationTiming() {
+
+        // on Time
+        new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        c.set(Calendar.MINUTE, minute);
+
+                        long nowMillis = System.currentTimeMillis();  //抓現在系統的時間
+                        long millis = c.getTimeInMillis() - nowMillis; //用戶預定時間 減掉 現在系統時間 的差等於 送出通知的延遲時間
+
+                        if (c.before(Calendar.getInstance())) {        //若用戶設定成過去的時間則不給設定
+                            Toast.makeText(getApplicationContext(), getString(R.string.Hey_thats_too_early),Toast.LENGTH_LONG).show();
+
+                        } else {                                       //若用戶設定成未來的時間則排程發送通知
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.TAIWAN);
+                            Long scheduledDateInMilliSeconds=c.getTimeInMillis();
+                            String FormattedScheduledDate = dateFormat.format(scheduledDateInMilliSeconds);
+                            Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + FormattedScheduledDate + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+
+
+                            //設置單字的通知事件
+                            ContentResolver cr = getContentResolver();
+                            ContentValues event = new ContentValues();
+                            event.put(CalendarContract.Events.DTSTART, c.getTimeInMillis());
+                            event.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
+                            event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+                            event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+                            event.put(CalendarContract.Events.ALL_DAY, false);
+                            event.put(CalendarContract.Events.CALENDAR_ID, 3);
+                            event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+
+                            // get the event ID that is the last element in the Uri
+                            Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+                            assert newEvent != null;
+                            Long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+                            //
+                            // ... do something with event ID
+                            //
+                            //
+
+                            ContentValues reminder = new ContentValues();
+                            reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+                            reminder.put(CalendarContract.Reminders.MINUTES, 0);
+                            reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+                            Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+                        }
+
+                    }
+                },
+                c.get(Calendar.HOUR_OF_DAY),
+                c.get(Calendar.MINUTE),
+                false).show();
+
+        // on Date
+        new DatePickerDialog(this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        c.set(Calendar.YEAR, year);
+                        c.set(Calendar.MONTH, monthOfYear);
+                        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                    }
+                },
+                c.get(Calendar.YEAR),
+                c.get(Calendar.MONTH),
+                c.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
+
+
+    //==============================================================================================
+    // 設置預設通知時機的Helper Method
+    //==============================================================================================
+    public void setPreDefinedNotificationTimings1Hour() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+ 60*60*1000);  //抓現在系統的時間的1小時後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*1000+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_hour) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimings9Hours() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*9*1000);  //抓現在系統的時間的9小時後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*9*1000+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_half_a_day) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimings1Day() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*1000);  //抓現在系統的時間的1天後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*1000+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_day) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimings2Days() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*2*1000);  //抓現在系統的時間的2天後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*2*1000+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_2_days) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimings6Days() {
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*6*1000);  //抓現在系統的時間的6天後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*6*1000+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_week) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimings1Month() {
+
+        //避免發生"Numeric overflow in expression”問題，把integer改成long
+        long oneSecond = 1000; long OneMinute = 60; long OneHour = 60; long oneDay = 24; long oneMonth = 30;
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond);  //抓現在系統的時間的1個月後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_month) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimingsHalfYear() {
+
+        //避免發生"Numeric overflow in expression”問題，把integer改成long
+        long oneSecond = 1000; long OneMinute = 60; long OneHour = 60; long oneDay = 24; long halfYear = 182;
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond);  //抓現在系統的時間的半年後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_6_months) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void setPreDefinedNotificationTimingsOneYear() {
+
+        //避免發生"Numeric overflow in expression”問題，把integer改成long
+        long oneSecond = 1000; long OneMinute = 60; long OneHour = 60; long oneDay = 24; long oneYear = 365;
+
+        //設置單字的通知事件
+        ContentResolver cr = getContentResolver();
+        ContentValues event = new ContentValues();
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond);  //抓現在系統的時間的一年後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
+        event.put(CalendarContract.Events.ALL_DAY, false);
+        event.put(CalendarContract.Events.CALENDAR_ID, 3);
+        event.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+
+        Uri newEvent = cr.insert(CalendarContract.Events.CONTENT_URI, event);
+        assert newEvent != null;
+        long eventID = Long.parseLong(Objects.requireNonNull(newEvent.getLastPathSegment())); // get the event ID that is the last element in the Uri
+
+        ContentValues reminder = new ContentValues();
+        reminder.put(CalendarContract.Reminders.EVENT_ID, ContentUris.parseId(newEvent));
+        reminder.put(CalendarContract.Reminders.MINUTES, 0);
+        reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+        Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_year) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+
     }
 
 
@@ -5177,7 +5661,7 @@ public class MainActivity extends AppCompatActivity {
                 .addOnFailureListener(this, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w("MainActivity", "Oops, we couldn't retrive that dynamic link data.", e);
+                        Log.w("MainActivity", "Oops, we couldn't retrieve that dynamic link data.", e);
                     }
                 });
     }

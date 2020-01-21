@@ -190,6 +190,14 @@
     </string-array>
 
 
+    <string-array name="quick_search_combo_search_or_google_translate">
+        <item>@string/Quick_lookup</item>
+        <item>@string/Combo_search</item>
+        <item>@string/Google_translate</item>
+
+    </string-array>
+
+
 
 
 
@@ -431,6 +439,8 @@
     <string name="In_1_year">In a year</string>
     <string name="In_1_day">In a day</string>
     <string name="Do_you_really_want_to_clear_the_list">Do you really want to clear the list?</string>
+    <string name="Quick_search_or_combo_search">Quick Search or Combo Search</string>
+    <string name="Clear_wordInput_view">Clear search box</string>
 
 
 </resources>

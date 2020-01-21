@@ -235,5 +235,7 @@
     <string name="In_1_year">1年後</string>
     <string name="In_1_day">1天後</string>
     <string name="Do_you_really_want_to_clear_the_list">確定清除列表？</string>
+    <string name="Quick_search_or_combo_search">快搜或三連搜</string>
+    <string name="Clear_wordInput_view">清除搜尋框</string>
 </resources>
 
