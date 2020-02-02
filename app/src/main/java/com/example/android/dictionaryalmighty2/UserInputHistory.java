@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,13 +26,21 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,8 +49,14 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 
+import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchCode;
+import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchPreferences;
+import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
+import static com.example.android.dictionaryalmighty2.MainActivity.mRootReference;
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
 import static com.example.android.dictionaryalmighty2.MainActivity.userInputArraylist;
+import static com.example.android.dictionaryalmighty2.MainActivity.username;
+import static com.example.android.dictionaryalmighty2.MainActivity.usernameSharedPreferences;
 
 public class UserInputHistory extends AppCompatActivity {
 
@@ -52,8 +67,10 @@ public class UserInputHistory extends AppCompatActivity {
     static String selectedListviewItemValue;
     static String[] presetNotificationTimingsList;
 
+    Switch localOrCloudSaveSwitch;
+
     ListView userInputListview;
-    ArrayAdapter userInputArrayAdapter;
+    static ArrayAdapter userInputArrayAdapter;
 
     Button clearUserInputList;
     Button goToWordsToMemorizePageButton;
@@ -70,18 +87,111 @@ public class UserInputHistory extends AppCompatActivity {
         setContentView(R.layout.user_input_history);
 
 
-
-
         //findViewById
         goToWordsToMemorizePageButton = findViewById(R.id.go_to_words_to_memorize_page);
         userInputListview = findViewById(R.id.user_input_listview);
         clearUserInputList = findViewById(R.id.clear_user_input_list);
         userInputHistorySearchBox = findViewById(R.id.user_input_history_search_box);
+        localOrCloudSaveSwitch = findViewById(R.id.local_or_cloud_save_switch);
+
+
+
+        localOrCloudSaveSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    if (localOrCloudSaveSwitch.isChecked()) {         //用isChecked()檢視開關的開啟狀態
+
+                        if (username!=null && !username.equals("")) {  //檢查若用戶有輸入username才執行以下動作
+
+                            //把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
+                            localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                            localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 1).apply();
+
+                            Toast.makeText(getApplicationContext(), getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_SHORT).show();
+
+                            reloadCurrentActivity(); //重新載入當前頁面
+
+                        }
+
+                        else {
+                            Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
+
+                            localOrCloudSaveSwitch.setChecked(false);
+
+                            registerLoginUsername();
+
+                        }
+
+                    } else {
+
+                        //把用戶使用本地端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=0)存入SharedPreferences
+                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                        localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 0).apply();
+
+                        Toast.makeText(getApplicationContext(), getString(R.string.You_are_using_local_storage), Toast.LENGTH_SHORT).show();
+
+                    }
+            }
+        });
+
+
+        //設置App啟動時檢查代碼為本地端存儲或雲端存儲單字紀錄
+        localOrCloudSaveSwitchCode = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE).getInt("CloudSaveMode", 2);
+
+        if (localOrCloudSaveSwitchCode==1) {
+            localOrCloudSaveSwitch.setChecked(true);
+        } else if (localOrCloudSaveSwitchCode==0) {
+            localOrCloudSaveSwitch.setChecked(false);
+        }
+
 
         //Initialize the adapter
         userInputArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userInputArraylist);
         userInputListview.setAdapter(userInputArrayAdapter);
+        mChildReferenceForInputHistory.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildKey) {
 
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String value = snapshot.getValue(String.class);
+
+                    if (localOrCloudSaveSwitchCode==1) {
+                    userInputArraylist.add(value);
+
+                    //透過HashSet自動過濾掉userInputArraylist中重複的字
+                    HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
+                    myVocabularyArraylistHashSet.addAll(userInputArraylist);
+                    userInputArraylist.clear();
+                    userInputArraylist.addAll(myVocabularyArraylistHashSet);
+
+                    //Alphabetic sorting
+                    Collections.sort(userInputArraylist);
+
+                    userInputArrayAdapter.notifyDataSetChanged();
+
+                    } else if (localOrCloudSaveSwitchCode==0) {
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
 
         /**
@@ -361,6 +471,7 @@ public class UserInputHistory extends AppCompatActivity {
                 String selectedListviewItemValue=userInputListview.getItemAtPosition(position).toString();
 
                 myVocabularyArrayList.add(selectedListviewItemValue);
+                mRootReference.child("Users' Vocabulary List").child(username).push().setValue(selectedListviewItemValue);
 
                 //透過HashSet自動過濾掉myVocabularyArraylist中重複的字
                 HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
@@ -415,8 +526,6 @@ public class UserInputHistory extends AppCompatActivity {
                                     Toast.makeText(getApplicationContext(), R.string.Your_selected_item_has_benn_deleted, Toast.LENGTH_SHORT).show();
 
                                 }
-
-
                             }
                         });
         userInputListview.setOnTouchListener(touchListener);
@@ -450,6 +559,33 @@ public class UserInputHistory extends AppCompatActivity {
 
 
 
+//==============================================================================================
+// 所有helper methods
+//==============================================================================================
+
+
+    //==============================================================================================
+    // 重新載入當前頁面的Helper Method
+    //==============================================================================================
+    //Seamlessly reload the current activity without screen blinking
+    public void reloadCurrentActivity() {
+        finish();
+        overridePendingTransition(0, 0);
+        startActivity(getIntent());
+        overridePendingTransition(0, 0);
+    }
+
+
+    //==========================================================================================
+    // 重啟App的helper methods
+    //==========================================================================================
+    public void relaunchApp() {
+        Intent relaunchAppIntent = new Intent(getApplicationContext(), MainActivity.class);
+        ProcessPhoenix.triggerRebirth(getApplicationContext(), relaunchAppIntent);
+        Runtime.getRuntime().exit(0);
+    }
+
+
     //==============================================================================================
     // 設置客製化ActionBar的Helper Method
     //==============================================================================================
@@ -480,6 +616,67 @@ public class UserInputHistory extends AppCompatActivity {
         }
         editor.apply();
 
+    }
+
+
+    //==============================================================================================
+    // Helper method for saving myVocabularyArrayList to SharedPreferences
+    //==============================================================================================
+    public void registerLoginUsername() {
+        //這邊設置AlertDialog讓用戶輸入用戶名稱
+        final AlertDialog.Builder registerLoginRenameDeleteUsernameAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
+        registerLoginRenameDeleteUsernameAlertDialog.setTitle(getString(R.string.Input_a_username));
+        registerLoginRenameDeleteUsernameAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+        final EditText usernameInputView = new EditText(getApplicationContext());
+        registerLoginRenameDeleteUsernameAlertDialog.setView(usernameInputView);
+
+        //AlertDialog的確定鈕，登入用戶名稱
+        registerLoginRenameDeleteUsernameAlertDialog.setPositiveButton(R.string.Register_or_log_in_username, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (username!=null && !username.equals("")) { //若用戶名稱不是空的則提示已經登入了
+
+                    Toast.makeText(getApplicationContext(), R.string.You_are_already_logged_in, Toast.LENGTH_LONG).show();
+
+                }
+
+                else
+                {
+                    String userInputUsername = usernameInputView.getText().toString();
+
+                    if (userInputUsername!=null && !userInputUsername.equals("")) { //檢查用戶確實有輸入名稱時儲存該名稱
+
+                        usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                        usernameSharedPreferences.edit().putString("userName", userInputUsername).apply();
+
+                        //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
+                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                        localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 1).apply();
+
+                        //延遲2.5秒重啟App
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                relaunchApp();
+                            }
+                        };
+                        Handler h =new Handler();
+                        h.postDelayed(r, 2500);
+
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.Logged_in_as) + userInputUsername + " " + getResources().getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_LONG).show();
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+        //把AlertDialog顯示出來
+        registerLoginRenameDeleteUsernameAlertDialog.create().show();
     }
 
 

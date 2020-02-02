@@ -53,4 +53,11 @@
         android:text="@string/Go_to_words_to_memorize_page"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
+    <Switch
+        android:id="@+id/local_or_cloud_save_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/Cloud_save_switch" />
+
 </LinearLayout>

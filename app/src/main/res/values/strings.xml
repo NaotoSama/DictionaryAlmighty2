@@ -6,6 +6,7 @@
         <item>@string/Return_to_default_background_image</item>
         <item>@string/Clear_search_input</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Register_login_rename_username</item>
         <item>@string/Call_Japanese_food_dictionary</item>
 
     </string-array>
@@ -16,6 +17,7 @@
         <item>@string/Change_background</item>
         <item>@string/Return_to_default_background_image</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Register_login_rename_username</item>
         <item>@string/Clear_search_input</item>
 
     </string-array>
@@ -396,7 +398,6 @@
     <string name="You_can_cancel_the_notifications_any_time">You can cancel the notification(s) any time</string>
     <string name="Will_send_the_notifications_on_8_preset_timings">Will send the notifications on the 8 preset timings sequentially</string>
     <string name="Go_to_words_to_memorize_page">Go to \"Words to Memorize\" page</string>
-    <string name="Do_you_remember_this_word">Do you remember this word</string>
     <string name="Do_you_want_to">Do you want to:</string>
     <string name="Clear_my_vocabulary_list_button">Clear my vocabulary list</string>
     <string name="Memorize_this_word">Memorize this word</string>
@@ -441,6 +442,23 @@
     <string name="Do_you_really_want_to_clear_the_list">Do you really want to clear the list?</string>
     <string name="Quick_search_or_combo_search">Quick Search or Combo Search</string>
     <string name="Clear_wordInput_view">Clear search box</string>
+    <string name="Cloud_save_switch">Cloud save switch</string>
+    <string name="Register_login_rename_username">Register/Log in/Rename username</string>
+    <string name="Input_a_username">Input a username (for storing your search history and vocabulary list online)</string>
+    <string name="Register_this_username">Register this username</string>
+    <string name="Register_or_log_in_username">Register/Log in</string>
+    <string name="Delete_username">Delete current username</string>
+    <string name="Username_deleted">Username deleted</string>
+    <string name="Unregistered_user">(Unregistered user)</string>
+    <string name="Logged_in_as">(Logged in as:</string>
+    <string name="Your_new_username_is">Your new username is:</string>
+    <string name="Rename_your_username">Rename your username</string>
+    <string name="You_are_already_logged_in">You are already logged in</string>
+    <string name="You_have_not_entered_any_username">You have not entered any username</string>
+    <string name="You_are_using_cloud_storage">You are using cloud storage</string>
+    <string name="You_are_using_local_storage">You are using local storage</string>
+    <string name="Do_you_remember_this_word">*</string>
+    <string name="This_username_is_already_taken">This username is already taken. Please use another one.</string>
 
 
 </resources>

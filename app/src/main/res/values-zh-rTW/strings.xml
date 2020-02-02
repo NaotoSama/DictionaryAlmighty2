@@ -192,7 +192,6 @@
     <string name="Will_send_the_notifications_on_8_preset_timings">將在預設的8個時間點依序發送提醒</string>
     <string name="Will_send_the_notification_at">將在</string>
     <string name="Go_to_words_to_memorize_page">前往我的單字記憶庫</string>
-    <string name="Do_you_remember_this_word">記得這個字嗎：</string>
     <string name="Do_you_want_to">您想要：</string>
     <string name="Clear_my_vocabulary_list_button">清空我的記憶庫列表</string>
     <string name="Memorize_this_word">記憶單字</string>
@@ -237,5 +236,22 @@
     <string name="Do_you_really_want_to_clear_the_list">確定清除列表？</string>
     <string name="Quick_search_or_combo_search">快搜或三連搜</string>
     <string name="Clear_wordInput_view">清除搜尋框</string>
+    <string name="Cloud_save_switch">雲端備份開關</string>
+    <string name="Register_login_rename_username">註冊/登入/更改用戶</string>
+    <string name="Input_a_username">輸入用戶名稱(用於線上備份您的搜尋紀錄和單字庫)</string>
+    <string name="Register_this_username">註冊此名稱</string>
+    <string name="Register_or_log_in_username">註冊/登入</string>
+    <string name="Delete_username">刪除當前用戶名稱</string>
+    <string name="Username_deleted">用戶名稱已刪除</string>
+    <string name="Unregistered_user">(未登入用戶)</string>
+    <string name="Logged_in_as">(用戶名稱：</string>
+    <string name="Your_new_username_is">您的新用戶名稱是：</string>
+    <string name="Rename_your_username">更改用戶名稱</string>
+    <string name="You_are_already_logged_in">您已經登入了</string>
+    <string name="You_have_not_entered_any_username">您尚未輸入用戶名稱</string>
+    <string name="You_are_using_cloud_storage">您已開啟雲端備份</string>
+    <string name="You_are_using_local_storage">您已關閉雲端備份</string>
+    <string name="Do_you_remember_this_word">*</string>
+    <string name="This_username_is_already_taken">此用戶名稱已有人使用，請換別的名稱</string>
 </resources>
 

@@ -18,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -54,10 +55,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.sachinvarma.easypermission.EasyPermissionInit;
 import com.sachinvarma.easypermission.EasyPermissionList;
 import com.yalantis.ucrop.UCrop;
@@ -79,6 +88,7 @@ import java.util.Objects;
 import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
+import static com.example.android.dictionaryalmighty2.UserInputHistory.userInputArrayAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -104,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
     static Button comboSearchButton; //三連搜按鈕
 
     static String searchKeyword;      //用戶輸入的關鍵字
+    static String username;      //用戶輸入的用戶名稱
     String LOG_TAG;  //Log tag for the external storage permission request error message
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
@@ -152,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
+    static int localOrCloudSaveSwitchCode; //本地端或雲端存儲單字紀錄的切換代碼
 
     File tempOutputFileForBackgroundImage;
 
@@ -161,7 +173,9 @@ public class MainActivity extends AppCompatActivity {
 
     Calendar c;
 
+    static SharedPreferences localOrCloudSaveSwitchPreferences;  //儲存用戶使用本地端或雲端存儲單字紀錄的SharedPreferences
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
+    static SharedPreferences usernameSharedPreferences;  //儲存用戶名稱的SharedPreferences
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
     SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
@@ -186,6 +200,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static final ArrayList<String> userInputArraylist = new ArrayList<>(); //用戶搜尋紀錄的ArrayList
     public static final ArrayList<String> myVocabularyArrayList = new ArrayList<>();
+
+    public static DatabaseReference mRootReference = FirebaseDatabase.getInstance().getReference();
+    public static DatabaseReference mChildReferenceForInputHistory = mRootReference.child("Users' Input History");
+    public static DatabaseReference mChildReferenceForVocabularyList = mRootReference.child("Users' Vocabulary List");
 
 
 
@@ -268,6 +286,14 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        /**
+         * 頁面生成時讀取用戶設定的用戶名稱
+         */
+        usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", Context.MODE_PRIVATE);
+        username = usernameSharedPreferences.getString("userName", ""); //Here we need to specify a defaultValue for the 2nd argument in case the data we are trying to retrieve does not exist, and the defaultValue will be used as a fallBack.
+
 
 
         /**
@@ -535,9 +561,10 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    /**
-     * 設置接收Firebase dynamic links
-     */
+    //==============================================================================================
+    // 在OnCreate外面設置接收Firebase Dynamic Links
+    //==============================================================================================
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -550,8 +577,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     //==============================================================================================
-// 在OnCreate外面設置 客製化Spinner選單列的項目(圖+文字) (包括簡易版與專業版的項目)
-//==============================================================================================
+    // 在OnCreate外面設置 客製化Spinner選單列的項目(圖+文字) (包括簡易版與專業版的項目)
+    //==============================================================================================
 
     private void initList() {
 
@@ -1074,6 +1101,237 @@ public class MainActivity extends AppCompatActivity {
 
 
     //==========================================================================================
+    // 重啟App的helper methods
+    //==========================================================================================
+    public void relaunchApp() {
+        Intent relaunchAppIntent = new Intent(getApplicationContext(), MainActivity.class);
+        ProcessPhoenix.triggerRebirth(getApplicationContext(), relaunchAppIntent);
+        Runtime.getRuntime().exit(0);
+    }
+
+
+    //==========================================================================================
+    // 註冊登入、更改或刪除用戶名稱的helper methods
+    //==========================================================================================
+    public void registerLoginRenameDeleteUsername() {
+        //這邊設置AlertDialog讓用戶輸入用戶名稱
+        final AlertDialog.Builder registerLoginRenameDeleteUsernameAlertDialog = new AlertDialog.Builder(MainActivity.this);
+        registerLoginRenameDeleteUsernameAlertDialog.setTitle(getString(R.string.Input_a_username));
+        registerLoginRenameDeleteUsernameAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+        final EditText usernameInputView = new EditText(getApplicationContext());
+        registerLoginRenameDeleteUsernameAlertDialog.setView(usernameInputView);
+
+        //AlertDialog的確定鈕，登入用戶名稱
+        registerLoginRenameDeleteUsernameAlertDialog.setPositiveButton(R.string.Register_or_log_in_username, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (username!=null && !username.equals("")) { //若用戶名稱不是空的則提示已經登入了
+
+                    Toast.makeText(getApplicationContext(), R.string.You_are_already_logged_in, Toast.LENGTH_LONG).show();
+
+                }
+
+                else
+                {
+                    String userInputUsername = usernameInputView.getText().toString();
+
+                    if (userInputUsername!=null && !userInputUsername.equals("")) { //檢查用戶確實有輸入名稱時儲存該名稱
+
+                        usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                        usernameSharedPreferences.edit().putString("userName", userInputUsername).apply();
+
+                        //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
+                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                        localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 1).apply();
+
+                        //延遲2.5秒重啟App
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                relaunchApp();
+                            }
+                        };
+                        Handler h =new Handler();
+                        h.postDelayed(r, 2500);
+
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.Logged_in_as) + userInputUsername + " " + getResources().getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_LONG).show();
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+
+        //AlertDialog的中立鈕，更改用戶名稱
+        registerLoginRenameDeleteUsernameAlertDialog.setNeutralButton(R.string.Rename_your_username, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (username!=null && !username.equals("")) {  //檢查若用戶有輸入username才執行更改名稱
+
+                    final String temporaryUsername = usernameInputView.getText().toString();
+
+                    if (temporaryUsername!=null && !temporaryUsername.equals("")) {
+
+
+                        mChildReferenceForInputHistory.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.hasChild(temporaryUsername)) {
+                                    Toast.makeText(getApplicationContext(),R.string.This_username_is_already_taken,Toast.LENGTH_LONG).show();
+                                }
+                                else {
+
+                                    // (1) 先創建一個新的child名為用戶新設立的名稱(temporaryUsername)
+                                    mRootReference.child("Users' Input History").child(temporaryUsername).push().setValue("");
+                                    mRootReference.child("Users' Vocabulary List").child(temporaryUsername).push().setValue("");
+
+                                    // (2) 複製舊的child到新的child
+                                    DatabaseReference usersInputHistorySourceNode = FirebaseDatabase.getInstance().getReference().child("Users' Input History").child(username);
+                                    final DatabaseReference usersInputHistoryTargetNode = FirebaseDatabase.getInstance().getReference().child("Users' Input History").child(temporaryUsername);
+                                    ValueEventListener valueEventListenerForUsersInputHistory = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            usersInputHistoryTargetNode.setValue(dataSnapshot.getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isComplete()) {
+                                                        // (3) 把舊的child砍掉
+                                                        mChildReferenceForInputHistory.child(username).removeValue();
+                                                        Log.d("User Input History copy", "Success!");
+                                                    } else {
+                                                        Log.d("User Input History copy", "Copy failed!");
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                    };
+                                    usersInputHistorySourceNode.addListenerForSingleValueEvent(valueEventListenerForUsersInputHistory);
+
+
+                                    DatabaseReference usersVocabularyListSourceNode = FirebaseDatabase.getInstance().getReference().child("Users' Vocabulary List").child(username);
+                                    final DatabaseReference usersVocabularyListTargetNode = FirebaseDatabase.getInstance().getReference().child("Users' Vocabulary List").child(temporaryUsername);
+                                    ValueEventListener valueEventListenerForUsersVocabularyList = new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            usersVocabularyListTargetNode.setValue(dataSnapshot.getValue()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isComplete()) {
+                                                        // (3) 把舊的child砍掉
+                                                        mChildReferenceForVocabularyList.child(username).removeValue();
+                                                        Log.d("User Vocab List copy", "Success!");
+                                                    } else {
+                                                        Log.d("User Vocab List copy", "Copy failed!");
+                                                    }
+                                                }
+                                            });
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {}
+                                    };
+                                    usersVocabularyListSourceNode.addListenerForSingleValueEvent(valueEventListenerForUsersVocabularyList);
+
+
+                                    //讓用戶輸入的新名稱(temporaryUsername)變成username，並存入sharedPreferences
+                                    usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                                    usernameSharedPreferences.edit().putString("userName", temporaryUsername).apply();
+
+
+                                    //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
+                                    localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                                    localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 1).apply();
+
+
+                                    //延遲2.5秒重啟App
+                                    Runnable r = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            relaunchApp();
+                                        }
+                                    };
+                                    Handler h =new Handler();
+                                    h.postDelayed(r, 2500);
+
+                                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.Your_new_username_is) + temporaryUsername + " " + getResources().getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_LONG).show();
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //AlertDialog的取消鈕，刪除用戶名稱
+        registerLoginRenameDeleteUsernameAlertDialog.setNegativeButton(R.string.Delete_username, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                if (username!=null && !username.equals("")) { //檢查若用戶有輸入username才刪除名稱
+
+                    mChildReferenceForInputHistory.child(username).removeValue();
+                    mChildReferenceForVocabularyList.child(username).removeValue();
+
+                    //清除用戶名稱
+                    username=null;
+                    usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                    usernameSharedPreferences.edit().putString("userName", username).apply();
+
+                    //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=0)存入SharedPreferences
+                    localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                    localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 0).apply();
+
+                    //延遲2.5秒重啟App
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+                            relaunchApp();
+                        }
+                    };
+                    Handler h =new Handler();
+                    h.postDelayed(r, 2500);
+
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.Username_deleted) + " " + getResources().getString(R.string.You_are_using_local_storage), Toast.LENGTH_LONG).show();
+                }
+
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        //把AlertDialog顯示出來
+        registerLoginRenameDeleteUsernameAlertDialog.create().show();
+    }
+
+
+    //==========================================================================================
     // Spinner的helper methods
     //==========================================================================================
 
@@ -1160,7 +1418,11 @@ public class MainActivity extends AppCompatActivity {
 
                     setDefaultDictionariesOriginal(); //設置專業版預設字典
 
-                } else if (position == 5) {
+                } else if (position == 5) {//註冊登入、更改或刪除用戶名稱
+
+                    registerLoginRenameDeleteUsername();
+
+                } else if (position == 6) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -1242,7 +1504,11 @@ public class MainActivity extends AppCompatActivity {
 
                     setDefaultDictionariesSimplified();  //設置簡易版預設字典
 
-                } else if (position == 4) {  //清除搜尋紀錄
+                } else if (position == 4) {//註冊登入、更改或刪除用戶名稱
+
+                    registerLoginRenameDeleteUsername();
+
+                } else if (position == 5) {  //清除搜尋紀錄
 
                     //這邊設置AlertDialog讓用戶確認是否真要清除列表
                     AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
@@ -2965,7 +3231,11 @@ public class MainActivity extends AppCompatActivity {
     public void customActionBarPro() {
 
         customActionBarTextview.setLayoutParams(layoutparams);
-        customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro));
+        if (username!=null && !username.equals("")) {
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro) + "  " + getString(R.string.Logged_in_as) + username + ")");
+        } else {
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro) + "  " + getString(R.string.Unregistered_user));
+        }
         customActionBarTextview.setTextSize(20);
         customActionBarTextview.setTextColor(Color.parseColor("#00ff7b"));
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff0000")));
@@ -2981,7 +3251,11 @@ public class MainActivity extends AppCompatActivity {
     public void customActionBarSimplified() {
 
         customActionBarTextview.setLayoutParams(layoutparams);
-        customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified));
+        if (username!=null && !username.equals("")) {
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified) + "  " + getString(R.string.Logged_in_as) + username + ")");
+        } else {
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified) + "  " + getString(R.string.Unregistered_user));
+        }
         customActionBarTextview.setTextSize(20);
         customActionBarTextview.setTextColor(Color.parseColor("#ffffff"));
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#018577")));
@@ -3001,6 +3275,13 @@ public class MainActivity extends AppCompatActivity {
      */
     public static void saveKeywordtoUserInputListView() {
         if (searchKeyword != null && !searchKeyword.equals("")) {
+
+            if (username!=null && !username.equals("") && localOrCloudSaveSwitchCode==1) {
+
+                if (!userInputArraylist.contains(searchKeyword)){
+               mRootReference.child("Users' Input History").child(username).push().setValue(searchKeyword);}
+            }
+
             userInputArraylist.add(searchKeyword);
         }
 
@@ -3012,6 +3293,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Alphabetic sorting
         Collections.sort(userInputArraylist);
+
+        userInputArrayAdapter.notifyDataSetChanged();
     }
 
 
