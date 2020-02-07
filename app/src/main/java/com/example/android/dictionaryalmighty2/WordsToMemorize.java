@@ -29,6 +29,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -38,6 +40,7 @@ import static com.example.android.dictionaryalmighty2.MainActivity.defaultSearch
 import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchCode;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
+import static com.example.android.dictionaryalmighty2.MainActivity.username;
 import static com.example.android.dictionaryalmighty2.MainActivity.wordInputView;
 
 public class WordsToMemorize extends AppCompatActivity {
@@ -171,7 +174,9 @@ public class WordsToMemorize extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        myVocabularyArrayList.clear();
+                        mChildReferenceForVocabularyList.child(username).removeValue(); //清除雲端用戶名稱的node
+
+                        myVocabularyArrayList.clear(); //同時清除本地的list
                         myVocabularyArrayAdapter.notifyDataSetChanged();
 
                         //將搜尋紀錄的列表存到SharedPreferences
@@ -260,7 +265,27 @@ public class WordsToMemorize extends AppCompatActivity {
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
-                                    myVocabularyArrayList.remove(position);
+                                    String wordToDelete = listView.getItemAtPosition(position).toString();
+                                    Toast.makeText(WordsToMemorize.this, wordToDelete,Toast.LENGTH_LONG).show();
+
+                                    Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
+
+                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                                                snapshot.getRef().removeValue(); //刪除該字
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            throw databaseError.toException();
+                                        }
+                                    });
+
+
+                                    myVocabularyArrayList.remove(position);  //同時本從地的list移除該字
                                     myVocabularyArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences
@@ -272,7 +297,7 @@ public class WordsToMemorize extends AppCompatActivity {
                                     }
                                     editor.apply();
 
-                                    Toast.makeText(getApplicationContext(), R.string.Your_selected_item_has_benn_deleted, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), wordToDelete + getResources().getString(R.string.Has_benn_deleted), Toast.LENGTH_SHORT).show();
 
                                 }
 

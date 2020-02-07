@@ -40,6 +40,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.text.SimpleDateFormat;
@@ -52,7 +54,7 @@ import java.util.Objects;
 import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchCode;
 import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchPreferences;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
-import static com.example.android.dictionaryalmighty2.MainActivity.mRootReference;
+import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
 import static com.example.android.dictionaryalmighty2.MainActivity.userInputArraylist;
 import static com.example.android.dictionaryalmighty2.MainActivity.username;
@@ -203,6 +205,9 @@ public class UserInputHistory extends AppCompatActivity {
         customActionBarForUserInputHistoryPage();   //Helper Method
 
 
+        /**
+         * 帶用戶前往單字庫頁面的按鈕
+         */
         goToWordsToMemorizePageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,7 +260,9 @@ public class UserInputHistory extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        userInputArraylist.clear();
+                        mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
+
+                        userInputArraylist.clear(); //同時清除本地的list
                         userInputArrayAdapter.notifyDataSetChanged();
 
                         //將搜尋紀錄的列表存到SharedPreferences
@@ -470,8 +477,34 @@ public class UserInputHistory extends AppCompatActivity {
 
                 String selectedListviewItemValue=userInputListview.getItemAtPosition(position).toString();
 
-                myVocabularyArrayList.add(selectedListviewItemValue);
-                mRootReference.child("Users' Vocabulary List").child(username).push().setValue(selectedListviewItemValue);
+                if (username!=null && !username.equals("") && localOrCloudSaveSwitchCode==1) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
+
+                    //檢查資料庫中是否有重複的字
+                    Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(selectedListviewItemValue);
+
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                                snapshot.getRef().setValue(null); //若有，先移除該重複的字
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            throw databaseError.toException();
+                        }
+                    });
+
+                    mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
+
+                                                            //                if (!userInputArraylist.contains(searchKeyword)){
+                                                            //                    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);
+                                                            //                }
+                }
+
+
+                myVocabularyArrayList.add(selectedListviewItemValue); //同時加入單字到本地的list
 
                 //透過HashSet自動過濾掉myVocabularyArraylist中重複的字
                 HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
@@ -511,7 +544,27 @@ public class UserInputHistory extends AppCompatActivity {
                             public void onDismiss(ListView listView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
 
-                                    userInputArraylist.remove(position);
+                                    String wordToDelete = listView.getItemAtPosition(position).toString();
+                                    Toast.makeText(UserInputHistory.this, wordToDelete,Toast.LENGTH_LONG).show();
+
+                                    Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
+
+                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                                                snapshot.getRef().removeValue();  //刪除該字
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            throw databaseError.toException();
+                                        }
+                                    });
+
+
+                                    userInputArraylist.remove(position);  //同時本從地的list移除該字
                                     userInputArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences
@@ -523,7 +576,7 @@ public class UserInputHistory extends AppCompatActivity {
                                     }
                                     editor.apply();
 
-                                    Toast.makeText(getApplicationContext(), R.string.Your_selected_item_has_benn_deleted, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), wordToDelete + getResources().getString(R.string.Has_benn_deleted), Toast.LENGTH_SHORT).show();
 
                                 }
                             }

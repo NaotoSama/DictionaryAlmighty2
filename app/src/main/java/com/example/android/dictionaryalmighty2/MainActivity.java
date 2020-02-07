@@ -63,6 +63,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
@@ -88,7 +89,6 @@ import java.util.Objects;
 import pl.droidsonroids.gif.GifImageView;
 
 import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
-import static com.example.android.dictionaryalmighty2.UserInputHistory.userInputArrayAdapter;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -3232,9 +3232,9 @@ public class MainActivity extends AppCompatActivity {
 
         customActionBarTextview.setLayoutParams(layoutparams);
         if (username!=null && !username.equals("")) {
-            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro) + "  " + getString(R.string.Logged_in_as) + username + ")");
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro) + "\n" + getString(R.string.Logged_in_as) + username + ")");
         } else {
-            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro) + "  " + getString(R.string.Unregistered_user));
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro) + "\n" + getString(R.string.Unregistered_user));
         }
         customActionBarTextview.setTextSize(20);
         customActionBarTextview.setTextColor(Color.parseColor("#00ff7b"));
@@ -3252,9 +3252,9 @@ public class MainActivity extends AppCompatActivity {
 
         customActionBarTextview.setLayoutParams(layoutparams);
         if (username!=null && !username.equals("")) {
-            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified) + "  " + getString(R.string.Logged_in_as) + username + ")");
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified) + "\n" + getString(R.string.Logged_in_as) + username + ")");
         } else {
-            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified) + "  " + getString(R.string.Unregistered_user));
+            customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified) + "\n" + getString(R.string.Unregistered_user));
         }
         customActionBarTextview.setTextSize(20);
         customActionBarTextview.setTextColor(Color.parseColor("#ffffff"));
@@ -3274,27 +3274,45 @@ public class MainActivity extends AppCompatActivity {
      * Helper method for saving Keywords to UserInputListView
      */
     public static void saveKeywordtoUserInputListView() {
-        if (searchKeyword != null && !searchKeyword.equals("")) {
+        if (searchKeyword != null && !searchKeyword.equals("")) {  //檢查用戶是否有輸入要查的單字
 
-            if (username!=null && !username.equals("") && localOrCloudSaveSwitchCode==1) {
+            if (username!=null && !username.equals("") && localOrCloudSaveSwitchCode==1) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
 
-                if (!userInputArraylist.contains(searchKeyword)){
-               mRootReference.child("Users' Input History").child(username).push().setValue(searchKeyword);}
+                //檢查資料庫中是否有重複的字
+                Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(searchKeyword);
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                            snapshot.getRef().setValue(null); //若有，先移除該重複的字
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        throw databaseError.toException();
+                    }
+                });
+
+                mChildReferenceForInputHistory.child(username).push().setValue(searchKeyword); //加入單字到資料庫
+
+                                                            //                if (!userInputArraylist.contains(searchKeyword)){
+                                                            //                    mChildReferenceForInputHistory.child(username).push().setValue(searchKeyword);
+                                                            //                }
             }
 
-            userInputArraylist.add(searchKeyword);
+            userInputArraylist.add(searchKeyword); //同時加入單字到本地的list
+
+            //透過HashSet自動過濾掉userInputArraylist中重複的字
+            HashSet<String> userInputArraylistHashSet = new HashSet<>();
+            userInputArraylistHashSet.addAll(userInputArraylist);
+            userInputArraylist.clear();
+            userInputArraylist.addAll(userInputArraylistHashSet);
+
+            //Alphabetic sorting
+            Collections.sort(userInputArraylist);
         }
-
-        //透過HashSet自動過濾掉userInputArraylist中重複的字
-        HashSet<String> userInputArraylistHashSet = new HashSet<>();
-        userInputArraylistHashSet.addAll(userInputArraylist);
-        userInputArraylist.clear();
-        userInputArraylist.addAll(userInputArraylistHashSet);
-
-        //Alphabetic sorting
-        Collections.sort(userInputArraylist);
-
-        userInputArrayAdapter.notifyDataSetChanged();
     }
 
 

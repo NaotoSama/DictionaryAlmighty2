@@ -154,7 +154,7 @@
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
     <string name="Search_records_page_instructions">(點按 = 帶入單字到首頁或記憶單字；長按 = 存入單字庫 ； 滑動 = 刪除單字)</string>
-    <string name="Your_selected_item_has_benn_deleted">您選擇的項目已刪除完畢</string>
+    <string name="Has_benn_deleted">已刪除</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
     <string name="Pro_version_switch">專業版開關</string>
@@ -244,7 +244,7 @@
     <string name="Delete_username">刪除當前用戶名稱</string>
     <string name="Username_deleted">用戶名稱已刪除</string>
     <string name="Unregistered_user">(未登入用戶)</string>
-    <string name="Logged_in_as">(用戶名稱：</string>
+    <string name="Logged_in_as">用戶名稱：</string>
     <string name="Your_new_username_is">您的新用戶名稱是：</string>
     <string name="Rename_your_username">更改用戶名稱</string>
     <string name="You_are_already_logged_in">您已經登入了</string>

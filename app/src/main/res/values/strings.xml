@@ -360,7 +360,7 @@
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
     <string name="Search_records_page_instructions">(Finger tap = search memorize word ; Long press = save to word bank ; Swipe = delete word)</string>
-    <string name="Your_selected_item_has_benn_deleted">Your selected item has benn deleted</string>
+    <string name="Has_benn_deleted">" has benn deleted"</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
     <string name="Pro_version_switch">Pro Version Switch</string>

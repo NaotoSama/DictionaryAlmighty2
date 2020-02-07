@@ -38,11 +38,11 @@ dependencies {
 
 
     implementation 'com.github.yalantis:ucrop:2.2.3'
-    implementation 'androidx.work:work-runtime:2.2.0'
+    implementation 'androidx.work:work-runtime:2.3.0'
 
     implementation 'com.github.sachinvarma:EasyPermission:1.0.1'
 
-    implementation 'com.google.firebase:firebase-database:19.2.0'
+    implementation 'com.google.firebase:firebase-database:19.2.1'
 
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 }
