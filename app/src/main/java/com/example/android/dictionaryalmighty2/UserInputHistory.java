@@ -545,7 +545,6 @@ public class UserInputHistory extends AppCompatActivity {
                                 for (int position : reverseSortedPositions) {
 
                                     String wordToDelete = listView.getItemAtPosition(position).toString();
-                                    Toast.makeText(UserInputHistory.this, wordToDelete,Toast.LENGTH_LONG).show();
 
                                     Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
 

@@ -1,157 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-                                        <!--以下編碼暫時用不到了-->
+<resources>
 
-                                        <resources>
-                                            <color name="colorPrimary">#008577</color>
-                                            <color name="colorPrimaryDark">#00574B</color>
-                                            <color name="colorAccent">#D81B60</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_500">#9E9E9E</color>
 
+                                                        <!--以下編碼暫時用不到了-->
 
-                                            <!--因為 Spinner 項目裡面是要放顏色，所以要去設定有哪些顏色可以使用。
-                                                定義各顏色的HEX編碼。-->
-                                            <color name="bright_pink">#FF007F</color>
-                                            <color name="red">#FF0000</color>
-                                            <color name="orange">#FF7F00</color>
-                                            <color name="yellow">#FFFF00</color>
-                                            <color name="light_yellow">#FFFF73</color>
-                                            <color name="chartreuse">#7FFF00</color>
-                                            <color name="green">#00FF00</color>
-                                            <color name="spring_green">#00FF7F</color>
-                                            <color name="cyan">#00FFFF</color>
-                                            <color name="azure">#007FFF</color>
-                                            <color name="blue">#0000FF</color>
-                                            <color name="violet">#7F00FF</color>
-                                            <color name="magenta">#FF00FF</color>
-                                            <color name="grey">#BDB9B9</color>
-                                            <color name="white">#FFFFFF</color>
-
-
-                                            <!--定義SPINNER的各子項目顏色。以下餘同-->
-                                            <array name="SpeechRecognitionSpinnerCustomColors">
-                                                <item>@color/azure</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                            </array>
+                                                        <!--因為 Spinner 項目裡面是要放顏色，所以要去設定有哪些顏色可以使用。
+                                                            定義各顏色的HEX編碼。-->
+                                                        <color name="bright_pink">#FF007F</color>
+                                                        <color name="red">#FF0000</color>
+                                                        <color name="orange">#FF7F00</color>
+                                                        <color name="yellow">#FFFF00</color>
+                                                        <color name="light_yellow">#FFFF73</color>
+                                                        <color name="chartreuse">#7FFF00</color>
+                                                        <color name="green">#00FF00</color>
+                                                        <color name="spring_green">#00FF7F</color>
+                                                        <color name="cyan">#00FFFF</color>
+                                                        <color name="azure">#007FFF</color>
+                                                        <color name="blue">#0000FF</color>
+                                                        <color name="violet">#7F00FF</color>
+                                                        <color name="magenta">#FF00FF</color>
+                                                        <color name="grey">#BDB9B9</color>
+                                                        <color name="white">#FFFFFF</color>
 
 
-                                            <array name="OCR_Mode_Spinner_Custom_Colors">
-                                                <item>@color/grey</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                            </array>
+                                                        <!--定義SPINNER的各子項目顏色。以下餘同-->
+                                                        <array name="SpeechRecognitionSpinnerCustomColors">
+                                                            <item>@color/azure</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                        </array>
 
 
-                                            <array name="En_Dictionary_Spinner_Custom_Colors">
-                                                <item>@color/grey</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                            </array>
+                                                        <array name="OCR_Mode_Spinner_Custom_Colors">
+                                                            <item>@color/grey</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                        </array>
 
 
-                                            <array name="Jp_Dictionary_Spinner_Custom_Colors">
-                                                <item>@color/grey</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/chartreuse</item>
-                                                <item>@color/chartreuse</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                                <item>@color/orange</item>
-                                            </array>
+                                                        <array name="En_Dictionary_Spinner_Custom_Colors">
+                                                            <item>@color/grey</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                        </array>
 
 
-                                            <array name="Google_Word_Search_Spinner_Custom_Colors">
-                                                <item>@color/grey</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/chartreuse</item>
-                                            </array>
+                                                        <array name="Jp_Dictionary_Spinner_Custom_Colors">
+                                                            <item>@color/grey</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/chartreuse</item>
+                                                            <item>@color/chartreuse</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                            <item>@color/orange</item>
+                                                        </array>
 
 
-                                            <array name="Sentence_Search_Spinner_Custom_Colors">
-                                                <item>@color/grey</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/chartreuse</item>
-                                                <item>@color/chartreuse</item>
-                                                <item>@color/chartreuse</item>
-                                            </array>
+                                                        <array name="Google_Word_Search_Spinner_Custom_Colors">
+                                                            <item>@color/grey</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/chartreuse</item>
+                                                        </array>
 
 
-                                            <array name="Miscellaneous_Spinner_Custom_Colors">
-                                                <item>@color/grey</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/cyan</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                                <item>@color/light_yellow</item>
-                                            </array>
+                                                        <array name="Sentence_Search_Spinner_Custom_Colors">
+                                                            <item>@color/grey</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/chartreuse</item>
+                                                            <item>@color/chartreuse</item>
+                                                            <item>@color/chartreuse</item>
+                                                        </array>
 
 
-                                        </resources>
+                                                        <array name="Miscellaneous_Spinner_Custom_Colors">
+                                                            <item>@color/grey</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/cyan</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                            <item>@color/light_yellow</item>
+                                                        </array>
+
+
+</resources>
