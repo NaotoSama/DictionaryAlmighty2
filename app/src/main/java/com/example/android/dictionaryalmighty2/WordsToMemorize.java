@@ -21,12 +21,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -37,7 +35,6 @@ import java.util.HashSet;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.comboSearchButton;
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultSearchButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchCode;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
 import static com.example.android.dictionaryalmighty2.MainActivity.username;
@@ -84,54 +81,38 @@ public class WordsToMemorize extends AppCompatActivity {
         //Initialize the adapter
         myVocabularyArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myVocabularyArrayList);
         myVocabularyListview.setAdapter(myVocabularyArrayAdapter);
-        mChildReferenceForVocabularyList.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildKey) {
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String value = snapshot.getValue(String.class);
+        if (username!=null && !username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
+            mChildReferenceForVocabularyList.child(username).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                    if (localOrCloudSaveSwitchCode==1) {
-                    myVocabularyArrayList.add(value);
+                        //Get the data from snapshot
+                        String myVocabulary = postSnapshot.getValue(String.class);
 
-                    //透過HashSet自動過濾掉myVocabularyArraylist中重複的字
-                    HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
-                    myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
-                    myVocabularyArrayList.clear();
-                    myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
+                        //Add the data to the arraylist
+                        myVocabularyArrayList.add(myVocabulary);
 
-                    //Alphabetic sorting
-                    Collections.sort(myVocabularyArrayList);
+                        //透過HashSet自動過濾掉userInputArraylist中重複的字
+                        HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
+                        myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
+                        myVocabularyArrayList.clear();
+                        myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
 
-                    myVocabularyArrayAdapter.notifyDataSetChanged();
+                        //Alphabetic sorting
+                        Collections.sort(myVocabularyArrayList);
 
-                    } else if (localOrCloudSaveSwitchCode==0) {
-                        return;
+                        myVocabularyArrayAdapter.notifyDataSetChanged();
                     }
+
                 }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
 
 
         /**

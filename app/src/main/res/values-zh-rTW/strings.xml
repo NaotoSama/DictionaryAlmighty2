@@ -255,17 +255,17 @@
     <string name="Username">用戶名稱</string>
     <string name="Log_in_out_unregister">登入/註銷</string>
     <string name="Disconnect">斷開</string>
-    <string name="Google_status_fmt">您已登入Google帳戶名稱: %s</string>
+    <string name="Google_status_fmt">您已登入帳戶名稱: %s</string>
     <string name="Firebase_status_fmt">%s</string>
     <string name="You_are_not_signed_in">您未登入</string>
     <string name="Signed_in">您已登入</string>
-    <string name="Sign_in">登入</string>
-    <string name="Sign_out">登出</string>
-    <string name="google_title_text">透過Google帳戶登入</string>
+    <string name="Sign_in_or_register">登入/註冊</string>
+    <string name="Sign_out">登出用戶</string>
+    <string name="User_sign_in_status">用戶登錄狀態</string>
     <string name="Delete_user">刪除用戶</string>
     <string name="Login_successful">登入成功</string>
     <string name="User_deleted">用戶已刪除</string>
-    <string name="Relaunching_app">將重啟App ．．．</string>
+    <string name="Relaunching_app">5秒後重啟App ．．．</string>
     <string name="Auth_failed">認證失敗</string>
     <string name="Create_account">建立帳戶</string>
     <string name="Custom_auth_signin_status_failed">錯誤：登入失敗</string>
@@ -315,5 +315,16 @@
     <string name="passwordless_title_text">無密碼的登入</string>
     <string name="phone_title_text">電話號碼</string>
     <string name="status_log_in_cancelled">登入取消</string>
+    <string name="Via_google_account">透過Google帳戶</string>
+    <string name="Via_email_and_password">透過電子信箱和密碼登入或註冊</string>
+    <string name="Input_email">輸入電子信箱位址</string>
+    <string name="Input_password">輸入密碼</string>
+    <string name="Login_problem">登入問題</string>
+    <string name="Account_not_found">無此帳號，是否要以此帳號與密碼註冊?</string>
+    <string name="Register">註冊</string>
+    <string name="Registration_completed">註冊成功</string>
+    <string name="Registration_failed">註冊失敗</string>
+    <string name="Currently_logged_in">( 已登入 ✓ )</string>
+    <string name="Database_UID">UID:</string>
 </resources>
 

@@ -26,7 +26,7 @@
     <ListView
         android:id="@+id/user_input_listview"
         android:layout_width="match_parent"
-        android:layout_height="419dp"
+        android:layout_height="437dp"
         android:divider="@android:drawable/divider_horizontal_textfield"
         android:textAlignment="center">
 
@@ -52,12 +52,5 @@
         android:background="@android:drawable/button_onoff_indicator_on"
         android:text="@string/Go_to_words_to_memorize_page"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-    <Switch
-        android:id="@+id/local_or_cloud_save_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/Cloud_save_switch" />
 
 </LinearLayout>

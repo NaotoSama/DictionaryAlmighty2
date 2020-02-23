@@ -2,6 +2,20 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\Backuped Media\\App Keystore\\DictionaryAlmighty2Release.jks')
+            storePassword '#123ayumi#'
+            keyAlias = 'DictionaryAlmighty2Release'
+            keyPassword '#123ayumi#'
+        }
+        debug {
+            storeFile file('D:\\Backuped Media\\App Keystore\\DictionaryAlmighty2.jks')
+            storePassword '#123ayumi#'
+            keyAlias = 'DictionaryAlmighty2Debug'
+            keyPassword '#123ayumi#'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.android.dictionaryalmighty2"
@@ -10,6 +24,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
@@ -40,13 +55,13 @@ dependencies {
 
 
     implementation 'com.github.yalantis:ucrop:2.2.3'
-    implementation 'androidx.work:work-runtime:2.3.0'
+    implementation 'androidx.work:work-runtime:2.3.1'
 
     implementation 'com.github.sachinvarma:EasyPermission:1.0.1'
 
     implementation 'com.google.firebase:firebase-database:19.2.1'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
-    implementation 'com.google.firebase:firebase-dynamic-links:19.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.facebook.android:facebook-android-sdk:6.0.0'

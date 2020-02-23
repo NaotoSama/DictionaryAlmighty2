@@ -328,10 +328,10 @@
 
     <string name="hint_user_id">User ID</string>
     <string name="get_custom_token" translatable="false">Get Token</string>
-    <string name="Sign_in">Sign In</string>
+    <string name="Sign_in_or_register">Sign in/Register</string>
     <string name="Create_account">Create Account</string>
     <string name="send_link">Send Link</string>
-    <string name="Sign_out">Sign Out</string>
+    <string name="Sign_out">Sign out user</string>
     <string name="verify_email">Verify Email</string>
     <string name="Disconnect">Disconnect</string>
     <string name="loading">Loading…</string>
@@ -357,8 +357,8 @@
     <string name="Firebase_status_fmt">%s</string>
     <string name="firebase_user_management">Firebase User Management</string>
 
-    <string name="Google_status_fmt">You\'re Logged in as Google User: %s</string>
-    <string name="google_title_text">Google Sign In</string>
+    <string name="Google_status_fmt">You\'re Logged in as User: %s</string>
+    <string name="User_sign_in_status">User Sing-in Status</string>
 
     <string name="facebook_status_fmt">Facebook User: %s</string>
     <string name="facebook_title_text">Facebook Login</string>
@@ -562,8 +562,21 @@
     <string name="Delete_user">Delete User</string>
     <string name="Login_successful">Login successful</string>
     <string name="User_deleted">User deleted</string>
-    <string name="Relaunching_app">Relaunching app</string>
+    <string name="Relaunching_app">Relaunching app in 5 seconds</string>
     <string name="status_log_in_cancelled">Log in cancelled</string>
+    <string name="Via_google_account">Via Google Account</string>
+    <string name="Via_email_and_password">Sign in or sign up via Email &amp; Password</string>
+    <string name="Input_email">Input email</string>
+    <string name="Input_password">Input password</string>
+    <string name="Login_problem">Login Problem</string>
+    <string name="Account_not_found">Account not found. Would you like to register with this email and password?</string>
+    <string name="Register">Register</string>
+    <string name="Registration_completed">Registration completed</string>
+    <string name="Registration_failed">Registration failed</string>
+    <string name="Currently_logged_in">( ✓ Currently logged in)</string>
+    <string name="Database_UID">UID:</string>
+    <string name="facebook_application_id" translatable="false">1329615473905535</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1329615473905535</string>
 
 
 </resources>

@@ -26,18 +26,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -69,8 +66,6 @@ public class UserInputHistory extends AppCompatActivity {
     static String selectedListviewItemValue;
     static String[] presetNotificationTimingsList;
 
-    Switch localOrCloudSaveSwitch;
-
     ListView userInputListview;
     static ArrayAdapter userInputArrayAdapter;
 
@@ -94,106 +89,43 @@ public class UserInputHistory extends AppCompatActivity {
         userInputListview = findViewById(R.id.user_input_listview);
         clearUserInputList = findViewById(R.id.clear_user_input_list);
         userInputHistorySearchBox = findViewById(R.id.user_input_history_search_box);
-        localOrCloudSaveSwitch = findViewById(R.id.local_or_cloud_save_switch);
-
-
-
-        localOrCloudSaveSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    if (localOrCloudSaveSwitch.isChecked()) {         //用isChecked()檢視開關的開啟狀態
-
-                        if (username!=null && !username.equals("")) {  //檢查若用戶有輸入username才執行以下動作
-
-                            //把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
-                            localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                            localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 1).apply();
-
-                            Toast.makeText(getApplicationContext(), getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_SHORT).show();
-
-                            reloadCurrentActivity(); //重新載入當前頁面
-
-                        }
-
-                        else {
-                            Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_any_username, Toast.LENGTH_LONG).show();
-
-                            localOrCloudSaveSwitch.setChecked(false);
-
-                            registerLoginUsername();
-
-                        }
-
-                    } else {
-
-                        //把用戶使用本地端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=0)存入SharedPreferences
-                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                        localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 0).apply();
-
-                        Toast.makeText(getApplicationContext(), getString(R.string.You_are_using_local_storage), Toast.LENGTH_SHORT).show();
-
-                    }
-            }
-        });
-
-
-        //設置App啟動時檢查代碼為本地端存儲或雲端存儲單字紀錄
-        localOrCloudSaveSwitchCode = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE).getInt("CloudSaveMode", 2);
-
-        if (localOrCloudSaveSwitchCode==1) {
-            localOrCloudSaveSwitch.setChecked(true);
-        } else if (localOrCloudSaveSwitchCode==0) {
-            localOrCloudSaveSwitch.setChecked(false);
-        }
 
 
         //Initialize the adapter
         userInputArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userInputArraylist);
         userInputListview.setAdapter(userInputArrayAdapter);
-        mChildReferenceForInputHistory.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildKey) {
 
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-                    String value = snapshot.getValue(String.class);
+        if (username!=null && !username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
+            mChildReferenceForInputHistory.child(username).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                    if (localOrCloudSaveSwitchCode==1) {
-                    userInputArraylist.add(value);
+                        //Get the data from snapshot
+                        String userSearchHistory = postSnapshot.getValue(String.class);
 
-                    //透過HashSet自動過濾掉userInputArraylist中重複的字
-                    HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
-                    myVocabularyArraylistHashSet.addAll(userInputArraylist);
-                    userInputArraylist.clear();
-                    userInputArraylist.addAll(myVocabularyArraylistHashSet);
+                        //Add the data to the arraylist
+                        userInputArraylist.add(userSearchHistory);
 
-                    //Alphabetic sorting
-                    Collections.sort(userInputArraylist);
+                        //透過HashSet自動過濾掉userInputArraylist中重複的字
+                        HashSet<String> userInputHistoryArraylistHashSet = new HashSet<>();
+                        userInputHistoryArraylistHashSet.addAll(userInputArraylist);
+                        userInputArraylist.clear();
+                        userInputArraylist.addAll(userInputHistoryArraylistHashSet);
 
-                    userInputArrayAdapter.notifyDataSetChanged();
+                        //Alphabetic sorting
+                        Collections.sort(userInputArraylist);
 
-                    } else if (localOrCloudSaveSwitchCode==0) {
-                        return;
+                        userInputArrayAdapter.notifyDataSetChanged();
                     }
+
                 }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
 
 
         /**
@@ -477,7 +409,7 @@ public class UserInputHistory extends AppCompatActivity {
 
                 String selectedListviewItemValue=userInputListview.getItemAtPosition(position).toString();
 
-                if (username!=null && !username.equals("") && localOrCloudSaveSwitchCode==1) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
+                if (username!=null && !username.equals("")) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
 
                     //檢查資料庫中是否有重複的字
                     Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(selectedListviewItemValue);
@@ -546,21 +478,23 @@ public class UserInputHistory extends AppCompatActivity {
 
                                     String wordToDelete = listView.getItemAtPosition(position).toString();
 
-                                    Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
+                                    if (username!=null && localOrCloudSaveSwitchCode.equals("1")) {
+                                        Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
 
-                                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                            for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
-                                                snapshot.getRef().removeValue();  //刪除該字
+                                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                                                    snapshot.getRef().removeValue();  //刪除該字
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            throw databaseError.toException();
-                                        }
-                                    });
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                throw databaseError.toException();
+                                            }
+                                        });
+                                    }
 
 
                                     userInputArraylist.remove(position);  //同時本從地的list移除該字
@@ -705,7 +639,7 @@ public class UserInputHistory extends AppCompatActivity {
 
                         //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
                         localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                        localOrCloudSaveSwitchPreferences.edit().putInt("CloudSaveMode", 1).apply();
+                        localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "1").apply();
 
                         //延遲2.5秒重啟App
                         Runnable r = new Runnable() {

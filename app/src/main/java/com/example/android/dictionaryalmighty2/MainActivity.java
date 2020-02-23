@@ -113,7 +113,12 @@ public class MainActivity extends AppCompatActivity {
     static String searchKeyword;      //用戶輸入的關鍵字
     static String username;      //用戶的Firebase UID
     static String userScreenName;      //用戶的顯示暱稱
+    static String userInputLoginEmail; //用戶手動輸入的登入信箱
+    static String userInputLoginPassword; //用戶手動輸入的登入密碼
+    static String googleIdToken;
+    static String logInProviderCheckCode; //用來檢查用戶透過哪個方式登入帳戶
     String LOG_TAG;  //Log tag for the external storage permission request error message
+    static String localOrCloudSaveSwitchCode; //本地端或雲端備份的代碼
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
     String defaultSingleSearchCode; //用以設定單一預設快搜字典
@@ -161,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
 
     private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
-    static int localOrCloudSaveSwitchCode; //本地端或雲端存儲單字紀錄的切換代碼
 
     File tempOutputFileForBackgroundImage;
 
@@ -175,6 +179,10 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     static SharedPreferences usernameSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
     static SharedPreferences userScreenNameSharedPreferences;  //儲存用戶顯示暱稱的SharedPreferences
+    static SharedPreferences userInputLoginEmailSharedPreferences;  //儲存用戶登入信箱的SharedPreferences
+    static SharedPreferences userInputLoginPasswordSharedPreferences;  //儲存用戶登入密碼的SharedPreferences
+    static SharedPreferences googleIdTokenSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
+    static SharedPreferences logInProviderCheckCodeSharedPreferences;  //儲存用戶以哪種方式登入帳戶
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
     SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
@@ -296,6 +304,36 @@ public class MainActivity extends AppCompatActivity {
         userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", Context.MODE_PRIVATE);
         userScreenName = userScreenNameSharedPreferences.getString("userScreenName", "");
 
+
+        /**
+         * 頁面生成時讀取用戶手動輸入的登入信箱和密碼
+         */
+        userInputLoginEmailSharedPreferences = getSharedPreferences("userInputLoginEmailSharedPreferences", Context.MODE_PRIVATE);
+        userInputLoginEmail = userInputLoginEmailSharedPreferences.getString("userInputLoginEmail", ""); //Here we need to specify a defaultValue for the 2nd argument in case the data we are trying to retrieve does not exist, and the defaultValue will be used as a fallBack.
+
+        userInputLoginPasswordSharedPreferences = getSharedPreferences("userInputLoginPasswordSharedPreferences", Context.MODE_PRIVATE);
+        userInputLoginPassword = userInputLoginPasswordSharedPreferences.getString("userInputLoginPassword", "");
+
+
+        /**
+         * 頁面生成時讀取googleIdToken
+         */
+        googleIdTokenSharedPreferences = getSharedPreferences("googleIdTokenSharedPreferences", MODE_PRIVATE);
+        googleIdToken = googleIdTokenSharedPreferences.getString("googleIdToken", "");
+
+
+        /**
+         * 頁面生成時讀取用戶用哪種方式登入帳戶
+         */
+        logInProviderCheckCodeSharedPreferences = getSharedPreferences("logInProviderCheckCodeSharedPreferences", MODE_PRIVATE);
+        logInProviderCheckCode = logInProviderCheckCodeSharedPreferences.getString("logInProviderCheckCode", "");
+
+
+        /**
+         * 頁面生成時讀取用戶的本地或雲端備份狀態
+         */
+        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+        localOrCloudSaveSwitchCode = localOrCloudSaveSwitchPreferences.getString("CloudSaveMode", "");
 
 
 
@@ -3294,7 +3332,7 @@ public class MainActivity extends AppCompatActivity {
     public static void saveKeywordtoUserInputListView() {
         if (searchKeyword != null && !searchKeyword.equals("")) {  //檢查用戶是否有輸入要查的單字
 
-            if (username!=null && !username.equals("") && localOrCloudSaveSwitchCode==1) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
+            if (username!=null && !username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
 
                 //檢查資料庫中是否有重複的字
                 Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(searchKeyword);
@@ -3305,6 +3343,9 @@ public class MainActivity extends AppCompatActivity {
                         for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                             snapshot.getRef().setValue(null); //若有，先移除該重複的字
                         }
+
+                        mChildReferenceForInputHistory.child(username).push().setValue(searchKeyword); //加入單字到資料庫
+
                     }
 
                     @Override
@@ -3313,7 +3354,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                mChildReferenceForInputHistory.child(username).push().setValue(searchKeyword); //加入單字到資料庫
 
                                                             //                if (!userInputArraylist.contains(searchKeyword)){
                                                             //                    mChildReferenceForInputHistory.child(username).push().setValue(searchKeyword);
