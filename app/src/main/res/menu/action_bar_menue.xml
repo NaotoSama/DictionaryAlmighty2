@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/log_in_button"
-        android:title="@string/Log_in_out_unregister"
+        android:title="@string/Log_out_unregister"
         app:showAsAction="always"
         />
 

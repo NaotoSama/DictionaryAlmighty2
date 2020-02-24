@@ -252,10 +252,10 @@
     <string name="You_are_using_local_storage">已關閉雲端備份</string>
     <string name="Do_you_remember_this_word">*</string>
     <string name="This_username_is_already_taken">此用戶名稱已有人使用，請換別的名稱</string>
-    <string name="Username">用戶名稱</string>
-    <string name="Log_in_out_unregister">登入/註銷</string>
+    <string name="Username">用戶</string>
+    <string name="Log_out_unregister">登出/註銷</string>
     <string name="Disconnect">斷開</string>
-    <string name="Google_status_fmt">您已登入帳戶名稱: %s</string>
+    <string name="Google_status_fmt">您已登入帳戶名稱： %s</string>
     <string name="Firebase_status_fmt">%s</string>
     <string name="You_are_not_signed_in">您未登入</string>
     <string name="Signed_in">您已登入</string>
@@ -324,7 +324,9 @@
     <string name="Register">註冊</string>
     <string name="Registration_completed">註冊成功</string>
     <string name="Registration_failed">註冊失敗</string>
-    <string name="Currently_logged_in">( 已登入 ✓ )</string>
+    <string name="Currently_logged_in">(已登入 ✓)</string>
     <string name="Database_UID">UID:</string>
+    <string name="User">用戶：</string>
+    <string name="Please_manually_close_and_open_this_app">請手動關閉並重新開啟此App</string>
 </resources>
 

@@ -558,7 +558,7 @@
     <string name="Do_you_remember_this_word">*</string>
     <string name="This_username_is_already_taken">This username is already taken. Please use another one.</string>
     <string name="Username">Username</string>
-    <string name="Log_in_out_unregister">Log In/Unregister</string>
+    <string name="Log_out_unregister">Log Out/Unregister</string>
     <string name="Delete_user">Delete User</string>
     <string name="Login_successful">Login successful</string>
     <string name="User_deleted">User deleted</string>
@@ -573,11 +573,10 @@
     <string name="Register">Register</string>
     <string name="Registration_completed">Registration completed</string>
     <string name="Registration_failed">Registration failed</string>
-    <string name="Currently_logged_in">( ✓ Currently logged in)</string>
+    <string name="Currently_logged_in">(✓ Currently logged in)</string>
     <string name="Database_UID">UID:</string>
-    <string name="facebook_application_id" translatable="false">1329615473905535</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb1329615473905535</string>
-
+    <string name="User">User:</string>
+    <string name="Please_manually_close_and_open_this_app">Please manually close and re-open this app</string>
 
 </resources>
 

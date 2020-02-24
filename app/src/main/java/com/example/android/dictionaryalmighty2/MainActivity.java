@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestWritePermission();  //在程式運行中要求存取的權限
+        invalidateOptionsMenu();   //Change the menu in the action bar.
 
 
         /**
@@ -1090,6 +1091,16 @@ public class MainActivity extends AppCompatActivity {
         // If you don't have res/menu, just create a directory named "menu" inside res
         getMenuInflater().inflate(R.menu.action_bar_menue, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    // Override this method to do whatever change you want with the menu when it is recreated
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (username!=null && !username.equals("")) {
+            menu.findItem(R.id.log_in_button).setTitle(userScreenName + System.getProperty("line.separator") + getResources().getString(R.string.Log_out_unregister));
+        } else menu.findItem(R.id.log_in_button).setTitle(getString(R.string.Sign_in_or_register));
+        return super.onPrepareOptionsMenu(menu);
     }
 
 
@@ -3287,11 +3298,12 @@ public class MainActivity extends AppCompatActivity {
     public void customActionBarPro() {
 
         customActionBarTextview.setLayoutParams(layoutparams);
-        if (userScreenName!=null && !userScreenName.equals("")) {
-            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_pro), userScreenName));
-        } else {
-            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_pro), getString(R.string.Unregistered_user)));
-        }
+//        if (userScreenName!=null && !userScreenName.equals("")) {
+//            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_pro), userScreenName));
+//        } else {
+//            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_pro), getString(R.string.Unregistered_user)));
+//        }
+        customActionBarTextview.setText(getString(R.string.Dictionary_almighty_pro));
         customActionBarTextview.setTextSize(20);
         customActionBarTextview.setTextColor(Color.parseColor("#00ff7b"));
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff0000")));
@@ -3307,11 +3319,12 @@ public class MainActivity extends AppCompatActivity {
     public void customActionBarSimplified() {
 
         customActionBarTextview.setLayoutParams(layoutparams);
-        if (userScreenName!=null && !userScreenName.equals("")) {
-            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_simplified), userScreenName));
-        } else {
-            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_simplified), getString(R.string.Unregistered_user)));
-        }
+//        if (userScreenName!=null && !userScreenName.equals("")) {
+//            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_simplified), userScreenName));
+//        } else {
+//            customActionBarTextview.setText(String.format("%s\n%s", getString(R.string.Dictionary_almighty_simplified), getString(R.string.Unregistered_user)));
+//        }
+        customActionBarTextview.setText(getString(R.string.Dictionary_almighty_simplified));
         customActionBarTextview.setTextSize(20);
         customActionBarTextview.setTextColor(Color.parseColor("#ffffff"));
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#018577")));

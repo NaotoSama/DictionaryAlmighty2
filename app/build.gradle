@@ -4,15 +4,15 @@ apply plugin: 'com.google.gms.google-services'
 android {
     signingConfigs {
         release {
-            storeFile file('D:\\Backuped Media\\App Keystore\\DictionaryAlmighty2Release.jks')
+            storeFile file('D:\\Keystore\\DictionaryAlmighty2Release.jks')
             storePassword '#123ayumi#'
             keyAlias = 'DictionaryAlmighty2Release'
             keyPassword '#123ayumi#'
         }
         debug {
-            storeFile file('D:\\Backuped Media\\App Keystore\\DictionaryAlmighty2.jks')
+            storeFile file('D:\\Keystore\\DictionaryAlmighty2Debug.keystore')
             storePassword '#123ayumi#'
-            keyAlias = 'DictionaryAlmighty2Debug'
+            keyAlias = 'dictionaryalmighty2debug'
             keyPassword '#123ayumi#'
         }
     }

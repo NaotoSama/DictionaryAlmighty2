@@ -128,7 +128,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                         public void run() {
                             //抓用戶Firebase UID和暱稱
                             username = mDetailTextView.getText().toString();
-                            userScreenName = mStatusTextView.getText().toString();  //這裡故意讓它抓Email作為用戶暱稱
+                            userScreenName = mScreenNameTextView.getText().toString();
 
                             //儲存用戶Firebase UID和暱稱
                             usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
@@ -514,7 +514,7 @@ public class GoogleSignInActivity extends BaseActivity implements
         if (user != null) {
             mStatusTextView.setText(getString(R.string.Google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.Firebase_status_fmt, user.getUid()));
-            mScreenNameTextView.setText(String.format("%s:%s", getResources().getString(R.string.Username), user.getDisplayName()));
+            mScreenNameTextView.setText(String.format("%s%s", getResources().getString(R.string.Username), user.getDisplayName()));
 
             firebaseUidTextView.setVisibility(View.VISIBLE);
 
@@ -522,14 +522,22 @@ public class GoogleSignInActivity extends BaseActivity implements
             findViewById(R.id.google_sign_out_button).setVisibility(View.VISIBLE);
             findViewById(R.id.google_unregister_button).setVisibility(View.VISIBLE);
 
-            if (logInProviderCheckCode.equals("Signed in with Google")) {
-                findViewById(R.id.google_loggedIn_textView).setVisibility(View.VISIBLE);
-                findViewById(R.id.emailPasswordLoggedIn_textView).setVisibility(View.GONE);
-                mScreenNameTextView.setVisibility(View.VISIBLE);
-            } else if (logInProviderCheckCode.equals("Signed in with email and password input")){
-                findViewById(R.id.google_loggedIn_textView).setVisibility(View.GONE);
-                findViewById(R.id.emailPasswordLoggedIn_textView).setVisibility(View.VISIBLE);
-                mScreenNameTextView.setVisibility(View.INVISIBLE);
+            try {
+                if (logInProviderCheckCode.equals("Signed in with Google")) {
+                    findViewById(R.id.google_loggedIn_textView).setVisibility(View.VISIBLE);
+                    findViewById(R.id.emailPasswordLoggedIn_textView).setVisibility(View.GONE);
+                    mScreenNameTextView.setVisibility(View.VISIBLE);
+                } else if (logInProviderCheckCode.equals("Signed in with email and password input")){
+                    findViewById(R.id.google_loggedIn_textView).setVisibility(View.GONE);
+                    findViewById(R.id.emailPasswordLoggedIn_textView).setVisibility(View.VISIBLE);
+                    mScreenNameTextView.setVisibility(View.INVISIBLE);
+                }
+            } catch (Exception e) {
+                if (logInProviderCheckCode==null) {
+                    findViewById(R.id.google_loggedIn_textView).setVisibility(View.GONE);
+                    findViewById(R.id.emailPasswordLoggedIn_textView).setVisibility(View.GONE);
+                    Toast.makeText(getApplicationContext(),getString(R.string.Please_manually_close_and_open_this_app),Toast.LENGTH_LONG).show();
+                }
             }
 
             findViewById(R.id.email_sign_in_button).setVisibility(View.GONE);
@@ -585,7 +593,7 @@ public class GoogleSignInActivity extends BaseActivity implements
     // 重啟App的helper method
     //==========================================================================================
     public void relaunchApp() {
-        Intent relaunchAppIntent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent relaunchAppIntent = new Intent(getApplicationContext(), GoogleSignInActivity.class);
         ProcessPhoenix.triggerRebirth(getApplicationContext(), relaunchAppIntent);
         Runtime.getRuntime().exit(0);
     }
