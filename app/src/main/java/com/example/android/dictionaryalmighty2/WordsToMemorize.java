@@ -247,7 +247,6 @@ public class WordsToMemorize extends AppCompatActivity {
                                 for (int position : reverseSortedPositions) {
 
                                     String wordToDelete = listView.getItemAtPosition(position).toString();
-                                    Toast.makeText(WordsToMemorize.this, wordToDelete,Toast.LENGTH_LONG).show();
 
                                     Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
 
@@ -261,7 +260,7 @@ public class WordsToMemorize extends AppCompatActivity {
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {
-                                            throw databaseError.toException();
+                                                            // throw databaseError.toException();  這句拿掉以免閃退
                                         }
                                     });
 

@@ -153,7 +153,7 @@
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records_page_instructions">(點按 = 帶入單字到首頁或記憶單字；長按 = 存入單字庫 ； 滑動 = 刪除單字)</string>
+    <string name="Search_records_page_instructions">(點按 = 帶入單字到首頁或記憶單字；長按 = 存入單字本 ； 滑動 = 刪除單字)</string>
     <string name="Has_benn_deleted">已刪除</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
@@ -191,7 +191,7 @@
     <string name="You_can_cancel_the_notifications_any_time">您可隨時取消提醒</string>
     <string name="Will_send_the_notifications_on_8_preset_timings">將在預設的8個時間點依序發送提醒</string>
     <string name="Will_send_the_notification_at">將在</string>
-    <string name="Go_to_words_to_memorize_page">前往我的單字記憶庫</string>
+    <string name="Go_to_words_to_memorize_page">前往「我的單字本」</string>
     <string name="Do_you_want_to">您想要：</string>
     <string name="Clear_my_vocabulary_list_button">清空我的記憶庫列表</string>
     <string name="Memorize_this_word">記憶單字</string>
@@ -224,7 +224,7 @@
     <string name="Britannica_encyclopedia">大英百科全書</string>
     <string name="Search_text_here">搜尋文字...</string>
     <string name="Choose_one_preset_timing">選擇一個預設時機點(慎選!選完若反悔須自行在手機日曆中手動刪除通知)</string>
-    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(一鍵打包設定) 1小時,半天,1天,2天,1週,1個月,半年,1年後</string>
+    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(長期包套記憶) 1小時,半天,1天,2天,1週,1個月,半年,1年後</string>
     <string name="In_1_hour">1小時後</string>
     <string name="In_half_a_day">半天後</string>
     <string name="In_2_days">2天後</string>
@@ -327,6 +327,22 @@
     <string name="Currently_logged_in">(已登入 ✓)</string>
     <string name="Database_UID">UID:</string>
     <string name="User">用戶：</string>
-    <string name="Please_manually_close_and_open_this_app">請手動關閉並重新開啟此App</string>
+    <string name="In_1day_week_month">(短期包套記憶) 1天,1週,1個月後</string>
+    <string name="Will_send_the_notifications_on_3_preset_timings">將在預設的3個時間點依序發送提醒</string>
+    <string name="Word_saved_to_my_vocabulary_list">已儲存到「我的單字本」</string>
+    <string name="Show_tutorial">使用教學</string>
+    <string name="Next">下一步</string>
+    <string name="Skip">跳過</string>
+    <string name="Tutorial_for_login_button">點擊這裡可註冊、登入、登出或刪除用戶。註冊用戶即可透過雲端備份您的查詢紀錄和單字本，遇到手機重灌或重新安裝App也不怕丟了單字！</string>
+    <string name="Tutorial_for_user_input_history_button">點擊這裡進入您的查詢紀錄頁面和單字本。</string>
+    <string name="Tutorial_for_delete_user_input_button">點擊這裡清空查詢欄位內的文字。</string>
+    <string name="Tutorial_for_default_search_button">快速查詢一部字典。(您要先設定一部預設字典，或使用系統為您推薦的預設字典)</string>
+    <string name="Tutorial_for_combo_search_button">3連搜三部預設字典。(您要先設定三部預設字典，或使用系統為您推薦的預設字典)</string>
+    <string name="Tutorial_for_dictionary_spinner">按這裡顯示字典選單。簡易版提供您最常會用到的精選字典，專業版收錄超過80部字典，一般字典、專業技術字典、發音字典、例句字典、介係詞字典、單複數型字典、百科全書等等任君挑選！</string>
+    <string name="Tutorial_for_proOrSimplifiedLayoutSwitch">按這裡切換簡易版或專業版。</string>
+    <string name="Tutorial_for_browserSwitch">字典網頁的顯示開關。</string>
+    <string name="Tutorial_for_voiceRecognitionImageView">懶得手打查單字? 語音辨識助理讓您用說的來查單字。</string>
+    <string name="Tutorial_for_ocrImageView">不會打某個單字或單字太長懶得打字? 光學掃描助理讓您用相機掃描或掃描相簿的圖片來查單字。(需另外安裝第三方App)</string>
+    <string name="Tutorial_for_otherFunctionsImageView">要設置預設字典和其他功能就按這裡。</string>
 </resources>
 

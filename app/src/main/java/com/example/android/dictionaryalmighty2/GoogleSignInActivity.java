@@ -24,6 +24,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -36,7 +37,9 @@ import static com.example.android.dictionaryalmighty2.MainActivity.logInProvider
 import static com.example.android.dictionaryalmighty2.MainActivity.logInProviderCheckCodeSharedPreferences;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
+import static com.example.android.dictionaryalmighty2.MainActivity.userInputLoginEmail;
 import static com.example.android.dictionaryalmighty2.MainActivity.userInputLoginEmailSharedPreferences;
+import static com.example.android.dictionaryalmighty2.MainActivity.userInputLoginPassword;
 import static com.example.android.dictionaryalmighty2.MainActivity.userInputLoginPasswordSharedPreferences;
 import static com.example.android.dictionaryalmighty2.MainActivity.userScreenName;
 import static com.example.android.dictionaryalmighty2.MainActivity.userScreenNameSharedPreferences;
@@ -536,7 +539,6 @@ public class GoogleSignInActivity extends BaseActivity implements
                 if (logInProviderCheckCode==null) {
                     findViewById(R.id.google_loggedIn_textView).setVisibility(View.GONE);
                     findViewById(R.id.emailPasswordLoggedIn_textView).setVisibility(View.GONE);
-                    Toast.makeText(getApplicationContext(),getString(R.string.Please_manually_close_and_open_this_app),Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -574,7 +576,11 @@ public class GoogleSignInActivity extends BaseActivity implements
         } else if (i == R.id.google_sign_out_button) {
             signOut();
         } else if (i == R.id.google_unregister_button) {
-            googleReauthenticate();
+            if (findViewById(R.id.google_loggedIn_textView).isShown()) {
+                googleReauthenticate();
+            } else if (findViewById(R.id.emailPasswordLoggedIn_textView).isShown()) {
+                emailPasswordReauthenticate();
+            }
             signOutAndDeleteUser();
         }
                                                                         //        else if (i == R.id.email_sign_out_button) {
@@ -623,40 +629,38 @@ public class GoogleSignInActivity extends BaseActivity implements
                                             }
                                         }
                                     });
-
                         }
                     });
         }
     }
 
 
-                                                                        //    public void emailPasswordReauthenticate() {
-                                                                        //        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                                                        //
-                                                                        //        // Get auth credentials from the user for re-authentication.
-                                                                        //        AuthCredential credential = EmailAuthProvider
-                                                                        //                .getCredential(userInputLoginEmail, userInputLoginPassword);
-                                                                        //
-                                                                        //        // Prompt the user to re-provide their sign-in credentials
-                                                                        //        if (user != null) {
-                                                                        //            user.reauthenticate(credential)
-                                                                        //                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        //                        @Override
-                                                                        //                        public void onComplete(@NonNull Task<Void> task) {
-                                                                        //                            user.delete()
-                                                                        //                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                                        //                                        @Override
-                                                                        //                                        public void onComplete(@NonNull Task<Void> task) {
-                                                                        //                                            if (task.isSuccessful()) {
-                                                                        //                                                Log.d(TAG, "User account deleted.");
-                                                                        //                                            }
-                                                                        //                                        }
-                                                                        //                                    });
-                                                                        //
-                                                                        //                        }
-                                                                        //                    });
-                                                                        //        }
-                                                                        //    }
+    public void emailPasswordReauthenticate() {
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Get auth credentials from the user for re-authentication.
+        AuthCredential credential = EmailAuthProvider
+                .getCredential(userInputLoginEmail, userInputLoginPassword);
+
+        // Prompt the user to re-provide their sign-in credentials
+        if (user != null) {
+            user.reauthenticate(credential)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            user.delete()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                Log.d(TAG, "User account deleted.");
+                                            }
+                                        }
+                                    });
+                        }
+                    });
+        }
+    }
 
 
     //==========================================================================================

@@ -18,6 +18,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
@@ -84,6 +85,9 @@ import java.util.Locale;
 import java.util.Objects;
 
 import pl.droidsonroids.gif.GifImageView;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
 
@@ -131,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String IMAGE_UNSPECIFIED = "image/*";
     static String intentReceivedText;  //接收其他外部App傳來的文字
     String FriebaseUrl; //接收Firebase傳來的URL
+    private static final String SHOWCASE_ID = "Sequence Showcase";
 
     AlertDialog.Builder defaultSearchAlertDialog; //專業版自訂單一預設字典名單的對話方塊
     AlertDialog.Builder defaultComboSearchAlertDialogFirstDictionary; //專業版自訂第一個預設字典名單的對話方塊
@@ -183,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
     static SharedPreferences userInputLoginPasswordSharedPreferences;  //儲存用戶登入密碼的SharedPreferences
     static SharedPreferences googleIdTokenSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
     static SharedPreferences logInProviderCheckCodeSharedPreferences;  //儲存用戶以哪種方式登入帳戶
+    SharedPreferences savedAppVersionCodeSharedPreferences; //For storing savedAppVersionCode，用來判斷用戶是否為首次安裝
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
     SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
@@ -225,6 +231,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         requestWritePermission();  //在程式運行中要求存取的權限
         invalidateOptionsMenu();   //Change the menu in the action bar.
+
+
+
+        /**
+         * 檢查是否是首次安裝App，是的話就顯示教學模式
+         */
+        //延遲5秒顯示教學模式(等元件都載入完)
+        Runnable r = new Runnable() {
+            @Override
+            public void run() {
+                checkFirstRun(); //檢查用戶是否為首次安裝
+            }
+        };
+        Handler h =new Handler();
+        h.postDelayed(r, 5000);
 
 
         /**
@@ -1505,6 +1526,10 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
                     }
 
+                } else if (position == 6) {
+                    //顯示使用教學
+                    MaterialShowcaseView.resetAll(getApplicationContext());
+                    showTutorSequence();
                 }
 
                 otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
@@ -1608,6 +1633,10 @@ public class MainActivity extends AppCompatActivity {
                     //把AlertDialog顯示出來
                     doYouReallyWantToClearListAlertDialog.create().show();
 
+                } else if (position == 5) {
+                    //顯示使用教學
+                    MaterialShowcaseView.resetAll(getApplicationContext());
+                    showTutorSequence();
                 }
 
                 otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
@@ -5992,7 +6021,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //==============================================================================================
-    // 設置接收Firebase dynamic links
+    // 設置接收Firebase dynamic links的Helper Method
     //==============================================================================================
     private void checkForDynamicLinks() {
         FirebaseDynamicLinks.getInstance()
@@ -6036,6 +6065,177 @@ public class MainActivity extends AppCompatActivity {
                         Log.w("MainActivity", "Oops, we couldn't retrieve that dynamic link data.", e);
                     }
                 });
+    }
+
+
+
+    //==============================================================================================
+    // 設置教學模式的Helper Method
+    //==============================================================================================
+    private void showTutorSequence() {
+
+        ShowcaseConfig config = new ShowcaseConfig(); //create the showcase config
+        config.setDelay(500); //set the delay of each sequence using millis variable
+
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID); // create the material showcase sequence
+
+        sequence.setOnItemShownListener(new MaterialShowcaseSequence.OnSequenceItemShownListener() {
+            @Override
+            public void onShow(MaterialShowcaseView itemView, int position) {
+                                                            // Toast.makeText(itemView.getContext(), "Item #" + position, Toast.LENGTH_SHORT).show();
+            }
+        }); // set the listener of the sequence order to know we are in which position
+
+        sequence.setConfig(config); //set the showcase config to the sequence.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(findViewById(R.id.log_in_button))
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_login_button))
+                        .withCircleShape()
+                        .build()
+        );
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(userInputHistoryButton)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_user_input_history_button))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 2nd sequence, in this case it is a button.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(deleteUserInput)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_delete_user_input_button))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 3rd sequence, in this case it is a button.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(defaultSearchButton)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_default_search_button))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 4th sequence, in this case it is a button.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(comboSearchButton)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_combo_search_button))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 5th sequence, in this case it is a button.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(JpDictionarySpinner)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_dictionary_spinner))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 6th sequence, in this case it is a spinner.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(proOrSimplifiedLayoutSwitch)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_proOrSimplifiedLayoutSwitch))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 7th sequence, in this case it is a switch.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(browserSwitch)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_browserSwitch))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 8th sequence, in this case it is a switch.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(voiceRecognitionImageView)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_voiceRecognitionImageView))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 9th sequence, in this case it is an imageView.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(ocrImageView)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_ocrImageView))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 10th sequence, in this case it is an imageView.
+
+        sequence.addSequenceItem(
+                new MaterialShowcaseView.Builder(this)
+                        .setTarget(otherFunctionsImageView)
+                        .setDismissText(getString(R.string.Next))
+                        .setSkipText(getString(R.string.Skip))
+                        .setContentText(getString(R.string.Tutorial_for_otherFunctionsImageView))
+                        .withCircleShape()
+                        .build()
+        ); // add view for the 11th sequence, in this case it is an imageView.
+
+        sequence.start(); //start the sequence showcase
+
+    }
+
+
+
+    //==============================================================================================
+    // 檢查用戶是否是首次安裝App的Helper Method
+    //==============================================================================================
+    private void checkFirstRun() {
+
+        final String PREFS_NAME = "MyPrefsFile";
+        final String PREF_VERSION_CODE_KEY = "version_code";
+        final int DOESNT_EXIST = -1;
+
+        // Get current version code
+        int currentAppVersionCode = BuildConfig.VERSION_CODE;
+
+        // Get saved version code
+        savedAppVersionCodeSharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        int savedAppVersionCode = savedAppVersionCodeSharedPreferences.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+
+        // Check for first run or upgrade
+        if (currentAppVersionCode == savedAppVersionCode) {
+            // This is just a normal run
+            return;
+
+        } else if (savedAppVersionCode == DOESNT_EXIST) {
+            // This is a new install (or the user cleared the shared preferences)
+            showTutorSequence();
+
+        } else if (currentAppVersionCode > savedAppVersionCode) {
+            // This is an upgrade
+            return;
+        }
+
+        // Update the shared preferences with the current version code
+        savedAppVersionCodeSharedPreferences.edit().putInt(PREF_VERSION_CODE_KEY, currentAppVersionCode).apply();
     }
 
 

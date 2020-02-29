@@ -8,6 +8,7 @@
         <item>@string/Set_default_dictionary</item>
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
         <item>@string/Call_Japanese_food_dictionary</item>
+        <item>@string/Show_tutorial</item>
 
     </string-array>
 
@@ -19,6 +20,7 @@
         <item>@string/Set_default_dictionary</item>
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
         <item>@string/Clear_search_input</item>
+        <item>@string/Show_tutorial</item>
 
     </string-array>
 
@@ -180,6 +182,7 @@
 
     <string-array name="preset_notification_timings">
         <item>@string/In_an_hour_halfDay_1day_2days_week_month_6months_year</item>
+        <item>@string/In_1day_week_month</item>
         <item>@string/In_1_hour</item>
         <item>@string/In_half_a_day</item>
         <item>@string/In_1_day</item>
@@ -458,7 +461,7 @@
     <string name="Browser_switch">Browser Switch</string>
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
-    <string name="Search_records_page_instructions">(Finger tap = search memorize word ; Long press = save to word bank ; Swipe = delete word)</string>
+    <string name="Search_records_page_instructions">(Finger tap = search/memorize word ; Long press = save to vocabulary list ; Swipe = delete word)</string>
     <string name="Has_benn_deleted">" has benn deleted"</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
@@ -496,7 +499,7 @@
     <string name="blank_space"></string>
     <string name="You_can_cancel_the_notifications_any_time">You can cancel the notification(s) any time</string>
     <string name="Will_send_the_notifications_on_8_preset_timings">Will send the notifications on the 8 preset timings sequentially</string>
-    <string name="Go_to_words_to_memorize_page">Go to \"Words to Memorize\" page</string>
+    <string name="Go_to_words_to_memorize_page">Go to \"My Vocabulary List\"</string>
     <string name="Do_you_want_to">Do you want to:</string>
     <string name="Clear_my_vocabulary_list_button">Clear my vocabulary list</string>
     <string name="Memorize_this_word">Memorize this word</string>
@@ -529,7 +532,7 @@
     <string name="Britannica_encyclopedia">Britannica Encyclopedia</string>
     <string name="Search_text_here">Search text here...</string>
     <string name="Choose_one_preset_timing">Choose one preset timing (Use with caution! To cancel a notitification will require the user to manually delete it on the phone\'s calendar.)</string>
-    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">In 1Hr, half a day, 1 day, 2 days, 1 week, 1 month, 6 months, 1 year sequentially (Package Timings)</string>
+    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(Long Package Timings) In 1Hr, half a day, 1 day, 2 days, 1 week, 1 month, 6 months, 1 year sequentially</string>
     <string name="In_1_hour">In1 hour</string>
     <string name="In_half_a_day">In half a day</string>
     <string name="In_2_days">In 2 days</string>
@@ -576,7 +579,23 @@
     <string name="Currently_logged_in">(✓ Currently logged in)</string>
     <string name="Database_UID">UID:</string>
     <string name="User">User:</string>
-    <string name="Please_manually_close_and_open_this_app">Please manually close and re-open this app</string>
+    <string name="In_1day_week_month">(Short Package Timings) In a day, 1 week, 1 month</string>
+    <string name="Will_send_the_notifications_on_3_preset_timings">Will send the notifications on the 3 preset timings sequentially</string>
+    <string name="Word_saved_to_my_vocabulary_list">saved to My Vocabulary List</string>
+    <string name="Show_tutorial">Show tutorial</string>
+    <string name="Next">Next</string>
+    <string name="Skip">Skip</string>
+    <string name="Tutorial_for_login_button">Tap here to register, log in, log out or delete your user account. Register a user account to back up your search history and vocabulary list to the cloud database and never worry about losing them after reinstalling this app or a factory reset.</string>
+    <string name="Tutorial_for_user_input_history_button">Tap here to access your search history and vocabulary list.</string>
+    <string name="Tutorial_for_delete_user_input_button">Tap here to clear the your text in the search box.</string>
+    <string name="Tutorial_for_default_search_button">Quickly search a default dictionary (You\'ll need to set a default dictionary or use a system-recommended default dictionary)</string>
+    <string name="Tutorial_for_combo_search_button">Combo search 3 default dictionary (You\'ll need to set 3 default dictionaries or use  system-recommended default dictionaries)</string>
+    <string name="Tutorial_for_dictionary_spinner">Tap here to drop down the dictionary lists The simplified version of this app provides minimun frequently used dictionaries The pro version has over 80 dicitonaries covering common vocabulary, technical terms, pronunciation, example sentences, plurals, prepositions, encyclopaedia, all in one app.</string>
+    <string name="Tutorial_for_proOrSimplifiedLayoutSwitch">Tap here to switch between pro and simplified versions.</string>
+    <string name="Tutorial_for_browserSwitch">Tap here to switch on or off the browser for displaying dictionary sites.</string>
+    <string name="Tutorial_for_voiceRecognitionImageView">You don\'t even bother to type? Speak it out and let voice recognition do it for you.</string>
+    <string name="Tutorial_for_ocrImageView">Is there a word you can\'t type or is it too long for you to want to type? OCR allows for camera scan and you can even scan images in your gallery. (You\'ll be prompted to install a 3rd-party app)</string>
+    <string name="Tutorial_for_otherFunctionsImageView">Tap here to set default dictionaries or use other functions.</string>
 
 </resources>
 

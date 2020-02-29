@@ -313,34 +313,41 @@ public class UserInputHistory extends AppCompatActivity {
                                                 Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
                                                 break;
                                             case 1:
+                                                setPreDefinedNotificationTimings1Day();
+                                                setPreDefinedNotificationTimings6Days();
+                                                setPreDefinedNotificationTimings1Month();
+                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
+                                                break;
+                                            case 2:
                                                 setPreDefinedNotificationTimings1Hour();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 2:
+                                            case 3:
                                                 setPreDefinedNotificationTimings9Hours();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 3:
+                                            case 4:
                                                 setPreDefinedNotificationTimings1Day();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 4:
+                                            case 5:
                                                 setPreDefinedNotificationTimings2Days();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 5:
+                                            case 6:
                                                 setPreDefinedNotificationTimings6Days();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 6:
+                                            case 7:
                                                 setPreDefinedNotificationTimings1Month();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 7:
+                                            case 8:
                                                 setPreDefinedNotificationTimingsHalfYear();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
-                                            case 8:
+                                            case 9:
                                                 setPreDefinedNotificationTimingsOneYear();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
@@ -449,9 +456,11 @@ public class UserInputHistory extends AppCompatActivity {
 
                 saveMyVocabularyArrayListToSharedPreferences();
 
-                Intent intent = new Intent(UserInputHistory.this, WordsToMemorize.class);
-                intent.putExtra("selectedListviewItemValue",myVocabularyArrayList);
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(),selectedListviewItemValue + getResources().getString(R.string.Word_saved_to_my_vocabulary_list),Toast.LENGTH_LONG).show();
+
+                                                            //                Intent intent = new Intent(UserInputHistory.this, WordsToMemorize.class);
+                                                            //                intent.putExtra("selectedListviewItemValue",myVocabularyArrayList);
+                                                            //                startActivity(intent);
 
                 return true;
             }
@@ -491,7 +500,7 @@ public class UserInputHistory extends AppCompatActivity {
 
                                             @Override
                                             public void onCancelled(@NonNull DatabaseError databaseError) {
-                                                throw databaseError.toException();
+                                                            // throw databaseError.toException();  這句拿掉以免閃退
                                             }
                                         });
                                     }
