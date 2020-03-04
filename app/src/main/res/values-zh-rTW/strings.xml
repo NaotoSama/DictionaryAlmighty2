@@ -18,8 +18,6 @@
     <string name="Weblio_CN">Weblio日中中日字典</string>
     <string name="Weblio_EN">Weblio英日日英字典</string>
     <string name="Sanseido">三省堂日日字典</string>
-    <string name="Japanese_Industry_Terms">訳語翻訳--専門産業</string>
-    <string name="Kanji_Dictionary_Online">日文漢字字典</string>
     <string name="Eijirou">英辞郎</string>
     <string name="How_do_you_say_this_in_English">英語でなんて言うの？</string>
     <string name="Word_Plus_Chinese">關鍵字 + 中文</string>
@@ -174,8 +172,6 @@
     <string name="Choose_3_default_dictionaries">請勾選三個預設字典</string>
     <string name="You_can_only_choose_3_dictionaries">太多了，只能選三個喔</string>
     <string name="Is_plural_dictionary">單複數形字典</string>
-    <string name="Cidian8">詞典吧英漢漢英字典</string>
-    <string name="Cidianwang">詞典王中日日中字典</string>
     <string name="Use_default_settings">使用建議的設定</string>
     <string name="Settings_complete">設定成功</string>
     <string name="Please_set_3_default_dictionaries">請先設置三個預設字典(點選3連搜模式)</string>
@@ -344,5 +340,10 @@
     <string name="Tutorial_for_voiceRecognitionImageView">懶得手打查單字? 語音辨識助理讓您用說的來查單字。</string>
     <string name="Tutorial_for_ocrImageView">不會打某個單字或單字太長懶得打字? 光學掃描助理讓您用相機掃描或掃描相簿的圖片來查單字。(需另外安裝第三方App)</string>
     <string name="Tutorial_for_otherFunctionsImageView">要設置預設字典和其他功能就按這裡。</string>
+    <string name="Google_dictionary">Google字典</string>
+    <string name="Macmillan_dictionary">麥克米倫英英字典</string>
+    <string name="Just_the_word">Just the Word語料庫</string>
+    <string name="Idioms_4_you">i4u 俚語英英字典</string>
+    <string name="The_online_slang_dictionary">線上英文俚語字典</string>
 </resources>
 

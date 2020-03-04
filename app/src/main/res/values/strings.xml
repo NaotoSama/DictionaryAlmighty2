@@ -78,10 +78,11 @@
         <item>@string/Yahoo_Dictionary</item>
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Dict_site</item>
-        <item>@string/Cidian8</item>
+        <item>@string/Google_dictionary</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
         <item>@string/Merriam_Webster</item>
+        <item>@string/Macmillan_dictionary</item>
         <item>@string/Collins</item>
         <item>@string/Oxford</item>
         <item>@string/Vocabulary</item>
@@ -89,19 +90,21 @@
         <item>@string/The_Free_Dictionary</item>
         <item>@string/Your_Dictionary</item>
         <item>@string/Longman_Dictionary</item>
-        <item>@string/Greens_dictionary_of_slang</item>
+        <item>@string/WordWeb_dictionary</item>
         <item>@string/Wiki_Dictionary</item>
         <item>@string/Word_Hippo</item>
         <item>@string/Onelook</item>
         <item>@string/Business_Dictionary</item>
         <item>@string/Slang</item>
+        <item>@string/The_online_slang_dictionary</item>
+        <item>@string/Idioms_4_you</item>
+        <item>@string/Greens_dictionary_of_slang</item>
         <item>@string/YouGlish</item>
         <item>@string/SCI_Dictionary</item>
         <item>@string/TechDico</item>
         <item>@string/BioMedical_dictionary</item>
         <item>@string/Is_plural_dictionary</item>
         <item>@string/Lingo_help_prepositions</item>
-        <item>@string/WordWeb_dictionary</item>
 
         <item>@string/Weblio_JP</item>
         <item>@string/Weblio_CN</item>
@@ -113,13 +116,10 @@
         <item>@string/Tangorin_Sentence</item>
         <item>@string/DA_JP_TW_Dictionary</item>
         <item>@string/DA_TW_JP_Dictionary</item>
-        <item>@string/Cidianwang</item>
         <item>@string/Goo</item>
         <item>@string/Sanseido</item>
         <item>@string/Kotoba_Bank</item>
         <item>@string/J_Logos</item>
-        <item>@string/Japanese_Industry_Terms</item>
-        <item>@string/Kanji_Dictionary_Online</item>
         <item>@string/Eijirou</item>
         <item>@string/How_do_you_say_this_in_English</item>
         <item>@string/Jisho</item>
@@ -155,6 +155,7 @@
         <item>@string/Forvo</item>
         <item>@string/Wiki_Diff</item>
         <item>@string/Net_Speak</item>
+        <item>@string/Just_the_word</item>
         <item>@string/Yomikata</item>
         <item>@string/Chigai</item>
         <item>@string/OJAD</item>
@@ -165,6 +166,7 @@
         <item>@string/Yahoo_Dictionary</item>
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Dict_site</item>
+        <item>@string/Google_dictionary</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
 
@@ -224,8 +226,6 @@
     <string name="Weblio_CN">Weblio CN</string>
     <string name="Weblio_EN">Weblio EN</string>
     <string name="Sanseido">三省堂</string>
-    <string name="Japanese_Industry_Terms">訳語翻訳--専門産業</string>
-    <string name="Kanji_Dictionary_Online">漢字辞典オンライン</string>
     <string name="Eijirou">英辞郎</string>
     <string name="How_do_you_say_this_in_English">英語でなんて言うの？</string>
     <string name="Word_Plus_Chinese">Word + 中文</string>
@@ -307,6 +307,8 @@
 
     <string name="label_facebook_login">Firebase + Facebook Login</string>
     <string name="desc_facebook_login" translatable="false">Use a Facebook Login credential to authenticate with Firebase.</string>
+    <string name="facebook_application_id" translatable="false">1329615473905535</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb1329615473905535</string>
 
     <string name="label_emailpassword">Email/Password Authentication</string>
     <string name="desc_emailpassword" translatable="false">Use an email and password to authenticate with Firebase.</string>
@@ -482,8 +484,6 @@
     <string name="Choose_3_default_dictionaries">Choose 3 default dictionaries</string>
     <string name="You_can_only_choose_3_dictionaries">You can only choose 3 dictionaries and no more</string>
     <string name="Is_plural_dictionary">Is Plural Dictionary</string>
-    <string name="Cidian8">Cidian8  EC CE</string>
-    <string name="Cidianwang">Cidianwang CJ JC</string>
     <string name="Use_default_settings">Use Default Settings</string>
     <string name="Settings_complete">Settings complete</string>
     <string name="Please_set_3_default_dictionaries">Please set 3 default dictionaries</string>
@@ -596,6 +596,11 @@
     <string name="Tutorial_for_voiceRecognitionImageView">You don\'t even bother to type? Speak it out and let voice recognition do it for you.</string>
     <string name="Tutorial_for_ocrImageView">Is there a word you can\'t type or is it too long for you to want to type? OCR allows for camera scan and you can even scan images in your gallery. (You\'ll be prompted to install a 3rd-party app)</string>
     <string name="Tutorial_for_otherFunctionsImageView">Tap here to set default dictionaries or use other functions.</string>
+    <string name="Google_dictionary">Google Dictionary</string>
+    <string name="Macmillan_dictionary">Macmillan Dictionary</string>
+    <string name="Just_the_word">Just the Word Corpus</string>
+    <string name="The_online_slang_dictionary">The Online Slang Dictionary</string>
+    <string name="Idioms_4_you">Idioms 4 you</string>
 
 </resources>
 

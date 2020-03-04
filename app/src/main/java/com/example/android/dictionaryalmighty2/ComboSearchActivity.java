@@ -219,9 +219,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
                         comboSearchWebViewBrowser1.loadUrl(dictDotSiteUrl);
                         break;
-                    case "Cidian8":
-                        String cidian8Url= "http://www.cidian8.com/ec/?w="+searchKeyword;
-                        comboSearchWebViewBrowser1.loadUrl(cidian8Url);
+                    case "Google Dictionary":
+                        String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
+                        comboSearchWebViewBrowser1.loadUrl(googleDictionaryUrl);
                         break;
                     case "VoiceTube":
                         String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
@@ -234,6 +234,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "Merriam Webster":
                         String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(merriamDictionaryUrl);
+                        break;
+                    case "Macmillan Dictionary":
+                        String macmillanDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+searchKeyword+"_1";
+                        comboSearchWebViewBrowser1.loadUrl(macmillanDictionaryUrl);
                         break;
                     case "Collins":
                         String collinsDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
@@ -263,9 +267,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(longmanDictionaryUrl);
                         break;
-                    case "Greens dictionary of slang":
-                        String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
-                        comboSearchWebViewBrowser1.loadUrl(greensDictionaryOfSlangUrl);
+                    case "WordWeb":
+                        String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordWebUrl);
                         break;
                     case "Wiki Dictionary":
                         String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
@@ -286,6 +290,18 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "Slang":
                         String slangDictionary= "http://www.yiym.com/?s="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(slangDictionary);
+                        break;
+                    case "The Online Slang Dictionary":
+                        String theOnlineSlangDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+searchKeyword+"&sa=Search";
+                        comboSearchWebViewBrowser1.loadUrl(theOnlineSlangDictionaryUrl);
+                        break;
+                    case "Idioms 4 You":
+                        String idioms4YouUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(idioms4YouUrl);
+                        break;
+                    case "Greens dictionary of slang":
+                        String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(greensDictionaryOfSlangUrl);
                         break;
                     case "YouGlish":
                         String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
@@ -310,10 +326,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "LingoHelpPrepositions":
                         String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(lingoHelpPrepositionsUrl);
-                        break;
-                    case "WordWeb":
-                        String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
-                        comboSearchWebViewBrowser1.loadUrl(wordWebUrl);
                         break;
                     case "Weblio JP":
                         String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -355,10 +367,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String DaCHtoJPDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(DaCHtoJPDictionaryUrl);
                         break;
-                    case "Cidianwang":
-                        String CidianwangUrl= "http://m.cidianwang.com/search/jp/?q="+searchKeyword+"&y=1";
-                        comboSearchWebViewBrowser1.loadUrl(CidianwangUrl);
-                        break;
                     case "Goo":
                         String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
                         comboSearchWebViewBrowser1.loadUrl(gooDictionaryUrl);
@@ -374,14 +382,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "J Logos":
                         String jlogosUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
                         comboSearchWebViewBrowser1.loadUrl(jlogosUrl);
-                        break;
-                    case "Japanese Industry Terms":
-                        String industryDictionaryUrl= "https://www.sangyo-honyaku.jp/dictionaries/index/search_info:"+searchKeyword+"_ＩＴ・機械・電気電子";
-                        comboSearchWebViewBrowser1.loadUrl(industryDictionaryUrl);
-                        break;
-                    case "Kanji Dictionary Online":
-                        String KanjiDictionaryUrl= "https://kanji.jitenon.jp/cat/search.php?getdata="+searchKeyword+"&search=fpart&search2=twin";
-                        comboSearchWebViewBrowser1.loadUrl(KanjiDictionaryUrl);
                         break;
                     case "Eijirou":
                         String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
@@ -511,6 +511,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(netspeakUrl);
                         break;
+                    case "Just the Word":
+                        String justTheWordUrl= "http://www.just-the-word.com/main.pl?word="+searchKeyword+"+&mode=combinations";
+                        comboSearchWebViewBrowser1.loadUrl(justTheWordUrl);
+                        break;
                     case "Yomikata":
                         String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
                         comboSearchWebViewBrowser1.loadUrl(yomikatawaUrl);
@@ -549,9 +553,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
                 comboSearchWebViewBrowser2.loadUrl(dictDotSiteUrl);
                 break;
-            case "Cidian8":
-                String cidian8Url= "http://www.cidian8.com/ec/?w="+searchKeyword;
-                comboSearchWebViewBrowser2.loadUrl(cidian8Url);
+            case "Google Dictionary":
+                String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
+                comboSearchWebViewBrowser2.loadUrl(googleDictionaryUrl);
                 break;
             case "VoiceTube":
                 String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
@@ -564,6 +568,10 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Merriam Webster":
                 String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(merriamDictionaryUrl);
+                break;
+            case "Macmillan Dictionary":
+                String macmillanDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+searchKeyword+"_1";
+                comboSearchWebViewBrowser2.loadUrl(macmillanDictionaryUrl);
                 break;
             case "Collins":
                 String collinsDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
@@ -593,9 +601,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(longmanDictionaryUrl);
                 break;
-            case "Greens dictionary of slang":
-                String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
-                comboSearchWebViewBrowser2.loadUrl(greensDictionaryOfSlangUrl);
+            case "WordWeb":
+                String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordWebUrl);
                 break;
             case "Wiki Dictionary":
                 String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
@@ -616,6 +624,18 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Slang":
                 String slangDictionary= "http://www.yiym.com/?s="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(slangDictionary);
+                break;
+            case "The Online Slang Dictionary":
+                String theOnlineSlangDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+searchKeyword+"&sa=Search";
+                comboSearchWebViewBrowser2.loadUrl(theOnlineSlangDictionaryUrl);
+                break;
+            case "Idioms 4 You":
+                String idioms4YouUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(idioms4YouUrl);
+                break;
+            case "Greens dictionary of slang":
+                String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(greensDictionaryOfSlangUrl);
                 break;
             case "YouGlish":
                 String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
@@ -640,10 +660,6 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "LingoHelpPrepositions":
                 String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(lingoHelpPrepositionsUrl);
-                break;
-            case "WordWeb":
-                String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
-                comboSearchWebViewBrowser2.loadUrl(wordWebUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -685,10 +701,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String DaCHtoJPDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(DaCHtoJPDictionaryUrl);
                 break;
-            case "Cidianwang":
-                String CidianwangUrl= "http://m.cidianwang.com/search/jp/?q="+searchKeyword+"&y=1";
-                comboSearchWebViewBrowser2.loadUrl(CidianwangUrl);
-                break;
             case "Goo":
                 String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
                 comboSearchWebViewBrowser2.loadUrl(gooDictionaryUrl);
@@ -704,14 +716,6 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "J Logos":
                 String jlogosUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
                 comboSearchWebViewBrowser2.loadUrl(jlogosUrl);
-                break;
-            case "Japanese Industry Terms":
-                String industryDictionaryUrl= "https://www.sangyo-honyaku.jp/dictionaries/index/search_info:"+searchKeyword+"_ＩＴ・機械・電気電子";
-                comboSearchWebViewBrowser2.loadUrl(industryDictionaryUrl);
-                break;
-            case "Kanji Dictionary Online":
-                String KanjiDictionaryUrl= "https://kanji.jitenon.jp/cat/search.php?getdata="+searchKeyword+"&search=fpart&search2=twin";
-                comboSearchWebViewBrowser2.loadUrl(KanjiDictionaryUrl);
                 break;
             case "Eijirou":
                 String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
@@ -841,6 +845,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(netspeakUrl);
                 break;
+            case "Just the Word":
+                String justTheWordUrl= "http://www.just-the-word.com/main.pl?word="+searchKeyword+"+&mode=combinations";
+                comboSearchWebViewBrowser2.loadUrl(justTheWordUrl);
+                break;
             case "Yomikata":
                 String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
                 comboSearchWebViewBrowser2.loadUrl(yomikatawaUrl);
@@ -879,9 +887,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
                 comboSearchWebViewBrowser3.loadUrl(dictDotSiteUrl);
                 break;
-            case "Cidian8":
-                String cidian8Url= "http://www.cidian8.com/ec/?w="+searchKeyword;
-                comboSearchWebViewBrowser3.loadUrl(cidian8Url);
+            case "Google Dictionary":
+                String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
+                comboSearchWebViewBrowser1.loadUrl(googleDictionaryUrl);
                 break;
             case "VoiceTube":
                 String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
@@ -894,6 +902,10 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Merriam Webster":
                 String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(merriamDictionaryUrl);
+                break;
+            case "Macmillan Dictionary":
+                String macmillanDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+searchKeyword+"_1";
+                comboSearchWebViewBrowser3.loadUrl(macmillanDictionaryUrl);
                 break;
             case "Collins":
                 String collinsDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
@@ -923,9 +935,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(longmanDictionaryUrl);
                 break;
-            case "Greens dictionary of slang":
-                String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
-                comboSearchWebViewBrowser3.loadUrl(greensDictionaryOfSlangUrl);
+            case "WordWeb":
+                String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordWebUrl);
                 break;
             case "Wiki Dictionary":
                 String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
@@ -946,6 +958,18 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Slang":
                 String slangDictionary= "http://www.yiym.com/?s="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(slangDictionary);
+                break;
+            case "The Online Slang Dictionary":
+                String theOnlineSlangDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+searchKeyword+"&sa=Search";
+                comboSearchWebViewBrowser3.loadUrl(theOnlineSlangDictionaryUrl);
+                break;
+            case "Idioms 4 You":
+                String idioms4YouUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(idioms4YouUrl);
+                break;
+            case "Greens dictionary of slang":
+                String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(greensDictionaryOfSlangUrl);
                 break;
             case "YouGlish":
                 String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
@@ -970,10 +994,6 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "LingoHelpPrepositions":
                 String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(lingoHelpPrepositionsUrl);
-                break;
-            case "WordWeb":
-                String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
-                comboSearchWebViewBrowser3.loadUrl(wordWebUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -1015,10 +1035,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String DaCHtoJPDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(DaCHtoJPDictionaryUrl);
                 break;
-            case "Cidianwang":
-                String CidianwangUrl= "http://m.cidianwang.com/search/jp/?q="+searchKeyword+"&y=1";
-                comboSearchWebViewBrowser3.loadUrl(CidianwangUrl);
-                break;
             case "Goo":
                 String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
                 comboSearchWebViewBrowser3.loadUrl(gooDictionaryUrl);
@@ -1034,14 +1050,6 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "J Logos":
                 String jlogosUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
                 comboSearchWebViewBrowser3.loadUrl(jlogosUrl);
-                break;
-            case "Japanese Industry Terms":
-                String industryDictionaryUrl= "https://www.sangyo-honyaku.jp/dictionaries/index/search_info:"+searchKeyword+"_ＩＴ・機械・電気電子";
-                comboSearchWebViewBrowser3.loadUrl(industryDictionaryUrl);
-                break;
-            case "Kanji Dictionary Online":
-                String KanjiDictionaryUrl= "https://kanji.jitenon.jp/cat/search.php?getdata="+searchKeyword+"&search=fpart&search2=twin";
-                comboSearchWebViewBrowser3.loadUrl(KanjiDictionaryUrl);
                 break;
             case "Eijirou":
                 String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
@@ -1170,6 +1178,10 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Net Speak":
                 String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(netspeakUrl);
+                break;
+            case "Just the Word":
+                String justTheWordUrl= "http://www.just-the-word.com/main.pl?word="+searchKeyword+"+&mode=combinations";
+                comboSearchWebViewBrowser3.loadUrl(justTheWordUrl);
                 break;
             case "Yomikata":
                 String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
