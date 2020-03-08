@@ -6,6 +6,8 @@
         <item>@string/Return_to_default_background_image</item>
         <item>@string/Clear_search_input</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Online_chat_room</item>
+
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
         <item>@string/Call_Japanese_food_dictionary</item>
         <item>@string/Show_tutorial</item>
@@ -18,6 +20,7 @@
         <item>@string/Change_background</item>
         <item>@string/Return_to_default_background_image</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Online_chat_room</item>
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
         <item>@string/Clear_search_input</item>
         <item>@string/Show_tutorial</item>
@@ -531,7 +534,7 @@
     <string name="Kanji_recognizer">Kanji Recognizer</string>
     <string name="Britannica_encyclopedia">Britannica Encyclopedia</string>
     <string name="Search_text_here">Search text here...</string>
-    <string name="Choose_one_preset_timing">Choose one preset timing (Use with caution! To cancel a notitification will require the user to manually delete it on the phone\'s calendar.)</string>
+    <string name="Choose_one_preset_timing">Choose one preset timing (Use with caution! To cancel a notification will require the user to manually delete it on the phone\'s calendar.)</string>
     <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(Long Package Timings) In 1Hr, half a day, 1 day, 2 days, 1 week, 1 month, 6 months, 1 year sequentially</string>
     <string name="In_1_hour">In1 hour</string>
     <string name="In_half_a_day">In half a day</string>
@@ -590,7 +593,7 @@
     <string name="Tutorial_for_delete_user_input_button">Tap here to clear the your text in the search box.</string>
     <string name="Tutorial_for_default_search_button">Quickly search a default dictionary (You\'ll need to set a default dictionary or use a system-recommended default dictionary)</string>
     <string name="Tutorial_for_combo_search_button">Combo search 3 default dictionary (You\'ll need to set 3 default dictionaries or use  system-recommended default dictionaries)</string>
-    <string name="Tutorial_for_dictionary_spinner">Tap here to drop down the dictionary lists The simplified version of this app provides minimun frequently used dictionaries The pro version has over 80 dicitonaries covering common vocabulary, technical terms, pronunciation, example sentences, plurals, prepositions, encyclopaedia, all in one app.</string>
+    <string name="Tutorial_for_dictionary_spinner">Tap here to drop down the dictionary lists The simplified version of this app provides minimun frequently used dictionaries The pro version has over 80 dicitonaries covering common vocabulary, technical terms, pronunciation, example sentences, plurals, prepositions, encyclopedia, all in one app.</string>
     <string name="Tutorial_for_proOrSimplifiedLayoutSwitch">Tap here to switch between pro and simplified versions.</string>
     <string name="Tutorial_for_browserSwitch">Tap here to switch on or off the browser for displaying dictionary sites.</string>
     <string name="Tutorial_for_voiceRecognitionImageView">You don\'t even bother to type? Speak it out and let voice recognition do it for you.</string>
@@ -601,6 +604,8 @@
     <string name="Just_the_word">Just the Word Corpus</string>
     <string name="The_online_slang_dictionary">The Online Slang Dictionary</string>
     <string name="Idioms_4_you">Idioms 4 you</string>
+    <string name="About">About</string>
+    <string name="Online_chat_room">Online Chat Room</string>
 
 </resources>
 

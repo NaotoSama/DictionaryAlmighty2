@@ -47,7 +47,7 @@ public class WordsToMemorize extends AppCompatActivity {
     androidx.appcompat.app.ActionBar actionBar;
 
     Button clearMyVocabularyList;
-    Button aboutMemorizingWordsButton;
+                                                                    //    Button aboutMemorizingWordsButton;
     String selectedMyVocabularyListviewItemValue;
 
     EditText wordsToMemorizeSearchBox;
@@ -74,7 +74,7 @@ public class WordsToMemorize extends AppCompatActivity {
         //findViewById
         myVocabularyListview = findViewById(R.id.my_vocabulary_listview);
         clearMyVocabularyList = findViewById(R.id.clear_my_vocabulary_list_button);
-        aboutMemorizingWordsButton = findViewById(R.id.about_memorizing_words_button);
+                                                                    //        aboutMemorizingWordsButton = findViewById(R.id.about_memorizing_words_button);
         wordsToMemorizeSearchBox = findViewById(R.id.words_to_memorize_search_box);
 
 
@@ -288,17 +288,17 @@ public class WordsToMemorize extends AppCompatActivity {
 
 
 
-        /**
-         * Take the user to the "About memorizing words" page
-         */
-        aboutMemorizingWordsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(WordsToMemorize.this, AboutMemorizingWords.class);
-                startActivity(intent);
-            }
-        });
+                                                                    //        /**
+                                                                    //         * Take the user to the "About memorizing words" page
+                                                                    //         */
+                                                                    //        aboutMemorizingWordsButton.setOnClickListener(new View.OnClickListener() {
+                                                                    //            @Override
+                                                                    //            public void onClick(View v) {
+                                                                    //
+                                                                    //                Intent intent = new Intent(WordsToMemorize.this, AboutMemorizingWords.class);
+                                                                    //                startActivity(intent);
+                                                                    //            }
+                                                                    //        });
 
 
     }

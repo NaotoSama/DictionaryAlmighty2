@@ -1,34 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/rainbow_line_1"
-    android:orientation="vertical">
+    android:background="@drawable/rainbow_line_1">
 
     <TextView
         android:id="@+id/search_record_textView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Search_records_page_instructions"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#3F51B5"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/user_input_history_search_box"
+        app:layout_constraintStart_toStartOf="@+id/user_input_history_search_box"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/user_input_history_search_box"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="50dp"
-        android:hint="@string/Search_text_here">
+        android:hint="@string/Search_text_here"
+        app:layout_constraintBottom_toTopOf="@+id/user_input_listview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_record_textView">
 
     </EditText>
 
     <ListView
         android:id="@+id/user_input_listview"
-        android:layout_width="match_parent"
-        android:layout_height="437dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="32dp"
         android:divider="@android:drawable/divider_horizontal_textfield"
-        android:textAlignment="center">
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@+id/clear_user_input_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/user_input_history_search_box"
+        app:layout_constraintTop_toBottomOf="@+id/user_input_history_search_box">
 
     </ListView>
 
@@ -36,21 +51,27 @@
         android:id="@+id/clear_user_input_list"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="32dp"
         android:background="@color/red"
         android:text="@string/Clear_search_input"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toTopOf="@+id/go_to_words_to_memorize_page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_input_listview" />
 
     <Button
         android:id="@+id/go_to_words_to_memorize_page"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
         android:background="@android:drawable/button_onoff_indicator_on"
         android:text="@string/Go_to_words_to_memorize_page"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clear_user_input_list" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,6 +18,8 @@ import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -554,6 +556,38 @@ public class UserInputHistory extends AppCompatActivity {
 
 
 
+    //==============================================================================================
+    // 在OnCreate外面設置 action bar按鈕
+    //==============================================================================================
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
+        // If you don't have res/menu, just create a directory named "menu" inside res
+        getMenuInflater().inflate(R.menu.action_bar_menue, menu);  //先沿用舊有的佈局檔
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    // Override this method to do whatever change you want with the menu when it is recreated
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.log_in_button).setTitle(getResources().getString(R.string.About)+ System.getProperty("line.separator") + getResources().getString(R.string.Memorize_this_word));
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.log_in_button: //先沿用舊有的按鈕
+                Intent goToAboutMemorizingWordsPageIntent = new Intent(UserInputHistory.this, AboutMemorizingWords.class);
+                startActivity(goToAboutMemorizingWordsPageIntent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
 //==============================================================================================
 // 所有helper methods
 //==============================================================================================
@@ -591,8 +625,8 @@ public class UserInputHistory extends AppCompatActivity {
         customActionBarTextviewforUserInputHistoryPage.setTextSize(20);
         customActionBarTextviewforUserInputHistoryPage.setGravity(Gravity.CENTER);
         customActionBarTextviewforUserInputHistoryPage.setTypeface(Typeface.DEFAULT_BOLD);
-        customActionBarTextviewforUserInputHistoryPage.setTextColor(Color.parseColor("#6ac2eb"));
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD700")));
+        customActionBarTextviewforUserInputHistoryPage.setTextColor(Color.parseColor("#ffffff"));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ff6600")));
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(customActionBarTextviewforUserInputHistoryPage);
 

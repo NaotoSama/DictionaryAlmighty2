@@ -217,6 +217,7 @@ public class MainActivity extends AppCompatActivity {
     public static DatabaseReference mRootReference = FirebaseDatabase.getInstance().getReference();
     public static DatabaseReference mChildReferenceForInputHistory = mRootReference.child("Users' Input History");
     public static DatabaseReference mChildReferenceForVocabularyList = mRootReference.child("Users' Vocabulary List");
+    public static DatabaseReference mChildReferenceForChatMessages = mRootReference.child("Chat Messages");
 
 
 
@@ -1513,6 +1514,11 @@ public class MainActivity extends AppCompatActivity {
                                                                     //                    registerLoginRenameDeleteUsername();
 
                 } else if (position == 5) {
+                    //進入聊天室
+                    Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
+                    startActivity(goToChatRoomIntent);
+
+                } else if (position == 6) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -1528,7 +1534,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
                     }
 
-                } else if (position == 6) {
+                } else if (position == 7) {
                     //顯示使用教學
                     MaterialShowcaseView.resetAll(getApplicationContext());
                     showTutorSequence();
@@ -1636,6 +1642,11 @@ public class MainActivity extends AppCompatActivity {
                     doYouReallyWantToClearListAlertDialog.create().show();
 
                 } else if (position == 5) {
+                    //進入聊天室
+                    Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
+                    startActivity(goToChatRoomIntent);
+
+                } else if (position == 6) {
                     //顯示使用教學
                     MaterialShowcaseView.resetAll(getApplicationContext());
                     showTutorSequence();
