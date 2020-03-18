@@ -129,7 +129,26 @@
         </activity>
 
 
-        <activity android:name=".GoogleSignInActivity"
+        <activity android:name=".SignInActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+
+                                                        <!--        <activity android:name=".GoogleSignInActivity"-->
+                                                        <!--            android:screenOrientation="portrait"-->
+                                                        <!--            android:noHistory="true">-->
+                                                        <!--            <intent-filter>-->
+                                                        <!--                <action android:name="android.intent.action.MAIN" />-->
+                                                        <!--                <action android:name="android.intent.action.VIEW" />-->
+                                                        <!--            </intent-filter>-->
+                                                        <!--        </activity>-->
+
+
+        <activity android:name=".ChatRoomActivity"
             android:screenOrientation="portrait"
             android:noHistory="true">
             <intent-filter>
@@ -139,8 +158,7 @@
         </activity>
 
 
-        <activity android:name=".ChatRoomActivity"
-            android:screenOrientation="portrait"
+        <activity android:name=".MessageAdapter"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

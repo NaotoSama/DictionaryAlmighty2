@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--設置客製化Spinner選單的佈局檔(Logo圖+文字)-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/custom_spinner_image_view"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="0dp"
+
+        android:src="@drawable/ocr"
+        android:background="@drawable/customized_spinner_item_border"/>
+
+    <TextView
+        android:id="@+id/custom_spinner_text_view"
+        android:layout_width="143dp"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/custom_spinner_image_view"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="0dp"
+        android:layout_toEndOf="@+id/custom_spinner_image_view"
+        android:background="@drawable/customized_spinner_item_border"
+        android:gravity="center"
+        android:text="India"
+        android:textAlignment="viewStart"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
+
+</RelativeLayout>

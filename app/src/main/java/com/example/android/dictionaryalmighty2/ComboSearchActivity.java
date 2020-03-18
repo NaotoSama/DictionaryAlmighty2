@@ -1,7 +1,9 @@
 package com.example.android.dictionaryalmighty2;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -10,6 +12,10 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultComboSearchCodeFirstDictionary;
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultComboSearchCodeSecondDictionary;
@@ -25,14 +31,11 @@ public class ComboSearchActivity extends AppCompatActivity {
 // 所有變數Variables
 //==============================================================================================
 
-    static WebView comboSearchWebViewBrowser1;    //網頁框
-    static WebView comboSearchWebViewBrowser2;
-    static WebView comboSearchWebViewBrowser3;
+    static WebView comboSearchWebViewBrowser1, comboSearchWebViewBrowser2, comboSearchWebViewBrowser3;    //網頁框
 
-    ProgressBar comboSearchProgressBar1;   //網頁載入的進度條
-    ProgressBar comboSearchProgressBar2;
-    ProgressBar comboSearchProgressBar3;
+    ProgressBar comboSearchProgressBar1, comboSearchProgressBar2, comboSearchProgressBar3;   //網頁載入的進度條
 
+    FloatingActionButton floatingActionButtonforWebView1, floatingActionButtonforWebView2, floatingActionButtonforWebView3; //浮動按鈕
 
 
 //==============================================================================================
@@ -54,6 +57,10 @@ public class ComboSearchActivity extends AppCompatActivity {
         comboSearchProgressBar1 = findViewById(R.id.combo_search_webView_1_progressBar_1);
         comboSearchProgressBar2 = findViewById(R.id.combo_search_webView_2_progressBar_2);
         comboSearchProgressBar3 = findViewById(R.id.combo_search_webView_3_progressBar_3);
+
+        floatingActionButtonforWebView1 = findViewById(R.id.floating_action_button_for_webView1);
+        floatingActionButtonforWebView2 = findViewById(R.id.floating_action_button_for_webView2);
+        floatingActionButtonforWebView3 = findViewById(R.id.floating_action_button_for_webView3);
 
 
 
@@ -92,6 +99,130 @@ public class ComboSearchActivity extends AppCompatActivity {
         loadFirstDefaultDictionaries();
         loadSecondDefaultDictionaries();
         loadThirdDefaultDictionaries();
+
+
+        /**
+         * 設定點擊浮動按鈕時要顯示或隱藏的物件
+         */
+        floatingActionButtonforWebView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (floatingActionButtonforWebView2.isShown()) {
+
+                    floatingActionButtonforWebView1.setImageResource(R.drawable.minimize_browser_icon);
+                    floatingActionButtonforWebView1.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(192,192,192)));
+
+                    comboSearchWebViewBrowser2.setVisibility(View.GONE);
+                    comboSearchWebViewBrowser3.setVisibility(View.GONE);
+                    comboSearchProgressBar1.setVisibility(View.GONE);
+                    comboSearchProgressBar2.setVisibility(View.GONE);
+                    comboSearchProgressBar3.setVisibility(View.GONE);
+                    floatingActionButtonforWebView2.setVisibility(View.GONE);
+                    floatingActionButtonforWebView3.setVisibility(View.GONE);
+                }
+                else {
+
+                    floatingActionButtonforWebView1.setImageResource(R.drawable.maximize_browser_icon);
+                    floatingActionButtonforWebView1.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.spring_green)));
+
+                    comboSearchWebViewBrowser2.setVisibility(View.VISIBLE);
+                    comboSearchWebViewBrowser3.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar1.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar2.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar3.setVisibility(View.VISIBLE);
+                    floatingActionButtonforWebView2.setVisibility(View.VISIBLE);
+                    floatingActionButtonforWebView3.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        floatingActionButtonforWebView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (floatingActionButtonforWebView3.isShown()) {
+
+                    floatingActionButtonforWebView2.setImageResource(R.drawable.minimize_browser_icon);
+                    floatingActionButtonforWebView2.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(192,192,192)));
+
+                    comboSearchWebViewBrowser1.setVisibility(View.GONE);
+                    comboSearchWebViewBrowser3.setVisibility(View.GONE);
+                    comboSearchProgressBar1.setVisibility(View.GONE);
+                    comboSearchProgressBar2.setVisibility(View.GONE);
+                    comboSearchProgressBar3.setVisibility(View.GONE);
+                    floatingActionButtonforWebView1.setVisibility(View.GONE);
+                    floatingActionButtonforWebView3.setVisibility(View.GONE);
+                }
+                else {
+
+                    floatingActionButtonforWebView2.setImageResource(R.drawable.maximize_browser_icon);
+                    floatingActionButtonforWebView2.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.light_yellow)));
+
+                    comboSearchWebViewBrowser1.setVisibility(View.VISIBLE);
+                    comboSearchWebViewBrowser3.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar1.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar2.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar3.setVisibility(View.VISIBLE);
+                    floatingActionButtonforWebView1.setVisibility(View.VISIBLE);
+                    floatingActionButtonforWebView3.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        floatingActionButtonforWebView3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (floatingActionButtonforWebView1.isShown()) {
+
+                    floatingActionButtonforWebView3.setImageResource(R.drawable.minimize_browser_icon);
+                    floatingActionButtonforWebView3.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(192,192,192)));
+
+                    comboSearchWebViewBrowser1.setVisibility(View.GONE);
+                    comboSearchWebViewBrowser2.setVisibility(View.GONE);
+                    comboSearchProgressBar1.setVisibility(View.GONE);
+                    comboSearchProgressBar2.setVisibility(View.GONE);
+                    comboSearchProgressBar3.setAlpha(0);  //有Bug只好這樣寫
+
+                    //斷開comboSearchProgressBar2的下方constraint才不會在全螢幕時卡在中間
+                    ConstraintSet set = new ConstraintSet();
+                    ConstraintLayout layout;
+                    layout = (ConstraintLayout) findViewById(R.id.combo_search_activity_layout);
+                    set.clone(layout);
+                    // The following breaks the connection.
+                    set.clear(R.id.combo_search_webView_2_progressBar_2, ConstraintSet.BOTTOM);
+                    // Comment out line above and uncomment line below to make the connection.
+                    // set.connect(R.id.bottomText, ConstraintSet.TOP, R.id.imageView, ConstraintSet.BOTTOM, 0);
+                    set.applyTo(layout);
+
+                    floatingActionButtonforWebView1.setVisibility(View.GONE);
+                    floatingActionButtonforWebView2.setVisibility(View.GONE);
+                }
+                else {
+
+                    floatingActionButtonforWebView3.setImageResource(R.drawable.maximize_browser_icon);
+                    floatingActionButtonforWebView3.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.design_default_color_primary)));
+
+                    comboSearchWebViewBrowser1.setVisibility(View.VISIBLE);
+                    comboSearchWebViewBrowser2.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar1.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar2.setVisibility(View.VISIBLE);
+                    comboSearchProgressBar3.setAlpha(1); //有Bug只好這樣寫
+
+                    //從全螢幕狀態返回原狀態時要把斷開的comboSearchProgressBar2下方constraint補回去
+                    ConstraintSet set = new ConstraintSet();
+                    ConstraintLayout layout;
+                    layout = (ConstraintLayout) findViewById(R.id.combo_search_activity_layout);
+                    set.clone(layout);
+                    // The following breaks the connection.
+                    // set.clear(R.id.combo_search_webView_2_progressBar_2, ConstraintSet.BOTTOM);
+                    // Comment out line above and uncomment line below to make the connection.
+                    set.connect(R.id.combo_search_webView_2_progressBar_2, ConstraintSet.BOTTOM, R.id.combo_search_webView_3_progressBar_3, ConstraintSet.BOTTOM, 620);
+                    set.applyTo(layout);
+
+                    floatingActionButtonforWebView1.setVisibility(View.VISIBLE);
+                    floatingActionButtonforWebView2.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
 
 

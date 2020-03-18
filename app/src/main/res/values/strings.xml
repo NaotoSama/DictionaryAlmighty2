@@ -554,11 +554,11 @@
     <string name="Register_or_log_in_username">Register/Log in</string>
     <string name="Delete_username">Delete current username</string>
     <string name="Unregistered_user">(Unregistered user)</string>
-    <string name="Logged_in_as">(Logged in as:</string>
+    <string name="Logged_in_as">Logged</string>
     <string name="Your_new_username_is">Your new username is:</string>
     <string name="Rename_your_username">Rename your username</string>
     <string name="You_are_already_logged_in">You are already logged in</string>
-    <string name="You_have_not_entered_any_username">You have not entered any username</string>
+    <string name="You_have_not_entered_anything">You have not entered any anything</string>
     <string name="You_are_using_cloud_storage">You are using cloud storage</string>
     <string name="You_are_using_local_storage">You are using local storage</string>
     <string name="Do_you_remember_this_word">*</string>
@@ -568,7 +568,7 @@
     <string name="Delete_user">Delete User</string>
     <string name="Login_successful">Login successful</string>
     <string name="User_deleted">User deleted</string>
-    <string name="Relaunching_app">Relaunching app in 5 seconds</string>
+    <string name="Relaunching_app">Relaunching app...</string>
     <string name="status_log_in_cancelled">Log in cancelled</string>
     <string name="Via_google_account">Via Google Account</string>
     <string name="Via_email_and_password">Sign in or sign up via Email &amp; Password</string>
@@ -605,7 +605,22 @@
     <string name="The_online_slang_dictionary">The Online Slang Dictionary</string>
     <string name="Idioms_4_you">Idioms 4 you</string>
     <string name="About">About</string>
-    <string name="Online_chat_room">Online Chat Room</string>
+    <string name="Online_chat_room">Chat Room</string>
+    <string name="Do_you_really_want_to_delete_your_account">For safety, log out and in again before you unregister in case of failure.</string>
+    <string name="Do_you_really_want_to_log_out">Do you really want to log out?</string>
+    <string name="Change_user_screen_name">Change user screen name</string>
+    <string name="Change_user_info">Change user information</string>
+    <string name="Type_your_new_screen_name">Type your new screen name</string>
+    <string name="Your_screen_name_is_changed_successfully">Your screen name is changed successfully. Relaunching the app...</string>
+    <string name="Change_password">Change password</string>
+    <string name="Type_your_new_password">Type your new password</string>
+    <string name="Please_log_in_and_out_again">For safety, log out and in again before you unregister in case of failure.</string>
+    <string name="Your_passwod_is_changed_successfully">Your passwod is changed successfully. Relaunching the app...</string>
+    <string name="User_password_change_failed">User certificate expired and password change failed. Please manually log out and in again before changing the password.</string>
+    <string name="Change_email">Change email</string>
+    <string name="Type_your_new_email">Type your new email</string>
+    <string name="Your_email_is_changed_successfully">Your email is changed successfully. Relaunching the app...</string>
+    <string name="User_email_change_failed">User certificate expired and email change failed. Please manually log out and in again before changing the password.</string>
 
 </resources>
 

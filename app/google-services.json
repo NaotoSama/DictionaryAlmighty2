@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "825392319740",
+    "firebase_url": "https://dictionaryalmighty2.firebaseio.com",
+    "project_id": "dictionaryalmighty2",
+    "storage_bucket": "dictionaryalmighty2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825392319740:android:35346be2cb75cd0140db79",
+        "android_client_info": {
+          "package_name": "com.example.android.dictionaryalmighty2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825392319740-5v5sasdsgnso030lpspt9tpd9cksebqt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.dictionaryalmighty2",
+            "certificate_hash": "545ee5fa5fb80f1dd57f645fc1b5357eab8b0366"
+          }
+        },
+        {
+          "client_id": "825392319740-70t3q8s0t3bho77s4aa8tadvr25ps2fv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.dictionaryalmighty2",
+            "certificate_hash": "7fc44386a3e0156cefb442718be002c207590e29"
+          }
+        },
+        {
+          "client_id": "825392319740-cj25r9fqa2k3tv6i451jg3q8cq3p40ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwEF3bameUmOucaMwXHJp1TqGBtAyVPC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825392319740-cj25r9fqa2k3tv6i451jg3q8cq3p40ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

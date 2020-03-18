@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--以下功能廢除不使用了-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TesseractOpenCVCaptureActivity"
+    android:weightSum="1">
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="323dp">
+
+        <EditText
+            android:id="@+id/OCRTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="OCR Text will appear here..."
+            android:textColor="#a3a3a3"
+            android:textSize="18dip" />
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/photo_album"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/Open_photo_album" />
+
+    <ImageView
+        android:id="@+id/imageID"
+        android:layout_width="match_parent"
+        android:layout_height="360dip"/>
+
+
+    <!--android:background="#dedede"-->
+
+</LinearLayout>

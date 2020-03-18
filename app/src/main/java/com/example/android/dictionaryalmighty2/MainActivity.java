@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -58,6 +59,7 @@ import androidx.core.app.NavUtils;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity {
     Spinner SentenceSearchSpinner;
     Spinner MiscellaneousSpinner;
 
+    FloatingActionButton floatingActionButton;
     ActionBar actionBar;
     LayoutParams layoutparams; //用來客製化修改ActionBar
 
@@ -271,6 +274,7 @@ public class MainActivity extends AppCompatActivity {
         userInputHistoryButton = findViewById(R.id.user_input_history_button);
         defaultSearchButton = findViewById(R.id.default_search_button);
         comboSearchButton = findViewById(R.id.combo_search_button);
+        floatingActionButton = findViewById(R.id.floating_action_button);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
         browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
@@ -285,6 +289,27 @@ public class MainActivity extends AppCompatActivity {
         customActionBarTextview = new TextView(MainActivity.this); //宣告客製化ActionBar的新文字框
         layoutparams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT); //設置客製化ActionBar的Layout
         customActionBarSimplified(); //Helper method
+
+
+        /**
+         * 設定點擊浮動按鈕時要顯示或隱藏的物件
+         */
+        floatingActionButton.setVisibility(View.GONE);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (otherFunctionsImageView.isShown()) {
+                    hideViewsForFloatingActionButton();
+                    floatingActionButton.setImageResource(R.drawable.minimize_browser_icon);
+                    floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(Color.rgb(192,192,192)));
+                }
+                else {
+                    showViewsForFloatingActionButton();
+                    floatingActionButton.setImageResource(R.drawable.maximize_browser_icon);
+                    floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.chartreuse)));
+                }
+            }
+        });
 
 
         /**
@@ -482,10 +507,13 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
-                } else {
+                    floatingActionButton.setVisibility(View.VISIBLE);
+                }
+                else {
                     webViewBrowser.setVisibility(View.INVISIBLE);
                     browserNavigateBack.setVisibility(View.INVISIBLE);
                     browserNavigateForward.setVisibility(View.INVISIBLE);
+                    floatingActionButton.setVisibility(View.GONE);
                 }
             }
         });
@@ -1113,7 +1141,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // R.menu.mymenu is a reference to an xml file named mymenu.xml which should be inside your res/menu directory.
         // If you don't have res/menu, just create a directory named "menu" inside res
-        getMenuInflater().inflate(R.menu.action_bar_menue, menu);
+        getMenuInflater().inflate(R.menu.action_bar_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -1135,7 +1163,7 @@ public class MainActivity extends AppCompatActivity {
                 NavUtils.navigateUpFromSameTask(this); //按返回鍵時返回到前一個Activity 而非webView網頁的前一頁
                 return true;
             case R.id.log_in_button: //登入Google帳戶
-                Intent launchGoogleSignInActivity = new Intent(MainActivity.this, GoogleSignInActivity.class);
+                Intent launchGoogleSignInActivity = new Intent(MainActivity.this, SignInActivity.class);
                 startActivity(launchGoogleSignInActivity);
         }
         return super.onOptionsItemSelected(item);
@@ -1789,6 +1817,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
 
                                                                     /*  ↓ ↓ ↓ 此作法已取消，不必使用↓ ↓ ↓
@@ -1828,6 +1857,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 10) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -1845,6 +1875,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 11) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -1862,6 +1893,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 12) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -1879,6 +1911,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 13) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -1896,6 +1929,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 14) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -1913,6 +1947,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 15) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -1930,6 +1965,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }
 
@@ -1986,6 +2022,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 2) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -2003,6 +2040,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 3) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -2020,6 +2058,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }else if (position == 4) {
                     Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -2037,6 +2076,7 @@ public class MainActivity extends AppCompatActivity {
                     browserSwitch.setChecked(true);
                     browserNavigateBack.setVisibility(View.VISIBLE);
                     browserNavigateForward.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
 
                 }
 
@@ -2510,6 +2550,7 @@ public class MainActivity extends AppCompatActivity {
                 //把網頁框開關狀態設定成"開啟"，以免載入網頁時開關沒有變成開啟的狀態
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -2585,6 +2626,7 @@ public class MainActivity extends AppCompatActivity {
                 //把網頁框開關狀態設定成"開啟"，以免載入網頁時開關沒有變成開啟的狀態
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -2757,6 +2799,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -2817,6 +2860,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -2953,6 +2997,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -3008,6 +3053,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -3090,6 +3136,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -3256,6 +3303,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
             }
 
@@ -5552,6 +5600,7 @@ public class MainActivity extends AppCompatActivity {
                 browserSwitch.setChecked(true);
                 browserNavigateBack.setVisibility(View.VISIBLE);
                 browserNavigateForward.setVisibility(View.VISIBLE);
+                floatingActionButton.setVisibility(View.VISIBLE);
 
                 saveKeywordtoUserInputListView ();
                 saveUserInputArrayListToSharedPreferences ();
@@ -6289,6 +6338,51 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the shared preferences with the current version code
         savedAppVersionCodeSharedPreferences.edit().putInt(PREF_VERSION_CODE_KEY, currentAppVersionCode).apply();
+    }
+
+
+
+    //==============================================================================================
+    // 按浮動按鈕時顯示或隱藏特定物件的Helper Method
+    //==============================================================================================
+    public void showViewsForFloatingActionButton() {
+        findViewById(R.id.Select_EN_Dictionary_Provider_View).setVisibility(View.VISIBLE);
+        findViewById(R.id.Select_JP_Dictionary_Provider_View).setVisibility(View.VISIBLE);
+        findViewById(R.id.Select_Google_Word_Searcher_View).setVisibility(View.VISIBLE);
+        findViewById(R.id.Select_Sentence_Searcher_View).setVisibility(View.VISIBLE);
+        findViewById(R.id.Miscellaneous_View).setVisibility(View.VISIBLE);
+        EnDictionarySpinner.setVisibility(View.VISIBLE);
+        JpDictionarySpinner.setVisibility(View.VISIBLE);
+        GoogleWordSearchSpinner.setVisibility(View.VISIBLE);
+        SentenceSearchSpinner.setVisibility(View.VISIBLE);
+        MiscellaneousSpinner.setVisibility(View.VISIBLE);
+        voiceRecognitionImageView.setVisibility(View.VISIBLE);
+        ocrImageView.setVisibility(View.VISIBLE);
+        otherFunctionsImageView.setVisibility(View.VISIBLE);
+        proOrSimplifiedLayoutSwitch.setVisibility(View.VISIBLE);
+        browserSwitch.setVisibility(View.VISIBLE);
+        browserNavigateBack.setVisibility(View.VISIBLE);
+        browserNavigateForward.setVisibility(View.VISIBLE);
+    }
+
+    public void hideViewsForFloatingActionButton() {
+        findViewById(R.id.Select_EN_Dictionary_Provider_View).setVisibility(View.GONE);
+        findViewById(R.id.Select_JP_Dictionary_Provider_View).setVisibility(View.GONE);
+        findViewById(R.id.Select_Google_Word_Searcher_View).setVisibility(View.GONE);
+        findViewById(R.id.Select_Sentence_Searcher_View).setVisibility(View.GONE);
+        findViewById(R.id.Miscellaneous_View).setVisibility(View.GONE);
+        EnDictionarySpinner.setVisibility(View.GONE);
+        JpDictionarySpinner.setVisibility(View.GONE);
+        GoogleWordSearchSpinner.setVisibility(View.GONE);
+        SentenceSearchSpinner.setVisibility(View.GONE);
+        MiscellaneousSpinner.setVisibility(View.GONE);
+        voiceRecognitionImageView.setVisibility(View.GONE);
+        ocrImageView.setVisibility(View.GONE);
+        otherFunctionsImageView.setVisibility(View.GONE);
+        proOrSimplifiedLayoutSwitch.setVisibility(View.GONE);
+        browserSwitch.setVisibility(View.GONE);
+        browserNavigateBack.setVisibility(View.GONE);
+        browserNavigateForward.setVisibility(View.GONE);
     }
 
 

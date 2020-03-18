@@ -243,7 +243,7 @@
     <string name="Your_new_username_is">您的新用戶名稱是：</string>
     <string name="Rename_your_username">更改用戶名稱</string>
     <string name="You_are_already_logged_in">您已經登入了</string>
-    <string name="You_have_not_entered_any_username">您尚未輸入用戶名稱</string>
+    <string name="You_have_not_entered_anything">您尚未輸入任何資訊</string>
     <string name="You_are_using_cloud_storage">已開啟雲端備份</string>
     <string name="You_are_using_local_storage">已關閉雲端備份</string>
     <string name="Do_you_remember_this_word">*</string>
@@ -261,7 +261,7 @@
     <string name="Delete_user">刪除用戶</string>
     <string name="Login_successful">登入成功</string>
     <string name="User_deleted">用戶已刪除</string>
-    <string name="Relaunching_app">5秒後重啟App ．．．</string>
+    <string name="Relaunching_app">將重啟App ．．．</string>
     <string name="Auth_failed">認證失敗</string>
     <string name="Create_account">建立帳戶</string>
     <string name="Custom_auth_signin_status_failed">錯誤：登入失敗</string>
@@ -346,6 +346,21 @@
     <string name="Idioms_4_you">i4u 俚語英英字典</string>
     <string name="The_online_slang_dictionary">線上英文俚語字典</string>
     <string name="About">有關</string>
-    <string name="Online_chat_room">線上聊天室</string>
+    <string name="Online_chat_room">聊天室</string>
+    <string name="Do_you_really_want_to_delete_your_account">因安全機制，請務必先手動登出並登入後再立刻做此操作，否則會失敗！</string>
+    <string name="Do_you_really_want_to_log_out">確定要登出？</string>
+    <string name="Change_user_screen_name">更改用戶暱稱</string>
+    <string name="Change_user_info">更改用戶資訊</string>
+    <string name="Type_your_new_screen_name">輸入新暱稱</string>
+    <string name="Your_screen_name_is_changed_successfully">用戶暱稱更新成功，將重新啟動App</string>
+    <string name="Change_password">更改用戶密碼</string>
+    <string name="Type_your_new_password">輸入新密碼</string>
+    <string name="Please_log_in_and_out_again">因安全機制，請務必先手動登出並登入後再立刻做此操作，否則會失敗！</string>
+    <string name="Your_passwod_is_changed_successfully">用戶密碼更新成功，將重新啟動App</string>
+    <string name="User_password_change_failed">密碼更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
+    <string name="Change_email">更改用戶信箱</string>
+    <string name="Type_your_new_email">輸入新信箱</string>
+    <string name="Your_email_is_changed_successfully">用戶信箱更新成功，將重新啟動App</string>
+    <string name="User_email_change_failed">信箱更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
 </resources>
 
