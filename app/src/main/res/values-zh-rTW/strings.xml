@@ -12,7 +12,7 @@
     <string name="Longman_Dictionary">朗文英英字典</string>
     <string name="Dict_site">Dict.site英漢漢英字典</string>
     <string name="Business_Dictionary">商業英英字典</string>
-    <string name="National_Academy_for_Educational_Research">國教院</string>
+    <string name="National_Academy_for_Educational_Research">國教院英漢漢英字典</string>
     <string name="Slang">英文俚語網</string>
     <string name="Weblio_JP">Weblio日日字典</string>
     <string name="Weblio_CN">Weblio日中中日字典</string>
@@ -42,20 +42,20 @@
     <string name="OJAD">OJAD鈴木君</string>
     <string name="Google_Image">Google圖片搜尋</string>
     <string name="Word_Input">在此輸入欲查詢單字</string>
-    <string name="Select_EN_Dictionary_Provider">選擇英文字典提供者</string>
-    <string name="Select_JP_Dictionary_Provider">選擇日文字典提供者</string>
-    <string name="Select_Google_Word_Searcher">選擇Google關鍵字搜尋字串</string>
-    <string name="Select_Sentence_Searcher">選擇例句搜尋提供者</string>
+    <string name="Select_EN_Dictionary_Provider">查英文字典</string>
+    <string name="Select_JP_Dictionary_Provider">查日文字典</string>
+    <string name="Select_Google_Word_Searcher">問Google</string>
+    <string name="Select_Sentence_Searcher">查例句</string>
     <string name="Miscellaneous">雜項</string>
     <string name="Click_To_Scroll">點此下拉選單</string>
     <string name="Search">搜尋</string>
     <string name="Put_in_your_search_keyword_here">輸入欲搜尋的單字</string>
-    <string name="app_name">字典譯指通</string>
+    <string name="app_name">字典一指通</string>
     <string name="Tangorin_Word">單語林--單字</string>
     <string name="Kotoba_Bank">言葉バンク</string>
-    <string name="Onelook">Onelook</string>
+    <string name="Onelook">Onelook英文關聯詞字典</string>
     <string name="Wiki_Dictionary">英文維基字典</string>
-    <string name="Word_Hippo">Word Hippo</string>
+    <string name="Word_Hippo">Word Hippo英文關聯詞字典</string>
     <string name="Weblio_Synonym">Weblio類語辭典</string>
     <string name="Jisho">Jisho日文讀音</string>
     <string name="Goo">Goo字典</string>
@@ -159,8 +159,8 @@
     <string name="Pro_version_is_on">正使用專業版</string>
     <string name="You_are_using_pro_version">您正使用專業版</string>
     <string name="You_are_using_simplified_version">您正使用簡易版</string>
-    <string name="Dictionary_almighty_pro">字典譯指通 (專業版)</string>
-    <string name="Dictionary_almighty_simplified">字典譯指通 (簡易版)</string>
+    <string name="Dictionary_almighty_pro">字典一指通 (專業版)</string>
+    <string name="Dictionary_almighty_simplified">字典一指通 (簡易版)</string>
     <string name="Your_search_history">您的搜尋紀錄</string>
     <string name="Set_default_dictionary">設置預設字典</string>
     <string name="Please_set_a_default_dictionary">請先設置一個預設字典(點選快搜模式)</string>
@@ -340,7 +340,7 @@
     <string name="Tutorial_for_voiceRecognitionImageView">懶得手打查單字? 語音辨識助理讓您用說的來查單字。</string>
     <string name="Tutorial_for_ocrImageView">不會打某個單字或單字太長懶得打字? 光學掃描助理讓您用相機掃描或掃描相簿的圖片來查單字。(需另外安裝第三方App)</string>
     <string name="Tutorial_for_otherFunctionsImageView">要設置預設字典和其他功能就按這裡。</string>
-    <string name="Google_dictionary">Google字典</string>
+    <string name="Google_dictionary">Google英漢漢英字典</string>
     <string name="Macmillan_dictionary">麥克米倫英英字典</string>
     <string name="Just_the_word">Just the Word語料庫</string>
     <string name="Idioms_4_you">i4u 俚語英英字典</string>
@@ -362,5 +362,10 @@
     <string name="Type_your_new_email">輸入新信箱</string>
     <string name="Your_email_is_changed_successfully">用戶信箱更新成功，將重新啟動App</string>
     <string name="User_email_change_failed">信箱更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
+    <string name="Fast_dict">速譯通英漢漢英字典</string>
+    <string name="Wordnik">Wordnik英英字典</string>
+    <string name="Fine_dictionary">Fine Dictionary英英字典</string>
+    <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
+    <string name="Technical_difficulty_in_rendering_web_links">因技術限制，若畫面一直空白，請點選一個瀏覽器開啟頁面。</string>
 </resources>
 

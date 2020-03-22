@@ -81,6 +81,7 @@
         <item>@string/Yahoo_Dictionary</item>
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Dict_site</item>
+        <item>@string/Fast_dict</item>
         <item>@string/Google_dictionary</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
@@ -91,23 +92,26 @@
         <item>@string/Vocabulary</item>
         <item>@string/Dictionary</item>
         <item>@string/The_Free_Dictionary</item>
+        <item>@string/Fine_dictionary</item>
         <item>@string/Your_Dictionary</item>
         <item>@string/Longman_Dictionary</item>
         <item>@string/WordWeb_dictionary</item>
+        <item>@string/Wordnik</item>
         <item>@string/Wiki_Dictionary</item>
-        <item>@string/Word_Hippo</item>
-        <item>@string/Onelook</item>
         <item>@string/Business_Dictionary</item>
         <item>@string/Slang</item>
         <item>@string/The_online_slang_dictionary</item>
         <item>@string/Idioms_4_you</item>
         <item>@string/Greens_dictionary_of_slang</item>
-        <item>@string/YouGlish</item>
         <item>@string/SCI_Dictionary</item>
         <item>@string/TechDico</item>
         <item>@string/BioMedical_dictionary</item>
         <item>@string/Is_plural_dictionary</item>
         <item>@string/Lingo_help_prepositions</item>
+        <item>@string/Power_thesaurus_synonym</item>
+        <item>@string/Power_thesaurus_antonym</item>
+        <item>@string/Word_Hippo</item>
+        <item>@string/Onelook</item>
 
         <item>@string/Weblio_JP</item>
         <item>@string/Weblio_CN</item>
@@ -127,15 +131,15 @@
         <item>@string/How_do_you_say_this_in_English</item>
         <item>@string/Jisho</item>
 
-        <item>@string/Word_Plus_Chinese</item>
-        <item>@string/Word_Plus_English1</item>
-        <item>@string/Word_Plus_English2</item>
-        <item>@string/Word_Plus_Translation</item>
-        <item>@string/Word_Plus_Japanese1</item>
-        <item>@string/Word_Plus_Japanese2</item>
-        <item>@string/Word_Plus_Japanese3</item>
-        <item>@string/Word_Plus_Meaning1</item>
-        <item>@string/Word_Plus_Meaning2</item>
+                                                            <!--        <item>@string/Word_Plus_Chinese</item>-->
+                                                            <!--        <item>@string/Word_Plus_English1</item>-->
+                                                            <!--        <item>@string/Word_Plus_English2</item>-->
+                                                            <!--        <item>@string/Word_Plus_Translation</item>-->
+                                                            <!--        <item>@string/Word_Plus_Japanese1</item>-->
+                                                            <!--        <item>@string/Word_Plus_Japanese2</item>-->
+                                                            <!--        <item>@string/Word_Plus_Japanese3</item>-->
+                                                            <!--        <item>@string/Word_Plus_Meaning1</item>-->
+                                                            <!--        <item>@string/Word_Plus_Meaning2</item>-->
         <item>@string/Google_translate_to_CHTW</item>
         <item>@string/Google_translate_to_CHCN</item>
         <item>@string/Google_translate_to_EN</item>
@@ -146,6 +150,7 @@
 
         <item>@string/Ludwig</item>
         <item>@string/Your_Dictionary_Example_Sentences</item>
+        <item>@string/YouGlish</item>
         <item>@string/Word_Cool_EN_CH</item>
         <item>@string/Word_Cool_EN_JP</item>
         <item>@string/Word_Cool_JP_CH</item>
@@ -156,7 +161,7 @@
         <item>@string/Wikipedia_EN</item>
         <item>@string/English_Encyclopedia</item>
         <item>@string/Forvo</item>
-        <item>@string/Wiki_Diff</item>
+        <item>@string/Difference_between_dot_net</item>
         <item>@string/Net_Speak</item>
         <item>@string/Just_the_word</item>
         <item>@string/Yomikata</item>
@@ -169,6 +174,7 @@
         <item>@string/Yahoo_Dictionary</item>
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Dict_site</item>
+        <item>@string/Fast_dict</item>
         <item>@string/Google_dictionary</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
@@ -254,10 +260,10 @@
     <string name="OJAD">OJAD鈴木君</string>
     <string name="Google_Image">Google Image</string>
     <string name="Word_Input">Input your search term here</string>
-    <string name="Select_EN_Dictionary_Provider">Select EN Dictionary Provider</string>
-    <string name="Select_JP_Dictionary_Provider">Select JP Dictionary Provider</string>
-    <string name="Select_Google_Word_Searcher">Select Google Word Searcher</string>
-    <string name="Select_Sentence_Searcher">Select Sentence Searcher</string>
+    <string name="Select_EN_Dictionary_Provider">Search  English Dictionaries</string>
+    <string name="Select_JP_Dictionary_Provider">Search Japanese  Dictionaries</string>
+    <string name="Select_Google_Word_Searcher">Ask Google</string>
+    <string name="Select_Sentence_Searcher">Search Example Sentences</string>
     <string name="Miscellaneous">Miscellaneous</string>
     <string name="Click_To_Scroll">Click to scroll</string>
     <string name="Search">Search</string>
@@ -621,6 +627,11 @@
     <string name="Type_your_new_email">Type your new email</string>
     <string name="Your_email_is_changed_successfully">Your email is changed successfully. Relaunching the app...</string>
     <string name="User_email_change_failed">User certificate expired and email change failed. Please manually log out and in again before changing the password.</string>
+    <string name="Fast_dict">Fast Dict</string>
+    <string name="Wordnik">Wordnik</string>
+    <string name="Fine_dictionary">Fine Dictionary</string>
+    <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
+    <string name="Technical_difficulty_in_rendering_web_links">Due to technical difficulty, if the web page fails to render, choose a browser to load the page.</string>
 
 </resources>
 

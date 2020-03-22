@@ -1,15 +1,18 @@
 package com.example.android.dictionaryalmighty2;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -350,6 +353,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
                         comboSearchWebViewBrowser1.loadUrl(dictDotSiteUrl);
                         break;
+                    case "Fast Dict":
+                        String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(fastDictUrl);
+                        break;
                     case "Google Dictionary":
                         String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
                         comboSearchWebViewBrowser1.loadUrl(googleDictionaryUrl);
@@ -390,6 +397,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String theFreeDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(theFreeDictionaryUrl);
                         break;
+                    case "Fine Dictionary":
+                        String fineDictionaryUrl= "http://www.finedictionary.com/"+searchKeyword+".html";
+                        comboSearchWebViewBrowser1.loadUrl(fineDictionaryUrl);
+                        break;
                     case "Your_Dictionary":
                         String yourDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(yourDictionaryUrl);
@@ -402,17 +413,13 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(wordWebUrl);
                         break;
+                    case "WordNik":
+                        String wordNikUrl= "https://www.wordnik.com/words/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordNikUrl);
+                        break;
                     case "Wiki Dictionary":
                         String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(wiktionaryUrl);
-                        break;
-                    case "Word Hippo":
-                        String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
-                        comboSearchWebViewBrowser1.loadUrl(wordHippoUrl);
-                        break;
-                    case "Onelook":
-                        String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
-                        comboSearchWebViewBrowser1.loadUrl(onelookUrl);
                         break;
                     case "Business Dictionary":
                         String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
@@ -434,10 +441,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(greensDictionaryOfSlangUrl);
                         break;
-                    case "YouGlish":
-                        String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
-                        comboSearchWebViewBrowser1.loadUrl(youglishUrl);
-                        break;
                     case "SCI Dictionary":
                         String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(academiaDictionaryUrl);
@@ -457,6 +460,22 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "LingoHelpPrepositions":
                         String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(lingoHelpPrepositionsUrl);
+                        break;
+                    case "Power Thesaurus Synonym":
+                        String powerThesaurusSynonymUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
+                        comboSearchWebViewBrowser1.loadUrl(powerThesaurusSynonymUrl);
+                        break;
+                    case "Power Thesaurus Antonym":
+                        String powerThesaurusAntonymsUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
+                        comboSearchWebViewBrowser1.loadUrl(powerThesaurusAntonymsUrl);
+                        break;
+                    case "Word Hippo":
+                        String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
+                        comboSearchWebViewBrowser1.loadUrl(wordHippoUrl);
+                        break;
+                    case "Onelook":
+                        String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(onelookUrl);
                         break;
                     case "Weblio JP":
                         String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -526,42 +545,42 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(jishoUrl);
                         break;
-                    case "Word Plus Chinese":
-                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusChinese);
-                        break;
-                    case "Word Plus English 1":
-                        String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusENglish1);
-                        break;
-                    case "Word Plus English 2":
-                        String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusENglish2);
-                        break;
-                    case "Word Plus Translation":
-                        String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusTranslation);
-                        break;
-                    case "Word Plus Japanese 1":
-                        String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusJapanese1);
-                        break;
-                    case "Word Plus Japanese 2":
-                        String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusJapanese2);
-                        break;
-                    case "Word Plus Japanese 3":
-                        String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusJapanese3);
-                        break;
-                    case "Word Plus Meaning 1":
-                        String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusMeaning1);
-                        break;
-                    case "Word Plus Meaning 2":
-                        String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
-                        comboSearchWebViewBrowser1.loadUrl(googlePlusMeaning2);
-                        break;
+                                                                                                                //                    case "Word Plus Chinese":
+                                                                                                                //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusChinese);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus English 1":
+                                                                                                                //                        String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusENglish1);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus English 2":
+                                                                                                                //                        String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusENglish2);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus Translation":
+                                                                                                                //                        String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusTranslation);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus Japanese 1":
+                                                                                                                //                        String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusJapanese1);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus Japanese 2":
+                                                                                                                //                        String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusJapanese2);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus Japanese 3":
+                                                                                                                //                        String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusJapanese3);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus Meaning 1":
+                                                                                                                //                        String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusMeaning1);
+                                                                                                                //                        break;
+                                                                                                                //                    case "Word Plus Meaning 2":
+                                                                                                                //                        String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
+                                                                                                                //                        comboSearchWebViewBrowser1.loadUrl(googlePlusMeaning2);
+                                                                                                                //                        break;
                     case "Google translate to CHTW":
                         String GoogleTranslateToCHTWUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(GoogleTranslateToCHTWUrl);
@@ -593,10 +612,16 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "Ludwig":
                         String ludwigUrl= "https://ludwig.guru/s/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(ludwigUrl);
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
+                        Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
                         break;
                     case "Your Dictionary Example Sentences":
                         String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(yourDictionarySentenceUrl);
+                        break;
+                    case "YouGlish":
+                        String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
+                        comboSearchWebViewBrowser1.loadUrl(youglishUrl);
                         break;
                     case "Word Cool EN-CH":
                         String jukuuUrlCHEN= "http://www.jukuu.com/search.php?q="+searchKeyword;
@@ -634,12 +659,12 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String forvoUrl= "https://forvo.com/search/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(forvoUrl);
                         break;
-                    case "Wiki Diff":
-                        String wikidiffUrl= "https://wikidiff.com/"+searchKeyword;
-                        comboSearchWebViewBrowser1.loadUrl(wikidiffUrl);
+                    case "Difference Between":
+                        String differenceBetweenUrl= "http://www.differencebetween.net/search/?cx=partner-pub-1911891147296207%3Aw80z4hjpu14&cof=FORID%3A9&ie=ISO-8859-1&q="+searchKeyword+"&sa=Search";
+                        comboSearchWebViewBrowser1.loadUrl(differenceBetweenUrl);
                         break;
                     case "Net Speak":
-                        String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
+                        String netspeakUrl= "https://netspeak.org/#q="+searchKeyword+"&corpus=web-en";
                         comboSearchWebViewBrowser1.loadUrl(netspeakUrl);
                         break;
                     case "Just the Word":
@@ -684,6 +709,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
                 comboSearchWebViewBrowser2.loadUrl(dictDotSiteUrl);
                 break;
+            case "Fast Dict":
+                String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(fastDictUrl);
+                break;
             case "Google Dictionary":
                 String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
                 comboSearchWebViewBrowser2.loadUrl(googleDictionaryUrl);
@@ -724,6 +753,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String theFreeDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(theFreeDictionaryUrl);
                 break;
+            case "Fine Dictionary":
+                String fineDictionaryUrl= "http://www.finedictionary.com/"+searchKeyword+".html";
+                comboSearchWebViewBrowser2.loadUrl(fineDictionaryUrl);
+                break;
             case "Your_Dictionary":
                 String yourDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(yourDictionaryUrl);
@@ -736,17 +769,13 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(wordWebUrl);
                 break;
+            case "WordNik":
+                String wordNikUrl= "https://www.wordnik.com/words/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordNikUrl);
+                break;
             case "Wiki Dictionary":
                 String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(wiktionaryUrl);
-                break;
-            case "Word Hippo":
-                String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
-                comboSearchWebViewBrowser2.loadUrl(wordHippoUrl);
-                break;
-            case "Onelook":
-                String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
-                comboSearchWebViewBrowser2.loadUrl(onelookUrl);
                 break;
             case "Business Dictionary":
                 String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
@@ -768,10 +797,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(greensDictionaryOfSlangUrl);
                 break;
-            case "YouGlish":
-                String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
-                comboSearchWebViewBrowser2.loadUrl(youglishUrl);
-                break;
             case "SCI Dictionary":
                 String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(academiaDictionaryUrl);
@@ -791,6 +816,22 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "LingoHelpPrepositions":
                 String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(lingoHelpPrepositionsUrl);
+                break;
+            case "Power Thesaurus Synonym":
+                String powerThesaurusSynonymUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
+                comboSearchWebViewBrowser2.loadUrl(powerThesaurusSynonymUrl);
+                break;
+            case "Power Thesaurus Antonym":
+                String powerThesaurusAntonymsUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
+                comboSearchWebViewBrowser2.loadUrl(powerThesaurusAntonymsUrl);
+                break;
+            case "Word Hippo":
+                String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
+                comboSearchWebViewBrowser2.loadUrl(wordHippoUrl);
+                break;
+            case "Onelook":
+                String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(onelookUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -860,42 +901,42 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(jishoUrl);
                 break;
-            case "Word Plus Chinese":
-                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusChinese);
-                break;
-            case "Word Plus English 1":
-                String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusENglish1);
-                break;
-            case "Word Plus English 2":
-                String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusENglish2);
-                break;
-            case "Word Plus Translation":
-                String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusTranslation);
-                break;
-            case "Word Plus Japanese 1":
-                String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusJapanese1);
-                break;
-            case "Word Plus Japanese 2":
-                String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusJapanese2);
-                break;
-            case "Word Plus Japanese 3":
-                String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusJapanese3);
-                break;
-            case "Word Plus Meaning 1":
-                String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusMeaning1);
-                break;
-            case "Word Plus Meaning 2":
-                String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
-                comboSearchWebViewBrowser2.loadUrl(googlePlusMeaning2);
-                break;
+                                                                                                        //            case "Word Plus Chinese":
+                                                                                                        //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusChinese);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus English 1":
+                                                                                                        //                String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusENglish1);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus English 2":
+                                                                                                        //                String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusENglish2);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Translation":
+                                                                                                        //                String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusTranslation);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Japanese 1":
+                                                                                                        //                String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusJapanese1);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Japanese 2":
+                                                                                                        //                String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusJapanese2);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Japanese 3":
+                                                                                                        //                String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusJapanese3);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Meaning 1":
+                                                                                                        //                String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusMeaning1);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Meaning 2":
+                                                                                                        //                String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
+                                                                                                        //                comboSearchWebViewBrowser2.loadUrl(googlePlusMeaning2);
+                                                                                                        //                break;
             case "Google translate to CHTW":
                 String GoogleTranslateToCHTWUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(GoogleTranslateToCHTWUrl);
@@ -927,10 +968,16 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Ludwig":
                 String ludwigUrl= "https://ludwig.guru/s/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(ludwigUrl);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
+                Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
                 break;
             case "Your Dictionary Example Sentences":
                 String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(yourDictionarySentenceUrl);
+                break;
+            case "YouGlish":
+                String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
+                comboSearchWebViewBrowser2.loadUrl(youglishUrl);
                 break;
             case "Word Cool EN-CH":
                 String jukuuUrlCHEN= "http://www.jukuu.com/search.php?q="+searchKeyword;
@@ -968,12 +1015,12 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String forvoUrl= "https://forvo.com/search/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(forvoUrl);
                 break;
-            case "Wiki Diff":
-                String wikidiffUrl= "https://wikidiff.com/"+searchKeyword;
-                comboSearchWebViewBrowser2.loadUrl(wikidiffUrl);
+            case "Difference Between":
+                String differenceBetweenUrl= "http://www.differencebetween.net/search/?cx=partner-pub-1911891147296207%3Aw80z4hjpu14&cof=FORID%3A9&ie=ISO-8859-1&q="+searchKeyword+"&sa=Search";
+                comboSearchWebViewBrowser2.loadUrl(differenceBetweenUrl);
                 break;
             case "Net Speak":
-                String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
+                String netspeakUrl= "https://netspeak.org/#q="+searchKeyword+"&corpus=web-en";
                 comboSearchWebViewBrowser2.loadUrl(netspeakUrl);
                 break;
             case "Just the Word":
@@ -1018,6 +1065,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String dictDotSiteUrl= "http://dict.site/"+searchKeyword+".html";
                 comboSearchWebViewBrowser3.loadUrl(dictDotSiteUrl);
                 break;
+            case "Fast Dict":
+                String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(fastDictUrl);
+                break;
             case "Google Dictionary":
                 String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
                 comboSearchWebViewBrowser1.loadUrl(googleDictionaryUrl);
@@ -1058,6 +1109,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String theFreeDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(theFreeDictionaryUrl);
                 break;
+            case "Fine Dictionary":
+                String fineDictionaryUrl= "http://www.finedictionary.com/"+searchKeyword+".html";
+                comboSearchWebViewBrowser3.loadUrl(fineDictionaryUrl);
+                break;
             case "Your_Dictionary":
                 String yourDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(yourDictionaryUrl);
@@ -1070,17 +1125,13 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(wordWebUrl);
                 break;
+            case "WordNik":
+                String wordNikUrl= "https://www.wordnik.com/words/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordNikUrl);
+                break;
             case "Wiki Dictionary":
                 String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(wiktionaryUrl);
-                break;
-            case "Word Hippo":
-                String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
-                comboSearchWebViewBrowser3.loadUrl(wordHippoUrl);
-                break;
-            case "Onelook":
-                String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
-                comboSearchWebViewBrowser3.loadUrl(onelookUrl);
                 break;
             case "Business Dictionary":
                 String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
@@ -1102,10 +1153,6 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(greensDictionaryOfSlangUrl);
                 break;
-            case "YouGlish":
-                String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
-                comboSearchWebViewBrowser3.loadUrl(youglishUrl);
-                break;
             case "SCI Dictionary":
                 String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(academiaDictionaryUrl);
@@ -1125,6 +1172,22 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "LingoHelpPrepositions":
                 String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(lingoHelpPrepositionsUrl);
+                break;
+            case "Power Thesaurus Synonym":
+                String powerThesaurusSynonymUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
+                comboSearchWebViewBrowser3.loadUrl(powerThesaurusSynonymUrl);
+                break;
+            case "Power Thesaurus Antonym":
+                String powerThesaurusAntonymsUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
+                comboSearchWebViewBrowser3.loadUrl(powerThesaurusAntonymsUrl);
+                break;
+            case "Word Hippo":
+                String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
+                comboSearchWebViewBrowser3.loadUrl(wordHippoUrl);
+                break;
+            case "Onelook":
+                String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(onelookUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -1194,42 +1257,42 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(jishoUrl);
                 break;
-            case "Word Plus Chinese":
-                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusChinese);
-                break;
-            case "Word Plus English 1":
-                String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusENglish1);
-                break;
-            case "Word Plus English 2":
-                String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusENglish2);
-                break;
-            case "Word Plus Translation":
-                String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusTranslation);
-                break;
-            case "Word Plus Japanese 1":
-                String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusJapanese1);
-                break;
-            case "Word Plus Japanese 2":
-                String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusJapanese2);
-                break;
-            case "Word Plus Japanese 3":
-                String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusJapanese3);
-                break;
-            case "Word Plus Meaning 1":
-                String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusMeaning1);
-                break;
-            case "Word Plus Meaning 2":
-                String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
-                comboSearchWebViewBrowser3.loadUrl(googlePlusMeaning2);
-                break;
+                                                                                                        //            case "Word Plus Chinese":
+                                                                                                        //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusChinese);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus English 1":
+                                                                                                        //                String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusENglish1);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus English 2":
+                                                                                                        //                String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusENglish2);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Translation":
+                                                                                                        //                String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusTranslation);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Japanese 1":
+                                                                                                        //                String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusJapanese1);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Japanese 2":
+                                                                                                        //                String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusJapanese2);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Japanese 3":
+                                                                                                        //                String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusJapanese3);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Meaning 1":
+                                                                                                        //                String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusMeaning1);
+                                                                                                        //                break;
+                                                                                                        //            case "Word Plus Meaning 2":
+                                                                                                        //                String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
+                                                                                                        //                comboSearchWebViewBrowser3.loadUrl(googlePlusMeaning2);
+                                                                                                        //                break;
             case "Google translate to CHTW":
                 String GoogleTranslateToCHTWUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(GoogleTranslateToCHTWUrl);
@@ -1261,10 +1324,16 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Ludwig":
                 String ludwigUrl= "https://ludwig.guru/s/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(ludwigUrl);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
+                Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
                 break;
             case "Your Dictionary Example Sentences":
                 String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(yourDictionarySentenceUrl);
+                break;
+            case "YouGlish":
+                String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
+                comboSearchWebViewBrowser3.loadUrl(youglishUrl);
                 break;
             case "Word Cool EN-CH":
                 String jukuuUrlCHEN= "http://www.jukuu.com/search.php?q="+searchKeyword;
@@ -1302,12 +1371,12 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String forvoUrl= "https://forvo.com/search/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(forvoUrl);
                 break;
-            case "Wiki Diff":
-                String wikidiffUrl= "https://wikidiff.com/"+searchKeyword;
-                comboSearchWebViewBrowser3.loadUrl(wikidiffUrl);
+            case "Difference Between":
+                String differenceBetweenUrl= "http://www.differencebetween.net/search/?cx=partner-pub-1911891147296207%3Aw80z4hjpu14&cof=FORID%3A9&ie=ISO-8859-1&q="+searchKeyword+"&sa=Search";
+                comboSearchWebViewBrowser3.loadUrl(differenceBetweenUrl);
                 break;
             case "Net Speak":
-                String netspeakUrl= "http://www.netspeak.org/#query="+searchKeyword;
+                String netspeakUrl= "https://netspeak.org/#q="+searchKeyword+"&corpus=web-en";
                 comboSearchWebViewBrowser3.loadUrl(netspeakUrl);
                 break;
             case "Just the Word":

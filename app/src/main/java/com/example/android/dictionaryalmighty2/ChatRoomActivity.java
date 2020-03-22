@@ -1,31 +1,45 @@
 package com.example.android.dictionaryalmighty2;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static com.example.android.dictionaryalmighty2.MainActivity.mChatPhotoStorageReference;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForChatMessages;
+import static com.example.android.dictionaryalmighty2.MainActivity.mFirebaseRemoteConfig;
 
 public class ChatRoomActivity extends AppCompatActivity {
 
@@ -33,7 +47,9 @@ public class ChatRoomActivity extends AppCompatActivity {
 
     public static final String ANONYMOUS = "anonymous";
     public static final int DEFAULT_MSG_LENGTH_LIMIT = 1000;
+    public static final String CHAT_MSG_LENGTH_KEY = "chat_message_length";
     public static final int RC_SIGN_IN = 1;
+    private static final int RC_PHOTO_PICKER = 2;
 
     private ListView mMessageListView;
     private MessageAdapter mMessageAdapter;
@@ -55,8 +71,17 @@ public class ChatRoomActivity extends AppCompatActivity {
 
         mUsername = ANONYMOUS;
 
+        //Initialize Firebase database and auth
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+
+        // Define default config values. Defaults are used when fetched config values are not available. Eg: if an error occurred fetching values from the server.
+        Map<String, Object> defaultConfigSettings = new HashMap<>();
+        defaultConfigSettings.put(CHAT_MSG_LENGTH_KEY, DEFAULT_MSG_LENGTH_LIMIT);
+        mFirebaseRemoteConfig.setDefaults(defaultConfigSettings);
+        fetchConfig(); // Fetch config values from Firebase cloud console
+
 
         // Initialize references to views
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -82,7 +107,11 @@ public class ChatRoomActivity extends AppCompatActivity {
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: Fire an intent to show an image picker
+                // Fire an intent to show an image picker
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg"); //指定只顯示JPEG檔
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
             }
         });
 
@@ -237,6 +266,88 @@ public class ChatRoomActivity extends AppCompatActivity {
             mChildReferenceForChatMessages.removeEventListener(mChildEventListener);
             mChildEventListener = null;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            //Get the image's URI chosen by the user
+            Uri selectedImageUri = data.getData();
+
+            // Get a reference to store file at chat_photos/<FILENAME>
+            StorageReference photoReference = mChatPhotoStorageReference.child(selectedImageUri.getLastPathSegment());
+
+            // Upload file to Firebase Storage
+            UploadTask uploadTask = photoReference.putFile(selectedImageUri);
+
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task< Uri>>(){
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if(!task.isSuccessful()){
+                        throw task.getException();
+                    }
+
+                    return photoReference.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>(){
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()){
+                        Uri downloadUri = task.getResult();
+                        FriendlyMessage friendlyMessage = new FriendlyMessage(null, mUsername, downloadUri.toString());
+                        mChildReferenceForChatMessages.push().setValue(friendlyMessage);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "upload failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+    }
+
+
+    // Fetch the config to determine the allowed length of messages.
+    public void fetchConfig() {
+        long cacheExpiration = 3600; // 1 hour in seconds
+        // If developer mode is enabled reduce cacheExpiration to 0 so that each fetch goes to the
+        // server. This should not be used in release builds.
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+            cacheExpiration = 0;
+        }
+        mFirebaseRemoteConfig.fetch(cacheExpiration)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Make the fetched config available
+                        // via FirebaseRemoteConfig get<type> calls, e.g., getLong, getString.
+                        mFirebaseRemoteConfig.activateFetched();
+
+                        // Update the EditText length limit with
+                        // the newly retrieved values from Remote Config.
+                        applyRetrievedLengthLimit();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // An error occurred when fetching the config.
+                        Log.w(TAG, "Error fetching config", e);
+
+                        // Update the EditText length limit with
+                        // the newly retrieved values from Remote Config.
+                        applyRetrievedLengthLimit();
+                    }
+                });
+    }
+
+    /**
+     * Apply retrieved length limit to edit text field. This result may be fresh from the server or it may be from
+     * cached values.
+     */
+    private void applyRetrievedLengthLimit() {
+        Long chat_msg_length = mFirebaseRemoteConfig.getLong(CHAT_MSG_LENGTH_KEY);
+        mMessageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(chat_msg_length.intValue())});
+        Log.d(TAG, CHAT_MSG_LENGTH_KEY + " = " + chat_msg_length);
     }
 
 

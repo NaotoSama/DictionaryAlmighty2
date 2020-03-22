@@ -150,7 +150,7 @@
 
         <activity android:name=".ChatRoomActivity"
             android:screenOrientation="portrait"
-            android:noHistory="true">
+            android:noHistory="false">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
