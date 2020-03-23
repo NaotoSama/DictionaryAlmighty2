@@ -6,6 +6,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+
 public class AboutMemorizingWords extends AppCompatActivity {
 
     TextView forgettingCurveText1;
@@ -28,6 +31,14 @@ public class AboutMemorizingWords extends AppCompatActivity {
         forgettingCurveText2 = findViewById(R.id.forgetting_curve_textView_2);
         forgettingCurve1 = findViewById(R.id.forgetting_curve_1);
         forgettingCurve2 = findViewById(R.id.forgetting_curve_2);
+
+
+        //播放特效
+        YoYo.with(Techniques.Pulse)
+                .duration(1000)
+                .repeat(1)
+                .playOn(findViewById(R.id.forgetting_curve_textView_2));
+
     }
 
 

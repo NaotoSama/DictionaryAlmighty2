@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -110,6 +112,32 @@ public class SignInActivity extends AppCompatActivity {
                     localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
                     localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "1").apply();
 
+
+                    //播放特效
+                    YoYo.with(Techniques.ZoomIn)
+                            .duration(700)
+                            .repeat(0)
+                            .playOn(findViewById(R.id.AppIcon));
+                    YoYo.with(Techniques.FadeIn)
+                            .duration(1000)
+                            .repeat(0)
+                            .playOn(findViewById(R.id.titleText));
+                    YoYo.with(Techniques.FadeIn)
+                            .duration(1000)
+                            .repeat(0)
+                            .playOn(findViewById(R.id.status));
+                    YoYo.with(Techniques.FadeIn)
+                            .duration(1000)
+                            .repeat(0)
+                            .playOn(findViewById(R.id.firebase_UID_textView));
+                    YoYo.with(Techniques.FadeIn)
+                            .duration(1000)
+                            .repeat(0)
+                            .playOn(findViewById(R.id.detail));
+                    YoYo.with(Techniques.FadeIn)
+                            .duration(1000)
+                            .repeat(0)
+                            .playOn(findViewById(R.id.screen_name_textView));
                 }
 
                 else {

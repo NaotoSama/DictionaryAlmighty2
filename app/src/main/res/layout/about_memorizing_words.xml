@@ -38,7 +38,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="譯指通App根據遺忘曲線，在即將遺忘單字前發送複習通知，讓大腦牢牢抓住學過的字。有了貼心提醒，不怕學了又弄丟，只怕你懶得複習！"
+        android:text="字典一指通App根據遺忘曲線，在即將遺忘單字前發送複習通知，讓大腦牢牢抓住學過的字。有了貼心提醒，不怕學了又弄丟，只怕你懶得複習！"
         android:textColor="@color/orange"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

@@ -138,7 +138,7 @@
     <string name="Call_microsoft_translator_app_ocr_recognition">呼叫「微軟翻譯」App</string>
     <string name="Must_get_MicrosoftTranslate_app">您必須先安裝第三方的「微軟翻譯」App才能使用此功能，請按上方的安裝鈕</string>
     <string name="Greens_dictionary_of_slang">格林俚語英英字典</string>
-    <string name="Call_Yomiwa_app">呼叫「Yomiwa」App(僅日文)</string>
+    <string name="Call_Yomiwa_app">呼叫「Yomiwa」App (英文介面)</string>
     <string name="Must_get_Yomiwa_app">您必須先安裝第三方的「Yomiwa」App才能使用此功能，請按上方的安裝鈕</string>
     <string name="TechDico">TechDico技術用語辭典</string>
     <string name="BioMedical_dictionary">生物醫藥大辭典</string>
@@ -321,7 +321,7 @@
     <string name="Registration_completed">註冊成功</string>
     <string name="Registration_failed">註冊失敗</string>
     <string name="Currently_logged_in">(已登入 ✓)</string>
-    <string name="Database_UID">UID:</string>
+    <string name="Database_UID">UID碼:</string>
     <string name="User">用戶：</string>
     <string name="In_1day_week_month">(短期包套記憶) 1天,1週,1個月後</string>
     <string name="Will_send_the_notifications_on_3_preset_timings">將在預設的3個時間點依序發送提醒</string>

@@ -9,7 +9,7 @@
         <item>@string/Online_chat_room</item>
 
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
-        <item>@string/Call_Japanese_food_dictionary</item>
+                                                            <!--        <item>@string/Call_Japanese_food_dictionary</item> (已移轉到日文字典區，目前用不到) -->
         <item>@string/Show_tutorial</item>
 
     </string-array>
@@ -28,24 +28,21 @@
     </string-array>
 
 
-    <string-array name="OCR_spinner_array">
-        <item>@string/Select_an_OCR_third_party_app</item>
-        <item>@string/Call_TextScanner_app</item>
-        <item>@string/Call_google_translate_app</item>
-        <item>@string/Call_microsoft_translator_app_ocr_recognition</item>
-        <item>@string/Call_Yomiwa_app</item>
+<!--    以下功能廢除不使用了-->
+<!--    <string-array name="OCR_spinner_array">-->
+<!--        <item>@string/Select_an_OCR_third_party_app</item>-->
+<!--        <item>@string/Call_TextScanner_app</item>-->
+<!--        <item>@string/Call_google_translate_app</item>-->
+<!--        <item>@string/Call_microsoft_translator_app_ocr_recognition</item>-->
+<!--        <item>@string/Call_Yomiwa_app</item>-->
+<!--        <item>@string/Google_optical_recognition</item>-->
+<!--        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>-->
+<!--        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>-->
+<!--        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>-->
+<!--        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>-->
+<!--        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>-->
 
-
-        <!--以下功能廢除不使用了
-        <item>@string/Google_optical_recognition</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>
-        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>
-        -->
-
-    </string-array>
+<!--    </string-array>-->
 
 
     <string-array name="Speech_recognition_spinner_array_original">

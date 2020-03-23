@@ -701,7 +701,6 @@ public class MainActivity extends AppCompatActivity {
         mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
         mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
         mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_microsoft_translator_app_ocr_recognition, R.mipmap.microsoft_translator));
-        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
 
 
         mOcrSpinnerItemListSimplified = new ArrayList<>();
@@ -785,6 +784,8 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WWWJDIC_jp_en, R.mipmap.www_jdic));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WWWJDIC_en_jp, R.mipmap.www_jdic));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Kanji_recognizer, R.mipmap.kanji_recognizer));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Japanese_food_dictionary, R.mipmap.japanese_food_dictionary));
 
 
         mJapaneseDictionarySpinnerItemListSimplified = new ArrayList<>();
@@ -1125,7 +1126,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            // TODO Auto-generated method stub
             super.onPageStarted(view, url, favicon);
 
             progressBar.setVisibility(View.VISIBLE);   //在啟動網頁框時顯示網頁框
@@ -1574,22 +1574,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(goToChatRoomIntent);
 
                 } else if (position == 6) {
-                    //呼叫第三方「日本食物字典」app
-                    Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
-                    if (callJapaneseFoodDcitionaryAppIntent != null) {
-                        // If the TextScanner app is found, start the app.
-                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callJapaneseFoodDcitionaryAppIntent);
-                    } else {
-                        // Bring user to the market or let them choose an app.
-                        callJapaneseFoodDcitionaryAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callJapaneseFoodDcitionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.st.japanfooddictionaryfree"));
-                        startActivity(callJapaneseFoodDcitionaryAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
-                    }
-
-                } else if (position == 7) {
                     //顯示使用教學
                     MaterialShowcaseView.resetAll(getApplicationContext());
                     showTutorSequence();
@@ -2193,23 +2177,6 @@ public class MainActivity extends AppCompatActivity {
                         callMicrosoftTranslateAppIntent.setData(Uri.parse("market://details?id=" + "com.microsoft.translator"));
                         startActivity(callMicrosoftTranslateAppIntent);
                         Toast.makeText(getApplicationContext(), getString(R.string.Must_get_MicrosoftTranslate_app), Toast.LENGTH_LONG).show();
-                    }
-
-                }
-                else if (position == 4) {
-                    //呼叫第三方「Yomiwa」app
-                    Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
-                    if (callYomiwaAppIntent != null) {
-                        // If the TextScanner app is found, start the app.
-                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(callYomiwaAppIntent);
-                    } else {
-                        // Bring user to the market or let them choose an app.
-                        callYomiwaAppIntent = new Intent(Intent.ACTION_VIEW);
-                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        callYomiwaAppIntent.setData(Uri.parse("market://details?id=" + "com.yomiwa.yomiwa"));
-                        startActivity(callYomiwaAppIntent);
-                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_Yomiwa_app), Toast.LENGTH_LONG).show();
                     }
 
                 }
@@ -2834,6 +2801,92 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 23) {
+                    //呼叫第三方「Yomiwa」app
+                    Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
+                    if (callYomiwaAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callYomiwaAppIntent);
+
+                        //延遲0.1秒
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                browserSwitch.setChecked(false);
+                                browserNavigateBack.setVisibility(View.INVISIBLE);
+                                browserNavigateForward.setVisibility(View.INVISIBLE);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        Handler h =new Handler();
+                        h.postDelayed(r, 100);
+
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callYomiwaAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callYomiwaAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callYomiwaAppIntent.setData(Uri.parse("market://details?id=" + "com.yomiwa.yomiwa"));
+                        startActivity(callYomiwaAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_Yomiwa_app), Toast.LENGTH_LONG).show();
+
+                        //延遲0.1秒
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                browserSwitch.setChecked(false);
+                                browserNavigateBack.setVisibility(View.INVISIBLE);
+                                browserNavigateForward.setVisibility(View.INVISIBLE);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        Handler h =new Handler();
+                        h.postDelayed(r, 100);
+
+                    }
+                } else if (position == 24) {
+                    //呼叫第三方「日本食物字典」app
+                    Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
+                    if (callJapaneseFoodDcitionaryAppIntent != null) {
+                        // If the TextScanner app is found, start the app.
+                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callJapaneseFoodDcitionaryAppIntent);
+
+                        //延遲0.1秒
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                browserSwitch.setChecked(false);
+                                browserNavigateBack.setVisibility(View.INVISIBLE);
+                                browserNavigateForward.setVisibility(View.INVISIBLE);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        Handler h =new Handler();
+                        h.postDelayed(r, 100);
+
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callJapaneseFoodDcitionaryAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callJapaneseFoodDcitionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callJapaneseFoodDcitionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.st.japanfooddictionaryfree"));
+                        startActivity(callJapaneseFoodDcitionaryAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_TextScanner_app), Toast.LENGTH_LONG).show();
+
+                        //延遲0.1秒
+                        Runnable r = new Runnable() {
+                            @Override
+                            public void run() {
+                                browserSwitch.setChecked(false);
+                                browserNavigateBack.setVisibility(View.INVISIBLE);
+                                browserNavigateForward.setVisibility(View.INVISIBLE);
+                                floatingActionButton.setVisibility(View.INVISIBLE);
+                            }
+                        };
+                        Handler h =new Handler();
+                        h.postDelayed(r, 100);
+
+                    }
                 }
 
                 JpDictionarySpinner.setAdapter(mJapaneseDictionarySpinnerAdapter);
