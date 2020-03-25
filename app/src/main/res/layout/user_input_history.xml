@@ -11,14 +11,27 @@
         android:id="@+id/search_record_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Search_records_page_instructions"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/Instructions"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#3F51B5"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/user_input_history_search_box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="@+id/user_input_history_search_box"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/click_here_finger_user_input_history"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/search_record_textView"
+        app:layout_constraintStart_toEndOf="@+id/search_record_textView"
+        app:layout_constraintTop_toTopOf="@+id/search_record_textView"
+        app:srcCompat="@drawable/click_here_finger_with_text" />
 
     <EditText
         android:id="@+id/user_input_history_search_box"

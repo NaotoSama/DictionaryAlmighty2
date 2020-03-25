@@ -204,7 +204,7 @@
 
 
     <string-array name="quick_search_combo_search_or_google_translate">
-        <item>@string/Quick_lookup</item>
+        <item>@string/Quick_search</item>
         <item>@string/Combo_search</item>
         <item>@string/Google_translate</item>
 
@@ -469,7 +469,7 @@
     <string name="Browser_switch">Browser Switch</string>
     <string name="Return_to_default_background_image">Return to default background image</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
-    <string name="Search_records_page_instructions">(Finger tap = search/memorize word ; Long press = save to vocabulary list ; Swipe = delete word)</string>
+    <string name="Finger_tap_user_input_history">Finger tap = search/memorize word</string>
     <string name="Has_benn_deleted">" has benn deleted"</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
@@ -510,13 +510,13 @@
     <string name="Clear_my_vocabulary_list_button">Clear my vocabulary list</string>
     <string name="Memorize_this_word">Memorize this word</string>
     <string name="Choose_customized_or_predefined_notification_timings">Choose one of the following recall timings</string>
-    <string name="Send_to_WordInputView">Lookup this word</string>
+    <string name="Send_to_WordInputView">Search this word</string>
     <string name="List_cleared">List cleared</string>
-    <string name="Quick_lookup">Quick Lookup</string>
+    <string name="Quick_search">Quick search</string>
     <string name="Combo_search">Combo Search</string>
     <string name="Google_translate">Google Translate</string>
     <string name="About_memorizing_words">About Memorizing Words</string>
-    <string name="Words_to_memorize_page_instructions">(Finger tap = Bring word to main page or memorize word; Long press = Save to word bank ; Swipe = delete word)</string>
+    <string name="Swipe_words_to_memorize">Swipe = delete word</string>
     <string name="Lingo_help_prepositions">Lingo Help Prepositions Dictionary</string>
     <string name="WordWeb_dictionary">WordWeb Dictionary</string>
     <string name="Learn_with_kak">Learn with Kak</string>
@@ -537,7 +537,7 @@
     <string name="Kanji_recognizer">Kanji Recognizer</string>
     <string name="Britannica_encyclopedia">Britannica Encyclopedia</string>
     <string name="Search_text_here">Search text here...</string>
-    <string name="Choose_one_preset_timing">Choose one preset timing (Use with caution! To cancel a notification will require the user to manually delete it on the phone\'s calendar.)</string>
+    <string name="Choose_one_preset_timing">Choose one preset timing</string>
     <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(Long Package Timings) In 1Hr, half a day, 1 day, 2 days, 1 week, 1 month, 6 months, 1 year sequentially</string>
     <string name="In_1_hour">In1 hour</string>
     <string name="In_half_a_day">In half a day</string>
@@ -629,6 +629,24 @@
     <string name="Fine_dictionary">Fine Dictionary</string>
     <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
     <string name="Technical_difficulty_in_rendering_web_links">Due to technical difficulty, if the web page fails to render, choose a browser to load the page.</string>
+    <string name="Clear_user_search_history_confirmation_message">If your\'e a registered user, tapping \"Confirm\" will clear your search history on local phone drive and cloud drive. If not, search history on local phone drive will be cleared. Tap \"Cancel\" to back out.</string>
+    <string name="Clear_user_vocabulary_list_confirmation_message">If your\'e a registered user, tapping \"Confirm\" will clear your vocablary list on local phone drive and cloud drive. If not, vocablary list on local phone drive will be cleared. Tap \"Cancel\" to back out.</string>
+    <string name="Memorize_this_word_explanation">Memorize this word: Use your phone calendar to schedule notifications to remind of reviewing the word.</string>
+    <string name="User_configured_timing_explanation">Customize Timing: You might wanna review a word tomorrow 7:15 a.m. while sipping a cup of coffee? Set your preferred timing to receive notifications.</string>
+    <string name="Predefined_timing_explanation">User Predefined Timing: Pick a frequently used timing we already preset for you.</string>
+    <string name="Search_this_word_explanation">Search this word: Put the word in the search box and search manually.</string>
+    <string name="Quick_search_or_combo_search_or_google_translate_explanation">Quick Search or Combo Search: Perform quick search with your pre-configured default dictionaries, or with Google automatic translation.</string>
+    <string name="Quick_search_explanation">Use your predefined single default dictionary to perform quick search.</string>
+    <string name="Combo_search_explanation">Use your predefined 3 default dictionaries to perform quick search.</string>
+    <string name="Use_with_caution">(Use with caution! To cancel a notification will require the user to manually delete it on the phone\'s calendar.)</string>
+    <string name="After_performing_a_search">After performing a search, the record will appear below and you can do the following actions</string>
+    <string name="Instructions">Instructions</string>
+    <string name="Long_press_user_input_history">Long press = Save to vocabulary list</string>
+    <string name="Swipe">Swipe = Delete the word</string>
+    <string name="Got_it">Got it!</string>
+    <string name="After_saving_a_word">After saving a word, it will appear below as part of your vocabulary list and you can do the following actions</string>
+    <string name="Finger_tap_words_to_memorize">Finger tap = Bring word to main page or memorize word</string>
+    <string name="Long_press_words_to_memorize">Long press = Quick search or combo search</string>
 
 </resources>
 

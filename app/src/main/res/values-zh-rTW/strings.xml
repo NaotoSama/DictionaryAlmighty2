@@ -151,7 +151,7 @@
     <string name="Return_to_default_background_image">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Search_records_page_instructions">(點按 = 帶入單字到首頁或記憶單字；長按 = 存入單字本 ； 滑動 = 刪除單字)</string>
+    <string name="Finger_tap_user_input_history">點按 = 帶入單字到首頁或記憶單字</string>
     <string name="Has_benn_deleted">已刪除</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
@@ -194,11 +194,11 @@
     <string name="Choose_customized_or_predefined_notification_timings">選擇回憶單字的時機點</string>
     <string name="Send_to_WordInputView">查此單字</string>
     <string name="List_cleared">表單已清空</string>
-    <string name="Quick_lookup">快搜</string>
+    <string name="Quick_search">快搜</string>
     <string name="Combo_search">三連搜</string>
     <string name="Google_translate">Google翻譯</string>
     <string name="About_memorizing_words">有關記憶單字</string>
-    <string name="Words_to_memorize_page_instructions">(點按 = 帶入單字到主頁 ； 長按 = 快搜或三連搜模式 ； 滑動 = 刪除單字)</string>
+    <string name="Swipe_words_to_memorize">滑動 = 刪除單字</string>
     <string name="Lingo_help_prepositions">Lingo Help介係詞字典</string>
     <string name="WordWeb_dictionary">WordWeb英英字典</string>
     <string name="Learn_with_kak">(網誌) 小格子教英文</string>
@@ -219,8 +219,8 @@
     <string name="Kanji_recognizer">漢字手寫字典</string>
     <string name="Britannica_encyclopedia">大英百科全書</string>
     <string name="Search_text_here">搜尋文字...</string>
-    <string name="Choose_one_preset_timing">選擇一個預設時機點(慎選!選完若反悔須自行在手機日曆中手動刪除通知)</string>
-    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">(長期包套記憶) 1小時,半天,1天,2天,1週,1個月,半年,1年後</string>
+    <string name="Choose_one_preset_timing">選擇一個預設時機點</string>
+    <string name="In_an_hour_halfDay_1day_2days_week_month_6months_year">長期包套記憶：1小時,半天,1天,2天,1週,1個月,半年,1年後 (8個記憶時間點)</string>
     <string name="In_1_hour">1小時後</string>
     <string name="In_half_a_day">半天後</string>
     <string name="In_2_days">2天後</string>
@@ -323,7 +323,7 @@
     <string name="Currently_logged_in">(已登入 ✓)</string>
     <string name="Database_UID">UID碼:</string>
     <string name="User">用戶：</string>
-    <string name="In_1day_week_month">(短期包套記憶) 1天,1週,1個月後</string>
+    <string name="In_1day_week_month">短期包套記憶：1天、1週、1個月後 (3個記憶時間點)</string>
     <string name="Will_send_the_notifications_on_3_preset_timings">將在預設的3個時間點依序發送提醒</string>
     <string name="Word_saved_to_my_vocabulary_list">已儲存到「我的單字本」</string>
     <string name="Show_tutorial">使用教學</string>
@@ -367,5 +367,23 @@
     <string name="Fine_dictionary">Fine Dictionary英英字典</string>
     <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
     <string name="Technical_difficulty_in_rendering_web_links">因技術限制，若畫面一直空白，請點選一個瀏覽器開啟頁面。</string>
+    <string name="Clear_user_search_history_confirmation_message">若您已註冊會員，點擊確認鈕將會清除您在手機端與雲端上儲存的搜尋紀錄。若未註冊會員，手機端的搜尋紀錄將會被清除。要返回前一頁，點擊取消鈕。</string>
+    <string name="Clear_user_vocabulary_list_confirmation_message">若您已註冊會員，點擊確認鈕將會清除您在手機端與雲端上儲存的單字本。若未註冊會員，手機端的單字本將會被清除。要返回前一頁，點擊取消鈕。</string>
+    <string name="Memorize_this_word_explanation">記憶單字：透過您手機的日曆，預定並發送通知提醒複習單字。</string>
+    <string name="User_configured_timing_explanation">自定義通知的時機：想在明天早上7:15喝杯咖啡時複習單字？那就自己指定通知時間吧！</string>
+    <string name="Predefined_timing_explanation">預設的通知時機：挑選我們為您貼心準備的常用通知時間點。</string>
+    <string name="Search_this_word_explanation">查此單字：將文字放入搜尋框，由您手動搜尋。</string>
+    <string name="Quick_search_or_combo_search_or_google_translate_explanation">快搜或三連搜：透過您設定好的預設字典進行快速搜尋，或透過Google自動翻譯。</string>
+    <string name="Quick_search_explanation">快搜：使用您先前預設的單一預設字典快速搜尋</string>
+    <string name="Combo_search_explanation">三連搜：使用您先前預設的三部預設字典快速搜尋</string>
+    <string name="Use_with_caution">(慎選！選完若反悔須自行在手機日曆中手動刪除各別通知)</string>
+    <string name="After_performing_a_search">搜尋後您的搜尋紀錄會出現在下方，您可做以下動作：</string>
+    <string name="Instructions">操作說明</string>
+    <string name="Long_press_user_input_history">"長按 = 存入單字本 "</string>
+    <string name="Swipe">滑動 = 刪除單字</string>
+    <string name="Got_it">了解了!</string>
+    <string name="After_saving_a_word">您儲存的單字會出現在下方單字庫，您可做以下動作：</string>
+    <string name="Finger_tap_words_to_memorize">"點按 = 帶入單字到主頁 "</string>
+    <string name="Long_press_words_to_memorize">長按 = 快搜或三連搜模式</string>
 </resources>
 

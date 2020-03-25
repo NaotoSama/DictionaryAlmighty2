@@ -12,16 +12,28 @@
         android:id="@+id/words_to_memorize_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/Words_to_memorize_page_instructions"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:text="@string/Instructions"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="#013220"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/words_to_memorize_search_box"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="@+id/words_to_memorize_search_box"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <ImageView
+        android:id="@+id/click_here_finger_words_to_memorize"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/words_to_memorize_textView"
+        app:layout_constraintStart_toEndOf="@+id/words_to_memorize_textView"
+        app:layout_constraintTop_toTopOf="@+id/words_to_memorize_textView"
+        app:srcCompat="@drawable/click_here_finger_with_text" />
 
     <EditText
         android:id="@+id/words_to_memorize_search_box"

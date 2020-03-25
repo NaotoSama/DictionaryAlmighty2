@@ -25,7 +25,7 @@
         android:layout_width="37dp"
         android:layout_height="70dp"
         android:layout_marginEnd="8dp"
-        android:contentDescription="@string/Quick_lookup"
+        android:contentDescription="@string/Quick_search"
         android:text="🔎"
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/Select_EN_Dictionary_Provider_View"

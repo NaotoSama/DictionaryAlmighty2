@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -65,6 +67,9 @@ public class UserInputHistory extends AppCompatActivity {
     TextView customActionBarTextviewforUserInputHistoryPage;
     androidx.appcompat.app.ActionBar actionBar;
 
+    TextView searchRecordTextView;
+    ImageView clickHereFingerUserInputHistoryImageView;
+
     static String selectedListviewItemValue;
     static String[] presetNotificationTimingsList;
 
@@ -91,6 +96,8 @@ public class UserInputHistory extends AppCompatActivity {
         userInputListview = findViewById(R.id.user_input_listview);
         clearUserInputList = findViewById(R.id.clear_user_input_list);
         userInputHistorySearchBox = findViewById(R.id.user_input_history_search_box);
+        searchRecordTextView = findViewById(R.id.search_record_textView);
+        clickHereFingerUserInputHistoryImageView = findViewById(R.id.click_here_finger_user_input_history);
 
 
         //Initialize the adapter
@@ -140,6 +147,28 @@ public class UserInputHistory extends AppCompatActivity {
 
 
         /**
+         * 設置使用說明
+         */
+        searchRecordTextView.setText(R.string.Instructions);
+
+        searchRecordTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                userInputHistoryInstructionsAlertDialog();
+            }
+        });
+
+        clickHereFingerUserInputHistoryImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                userInputHistoryInstructionsAlertDialog();
+            }
+        });
+
+
+        /**
          * 帶用戶前往單字庫頁面的按鈕
          */
         goToWordsToMemorizePageButton.setOnClickListener(new View.OnClickListener() {
@@ -183,48 +212,49 @@ public class UserInputHistory extends AppCompatActivity {
             public void onClick(View v) {
 
                 //這邊設置AlertDialog讓用戶確認是否真要清除列表
-                AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
-                doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
-                doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                CFAlertDialog.Builder doYouReallyWantToClearListAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setTitle(getString(R.string.Do_you_really_want_to_clear_the_list))
+                        .setTextColor(Color.BLUE)
+                        .setMessage(getString(R.string.Clear_user_search_history_confirmation_message))
+                        .setCancelable(false)  //按到旁邊的空白處AlertDialog也不會消失
 
-                //AlertDialog的確定鈕，清除列表
-                doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                        //AlertDialog的確定鈕，清除列表
+                        .addButton(getString(R.string.Confirm)
+                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (doYouReallyWantToClearListAlertDialog, which) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                                    mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
 
-                        mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
+                                    userInputArraylist.clear(); //同時清除本地的list
+                                    userInputArrayAdapter.notifyDataSetChanged();
 
-                        userInputArraylist.clear(); //同時清除本地的list
-                        userInputArrayAdapter.notifyDataSetChanged();
+                                    //將搜尋紀錄的列表存到SharedPreferences
+                                    SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
+                                    editor.putInt("userInputArrayListValues", userInputArraylist.size());
+                                    for (int i = 0; i < userInputArraylist.size(); i++) {
+                                        editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
+                                    }
+                                    editor.apply();
 
-                        //將搜尋紀錄的列表存到SharedPreferences
-                        SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
-                        editor.putInt("userInputArrayListValues", userInputArraylist.size());
-                        for (int i = 0; i < userInputArraylist.size(); i++) {
-                            editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
-                        }
-                        editor.apply();
+                                    Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+                                    doYouReallyWantToClearListAlertDialog.dismiss();
+                        })
 
 
-                //AlertDialog的取消鈕
-                doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                        //AlertDialog的取消鈕
+                        .addButton(getString(R.string.Cancel)
+                                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (doYouReallyWantToClearListAlertDialog, which) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                                doYouReallyWantToClearListAlertDialog.dismiss();
+                        });
 
+
+                doYouReallyWantToClearListAlertDialogBuilder.setHeaderView(R.layout.custom_alert_diaglog_question_mark);
                 //把AlertDialog顯示出來
-                doYouReallyWantToClearListAlertDialog.create().show();
-
+                doYouReallyWantToClearListAlertDialogBuilder.show();
             }
 
         });
@@ -241,63 +271,59 @@ public class UserInputHistory extends AppCompatActivity {
                 selectedListviewItemValue=userInputListview.getItemAtPosition(position).toString();
 
                 //這邊設置第一層AlertDialog讓用戶選擇把單字傳送到首頁的wordInputView, 或發佈記憶單字的通知
-                AlertDialog.Builder passToWordInputViewOrFireCalendarEventAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
-                passToWordInputViewOrFireCalendarEventAlertDialog.setTitle(getString(R.string.Do_you_want_to));
-                passToWordInputViewOrFireCalendarEventAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                passToWordInputViewOrFireCalendarEventAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                CFAlertDialog.Builder passToWordInputViewOrFireCalendarEventAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getString(R.string.Do_you_want_to))
+                .setTextColor(Color.BLUE)
+                .setMessage(getString(R.string.Search_this_word_explanation) + System.getProperty("line.separator") + getString(R.string.Memorize_this_word_explanation))
+                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
 
                 //第一層AlertDialog的確定鈕，把單字傳送到首頁的wordInputView
-                passToWordInputViewOrFireCalendarEventAlertDialog.setPositiveButton(R.string.Send_to_WordInputView, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .addButton(getString(R.string.Send_to_WordInputView)
+                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) ->{
 
                         MainActivity.wordInputView.setText(selectedListviewItemValue);
-
                         finish(); //結束此Activity並返回上一個Activity
 
-                    }
-                });
+                        passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
+                })
 
                 //第一層AlertDialog的中立鈕，發佈記憶單字的通知。設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機。
-                passToWordInputViewOrFireCalendarEventAlertDialog.setNeutralButton(R.string.Memorize_this_word, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface CustomizedOrPredefinedNotificationDialogInterface, int which) {
+                        .addButton(getString(R.string.Memorize_this_word)
+                                , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) -> {
 
                         //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
-                        final AlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings));
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                        final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings))
+                        .setTextColor(Color.BLUE)
+                        .setMessage(getString(R.string.Predefined_timing_explanation) + System.getProperty("line.separator") + getString(R.string.User_configured_timing_explanation))
+                        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
 
-                        //第二層AlertDialog的確定鈕，自定義通知時機
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.setPositiveButton(R.string.Customize_timing, new DialogInterface.OnClickListener() {
+                        //第二層AlertDialog的確定鈕，預設的通知時機。
+                        .addButton(getString(R.string.Use_predefined_timing)
+                                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                setCustomizedNotificationTiming();
-
-                            }
-                        });
-
-                        //第二層AlertDialog的中立鈕，預設的通知時機。
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.setNeutralButton(R.string.Use_predefined_timing, new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
                                 presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
 
                                 //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
-                                AlertDialog.Builder choosePresetNotificationTimingsAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
-                                choosePresetNotificationTimingsAlertDialog.setTitle(getString(R.string.Choose_one_preset_timing));
-                                choosePresetNotificationTimingsAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                CFAlertDialog.Builder choosePresetNotificationTimingsAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
+                                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                .setCornerRadius(50)
+                                .setTitle(getString(R.string.Choose_one_preset_timing))
+                                .setTextColor(Color.BLUE)
+                                .setMessage(getString(R.string.Use_with_caution))
+                                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
-                                choosePresetNotificationTimingsAlertDialog.setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
+                                .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
                                         switch (position) {
@@ -356,52 +382,56 @@ public class UserInputHistory extends AppCompatActivity {
                                         }
 
                                     }
-                                });
+                                })
 
                                 //第三層AlertDialog的取消鈕
-                                choosePresetNotificationTimingsAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                        .addButton(getString(R.string.Cancel)
+                                                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) -> {
 
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
+                                        choosePresetNotificationTimingsAlertDialog.dismiss();
                                 });
 
                                 //把第三層的AlertDialog顯示出來
-                                choosePresetNotificationTimingsAlertDialog.create().show();
+                                choosePresetNotificationTimingsAlertDialogBuilder.show();
+                                //同時讓第二層的AlertDialog消失
+                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                        })
 
-                            }
-                        });
+                        //第二層AlertDialog的中立鈕，自定義通知時機
+                        .addButton(getString(R.string.Customize_timing)
+                                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+
+                                setCustomizedNotificationTiming();
+
+                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                        })
 
                         //第二層AlertDialog的取消鈕
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                .addButton(getString(R.string.Cancel)
+                                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
                         });
 
 
+                        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.setHeaderView(R.layout.custom_alert_dialog_clock);
                         //把第二層的AlertDialog顯示出來
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.create().show();
+                        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
                         //同時讓第一層的AlertDialog消失
-                        CustomizedOrPredefinedNotificationDialogInterface.dismiss();
+                        passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
 
-                    }
-                });
+                })
 
                 //第一層AlertDialog的取消鈕
-                passToWordInputViewOrFireCalendarEventAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                .addButton(getString(R.string.Cancel)
+                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
+                    passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
                 });
 
+                passToWordInputViewOrFireCalendarEventAlertDialogBuilder.setHeaderView(R.layout.custom_alert_diaglog_question_mark);
                 //把第一層的AlertDialog顯示出來
-                passToWordInputViewOrFireCalendarEventAlertDialog.create().show();
+                passToWordInputViewOrFireCalendarEventAlertDialogBuilder.show();
 
             }
         });
@@ -409,7 +439,7 @@ public class UserInputHistory extends AppCompatActivity {
 
 
         /**
-         * Let the user long click on an item, go to WordsToMemorize Page to save the item to that Page.
+         * Let the user long click on an item to save the item to WordsToMemorize Page.
          */
         userInputListview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -1073,6 +1103,27 @@ public class UserInputHistory extends AppCompatActivity {
     }
 
 
+    public void userInputHistoryInstructionsAlertDialog() {
+        CFAlertDialog.Builder userInputHistoryInstructionsAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getString(R.string.Instructions))
+                .setTextColor(Color.BLUE)
+                .setMessage(getString(R.string.After_performing_a_search) + System.getProperty("line.separator") + getString(R.string.Finger_tap_user_input_history) + System.getProperty("line.separator") + getString(R.string.Long_press_user_input_history) + System.getProperty("line.separator") + getString(R.string.Swipe))
+                .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
+
+
+                .addButton(getString(R.string.Got_it)
+                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (userInputHistoryInstructionsAlertDialog, which) -> {
+
+                            userInputHistoryInstructionsAlertDialog.dismiss();
+                        });
+
+        userInputHistoryInstructionsAlertDialogBuilder.show();
+    }
+
+
     //將字母轉換成數字  A-Z ：1-26
     //    public long convertStringToLong() {
     //        int length = selectedListviewItemValue.length();
@@ -1097,6 +1148,62 @@ public class UserInputHistory extends AppCompatActivity {
     //        int rows = getApplicationContext().getContentResolver().delete(deleteUri, null, null);
     //        Log.i("TAG", "Rows deleted: " + rows);
     //    }
+
+
+
+    ///**
+    // * 讓用戶清空列表 (已換成別的外掛，目前用不到)
+    // */
+    //    clearUserInputList.setOnClickListener(new View.OnClickListener() {
+    //    @Override
+    //    public void onClick(View v) {
+    //
+    //        //這邊設置AlertDialog讓用戶確認是否真要清除列表
+    //        AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
+    //        doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+    //        doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+    //        doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+    //
+    //        //AlertDialog的確定鈕，清除列表
+    //        doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+    //
+    //            @Override
+    //            public void onClick(DialogInterface dialog, int which) {
+    //
+    //                mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
+    //
+    //                userInputArraylist.clear(); //同時清除本地的list
+    //                userInputArrayAdapter.notifyDataSetChanged();
+    //
+    //                //將搜尋紀錄的列表存到SharedPreferences
+    //                SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
+    //                editor.putInt("userInputArrayListValues", userInputArraylist.size());
+    //                for (int i = 0; i < userInputArraylist.size(); i++) {
+    //                    editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
+    //                }
+    //                editor.apply();
+    //
+    //                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+    //
+    //            }
+    //        });
+    //
+    //
+    //        //AlertDialog的取消鈕
+    //        doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+    //
+    //            @Override
+    //            public void onClick(DialogInterface dialog, int which) {
+    //                dialog.dismiss();
+    //            }
+    //        });
+    //
+    //        //把AlertDialog顯示出來
+    //        doYouReallyWantToClearListAlertDialog.create().show();
+    //
+    //    }
+    //
+    //});
 
 
 
