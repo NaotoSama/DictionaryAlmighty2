@@ -369,6 +369,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(cambridgeDictionaryUrl);
                         break;
+                    case "WordReference EN-CH":
+                        String wordReferenceEnChDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordReferenceEnChDictionaryUrl);
+                        break;
+                    case "WordReference CH-EN":
+                        String wordReferenceChEnDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordReferenceChEnDictionaryUrl);
+                        break;
                     case "Merriam Webster":
                         String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(merriamDictionaryUrl);
@@ -522,7 +530,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                         comboSearchWebViewBrowser1.loadUrl(gooDictionaryUrl);
                         break;
                     case "Sanseido":
-                        String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                        String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+searchKeyword+"&search_type=0&start_index=0&selected_dic=";
                         comboSearchWebViewBrowser1.loadUrl(sanseidoUrl);
                         break;
                     case "Kotoba Bank":
@@ -544,6 +552,30 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "Jisho":
                         String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(jishoUrl);
+                        break;
+                    case "Cambridge JP-EN":
+                        String CambridgeJPtoENUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(CambridgeJPtoENUrl);
+                        break;
+                    case "Cambridge EN-JP":
+                        String CambridgeENtoJPUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(CambridgeENtoJPUrl);
+                        break;
+                    case "WWW JDIC JP-EN":
+                        String wwwjdicJpToEnUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wwwjdicJpToEnUrl);
+                        break;
+                    case "WWW JDIC EN-JP":
+                        String wwwjdicEnToJaUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wwwjdicEnToJaUrl);
+                        break;
+                    case "WordReference EN-JP":
+                        String wordReferenceEnJpDictionaryUrl= "https://www.wordreference.com/enja/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordReferenceEnJpDictionaryUrl);
+                        break;
+                    case "WordReference JP-EN":
+                        String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordReferenceJpEnDictionaryUrl);
                         break;
                                                                                                                 //                    case "Word Plus Chinese":
                                                                                                                 //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -725,6 +757,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(cambridgeDictionaryUrl);
                 break;
+            case "WordReference EN-CH":
+                String wordReferenceEnChDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordReferenceEnChDictionaryUrl);
+                break;
+            case "WordReference CH-EN":
+                String wordReferenceChEnDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordReferenceChEnDictionaryUrl);
+                break;
             case "Merriam Webster":
                 String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(merriamDictionaryUrl);
@@ -878,7 +918,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser2.loadUrl(gooDictionaryUrl);
                 break;
             case "Sanseido":
-                String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+searchKeyword+"&search_type=0&start_index=0&selected_dic=";
                 comboSearchWebViewBrowser2.loadUrl(sanseidoUrl);
                 break;
             case "Kotoba Bank":
@@ -900,6 +940,30 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Jisho":
                 String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(jishoUrl);
+                break;
+            case "Cambridge JP-EN":
+                String CambridgeJPtoENUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(CambridgeJPtoENUrl);
+                break;
+            case "Cambridge EN-JP":
+                String CambridgeENtoJPUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(CambridgeENtoJPUrl);
+                break;
+            case "WWW JDIC JP-EN":
+                String wwwjdicJpToEnUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wwwjdicJpToEnUrl);
+                break;
+            case "WWW JDIC EN-JP":
+                String wwwjdicEnToJaUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wwwjdicEnToJaUrl);
+                break;
+            case "WordReference EN-JP":
+                String wordReferenceEnJpDictionaryUrl= "https://www.wordreference.com/enja/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordReferenceEnJpDictionaryUrl);
+                break;
+            case "WordReference JP-EN":
+                String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordReferenceJpEnDictionaryUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -1081,6 +1145,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(cambridgeDictionaryUrl);
                 break;
+            case "WordReference EN-CH":
+                String wordReferenceEnChDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordReferenceEnChDictionaryUrl);
+                break;
+            case "WordReference CH-EN":
+                String wordReferenceChEnDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordReferenceChEnDictionaryUrl);
+                break;
             case "Merriam Webster":
                 String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(merriamDictionaryUrl);
@@ -1234,7 +1306,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser3.loadUrl(gooDictionaryUrl);
                 break;
             case "Sanseido":
-                String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+searchKeyword+"&search_type=0&start_index=0&selected_dic=";
                 comboSearchWebViewBrowser3.loadUrl(sanseidoUrl);
                 break;
             case "Kotoba Bank":
@@ -1256,6 +1328,30 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Jisho":
                 String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(jishoUrl);
+                break;
+            case "Cambridge JP-EN":
+                String CambridgeJPtoENUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(CambridgeJPtoENUrl);
+                break;
+            case "Cambridge EN-JP":
+                String CambridgeENtoJPUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(CambridgeENtoJPUrl);
+                break;
+            case "WWW JDIC JP-EN":
+                String wwwjdicJpToEnUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wwwjdicJpToEnUrl);
+                break;
+            case "WWW JDIC EN-JP":
+                String wwwjdicEnToJaUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wwwjdicEnToJaUrl);
+                break;
+            case "WordReference EN-JP":
+                String wordReferenceEnJpDictionaryUrl= "https://www.wordreference.com/enja/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordReferenceEnJpDictionaryUrl);
+                break;
+            case "WordReference JP-EN":
+                String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordReferenceJpEnDictionaryUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";

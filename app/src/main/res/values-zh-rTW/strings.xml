@@ -148,7 +148,7 @@
     <string name="Linguee_JP_EN">Linguee日英例句</string>
     <string name="Call_Japanese_food_dictionary">呼叫日本食物字典</string>
     <string name="Browser_switch">網頁 開關</string>
-    <string name="Return_to_default_background_image">恢復預設背景圖</string>
+    <string name="Restore_to_default_background">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
     <string name="Finger_tap_user_input_history">點按 = 帶入單字到首頁或記憶單字</string>
@@ -326,7 +326,7 @@
     <string name="In_1day_week_month">短期包套記憶：1天、1週、1個月後 (3個記憶時間點)</string>
     <string name="Will_send_the_notifications_on_3_preset_timings">將在預設的3個時間點依序發送提醒</string>
     <string name="Word_saved_to_my_vocabulary_list">已儲存到「我的單字本」</string>
-    <string name="Show_tutorial">使用教學</string>
+    <string name="Show_tutorial">顯示使用導覽</string>
     <string name="Next">下一步</string>
     <string name="Skip">跳過</string>
     <string name="Tutorial_for_login_button">點擊這裡可註冊、登入、登出或刪除用戶。註冊用戶即可透過雲端備份您的查詢紀錄和單字本，遇到手機重灌或重新安裝App也不怕丟了單字！</string>
@@ -355,7 +355,7 @@
     <string name="Your_screen_name_is_changed_successfully">用戶暱稱更新成功，將重新啟動App</string>
     <string name="Change_password">更改用戶密碼</string>
     <string name="Type_your_new_password">輸入新密碼</string>
-    <string name="Please_log_in_and_out_again">因安全機制，請務必先手動登出並登入後再立刻做此操作，否則會失敗！</string>
+    <string name="Please_log_in_and_out_again">。(因認證安全機制，請「務必」先手動登出並登入後再立刻做此操作，否則會操作失敗！)</string>
     <string name="Your_passwod_is_changed_successfully">用戶密碼更新成功，將重新啟動App</string>
     <string name="User_password_change_failed">密碼更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
     <string name="Change_email">更改用戶信箱</string>
@@ -385,5 +385,29 @@
     <string name="After_saving_a_word">您儲存的單字會出現在下方單字庫，您可做以下動作：</string>
     <string name="Finger_tap_words_to_memorize">"點按 = 帶入單字到主頁 "</string>
     <string name="Long_press_words_to_memorize">長按 = 快搜或三連搜模式</string>
+    <string name="Quick_search_example_explanation">快搜模式：您可選擇一部快搜字典，例如若選擇劍橋字典，以後只要點擊快搜按鈕就會自動查劍橋字典。</string>
+    <string name="Combo_search_example_explanation">三連搜：您可選擇三部預設字典，例如若選劍橋字典、例句字典和發音字典，點擊三連搜按鈕會同時查這三部字典。</string>
+    <string name="Must_get_Giphy_app">您必須先安裝第三方的「Giphy」App才能使用此功能，請按上方的安裝鈕</string>
+    <string name="Change_background_through_the_folllowing_channels">您可透過以下管道更換背景：</string>
+    <string name="Lemat_works_explanation">Lemat Works網站：提供許多特色絢麗動圖供您下載</string>
+    <string name="Go_to_Lemat_Works">前往LEMAT WORKS</string>
+    <string name="Giphy_explanation">動圖搜尋平台龍頭Giphy：提供數不盡的動圖供您下載</string>
+    <string name="Open_giphy_app">呼叫Giphy App</string>
+    <string name="Open_my_album_explanation">前往我的相簿：打開手機相簿挑選自己最愛的靜態圖或動圖</string>
+    <string name="Open_my_photo_album">前往我的相簿</string>
+    <string name="Restore_to_default_background_explanation">恢復預設背景：預設使用Lemat Works的宇宙動圖，官網 lematworks.myportfolio.com</string>
+    <string name="Choose_an_image_type">選擇圖片類型</string>
+    <string name="Use_static_image_for_background">選擇靜態圖做為背景圖</string>
+    <string name="Use_gif_for_background">選擇動圖(GIF)做為背景圖</string>
+    <string name="Lemat_works_tutorial">Lemat Works教學</string>
+    <string name="Giphy_tutorial">Giphy教學</string>
+    <string name="Album_tutorial">相簿教學</string>
+    <string name="Watch_tutorial">看使用教學</string>
+    <string name="Do_you_really_want_to_delete_account">確定刪除帳戶？</string>
+    <string name="Wills_english">Will的英語課</string>
+    <string name="Word_reference_en_to_ch">WordReference英漢字典</string>
+    <string name="Word_reference_ch_to_en">WordReference漢英字典</string>
+    <string name="Word_reference_en_to_jp">WordReference英日字典</string>
+    <string name="Word_reference_jp_to_en">WordReference日英字典</string>
 </resources>
 

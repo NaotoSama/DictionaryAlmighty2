@@ -1113,10 +1113,18 @@ public class UserInputHistory extends AppCompatActivity {
                 .setMessage(getString(R.string.After_performing_a_search) + System.getProperty("line.separator") + getString(R.string.Finger_tap_user_input_history) + System.getProperty("line.separator") + getString(R.string.Long_press_user_input_history) + System.getProperty("line.separator") + getString(R.string.Swipe))
                 .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
 
-
+                //了解了
                 .addButton(getString(R.string.Got_it)
                         , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (userInputHistoryInstructionsAlertDialog, which) -> {
 
+                            userInputHistoryInstructionsAlertDialog.dismiss();
+                        })
+
+                //看使用教學
+                .addButton(getString(R.string.Watch_tutorial)
+                        , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.END, (userInputHistoryInstructionsAlertDialog, which) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/UQVNGoyuQJA")));
                             userInputHistoryInstructionsAlertDialog.dismiss();
                         });
 

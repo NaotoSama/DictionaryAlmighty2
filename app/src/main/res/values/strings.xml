@@ -3,14 +3,13 @@
     <string-array name="Other_functions_spinner_array_original">
         <item>@string/Other_functions</item>
         <item>@string/Change_background</item>
-        <item>@string/Return_to_default_background_image</item>
-        <item>@string/Clear_search_input</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Show_tutorial</item>
         <item>@string/Online_chat_room</item>
-
+                                                            <!--        <item>@string/Restore_to_default_background</item>-->
+                                                            <!--        <item>@string/Clear_search_input</item>-->
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
                                                             <!--        <item>@string/Call_Japanese_food_dictionary</item> (已移轉到日文字典區，目前用不到) -->
-        <item>@string/Show_tutorial</item>
 
     </string-array>
 
@@ -18,12 +17,12 @@
     <string-array name="Other_functions_spinner_array_simplified">
         <item>@string/Other_functions</item>
         <item>@string/Change_background</item>
-        <item>@string/Return_to_default_background_image</item>
         <item>@string/Set_default_dictionary</item>
-        <item>@string/Online_chat_room</item>
-                                                            <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
-        <item>@string/Clear_search_input</item>
         <item>@string/Show_tutorial</item>
+        <item>@string/Online_chat_room</item>
+                                                            <!--        <item>@string/Restore_to_default_background</item>-->
+                                                            <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
+                                                            <!--        <item>@string/Clear_search_input</item>-->
 
     </string-array>
 
@@ -82,6 +81,8 @@
         <item>@string/Google_dictionary</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
+        <item>@string/Word_reference_en_to_ch</item>
+        <item>@string/Word_reference_ch_to_en</item>
         <item>@string/Merriam_Webster</item>
         <item>@string/Macmillan_dictionary</item>
         <item>@string/Collins</item>
@@ -127,6 +128,12 @@
         <item>@string/Eijirou</item>
         <item>@string/How_do_you_say_this_in_English</item>
         <item>@string/Jisho</item>
+        <item>@string/Cambridge_JP_EN</item>
+        <item>@string/Cambridge_EN_JP</item>
+        <item>@string/WWWJDIC_jp_en</item>
+        <item>@string/WWWJDIC_en_jp</item>
+        <item>@string/Word_reference_en_to_jp</item>
+        <item>@string/Word_reference_jp_to_en</item>
 
                                                             <!--        <item>@string/Word_Plus_Chinese</item>-->
                                                             <!--        <item>@string/Word_Plus_English1</item>-->
@@ -467,7 +474,7 @@
     <string name="Linguee_JP_EN">Linguee CH-EN</string>
     <string name="Call_Japanese_food_dictionary">Call Japanese Food Dictionary</string>
     <string name="Browser_switch">Browser Switch</string>
-    <string name="Return_to_default_background_image">Return to default background image</string>
+    <string name="Restore_to_default_background">Restore to default background</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
     <string name="Finger_tap_user_input_history">Finger tap = search/memorize word</string>
     <string name="Has_benn_deleted">" has benn deleted"</string>
@@ -617,7 +624,7 @@
     <string name="Your_screen_name_is_changed_successfully">Your screen name is changed successfully. Relaunching the app...</string>
     <string name="Change_password">Change password</string>
     <string name="Type_your_new_password">Type your new password</string>
-    <string name="Please_log_in_and_out_again">For safety, log out and in again before you unregister in case of failure.</string>
+    <string name="Please_log_in_and_out_again">. (For account security and verification requirement, you must manually log out and in again before you continue with this operation in case of failure.)</string>
     <string name="Your_passwod_is_changed_successfully">Your passwod is changed successfully. Relaunching the app...</string>
     <string name="User_password_change_failed">User certificate expired and password change failed. Please manually log out and in again before changing the password.</string>
     <string name="Change_email">Change email</string>
@@ -647,6 +654,30 @@
     <string name="After_saving_a_word">After saving a word, it will appear below as part of your vocabulary list and you can do the following actions</string>
     <string name="Finger_tap_words_to_memorize">Finger tap = Bring word to main page or memorize word</string>
     <string name="Long_press_words_to_memorize">Long press = Quick search or combo search</string>
+    <string name="Quick_search_example_explanation">Quick search: You can choose 1 dictionary for quick search. Say if you choose Cambridge, as soon as you hit the Quick Search Button you\'ll be automatically taken to Cambridge Dictionary.</string>
+    <string name="Combo_search_example_explanation">Combo Search: You can choose 3 default dictionaries. Say if you choose Cambridge Dictionary, example sentences dictionary and pronunciation dictionary, hitting the Combo Search button will look up those dictionaries simultaneously.</string>
+    <string name="Must_get_Giphy_app">The 3rd-party Giphy App must be installed to proceed with this function</string>
+    <string name="Change_background_through_the_folllowing_channels">Change background through the folllowing channels</string>
+    <string name="Lemat_works_explanation">Lemat Works: Available with characterized gifs for download.</string>
+    <string name="Go_to_Lemat_Works">Go to Lemat Works</string>
+    <string name="Giphy_explanation">The top GIFs serach platform has all the gifs for download.</string>
+    <string name="Open_giphy_app">Open Giphy App</string>
+    <string name="Open_my_album_explanation">Photo Album: Use you own favorite static images or gifs in your phone album.</string>
+    <string name="Open_my_photo_album">Open Photo Album</string>
+    <string name="Restore_to_default_background_explanation">Restore to default background: This app by default uses cosmos gif by LematWorks. Official site: lematworks.myportfolio.com</string>
+    <string name="Choose_an_image_type">Choose an image type</string>
+    <string name="Use_static_image_for_background">Use Static Image for Backgorund</string>
+    <string name="Use_gif_for_background">Use Gif for Background</string>
+    <string name="Lemat_works_tutorial">Lemat Works Tutorial</string>
+    <string name="Giphy_tutorial">Giphy Tutorial</string>
+    <string name="Album_tutorial">Album Tutorial</string>
+    <string name="Watch_tutorial">Watch Tutorial</string>
+    <string name="Do_you_really_want_to_delete_account">Do you really want to delete your account?</string>
+    <string name="Wills_english">Will\'s English</string>
+    <string name="Word_reference_en_to_ch">WordReference EN/CH Dictionary</string>
+    <string name="Word_reference_ch_to_en">WordReference CH/EN Dictionary</string>
+    <string name="Word_reference_en_to_jp">WordReference EN/JP Dictionary</string>
+    <string name="Word_reference_jp_to_en">WordReference JP/EN Dictionary</string>
 
 </resources>
 

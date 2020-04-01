@@ -171,8 +171,7 @@ public class WordsToMemorize extends AppCompatActivity {
             public void onClick(View v) {
 
                 //這邊設置AlertDialog讓用戶確認是否真要清除列表
-                CFAlertDialog.Builder doYouReallyWantToClearListAlertDialog
-                        = new CFAlertDialog.Builder(WordsToMemorize.this)
+                CFAlertDialog.Builder doYouReallyWantToClearListAlertDialog = new CFAlertDialog.Builder(WordsToMemorize.this)
                         .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                         .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                         .setCornerRadius(50)

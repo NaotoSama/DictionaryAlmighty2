@@ -1,7 +1,7 @@
 package com.example.android.dictionaryalmighty2;
 
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -13,9 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.auth.AuthUI;
@@ -188,16 +188,18 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //這邊設置AlertDialog讓用戶確認登出
-                AlertDialog.Builder signOutAlertDialog = new AlertDialog.Builder(SignInActivity.this);
-                signOutAlertDialog.setTitle(getResources().getString(R.string.Do_you_really_want_to_log_out));
-                signOutAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                signOutAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                CFAlertDialog.Builder signOutAlertDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getResources().getString(R.string.Do_you_really_want_to_log_out))
+                .setTextColor(Color.BLUE)
+                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
 
                 //AlertDialog的確定鈕，登出用戶
-                signOutAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .addButton(getResources().getString(R.string.Confirm)
+                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         // Firebase sign out
                         mFirebaseAuth.signOut();
@@ -229,20 +231,19 @@ public class SignInActivity extends AppCompatActivity {
                         };
                         Handler h =new Handler();
                         h.postDelayed(r, 5000);
-                    }
-                });
+
+                        dialog.dismiss();
+                })
 
                 //AlertDialog的取消鈕，取消登出
-                signOutAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                .addButton(getResources().getString(R.string.Cancel)
+                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                    }
                 });
 
                 //把AlertDialog顯示出來
-                signOutAlertDialog.create().show();
+                signOutAlertDialogBuilder.create().show();
 
             }
         });
@@ -255,29 +256,36 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //這邊設置第一層AlertDialog讓用戶更改帳戶資訊
-                AlertDialog.Builder updateUserAccountAlertDialog = new AlertDialog.Builder(SignInActivity.this);
-                updateUserAccountAlertDialog.setTitle(getResources().getString(R.string.Change_user_info));
-                updateUserAccountAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog也不會消失
-                updateUserAccountAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                CFAlertDialog.Builder updateUserAccountAlertDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getResources().getString(R.string.Change_user_info))
+                .setTextColor(Color.BLUE)
+                .setCancelable(true) //按到旁邊的空白處AlertDialog也不會消失
+                .setHeaderView(R.layout.custom_alert_alert_dialog_edit_user_info)
 
 
                 //第一層AlertDialog的中立鈕，更改顯示暱稱
-                updateUserAccountAlertDialog.setNeutralButton(getResources().getString(R.string.Change_user_screen_name), new DialogInterface.OnClickListener() {
+                .addButton(getResources().getString(R.string.Change_user_screen_name)
+                        , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder updateDisplayNameDialog = new AlertDialog.Builder(SignInActivity.this);
-                        updateDisplayNameDialog.setTitle(getResources().getString(R.string.Type_your_new_screen_name));
-                        updateDisplayNameDialog.setCancelable(false); //按到旁邊的空白處AlertDialog不會消失
+                        //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
-                        updateDisplayNameDialog.setView(userInputView);
+                        userInputView.setLines(2);
+                        userInputView.setHint(getString(R.string.Type_your_new_screen_name));
+                        CFAlertDialog.Builder updateDisplayNameDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
+                        .setHeaderView(userInputView)
 
 
                         //第二層AlertDialog的確定鈕
-                        updateDisplayNameDialog.setPositiveButton(getString(R.string.Confirm), new DialogInterface.OnClickListener() {
+                        .addButton(getString(R.string.Confirm)
+                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateDisplayNameDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
                                 String userInputDisplayName = userInputView.getText().toString();
 
                                 if (!userInputDisplayName.equals("")) {
@@ -320,43 +328,46 @@ public class SignInActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_anything, Toast.LENGTH_LONG).show();
                                 }
-                            }
-                        });
+
+                                    updateDisplayNameDialog.dismiss();
+                        })
 
 
                         //第二層AlertDialog的取消鈕
-                        updateDisplayNameDialog.setNegativeButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+                        .addButton(getString(R.string.Cancel)
+                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateDisplayNameDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                                    updateDisplayNameDialog.dismiss();
                         });
 
 
                         //把第二層AlertDialog顯示出來
-                        updateDisplayNameDialog.create().show();
-                    }
-                });
+                        updateDisplayNameDialogBuilder.show();
+                        //同時讓第一層AlertDialog消失
+                        updateUserAccountAlertDialog.dismiss();
+                })
 
 
                 //第一層AlertDialog的確定鈕，更改密碼
-                updateUserAccountAlertDialog.setPositiveButton(getResources().getString(R.string.Change_password), new DialogInterface.OnClickListener() {
+                .addButton(getResources().getString(R.string.Change_password)
+                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder updatePasswordDialog = new AlertDialog.Builder(SignInActivity.this);
-                        updatePasswordDialog.setTitle(getResources().getString(R.string.Type_your_new_password) + getResources().getString(R.string.Please_log_in_and_out_again));
-                        updatePasswordDialog.setCancelable(false); //按到旁邊的空白處AlertDialog不會消失
+                        //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
-                        updatePasswordDialog.setView(userInputView);
+                        userInputView.setLines(4);
+                        userInputView.setHint(getString(R.string.Type_your_new_password) + getString(R.string.Please_log_in_and_out_again));
+                        CFAlertDialog.Builder updatePasswordDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
+                        .setHeaderView(userInputView)
 
 
                         //第二層AlertDialog的確定鈕
-                        updatePasswordDialog.setPositiveButton(getString(R.string.Confirm), new DialogInterface.OnClickListener() {
+                        .addButton(getString(R.string.Confirm)
+                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updatePasswordDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
                                 String userInputPassword = userInputView.getText().toString();
 
                                 if (!userInputPassword.equals("")) {
@@ -394,43 +405,45 @@ public class SignInActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_anything, Toast.LENGTH_LONG).show();
                                 }
-                            }
-                        });
+
+                                    updatePasswordDialog.dismiss();
+                        })
 
 
                         //第二層AlertDialog的取消鈕
-                        updatePasswordDialog.setNegativeButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+                        .addButton(getString(R.string.Cancel), Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updatePasswordDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                            updatePasswordDialog.dismiss();
                         });
 
 
                         //把第二層AlertDialog顯示出來
-                        updatePasswordDialog.create().show();
-                    }
-                });
+                        updatePasswordDialogBuilder.show();
+                        //同時讓第一層AlertDialog消失
+                        updateUserAccountAlertDialog.dismiss();
+                })
 
 
-                //第一層AlertDialog的取消鈕，更改信箱
-                updateUserAccountAlertDialog.setNegativeButton(getResources().getString(R.string.Change_email), new DialogInterface.OnClickListener() {
+                //第一層AlertDialog的中立鈕，更改信箱
+                .addButton(getResources().getString(R.string.Change_email)
+                        , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder updateEmailDialog = new AlertDialog.Builder(SignInActivity.this);
-                        updateEmailDialog.setTitle(getResources().getString(R.string.Type_your_new_email) + getResources().getString(R.string.Please_log_in_and_out_again));
-                        updateEmailDialog.setCancelable(false); //按到旁邊的空白處AlertDialog不會消失
+                        //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
-                        updateEmailDialog.setView(userInputView);
+                        userInputView.setLines(4);
+                        userInputView.setHint(getString(R.string.Type_your_new_email) + getString(R.string.Please_log_in_and_out_again));
+                        CFAlertDialog.Builder updateEmailDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
+                        .setHeaderView(userInputView)
 
 
                         //第二層AlertDialog的確定鈕
-                        updateEmailDialog.setPositiveButton(getString(R.string.Confirm), new DialogInterface.OnClickListener() {
+                        .addButton(getString(R.string.Confirm)
+                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateEmailDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
                                 String userInputEmail = userInputView.getText().toString();
 
                                 if (!userInputEmail.equals("") && userInputEmail.matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
@@ -468,28 +481,35 @@ public class SignInActivity extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_anything, Toast.LENGTH_LONG).show();
                                 }
-                            }
-                        });
+
+                                    updateEmailDialog.dismiss();
+                        })
 
 
                         //第二層AlertDialog的取消鈕
-                        updateEmailDialog.setNegativeButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+                        .addButton(getString(R.string.Cancel)
+                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateEmailDialog, whichLayer2) -> {
 
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
+                                    updateEmailDialog.dismiss();
                         });
 
 
                         //把第二層AlertDialog顯示出來
-                        updateEmailDialog.create().show();
-                    }
-                });
+                        updateEmailDialogBuilder.show();
+                        //同時讓第一層AlertDialog消失
+                        updateUserAccountAlertDialog.dismiss();
+                })
+
+
+                //第一層AlertDialog的取消鈕
+                        .addButton(getString(R.string.Cancel)
+                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
+                                    updateUserAccountAlertDialog.dismiss();
+                                });
 
 
                 //把第一層AlertDialog顯示出來
-                updateUserAccountAlertDialog.create().show();
+                updateUserAccountAlertDialogBuilder.show();
             }
         });
 
@@ -502,16 +522,18 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 //這邊設置AlertDialog讓用戶確認是否真要刪除帳號
-                AlertDialog.Builder doYouReallyWantToDeleteYourAccountAlertDialog = new AlertDialog.Builder(SignInActivity.this);
-                doYouReallyWantToDeleteYourAccountAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_delete_your_account));
-                doYouReallyWantToDeleteYourAccountAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                doYouReallyWantToDeleteYourAccountAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                CFAlertDialog.Builder doYouReallyWantToDeleteYourAccountAlertDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getString(R.string.Do_you_really_want_to_delete_account) + getString(R.string.Please_log_in_and_out_again))
+                .setTextColor(Color.BLUE)
+                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
 
                 //AlertDialog的確定鈕，刪除帳號
-                doYouReallyWantToDeleteYourAccountAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .addButton(getResources().getString(R.string.Confirm)
+                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         //先清除雲端用戶Firebase UID
                         mChildReferenceForInputHistory.child(username).removeValue();
@@ -582,21 +604,19 @@ public class SignInActivity extends AppCompatActivity {
                                     });
                         }
 
-                    }
-                });
+                            dialog.dismiss();
+                })
 
 
                 //AlertDialog的取消鈕
-                doYouReallyWantToDeleteYourAccountAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                .addButton(getResources().getString(R.string.Cancel)
+                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                    }
                 });
 
                 //把AlertDialog顯示出來
-                doYouReallyWantToDeleteYourAccountAlertDialog.create().show();
+                doYouReallyWantToDeleteYourAccountAlertDialogBuilder.show();
             }
         });
 
@@ -676,15 +696,4 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
-    //    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.main_menu, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        return super.onOptionsItemSelected(item);
-//    }
 }

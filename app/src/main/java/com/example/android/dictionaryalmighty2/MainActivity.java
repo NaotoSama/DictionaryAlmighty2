@@ -57,6 +57,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 
+import com.bumptech.glide.Glide;
 import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -124,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
     static String searchKeyword;      //用戶輸入的關鍵字
     static String username;      //用戶的Firebase UID
     static String userScreenName;      //用戶的顯示暱稱
-    static String userInputLoginEmail; //用戶手動輸入的登入信箱
-    static String userInputLoginPassword; //用戶手動輸入的登入密碼
-    static String googleIdToken;
-    static String logInProviderCheckCode; //用來檢查用戶透過哪個方式登入帳戶
+                                                                                //static String userInputLoginEmail; //用戶手動輸入的登入信箱
+                                                                                //static String userInputLoginPassword; //用戶手動輸入的登入密碼
+                                                                                //static String googleIdToken;
+                                                                                //static String logInProviderCheckCode; //用來檢查用戶透過哪個方式登入帳戶
     String LOG_TAG;  //Log tag for the external storage permission request error message
     static String localOrCloudSaveSwitchCode; //本地端或雲端備份的代碼
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
@@ -144,10 +145,10 @@ public class MainActivity extends AppCompatActivity {
     String FriebaseUrl; //接收Firebase傳來的URL
     private static final String SHOWCASE_ID = "Sequence Showcase";
 
-    AlertDialog.Builder defaultSearchAlertDialog; //專業版自訂單一預設字典名單的對話方塊
-    AlertDialog.Builder defaultComboSearchAlertDialogFirstDictionary; //專業版自訂第一個預設字典名單的對話方塊
-    AlertDialog.Builder defaultComboSearchAlertDialogSecondDictionary; //專業版自訂第二個預設字典名單的對話方塊
-    AlertDialog.Builder defaultComboSearchAlertDialogThirdDictionary; //專業版自訂第三個預設字典名單的對話方塊
+    CFAlertDialog.Builder defaultSearchAlertDialogBuilder; //專業版自訂單一預設字典名單的對話方塊
+    CFAlertDialog.Builder defaultComboSearchAlertDialogFirstDictionaryBuilder; //專業版自訂第一個預設字典名單的對話方塊
+    CFAlertDialog.Builder defaultComboSearchAlertDialogSecondDictionaryBuilder; //專業版自訂第二個預設字典名單的對話方塊
+    CFAlertDialog.Builder defaultComboSearchAlertDialogThirdDictionaryBuilder; //專業版自訂第三個預設字典名單的對話方塊
 
     public static final int PHOTOALBUM = 1;   // 相簿
     int proOrSimplifiedSwitchCode; //專業版或簡易版切換的代碼
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
     File tempOutputFileForBackgroundImage;
 
     Uri imageForBackground;                                //相簿中的原始圖檔
+    Uri userGifBackground;
 
     Bitmap m_phone_for_background;                           // Bitmap圖像
 
@@ -192,14 +194,15 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     static SharedPreferences usernameSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
     static SharedPreferences userScreenNameSharedPreferences;  //儲存用戶顯示暱稱的SharedPreferences
-    static SharedPreferences userInputLoginEmailSharedPreferences;  //儲存用戶登入信箱的SharedPreferences
-    static SharedPreferences userInputLoginPasswordSharedPreferences;  //儲存用戶登入密碼的SharedPreferences
-    static SharedPreferences googleIdTokenSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
-    static SharedPreferences logInProviderCheckCodeSharedPreferences;  //儲存用戶以哪種方式登入帳戶
+                                                                                //static SharedPreferences userInputLoginEmailSharedPreferences;  //儲存用戶登入信箱的SharedPreferences
+                                                                                //static SharedPreferences userInputLoginPasswordSharedPreferences;  //儲存用戶登入密碼的SharedPreferences
+                                                                                //static SharedPreferences googleIdTokenSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
+                                                                                //static SharedPreferences logInProviderCheckCodeSharedPreferences;  //儲存用戶以哪種方式登入帳戶
     SharedPreferences savedAppVersionCodeSharedPreferences; //For storing savedAppVersionCode，用來判斷用戶是否為首次安裝
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
     SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
+    SharedPreferences gifBackgroundSharedPreferences;//儲存用戶指定的GIF動圖URI
 
     private ArrayList<DictionaryItem> mOcrSpinnerItemListOriginal;  //客製化Spinner選單列
     private ArrayList<DictionaryItem> mOcrSpinnerItemListSimplified;
@@ -354,6 +357,19 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
+         * 頁面生成時讀取用戶的選定的GIF動圖
+         */
+        gifBackgroundSharedPreferences = getSharedPreferences("gifBackgroundSharedPreferences", Context.MODE_PRIVATE);
+        String gifBackgroundURIString = gifBackgroundSharedPreferences.getString("gifBackgroundURI", "null");
+            if (!gifBackgroundURIString.equals("null")) {
+                userGifBackground = Uri.parse(gifBackgroundURIString);
+                Glide.with(this)
+                        .load(userGifBackground)
+                        .into((ImageView) findViewById(R.id.GIF_imageView));
+            }
+
+
+        /**
          * 頁面生成時讀取用戶的Firebase UID和顯示暱稱
          */
         usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", Context.MODE_PRIVATE);
@@ -363,28 +379,28 @@ public class MainActivity extends AppCompatActivity {
         userScreenName = userScreenNameSharedPreferences.getString("userScreenName", "");
 
 
-        /**
-         * 頁面生成時讀取用戶手動輸入的登入信箱和密碼
-         */
-        userInputLoginEmailSharedPreferences = getSharedPreferences("userInputLoginEmailSharedPreferences", Context.MODE_PRIVATE);
-        userInputLoginEmail = userInputLoginEmailSharedPreferences.getString("userInputLoginEmail", ""); //Here we need to specify a defaultValue for the 2nd argument in case the data we are trying to retrieve does not exist, and the defaultValue will be used as a fallBack.
-
-        userInputLoginPasswordSharedPreferences = getSharedPreferences("userInputLoginPasswordSharedPreferences", Context.MODE_PRIVATE);
-        userInputLoginPassword = userInputLoginPasswordSharedPreferences.getString("userInputLoginPassword", "");
-
-
-        /**
-         * 頁面生成時讀取googleIdToken
-         */
-        googleIdTokenSharedPreferences = getSharedPreferences("googleIdTokenSharedPreferences", MODE_PRIVATE);
-        googleIdToken = googleIdTokenSharedPreferences.getString("googleIdToken", "");
-
-
-        /**
-         * 頁面生成時讀取用戶用哪種方式登入帳戶
-         */
-        logInProviderCheckCodeSharedPreferences = getSharedPreferences("logInProviderCheckCodeSharedPreferences", MODE_PRIVATE);
-        logInProviderCheckCode = logInProviderCheckCodeSharedPreferences.getString("logInProviderCheckCode", "");
+                                                                                ///**
+                                                                                // * 頁面生成時讀取用戶手動輸入的登入信箱和密碼
+                                                                                // */
+                                                                                //userInputLoginEmailSharedPreferences = getSharedPreferences("userInputLoginEmailSharedPreferences", Context.MODE_PRIVATE);
+                                                                                //userInputLoginEmail = userInputLoginEmailSharedPreferences.getString("userInputLoginEmail", ""); //Here we need to specify a defaultValue for the 2nd argument in case the data we are trying to retrieve does not exist, and the defaultValue will be used as a fallBack.
+                                                                                //
+                                                                                //userInputLoginPasswordSharedPreferences = getSharedPreferences("userInputLoginPasswordSharedPreferences", Context.MODE_PRIVATE);
+                                                                                //userInputLoginPassword = userInputLoginPasswordSharedPreferences.getString("userInputLoginPassword", "");
+                                                                                //
+                                                                                //
+                                                                                ///**
+                                                                                // * 頁面生成時讀取googleIdToken
+                                                                                // */
+                                                                                //googleIdTokenSharedPreferences = getSharedPreferences("googleIdTokenSharedPreferences", MODE_PRIVATE);
+                                                                                //googleIdToken = googleIdTokenSharedPreferences.getString("googleIdToken", "");
+                                                                                //
+                                                                                //
+                                                                                ///**
+                                                                                // * 頁面生成時讀取用戶用哪種方式登入帳戶
+                                                                                // */
+                                                                                //logInProviderCheckCodeSharedPreferences = getSharedPreferences("logInProviderCheckCodeSharedPreferences", MODE_PRIVATE);
+                                                                                //logInProviderCheckCode = logInProviderCheckCodeSharedPreferences.getString("logInProviderCheckCode", "");
 
 
         /**
@@ -702,12 +718,14 @@ public class MainActivity extends AppCompatActivity {
         mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
         mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
         mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_microsoft_translator_app_ocr_recognition, R.mipmap.microsoft_translator));
+        mOcrSpinnerItemListOriginal.add(new DictionaryItem(R.string.Watch_tutorial, R.drawable.blank_icon));
 
 
         mOcrSpinnerItemListSimplified = new ArrayList<>();
         mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Select_an_OCR_third_party_app, R.mipmap.hand_pointing_down));
         mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Call_TextScanner_app, R.mipmap.text_scanner));
         mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Call_google_translate_app, R.mipmap.google_translate));
+        mOcrSpinnerItemListSimplified.add(new DictionaryItem(R.string.Watch_tutorial, R.drawable.blank_icon));
 
 
         mEnglishDictionarySpinnerItemListOriginal = new ArrayList<>();
@@ -719,6 +737,8 @@ public class MainActivity extends AppCompatActivity {
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_dictionary, R.mipmap.google_dictionary));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_reference_en_to_ch, R.mipmap.word_reference_dot_com));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_reference_ch_to_en, R.mipmap.word_reference_dot_com));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Merriam_Webster, R.mipmap.merriam_wester));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Macmillan_dictionary, R.mipmap.macmillan_dictionary));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Collins, R.mipmap.collins));
@@ -784,6 +804,8 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_EN_JP, R.mipmap.cambridge));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WWWJDIC_jp_en, R.mipmap.www_jdic));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.WWWJDIC_en_jp, R.mipmap.www_jdic));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_reference_en_to_jp, R.mipmap.word_reference_dot_com));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_reference_jp_to_en, R.mipmap.word_reference_dot_com));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Kanji_recognizer, R.mipmap.kanji_recognizer));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Japanese_food_dictionary, R.mipmap.japanese_food_dictionary));
@@ -859,6 +881,7 @@ public class MainActivity extends AppCompatActivity {
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Michael_chugani_column, R.mipmap.michael_chugani_column));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Grammarist, R.mipmap.grammarist));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Kenny_english, R.mipmap.kenny_english));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Wills_english, R.mipmap.learn_english_with_will));
 
     }
 
@@ -1065,6 +1088,11 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor=sharedPreferences.edit();
                     editor.putString("image", imageString);
                     editor.apply();
+
+                    gifBackgroundSharedPreferences = getSharedPreferences("gifBackgroundSharedPreferences", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor gifBackgroundSharedPreferencesEditor = gifBackgroundSharedPreferences.edit();
+                    gifBackgroundSharedPreferencesEditor.putString("gifBackgroundURI", "null").apply();
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -1075,6 +1103,22 @@ public class MainActivity extends AppCompatActivity {
             gifImageView.setVisibility(View.GONE);
             backGroundImageView.setImageBitmap(m_phone_for_background);
             backGroundImageView.setVisibility(View.VISIBLE);
+
+        } else if (changeBackgroundButtonIsPressed=="GIF") {
+            if (resultCode == 0 || data == null) {
+                return;
+            }if (requestCode == PHOTOALBUM) {
+                imageForBackground = data.getData();
+
+                gifBackgroundSharedPreferences = getSharedPreferences("gifBackgroundSharedPreferences", Context.MODE_PRIVATE);
+                SharedPreferences.Editor gifBackgroundSharedPreferencesEditor = gifBackgroundSharedPreferences.edit();
+                gifBackgroundSharedPreferencesEditor.putString("gifBackgroundURI", imageForBackground.toString()).apply();
+
+                Glide.with(this)
+                     .load(imageForBackground)
+                     .into((ImageView) findViewById(R.id.GIF_imageView));
+            }
+
         } else {
             return;
         }
@@ -1505,79 +1549,79 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (position == 1) {  //更換背景圖
 
-                    changeBackgroundButtonIsPressed="yes";
-                    Intent intent = new Intent(Intent.ACTION_PICK, null);
-                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
-                    startActivityForResult(intent, PHOTOALBUM);
+                    changeBackgroundImage();
 
-                } else if (position == 2) {  // 恢復成預設的背景圖
-
-                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
-                    m_phone_for_background = defaultBackgroundBmp;
-                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
-                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
-                    byte[] byteArray=byteArrayOutputStream.toByteArray();
-                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    //第三步:將String存至SharedPreferences
-                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("image", imageString);
-                    editor.apply();
-
-                    recreate(); //重新生成頁面
-                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
-
-                } else if (position == 3) {  //清除搜尋紀錄
-
-                    //這邊設置AlertDialog讓用戶確認是否真要清除列表
-                    AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                    doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
-                    doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                    doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
-
-                    //AlertDialog的確定鈕，清除列表
-                    doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
-                            saveUserInputArrayListToSharedPreferences ();
-                            Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
-
-                        }
-                    });
-
-                    //AlertDialog的取消鈕
-                    doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    //把AlertDialog顯示出來
-                    doYouReallyWantToClearListAlertDialog.create().show();
-
-                } else if (position == 4) {
+                }
+                                                                                        //else if (position == 2) {  // 恢復成預設的背景圖
+                                                                                        //
+                                                                                        //    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
+                                                                                        //    m_phone_for_background = defaultBackgroundBmp;
+                                                                                        //    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                                                                                        //    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                                                                                        //    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                                                                                        //    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                                                                                        //    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                                                                                        //    //第三步:將String存至SharedPreferences
+                                                                                        //    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                                                                                        //    SharedPreferences.Editor editor=sharedPreferences.edit();
+                                                                                        //    editor.putString("image", imageString);
+                                                                                        //    editor.apply();
+                                                                                        //
+                                                                                        //    recreate(); //重新生成頁面
+                                                                                        //    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
+                                                                                        //
+                                                                                        //}
+                                                                                        //else if (position == 3) {  //清除搜尋紀錄
+                                                                                        //
+                                                                                        //    //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                                                                                        //    AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                                                                                        //
+                                                                                        //    //AlertDialog的確定鈕，清除列表
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                                                                                        //
+                                                                                        //        @Override
+                                                                                        //        public void onClick(DialogInterface dialog, int which) {
+                                                                                        //
+                                                                                        //            userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                                                                                        //            saveUserInputArrayListToSharedPreferences ();
+                                                                                        //            Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+                                                                                        //
+                                                                                        //        }
+                                                                                        //    });
+                                                                                        //
+                                                                                        //    //AlertDialog的取消鈕
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                                                                        //
+                                                                                        //        @Override
+                                                                                        //        public void onClick(DialogInterface dialog, int which) {
+                                                                                        //            dialog.dismiss();
+                                                                                        //        }
+                                                                                        //    });
+                                                                                        //
+                                                                                        //    //把AlertDialog顯示出來
+                                                                                        //    doYouReallyWantToClearListAlertDialog.create().show();
+                                                                                        //
+                                                                                        //}
+                  else if (position == 2) {
 
                     setDefaultDictionariesOriginal(); //設置專業版預設字典
 
-                                                                    //                } else if (position == 5) {//註冊登入、更改或刪除用戶名稱 (已移轉到Action bar menu，目前用不到)
-                                                                    //
-                                                                    //                    registerLoginRenameDeleteUsername();
+                                                                                        //} else if (position == 5) {//註冊登入、更改或刪除用戶名稱 (已移轉到Action bar menu，目前用不到)
+                                                                                        //
+                                                                                        //    registerLoginRenameDeleteUsername();
+                } else if (position == 3) {
+                    //顯示使用教學
+                    MaterialShowcaseView.resetAll(getApplicationContext());
+                    showTutorSequence();
 
-                } else if (position == 5) {
+                } else if (position == 4) {
                     //進入聊天室
                     Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                     startActivity(goToChatRoomIntent);
 
-                } else if (position == 6) {
-                    //顯示使用教學
-                    MaterialShowcaseView.resetAll(getApplicationContext());
-                    showTutorSequence();
                 }
 
                 otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
@@ -1617,79 +1661,81 @@ public class MainActivity extends AppCompatActivity {
 
                 } else if (position == 1) {  //更換背景圖
 
-                    changeBackgroundButtonIsPressed="yes";
-                    Intent intent = new Intent(Intent.ACTION_PICK, null);
-                    intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, IMAGE_UNSPECIFIED);
-                    startActivityForResult(intent, PHOTOALBUM);
+                    changeBackgroundImage();
 
-                } else if (position == 2) {  // 恢復成預設的背景圖
-
-                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
-                    m_phone_for_background = defaultBackgroundBmp;
-                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
-                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
-                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
-                    byte[] byteArray=byteArrayOutputStream.toByteArray();
-                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    //第三步:將String存至SharedPreferences
-                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("image", imageString);
-                    editor.apply();
-
-                    recreate(); //重新生成頁面
-                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
-
-                } else if (position == 3) {
+                }
+                                                                                        //else if (position == 2) {  // 恢復成預設的背景圖
+                                                                                        //
+                                                                                        //    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
+                                                                                        //    m_phone_for_background = defaultBackgroundBmp;
+                                                                                        //    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                                                                                        //    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                                                                                        //    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                                                                                        //    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                                                                                        //    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                                                                                        //    //第三步:將String存至SharedPreferences
+                                                                                        //    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                                                                                        //    SharedPreferences.Editor editor=sharedPreferences.edit();
+                                                                                        //    editor.putString("image", imageString);
+                                                                                        //    editor.apply();
+                                                                                        //
+                                                                                        //    recreate(); //重新生成頁面
+                                                                                        //    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
+                                                                                        //
+                                                                                        //}
+                  else if (position == 2) {
 
                     setDefaultDictionariesSimplified();  //設置簡易版預設字典
 
-                                                                //                } else if (position == 4) {//註冊登入、更改或刪除用戶名稱 (已移轉到Action bar menu，目前用不到)
-                                                                //
-                                                                //                    registerLoginRenameDeleteUsername();
+                                                                                        // } else if (position == 4) {//註冊登入、更改或刪除用戶名稱 (已移轉到Action bar menu，目前用不到)
+                                                                                        //
+                                                                                        //     registerLoginRenameDeleteUsername();
 
-                } else if (position == 4) {  //清除搜尋紀錄
+                }
+                                                                                        //  else if (position == 4) {  //清除搜尋紀錄
+                                                                                        //
+                                                                                        //    //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                                                                                        //    AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                                                                                        //
+                                                                                        //    //AlertDialog的確定鈕，清除列表
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                                                                                        //
+                                                                                        //        @Override
+                                                                                        //        public void onClick(DialogInterface dialog, int which) {
+                                                                                        //
+                                                                                        //            userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
+                                                                                        //            saveUserInputArrayListToSharedPreferences ();
+                                                                                        //            Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
+                                                                                        //
+                                                                                        //        }
+                                                                                        //    });
+                                                                                        //
+                                                                                        //    //AlertDialog的取消鈕
+                                                                                        //    doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                                                                        //
+                                                                                        //        @Override
+                                                                                        //        public void onClick(DialogInterface dialog, int which) {
+                                                                                        //            dialog.dismiss();
+                                                                                        //        }
+                                                                                        //    });
+                                                                                        //
+                                                                                        //    //把AlertDialog顯示出來
+                                                                                        //    doYouReallyWantToClearListAlertDialog.create().show();
+                                                                                        //
+                                                                                        //}
+                  else if (position == 3) {
+                    //顯示使用教學
+                    MaterialShowcaseView.resetAll(getApplicationContext());
+                    showTutorSequence();
 
-                    //這邊設置AlertDialog讓用戶確認是否真要清除列表
-                    AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                    doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
-                    doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-                    doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
-
-                    //AlertDialog的確定鈕，清除列表
-                    doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            userInputArraylist.clear(); //清除userInputArraylsit中登錄的用戶搜尋紀錄
-                            saveUserInputArrayListToSharedPreferences ();
-                            Toast.makeText(getApplicationContext(), getString(R.string.Search_records_cleared), Toast.LENGTH_LONG).show();
-
-                        }
-                    });
-
-                    //AlertDialog的取消鈕
-                    doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    //把AlertDialog顯示出來
-                    doYouReallyWantToClearListAlertDialog.create().show();
-
-                } else if (position == 5) {
+                } else if (position == 4) {
                     //進入聊天室
                     Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                     startActivity(goToChatRoomIntent);
 
-                } else if (position == 6) {
-                    //顯示使用教學
-                    MaterialShowcaseView.resetAll(getApplicationContext());
-                    showTutorSequence();
                 }
 
                 otherFunctionsSpinner.setAdapter(OtherFunctionsSpinnerAdapter);
@@ -2181,6 +2227,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                else if (position == 4) {
+                    //看OCR教學影片
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/-j04ogbUNLA")));
+                }
 
 
                                                                 /* 以下功能廢除不使用了
@@ -2293,6 +2343,10 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 }
+                else if (position == 3) {
+                    //看OCR教學影片
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/-j04ogbUNLA")));
+                }
 
                 OCRModeSpinner.setAdapter(mOcrSpinnerAdapter);
 
@@ -2377,169 +2431,181 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 8){
+                }else if (position == 8) {
+                    String wordReferenceEnChDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
+                    webViewBrowser.loadUrl(wordReferenceEnChDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 9) {
+                    String wordReferenceChEnDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
+                    webViewBrowser.loadUrl(wordReferenceChEnDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 10){
                     String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                     webViewBrowser.loadUrl(merriamDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 9){
+                }else if (position == 11){
                     String macmillanDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+searchKeyword+"_1";
                     webViewBrowser.loadUrl(macmillanDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 10) {
+                }else if (position == 12) {
                     String collinsDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
                     webViewBrowser.loadUrl(collinsDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 11) {
+                }else if (position == 13) {
                     String oxfordDictionaryUrl= "https://en.oxforddictionaries.com/definition/"+searchKeyword;
                     webViewBrowser.loadUrl(oxfordDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 12) {
+                }else if (position == 14) {
                     String vocabularyDotComUrl= "https://www.vocabulary.com/dictionary/"+searchKeyword;
                     webViewBrowser.loadUrl(vocabularyDotComUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 13) {
+                }else if (position == 15) {
                     String dictionaryDotComUrl= "https://www.dictionary.com/browse/"+searchKeyword;
                     webViewBrowser.loadUrl(dictionaryDotComUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 14) {
+                }else if (position == 16) {
                     String theFreeDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
                     webViewBrowser.loadUrl(theFreeDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 15) {
+                }else if (position == 17) {
                     String fineDictionaryUrl= "http://www.finedictionary.com/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(fineDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 16) {
+                }else if (position == 18) {
                     String yourDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
                     webViewBrowser.loadUrl(yourDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 17) {
+                }else if (position == 19) {
                     String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                     webViewBrowser.loadUrl(longmanDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 18) {
+                }else if (position == 20) {
                     String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                     webViewBrowser.loadUrl(wordWebUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 19) {
+                }else if (position == 21) {
                     String wordNikUrl= "https://www.wordnik.com/words/"+searchKeyword;
                     webViewBrowser.loadUrl(wordNikUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 20) {
+                }else if (position == 22) {
                     String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
                     webViewBrowser.loadUrl(wiktionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 21) {
+                }else if (position == 23) {
                     String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(businessDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 22) {
+                }else if (position == 24) {
                     String slangDictionary= "http://www.yiym.com/?s="+searchKeyword;
                     webViewBrowser.loadUrl(slangDictionary);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 23) {
+                }else if (position == 25) {
                     String theOnlineSlangDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+searchKeyword+"&sa=Search";
                     webViewBrowser.loadUrl(theOnlineSlangDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 24) {
+                }else if (position == 26) {
                     String idioms4YouUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+searchKeyword;
                     webViewBrowser.loadUrl(idioms4YouUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 25) {
+                }else if (position == 27) {
                     String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                     webViewBrowser.loadUrl(greensDictionaryOfSlangUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 26) {
+                }else if (position == 28) {
                     String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
                     webViewBrowser.loadUrl(academiaDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 27) {
+                }else if (position == 29) {
                     String academiaDictionaryAndEncyclopediaUrl= "https://en.academic.ru/searchall.php?SWord="+searchKeyword+"&from=xx&to=en&did=&stype=0#";
                     webViewBrowser.loadUrl(academiaDictionaryAndEncyclopediaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 28) {
+                }else if (position == 30) {
                     String techDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(techDicoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 29) {
+                }else if (position == 31) {
                     String bioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
                     webViewBrowser.loadUrl(bioMedicalDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 30) {
+                }else if (position == 32) {
                     String isPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                     webViewBrowser.loadUrl(isPluralDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 31) {
+                }else if (position == 33) {
                     String lingoHelpPrepositionUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                     webViewBrowser.loadUrl(lingoHelpPrepositionUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 32) {
+                }else if (position == 34) {
                     String powerThesaurusSynonymUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
                     webViewBrowser.loadUrl(powerThesaurusSynonymUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 33) {
+                }else if (position == 35) {
                     String powerThesaurusAntonymsUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
                     webViewBrowser.loadUrl(powerThesaurusAntonymsUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 34) {
+                }else if (position == 36) {
                     String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(wordHippoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 35) {
+                }else if (position == 37) {
                     String oneLookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                     webViewBrowser.loadUrl(oneLookUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
@@ -2737,7 +2803,7 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 12) {
-                    String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                    String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+searchKeyword+"&search_type=0&start_index=0&selected_dic=";
                     webViewBrowser.loadUrl(sanseidoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
@@ -2797,12 +2863,24 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 22) {
+                    String WordReferenceEnJpDictionaryUrl= "https://www.wordreference.com/enja/"+searchKeyword;
+                    webViewBrowser.loadUrl(WordReferenceEnJpDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 23) {
+                    String WordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
+                    webViewBrowser.loadUrl(WordReferenceJpEnDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 24) {
                     String kanjiRecognizerUrl= "https://kanji.sljfaq.org/draw-canvas.html";
                     webViewBrowser.loadUrl(kanjiRecognizerUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 23) {
+                }else if (position == 25) {
                     //呼叫第三方「Yomiwa」app
                     Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
                     if (callYomiwaAppIntent != null) {
@@ -2845,7 +2923,7 @@ public class MainActivity extends AppCompatActivity {
                         h.postDelayed(r, 100);
 
                     }
-                } else if (position == 24) {
+                } else if (position == 26) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -3401,6 +3479,12 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 22) {
+                    String kennyEnglishUrl= "https://www.learnenglishwithwill.com/?s="+searchKeyword;
+                    webViewBrowser.loadUrl(kennyEnglishUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
                 }
 
                 MiscellaneousSpinner.setAdapter(mMiscellaneousSpinnerAdapter);
@@ -3499,7 +3583,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     //==============================================================================================
-    // 客製化轉頁板與簡易版ActionBar的Helper method
+    // 客製化專業版與簡易版ActionBar的Helper method
     //==============================================================================================
 
     /**
@@ -3625,30 +3709,39 @@ public class MainActivity extends AppCompatActivity {
          * 讓用戶快速搜尋預設字典
          */
         //這邊設置第一層AlertDialog讓用戶選擇"設置一個預設字典"或"設置同時搜尋三個預設字典"
-        AlertDialog.Builder chooseSingleOrComboDefaultDictionaryAlertDialog = new AlertDialog.Builder(MainActivity.this);
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setTitle(R.string.Set_default_dictionary);
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers);
+        CFAlertDialog.Builder chooseSingleOrComboDefaultDictionaryAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+        .setCornerRadius(50)
+        .setTitle(R.string.Set_default_dictionary)
+        .setTextColor(Color.BLUE)
+        .setMessage(getString(R.string.Quick_search_example_explanation) + System.getProperty("line.separator") + getString(R.string.Combo_search_example_explanation))
+        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
-        //這邊設置第二層AlertDialog讓用戶細部設置預設字典。checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setSingleChoiceItems(new String[]{getString(R.string.Set_a_single_default_dictionary), getString(R.string.Set_combo_default_dictionaries)}, -1, new DialogInterface.OnClickListener() {
+        //讓用戶細部設置預設字典。checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
+        .setSingleChoiceItems(new String[]{getString(R.string.Set_a_single_default_dictionary), getString(R.string.Set_combo_default_dictionaries)}, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface chooseSingleOrComboDefaultDictionaryDialogInterface, int position) {
 
-                //若用戶點選"設置一個預設字典"
+                //這邊設置第二層AlertDialog
+                // 若用戶點選"設置一個預設字典"
                 if (position==0){
 
                     defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
 
-                    defaultSearchAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                    defaultSearchAlertDialog.setTitle(R.string.Choose_one_default_dictionary);
-                    defaultSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                    defaultSearchAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                    .setCornerRadius(50)
+                    .setTitle(R.string.Choose_one_default_dictionary)
+                    .setTextColor(Color.BLUE)
+                    .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                     setDefaultSingleSearchCodeOriginal();   //設置專業版單一預設字典的代碼
 
                     //單一預設字典的確定鈕
-                    defaultSearchAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultSearchAlertDialogBuilder.addButton(getString(R.string.Confirm)
+                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
@@ -3657,25 +3750,25 @@ public class MainActivity extends AppCompatActivity {
                             editor.apply();
 
                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                        }
+
+                            defaultSearchAlertDialog.dismiss();
                     });
 
                     //單一預設字典的取消鈕
-                    defaultSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultSearchAlertDialogBuilder.addButton(getString(R.string.Cancel)
+                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) ->{
 
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
                             editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode = defaultDictionarySearchSharedPreferences.getString("DefaultSingleDictionaryCode", ""));
                             editor.apply();
 
-                            dialog.dismiss();
-                        }
+                            defaultSearchAlertDialog.dismiss();
                     });
 
                     //使用建議的單一預設字典
-                    defaultSearchAlertDialog.setNeutralButton(R.string.Use_default_settings, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultSearchAlertDialogBuilder.addButton(getString(R.string.Use_default_settings)
+                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             defaultSingleSearchCode="Yahoo Dictionary";
 
@@ -3684,16 +3777,14 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode);
                             editor.apply();
 
-                            dialog.dismiss();
+                            defaultSearchAlertDialog.dismiss();
 
                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                        }
                     });
 
 
                     //把第二層的AlertDialog顯示出來
-                    defaultSearchAlertDialog.create();
-                    defaultSearchAlertDialog.show();
+                    defaultSearchAlertDialogBuilder.show();
                     //同時讓第一層的AlertDialog消失
                     chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
 
@@ -3705,15 +3796,19 @@ public class MainActivity extends AppCompatActivity {
                     //跳出設定第一個字典的對話框
                     defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
 
-                    defaultComboSearchAlertDialogFirstDictionary = new AlertDialog.Builder(MainActivity.this);
-                    defaultComboSearchAlertDialogFirstDictionary.setTitle("請設定第一個預設字典");
-                    defaultComboSearchAlertDialogFirstDictionary.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                    .setCornerRadius(50)
+                    .setTitle("請設定第一個預設字典")
+                    .setTextColor(Color.BLUE)
+                    .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                     setDefaultComboSearchCodeFirstDictionaryOriginal();   //設置專業版三連搜預設字典的代碼
 
                     //第一個預設字典的確定鈕
-                    defaultComboSearchAlertDialogFirstDictionary.setPositiveButton("儲存第一個預設字典", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton("儲存第一個預設字典"
+                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -3725,106 +3820,111 @@ public class MainActivity extends AppCompatActivity {
                                 //跳出設定第二個預設字典的對話框
                                 defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
 
-                                defaultComboSearchAlertDialogSecondDictionary = new AlertDialog.Builder(MainActivity.this);
-                                defaultComboSearchAlertDialogSecondDictionary.setTitle("請設定第二個預設字典");
-                                defaultComboSearchAlertDialogSecondDictionary.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                defaultComboSearchAlertDialogSecondDictionaryBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                .setCornerRadius(50)
+                                .setTitle("請設定第二個預設字典")
+                                .setTextColor(Color.BLUE)
+                                .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                                 setDefaultComboSearchCodeSecondDictionaryOriginal();   //設置專業版三連搜預設字典的代碼
 
 
                                 //第二個預設字典的確定鈕
-                                defaultComboSearchAlertDialogSecondDictionary.setPositiveButton("儲存第二個預設字典", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
+                                defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton("儲存第二個預設字典"
+                                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                         //把選取的字典代碼存到sharedPreferences
                                         defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                        editor.putString("ComboSearchCodeForSecondDictionary", defaultComboSearchCodeSecondDictionary);
-                                        editor.apply();
+                                        SharedPreferences.Editor editor2=defaultComboDictionarySearchSharedPreferences.edit();
+                                        editor2.putString("ComboSearchCodeForSecondDictionary", defaultComboSearchCodeSecondDictionary);
+                                        editor2.apply();
 
 
                                             //跳出設定第三個字典的對話框
                                             defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
 
-                                            defaultComboSearchAlertDialogThirdDictionary = new AlertDialog.Builder(MainActivity.this);
-                                            defaultComboSearchAlertDialogThirdDictionary.setTitle("請設定第三個預設字典");
-                                            defaultComboSearchAlertDialogThirdDictionary.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                            defaultComboSearchAlertDialogThirdDictionaryBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                                            .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                            .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                            .setCornerRadius(50)
+                                            .setTitle("請設定第三個預設字典")
+                                            .setTextColor(Color.BLUE)
+                                            .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                                             setDefaultComboSearchCodeThirdDictionaryOriginal();   //設置專業版三連搜預設字典的代碼
 
 
                                             //第三個預設字典的確定鈕
-                                            defaultComboSearchAlertDialogThirdDictionary.setPositiveButton("儲存第三個預設字典", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
+                                            defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton("儲存第三個預設字典"
+                                                    , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                                     //把選取的字典代碼存到sharedPreferences
                                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-                                                    SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                                    editor.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary);
-                                                    editor.apply();
+                                                    SharedPreferences.Editor editor3=defaultComboDictionarySearchSharedPreferences.edit();
+                                                    editor3.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary);
+                                                    editor3.apply();
+
+                                                    defaultComboSearchAlertDialogThirdDictionary.dismiss();
 
                                                     Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                                                }
                                             });
 
                                             //第三個預設字典的取消鈕
-                                            defaultComboSearchAlertDialogThirdDictionary.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
+                                            defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton(getString(R.string.Cancel)
+                                                    , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-                                                    SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                                    editor.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForThirdDictionary", ""));
-                                                    editor.apply();
+                                                    SharedPreferences.Editor editor4=defaultComboDictionarySearchSharedPreferences.edit();
+                                                    editor4.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForThirdDictionary", ""));
+                                                    editor4.apply();
 
-                                                    dialog.dismiss();
-                                                }
+                                                    defaultComboSearchAlertDialogThirdDictionary.dismiss();
                                             });
 
 
                                         //把第三預設字典的AlertDialog顯示出來
-                                        defaultComboSearchAlertDialogThirdDictionary.create();
-                                        defaultComboSearchAlertDialogThirdDictionary.show();
+                                        defaultComboSearchAlertDialogThirdDictionaryBuilder.show();
+                                        defaultComboSearchAlertDialogSecondDictionary.dismiss();
 
-                                    }
                                 });
 
                                 //第二個預設字典的取消鈕
-                                defaultComboSearchAlertDialogSecondDictionary.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
+                                defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton(getString(R.string.Cancel)
+                                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                         defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
-                                        SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                        editor.putString("ComboSearchCodeForFirstDictionary", defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", ""));
-                                        editor.apply();
+                                        SharedPreferences.Editor editor2=defaultComboDictionarySearchSharedPreferences.edit();
+                                        editor2.putString("ComboSearchCodeForFirstDictionary", defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", ""));
+                                        editor2.apply();
 
-                                        dialog.dismiss();
-                                    }
+                                        defaultComboSearchAlertDialogSecondDictionary.dismiss();
                                 });
 
 
                             //把第二預設字典的AlertDialog顯示出來
-                            defaultComboSearchAlertDialogSecondDictionary.create();
-                            defaultComboSearchAlertDialogSecondDictionary.show();
+                            defaultComboSearchAlertDialogSecondDictionaryBuilder.show();
+                            //讓第一預設字典的AlertDialog消失
+                            defaultComboSearchAlertDialogFirstDictionary.dismiss();
 
-                        }
                     });
 
                     //第一個預設字典的取消鈕
-                    defaultComboSearchAlertDialogFirstDictionary.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Cancel)
+                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
                             editor.putString("ComboSearchCodeForFirstDictionary", defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", ""));
                             editor.apply();
 
-                            dialog.dismiss();
-                        }
+                            defaultComboSearchAlertDialogFirstDictionary.dismiss();
                     });
 
                     //使用建議的三連搜預設字典
-                    defaultComboSearchAlertDialogFirstDictionary.setNeutralButton(R.string.Use_default_settings, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Use_default_settings)
+                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboSearchCodeFirstDictionary="Yahoo Dictionary";
                             defaultComboSearchCodeSecondDictionary="Forvo";
@@ -3837,37 +3937,32 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary);
                             editor.apply();
 
-                            dialog.dismiss();
+                            defaultComboSearchAlertDialogFirstDictionary.dismiss();
 
                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                        }
                     });
 
 
                     //把第一預設字典的AlertDialog顯示出來
-                    defaultComboSearchAlertDialogFirstDictionary.create();
-                    defaultComboSearchAlertDialogFirstDictionary.show();
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.show();
                     //同時讓第一層的AlertDialog消失
                     chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
 
                 }
 
             }
-        });
+        })
 
 
         //第一層AlertDialog的取消鈕
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+        .addButton(getString(R.string.Cancel)
+                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseSingleOrComboDefaultDictionaryDialogInterface, whichLayer1) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+                        chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
         });
 
         //把第一層的AlertDialog顯示出來
-        chooseSingleOrComboDefaultDictionaryAlertDialog.create();
-        chooseSingleOrComboDefaultDictionaryAlertDialog.show();
+        chooseSingleOrComboDefaultDictionaryAlertDialogBuilder.show();
 
     }
 
@@ -3878,30 +3973,38 @@ public class MainActivity extends AppCompatActivity {
          * 讓用戶快速搜尋預設字典
          */
         //這邊設置第一層AlertDialog讓用戶選擇"設置一個預設字典"或"設置同時搜尋三個預設字典"
-        AlertDialog.Builder chooseSingleOrComboDefaultDictionaryAlertDialog = new AlertDialog.Builder(MainActivity.this);
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setTitle(R.string.Set_default_dictionary);
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers);
+        CFAlertDialog.Builder chooseSingleOrComboDefaultDictionaryAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+        .setCornerRadius(50)
+        .setTitle(R.string.Set_default_dictionary)
+        .setTextColor(Color.BLUE)
+        .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
-        //這邊設置第二層AlertDialog讓用戶細部設置預設字典。checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setSingleChoiceItems(new String[]{getString(R.string.Set_a_single_default_dictionary), getString(R.string.Set_combo_default_dictionaries)}, -1, new DialogInterface.OnClickListener() {
+        //讓用戶細部設置預設字典。checkedItem:-1的意思是指預設不選中任何項目，若要預設選種第一項則設置成0，第二項則為1...
+        chooseSingleOrComboDefaultDictionaryAlertDialogBuilder.setSingleChoiceItems(new String[]{getString(R.string.Set_a_single_default_dictionary), getString(R.string.Set_combo_default_dictionaries)}, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface chooseSingleOrComboDefaultDictionaryDialogInterface, int position) {
 
+                //這邊設置第二層AlertDialog
                 //若用戶點選"設置一個預設字典"
                 if (position==0){
 
                     defaultDictionaryListSimplified = getResources().getStringArray(R.array.default_dictionary_list_simplified);  //初始化簡易版預設字典名單
 
-                    defaultSearchAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                    defaultSearchAlertDialog.setTitle(R.string.Choose_one_default_dictionary);
-                    defaultSearchAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                    defaultSearchAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                    .setCornerRadius(50)
+                    .setTitle(R.string.Choose_one_default_dictionary)
+                    .setTextColor(Color.BLUE)
+                    .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                     setDefaultSingleSearchCodeSimplified();   //設置專業版單一預設字典的代碼
 
                     //單一預設字典的確定鈕
-                    defaultSearchAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultSearchAlertDialogBuilder.addButton(getString(R.string.Confirm)
+                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
@@ -3909,26 +4012,26 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode);
                             editor.apply();
 
+                            defaultSearchAlertDialog.dismiss();
+
                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                        }
                     });
 
                     //單一預設字典的取消鈕
-                    defaultSearchAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultSearchAlertDialogBuilder.addButton(getString(R.string.Cancel)
+                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
                             editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode = defaultDictionarySearchSharedPreferences.getString("DefaultSingleDictionaryCode", ""));
                             editor.apply();
 
-                            dialog.dismiss();
-                        }
+                            defaultSearchAlertDialog.dismiss();
                     });
 
                     //使用建議的單一預設字典
-                    defaultSearchAlertDialog.setNeutralButton(R.string.Use_default_settings, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultSearchAlertDialogBuilder.addButton(getString(R.string.Use_default_settings)
+                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             defaultSingleSearchCode="Yahoo Dictionary";
 
@@ -3937,16 +4040,14 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("DefaultSingleDictionaryCode", defaultSingleSearchCode);
                             editor.apply();
 
-                            dialog.dismiss();
+                            defaultSearchAlertDialog.dismiss();
 
                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                        }
                     });
 
 
                     //把第二層的AlertDialog顯示出來
-                    defaultSearchAlertDialog.create();
-                    defaultSearchAlertDialog.show();
+                    defaultSearchAlertDialogBuilder.show();
                     //同時讓第一層的AlertDialog消失
                     chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
 
@@ -3958,15 +4059,19 @@ public class MainActivity extends AppCompatActivity {
                     //跳出設定第一個字典的對話框
                     defaultDictionaryListSimplified = getResources().getStringArray(R.array.default_dictionary_list_simplified);      //初始化專業版預設字典名單
 
-                    defaultComboSearchAlertDialogFirstDictionary = new AlertDialog.Builder(MainActivity.this);
-                    defaultComboSearchAlertDialogFirstDictionary.setTitle("請設定第一個預設字典");
-                    defaultComboSearchAlertDialogFirstDictionary.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                    .setCornerRadius(50)
+                    .setTitle("請設定第一個預設字典")
+                    .setTextColor(Color.BLUE)
+                    .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                     setDefaultComboSearchCodeFirstDictionarySimplified();   //設置專業版三連搜預設字典的代碼
 
                     //第一個預設字典的確定鈕
-                    defaultComboSearchAlertDialogFirstDictionary.setPositiveButton("儲存第一個預設字典", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton("儲存第一個預設字典"
+                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -3978,106 +4083,109 @@ public class MainActivity extends AppCompatActivity {
                             //跳出設定第二個預設字典的對話框
                             defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
 
-                            defaultComboSearchAlertDialogSecondDictionary = new AlertDialog.Builder(MainActivity.this);
-                            defaultComboSearchAlertDialogSecondDictionary.setTitle("請設定第二個預設字典");
-                            defaultComboSearchAlertDialogSecondDictionary.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                            defaultComboSearchAlertDialogSecondDictionaryBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                            .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                            .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                            .setCornerRadius(50)
+                            .setTitle("請設定第二個預設字典")
+                            .setTextColor(Color.BLUE)
+                            .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                             setDefaultComboSearchCodeSecondDictionarySimplified();   //設置專業版三連搜預設字典的代碼
 
 
                             //第二個預設字典的確定鈕
-                            defaultComboSearchAlertDialogSecondDictionary.setPositiveButton("儲存第二個預設字典", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                                defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton("儲存第二個預設字典"
+                                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                     //把選取的字典代碼存到sharedPreferences
                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                    editor.putString("ComboSearchCodeForSecondDictionary", defaultComboSearchCodeSecondDictionary);
-                                    editor.apply();
+                                    SharedPreferences.Editor editor2=defaultComboDictionarySearchSharedPreferences.edit();
+                                    editor2.putString("ComboSearchCodeForSecondDictionary", defaultComboSearchCodeSecondDictionary);
+                                    editor2.apply();
 
 
                                     //跳出設定第三個字典的對話框
                                     defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);      //初始化專業版預設字典名單
 
-                                    defaultComboSearchAlertDialogThirdDictionary = new AlertDialog.Builder(MainActivity.this);
-                                    defaultComboSearchAlertDialogThirdDictionary.setTitle("請設定第三個預設字典");
-                                    defaultComboSearchAlertDialogThirdDictionary.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                    defaultComboSearchAlertDialogThirdDictionaryBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                    .setCornerRadius(50)
+                                    .setTitle("請設定第三個預設字典")
+                                    .setTextColor(Color.BLUE)
+                                    .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                                     setDefaultComboSearchCodeThirdDictionarySimplified();   //設置專業版三連搜預設字典的代碼
 
 
                                     //第三個預設字典的確定鈕
-                                    defaultComboSearchAlertDialogThirdDictionary.setPositiveButton("儲存第三個預設字典", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
+                                            defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton("儲存第三個預設字典"
+                                                    , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                             //把選取的字典代碼存到sharedPreferences
                                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-                                            SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                            editor.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary);
-                                            editor.apply();
+                                            SharedPreferences.Editor editor4=defaultComboDictionarySearchSharedPreferences.edit();
+                                            editor4.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary);
+                                            editor4.apply();
+
+                                            defaultComboSearchAlertDialogThirdDictionary.dismiss();
 
                                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                                        }
                                     });
 
                                     //第三個預設字典的取消鈕
-                                    defaultComboSearchAlertDialogThirdDictionary.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
+                                            defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton(getString(R.string.Cancel)
+                                                    , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
-                                            SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                            editor.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForThirdDictionary", ""));
-                                            editor.apply();
+                                            SharedPreferences.Editor editor5=defaultComboDictionarySearchSharedPreferences.edit();
+                                            editor5.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForThirdDictionary", ""));
+                                            editor5.apply();
 
-                                            dialog.dismiss();
-                                        }
+                                            defaultComboSearchAlertDialogThirdDictionary.dismiss();
                                     });
 
 
                                     //把第三預設字典的AlertDialog顯示出來
-                                    defaultComboSearchAlertDialogThirdDictionary.create();
-                                    defaultComboSearchAlertDialogThirdDictionary.show();
+                                    defaultComboSearchAlertDialogThirdDictionaryBuilder.show();
+                                    defaultComboSearchAlertDialogSecondDictionary.dismiss();
 
-                                }
                             });
 
                             //第二個預設字典的取消鈕
-                            defaultComboSearchAlertDialogSecondDictionary.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
+                                defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton(getString(R.string.Cancel)
+                                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
-                                    SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
-                                    editor.putString("ComboSearchCodeForFirstDictionary", defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", ""));
-                                    editor.apply();
+                                    SharedPreferences.Editor editor3=defaultComboDictionarySearchSharedPreferences.edit();
+                                    editor3.putString("ComboSearchCodeForFirstDictionary", defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", ""));
+                                    editor3.apply();
 
-                                    dialog.dismiss();
-                                }
+                                    defaultComboSearchAlertDialogSecondDictionary.dismiss();
                             });
 
 
                             //把第二預設字典的AlertDialog顯示出來
-                            defaultComboSearchAlertDialogSecondDictionary.create();
-                            defaultComboSearchAlertDialogSecondDictionary.show();
+                            defaultComboSearchAlertDialogSecondDictionaryBuilder.show();
+                            defaultComboSearchAlertDialogFirstDictionary.dismiss();
 
-                        }
                     });
 
                     //第一個預設字典的取消鈕
-                    defaultComboSearchAlertDialogFirstDictionary.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Cancel)
+                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
                             editor.putString("ComboSearchCodeForFirstDictionary", defaultComboSearchCodeFirstDictionary = defaultComboDictionarySearchSharedPreferences.getString("ComboSearchCodeForFirstDictionary", ""));
                             editor.apply();
 
-                            dialog.dismiss();
-                        }
+                            defaultComboSearchAlertDialogFirstDictionary.dismiss();
                     });
 
                     //使用建議的三連搜預設字典
-                    defaultComboSearchAlertDialogFirstDictionary.setNeutralButton(R.string.Use_default_settings, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Use_default_settings), Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboSearchCodeFirstDictionary="Yahoo Dictionary";
                             defaultComboSearchCodeSecondDictionary="Forvo";
@@ -4090,16 +4198,14 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("ComboSearchCodeForThirdDictionary", defaultComboSearchCodeThirdDictionary);
                             editor.apply();
 
-                            dialog.dismiss();
+                            defaultComboSearchAlertDialogFirstDictionary.dismiss();
 
                             Toast.makeText(getApplicationContext(),R.string.Settings_complete,Toast.LENGTH_LONG).show(); //告知預設字典設定成功
-                        }
                     });
 
 
                     //把第一預設字典的AlertDialog顯示出來
-                    defaultComboSearchAlertDialogFirstDictionary.create();
-                    defaultComboSearchAlertDialogFirstDictionary.show();
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.show();
                     //同時讓第一層的AlertDialog消失
                     chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
 
@@ -4110,17 +4216,14 @@ public class MainActivity extends AppCompatActivity {
 
 
         //第一層AlertDialog的取消鈕
-        chooseSingleOrComboDefaultDictionaryAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+        chooseSingleOrComboDefaultDictionaryAlertDialogBuilder.addButton(getString(R.string.Cancel)
+                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseSingleOrComboDefaultDictionaryDialogInterface, whichLayer1) -> {
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
+                    chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
         });
 
         //把第一層的AlertDialog顯示出來
-        chooseSingleOrComboDefaultDictionaryAlertDialog.create();
-        chooseSingleOrComboDefaultDictionaryAlertDialog.show();
+        chooseSingleOrComboDefaultDictionaryAlertDialogBuilder.show();
 
     }
 
@@ -4130,7 +4233,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setDefaultSingleSearchCodeOriginal(){
 
-        defaultSearchAlertDialog.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
+        defaultSearchAlertDialogBuilder.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -4156,136 +4259,160 @@ public class MainActivity extends AppCompatActivity {
                         defaultSingleSearchCode= "Cambridge EN-CH";
                         break;
                     case 7:
-                        defaultSingleSearchCode= "Merriam Webster";
+                        defaultSingleSearchCode= "WordReference EN-CH";
                         break;
                     case 8:
-                        defaultSingleSearchCode= "Macmillan Dictionary";
+                        defaultSingleSearchCode= "WordReference CH-EN";
                         break;
                     case 9:
-                        defaultSingleSearchCode= "Collins";
+                        defaultSingleSearchCode= "Merriam Webster";
                         break;
                     case 10:
-                        defaultSingleSearchCode= "Oxford";
+                        defaultSingleSearchCode= "Macmillan Dictionary";
                         break;
                     case 11:
-                        defaultSingleSearchCode= "Vocabulary";
+                        defaultSingleSearchCode= "Collins";
                         break;
                     case 12:
-                        defaultSingleSearchCode= "Dictionary.com";
+                        defaultSingleSearchCode= "Oxford";
                         break;
                     case 13:
-                        defaultSingleSearchCode= "The Free Dictionary";
+                        defaultSingleSearchCode= "Vocabulary";
                         break;
                     case 14:
-                        defaultSingleSearchCode= "Fine Dictionary";
+                        defaultSingleSearchCode= "Dictionary.com";
                         break;
                     case 15:
-                        defaultSingleSearchCode= "Your_Dictionary";
+                        defaultSingleSearchCode= "The Free Dictionary";
                         break;
                     case 16:
-                        defaultSingleSearchCode= "Longman Dictionary";
+                        defaultSingleSearchCode= "Fine Dictionary";
                         break;
                     case 17:
-                        defaultSingleSearchCode= "WordWeb";
+                        defaultSingleSearchCode= "Your_Dictionary";
                         break;
                     case 18:
-                        defaultSingleSearchCode= "WordNik";
+                        defaultSingleSearchCode= "Longman Dictionary";
                         break;
                     case 19:
-                        defaultSingleSearchCode= "Wiki Dictionary";
+                        defaultSingleSearchCode= "WordWeb";
                         break;
                     case 20:
-                        defaultSingleSearchCode= "Business Dictionary";
+                        defaultSingleSearchCode= "WordNik";
                         break;
                     case 21:
-                        defaultSingleSearchCode= "Slang";
+                        defaultSingleSearchCode= "Wiki Dictionary";
                         break;
                     case 22:
-                        defaultSingleSearchCode= "The Online Slang Dictionary";
+                        defaultSingleSearchCode= "Business Dictionary";
                         break;
                     case 23:
-                        defaultSingleSearchCode= "Idioms 4 You";
+                        defaultSingleSearchCode= "Slang";
                         break;
                     case 24:
-                        defaultSingleSearchCode= "Greens dictionary of slang";
+                        defaultSingleSearchCode= "The Online Slang Dictionary";
                         break;
                     case 25:
-                        defaultSingleSearchCode= "SCI Dictionary";
+                        defaultSingleSearchCode= "Idioms 4 You";
                         break;
                     case 26:
-                        defaultSingleSearchCode= "TechDico";
+                        defaultSingleSearchCode= "Greens dictionary of slang";
                         break;
                     case 27:
-                        defaultSingleSearchCode= "BioMedical Dictionary";
+                        defaultSingleSearchCode= "SCI Dictionary";
                         break;
                     case 28:
-                        defaultSingleSearchCode= "IsPlural Dictionary";
+                        defaultSingleSearchCode= "TechDico";
                         break;
                     case 29:
-                        defaultSingleSearchCode= "LingoHelpPrepositions";
+                        defaultSingleSearchCode= "BioMedical Dictionary";
                         break;
                     case 30:
-                        defaultSingleSearchCode= "Power Thesaurus Synonym";
+                        defaultSingleSearchCode= "IsPlural Dictionary";
                         break;
                     case 31:
-                        defaultSingleSearchCode= "Power_thesaurus_antonym";
+                        defaultSingleSearchCode= "LingoHelpPrepositions";
                         break;
                     case 32:
-                        defaultSingleSearchCode= "Word Hippo";
+                        defaultSingleSearchCode= "Power Thesaurus Synonym";
                         break;
                     case 33:
-                        defaultSingleSearchCode= "Onelook";
+                        defaultSingleSearchCode= "Power_thesaurus_antonym";
                         break;
                     case 34:
-                        defaultSingleSearchCode= "Weblio JP";
+                        defaultSingleSearchCode= "Word Hippo";
                         break;
                     case 35:
-                        defaultSingleSearchCode= "Weblio CN";
+                        defaultSingleSearchCode= "Onelook";
                         break;
                     case 36:
-                        defaultSingleSearchCode= "Weblio EN";
+                        defaultSingleSearchCode= "Weblio JP";
                         break;
                     case 37:
-                        defaultSingleSearchCode= "Weblio Synonym";
+                        defaultSingleSearchCode= "Weblio CN";
                         break;
                     case 38:
-                        defaultSingleSearchCode= "Tangorin Word";
+                        defaultSingleSearchCode= "Weblio EN";
                         break;
                     case 39:
-                        defaultSingleSearchCode= "Tangorin Kanji";
+                        defaultSingleSearchCode= "Weblio Synonym";
                         break;
                     case 40:
-                        defaultSingleSearchCode= "Tangorin Names";
+                        defaultSingleSearchCode= "Tangorin Word";
                         break;
                     case 41:
-                        defaultSingleSearchCode= "Tangorin Sentence";
+                        defaultSingleSearchCode= "Tangorin Kanji";
                         break;
                     case 42:
-                        defaultSingleSearchCode= "DA JP-TW Dictionary";
+                        defaultSingleSearchCode= "Tangorin Names";
                         break;
                     case 43:
-                        defaultSingleSearchCode= "DA TW-JP Dictionary";
+                        defaultSingleSearchCode= "Tangorin Sentence";
                         break;
                     case 44:
-                        defaultSingleSearchCode= "Goo";
+                        defaultSingleSearchCode= "DA JP-TW Dictionary";
                         break;
                     case 45:
-                        defaultSingleSearchCode= "Sanseido";
+                        defaultSingleSearchCode= "DA TW-JP Dictionary";
                         break;
                     case 46:
-                        defaultSingleSearchCode= "Kotoba Bank";
+                        defaultSingleSearchCode= "Goo";
                         break;
                     case 47:
-                        defaultSingleSearchCode= "J Logos";
+                        defaultSingleSearchCode= "Sanseido";
                         break;
                     case 48:
-                        defaultSingleSearchCode= "Eijirou";
+                        defaultSingleSearchCode= "Kotoba Bank";
                         break;
                     case 49:
-                        defaultSingleSearchCode= "How do you say this in English";
+                        defaultSingleSearchCode= "J Logos";
                         break;
                     case 50:
+                        defaultSingleSearchCode= "Eijirou";
+                        break;
+                    case 51:
+                        defaultSingleSearchCode= "How do you say this in English";
+                        break;
+                    case 52:
                         defaultSingleSearchCode= "Jisho";
+                        break;
+                    case 53:
+                        defaultSingleSearchCode= "Cambridge JP-EN";
+                        break;
+                    case 54:
+                        defaultSingleSearchCode= "Cambridge EN-JP";
+                        break;
+                    case 55:
+                        defaultSingleSearchCode= "WWW JDIC JP-EN";
+                        break;
+                    case 56:
+                        defaultSingleSearchCode= "WWW JDIC EN-JP";
+                        break;
+                    case 57:
+                        defaultSingleSearchCode= "WordReference EN-JP";
+                        break;
+                    case 58:
+                        defaultSingleSearchCode= "WordReference JP-EN";
                         break;
                                                                                     //                    case 51:
                                                                                     //                        defaultSingleSearchCode= "Word Plus Chinese";
@@ -4314,79 +4441,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                     //                    case 59:
                                                                                     //                        defaultSingleSearchCode= "Word Plus Meaning 2";
                                                                                     //                        break;
-                    case 51:
+                    case 59:
                         defaultSingleSearchCode= "Google translate to CHTW";
                         break;
-                    case 52:
+                    case 60:
                         defaultSingleSearchCode= "Google translate to CHCN";
                         break;
-                    case 53:
+                    case 61:
                         defaultSingleSearchCode= "Google translate to EN";
                         break;
-                    case 54:
+                    case 62:
                         defaultSingleSearchCode= "Google translate to JP";
                         break;
-                    case 55:
+                    case 63:
                         defaultSingleSearchCode= "Google translate to KR";
                         break;
-                    case 56:
+                    case 64:
                         defaultSingleSearchCode= "Google translate to SP";
                         break;
-                    case 57:
+                    case 65:
                         defaultSingleSearchCode= "Google Image";
                         break;
-                    case 58:
+                    case 66:
                         defaultSingleSearchCode= "Ludwig";
                         break;
-                    case 59:
+                    case 67:
                         defaultSingleSearchCode= "Your Dictionary Example Sentences";
                         break;
-                    case 60:
+                    case 68:
                         defaultSingleSearchCode= "YouGlish";
                         break;
-                    case 61:
+                    case 69:
                         defaultSingleSearchCode= "Word Cool EN-CH";
                         break;
-                    case 62:
+                    case 70:
                         defaultSingleSearchCode= "Word Cool EN-JP";
                         break;
-                    case 63:
+                    case 71:
                         defaultSingleSearchCode= "Word Cool JP-CH";
                         break;
-                    case 64:
+                    case 72:
                         defaultSingleSearchCode= "Linguee CH-EN";
                         break;
-                    case 65:
+                    case 73:
                         defaultSingleSearchCode= "Linguee JP-EN";
                         break;
-                    case 66:
+                    case 74:
                         defaultSingleSearchCode= "Wikipedia TW";
                         break;
-                    case 67:
+                    case 75:
                         defaultSingleSearchCode= "Wikipedia EN";
                         break;
-                    case 68:
+                    case 76:
                         defaultSingleSearchCode= "English Encyclopedia";
                         break;
-                    case 69:
+                    case 77:
                         defaultSingleSearchCode= "Forvo";
                         break;
-                    case 70:
+                    case 78:
                         defaultSingleSearchCode= "Difference Between";
                         break;
-                    case 71:
+                    case 79:
                         defaultSingleSearchCode= "Net Speak";
                         break;
-                    case 72:
+                    case 80:
                         defaultSingleSearchCode= "Just the Word";
                         break;
-                    case 73:
+                    case 81:
                         defaultSingleSearchCode= "Yomikata";
                         break;
-                    case 74:
+                    case 82:
                         defaultSingleSearchCode= "Chigai";
                         break;
-                    case 75:
+                    case 83:
                         defaultSingleSearchCode= "OJAD";
                         break;
                 }
@@ -4399,7 +4526,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDefaultSingleSearchCodeSimplified(){
 
-        defaultSearchAlertDialog.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
+        defaultSearchAlertDialogBuilder.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -4459,7 +4586,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void setDefaultComboSearchCodeFirstDictionaryOriginal(){
 
-        defaultComboSearchAlertDialogFirstDictionary.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
+        defaultComboSearchAlertDialogFirstDictionaryBuilder.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -4485,136 +4612,160 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeFirstDictionary= "Cambridge EN-CH";
                         break;
                     case 7:
-                        defaultComboSearchCodeFirstDictionary= "Merriam Webster";
+                        defaultComboSearchCodeFirstDictionary= "WordReference EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeFirstDictionary= "Macmillan Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "WordReference CH-EN";
                         break;
                     case 9:
-                        defaultComboSearchCodeFirstDictionary= "Collins";
+                        defaultComboSearchCodeFirstDictionary= "Merriam Webster";
                         break;
                     case 10:
-                        defaultComboSearchCodeFirstDictionary= "Oxford";
+                        defaultComboSearchCodeFirstDictionary= "Macmillan Dictionary";
                         break;
                     case 11:
-                        defaultComboSearchCodeFirstDictionary= "Vocabulary";
+                        defaultComboSearchCodeFirstDictionary= "Collins";
                         break;
                     case 12:
-                        defaultComboSearchCodeFirstDictionary= "Dictionary.com";
+                        defaultComboSearchCodeFirstDictionary= "Oxford";
                         break;
                     case 13:
-                        defaultComboSearchCodeFirstDictionary= "The Free Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Vocabulary";
                         break;
                     case 14:
-                        defaultComboSearchCodeFirstDictionary= "Fine Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Dictionary.com";
                         break;
                     case 15:
-                        defaultComboSearchCodeFirstDictionary= "Your_Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "The Free Dictionary";
                         break;
                     case 16:
-                        defaultComboSearchCodeFirstDictionary= "Longman Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Fine Dictionary";
                         break;
                     case 17:
-                        defaultComboSearchCodeFirstDictionary= "WordWeb";
+                        defaultComboSearchCodeFirstDictionary= "Your_Dictionary";
                         break;
                     case 18:
-                        defaultComboSearchCodeFirstDictionary= "WordNik";
+                        defaultComboSearchCodeFirstDictionary= "Longman Dictionary";
                         break;
                     case 19:
-                        defaultComboSearchCodeFirstDictionary= "Wiki Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "WordWeb";
                         break;
                     case 20:
-                        defaultComboSearchCodeFirstDictionary= "Business Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "WordNik";
                         break;
                     case 21:
-                        defaultComboSearchCodeFirstDictionary= "Slang";
+                        defaultComboSearchCodeFirstDictionary= "Wiki Dictionary";
                         break;
                     case 22:
-                        defaultComboSearchCodeFirstDictionary= "The Online Slang Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Business Dictionary";
                         break;
                     case 23:
-                        defaultComboSearchCodeFirstDictionary= "Idioms 4 You";
+                        defaultComboSearchCodeFirstDictionary= "Slang";
                         break;
                     case 24:
-                        defaultComboSearchCodeFirstDictionary= "Greens dictionary of slang";
+                        defaultComboSearchCodeFirstDictionary= "The Online Slang Dictionary";
                         break;
                     case 25:
-                        defaultComboSearchCodeFirstDictionary= "SCI Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Idioms 4 You";
                         break;
                     case 26:
-                        defaultComboSearchCodeFirstDictionary= "TechDico";
+                        defaultComboSearchCodeFirstDictionary= "Greens dictionary of slang";
                         break;
                     case 27:
-                        defaultComboSearchCodeFirstDictionary= "BioMedical Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "SCI Dictionary";
                         break;
                     case 28:
-                        defaultComboSearchCodeFirstDictionary= "IsPlural Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "TechDico";
                         break;
                     case 29:
-                        defaultComboSearchCodeFirstDictionary= "LingoHelpPrepositions";
+                        defaultComboSearchCodeFirstDictionary= "BioMedical Dictionary";
                         break;
                     case 30:
-                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Synonym";
+                        defaultComboSearchCodeFirstDictionary= "IsPlural Dictionary";
                         break;
                     case 31:
-                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Antonym";
+                        defaultComboSearchCodeFirstDictionary= "LingoHelpPrepositions";
                         break;
                     case 32:
-                        defaultComboSearchCodeFirstDictionary= "Word Hippo";
+                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Synonym";
                         break;
                     case 33:
-                        defaultComboSearchCodeFirstDictionary= "Onelook";
+                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Antonym";
                         break;
                     case 34:
-                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
+                        defaultComboSearchCodeFirstDictionary= "Word Hippo";
                         break;
                     case 35:
-                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
+                        defaultComboSearchCodeFirstDictionary= "Onelook";
                         break;
                     case 36:
-                        defaultComboSearchCodeFirstDictionary= "Weblio EN";
+                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
                         break;
                     case 37:
-                        defaultComboSearchCodeFirstDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
                         break;
                     case 38:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Word";
+                        defaultComboSearchCodeFirstDictionary= "Weblio EN";
                         break;
                     case 39:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeFirstDictionary= "Weblio Synonym";
                         break;
                     case 40:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Names";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Word";
                         break;
                     case 41:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Kanji";
                         break;
                     case 42:
-                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Names";
                         break;
                     case 43:
-                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Sentence";
                         break;
                     case 44:
-                        defaultComboSearchCodeFirstDictionary= "Goo";
+                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
                         break;
                     case 45:
-                        defaultComboSearchCodeFirstDictionary= "Sanseido";
+                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
                         break;
                     case 46:
-                        defaultComboSearchCodeFirstDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeFirstDictionary= "Goo";
                         break;
                     case 47:
-                        defaultComboSearchCodeFirstDictionary= "J Logos";
+                        defaultComboSearchCodeFirstDictionary= "Sanseido";
                         break;
                     case 48:
-                        defaultComboSearchCodeFirstDictionary= "Eijirou";
+                        defaultComboSearchCodeFirstDictionary= "Kotoba Bank";
                         break;
                     case 49:
-                        defaultComboSearchCodeFirstDictionary= "How do you say this in English";
+                        defaultComboSearchCodeFirstDictionary= "J Logos";
                         break;
                     case 50:
+                        defaultComboSearchCodeFirstDictionary= "Eijirou";
+                        break;
+                    case 51:
+                        defaultComboSearchCodeFirstDictionary= "How do you say this in English";
+                        break;
+                    case 52:
                         defaultComboSearchCodeFirstDictionary= "Jisho";
+                        break;
+                    case 53:
+                        defaultComboSearchCodeFirstDictionary= "Cambridge JP-EN";
+                        break;
+                    case 54:
+                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-JP";
+                        break;
+                    case 55:
+                        defaultComboSearchCodeFirstDictionary= "WWW JDIC JP-EN";
+                        break;
+                    case 56:
+                        defaultComboSearchCodeFirstDictionary= "WWW JDIC EN-JP";
+                        break;
+                    case 57:
+                        defaultComboSearchCodeFirstDictionary= "WordReference EN-JP";
+                        break;
+                    case 58:
+                        defaultComboSearchCodeFirstDictionary= "WordReference JP-EN";
                         break;
                                                                                                 //                    case 51:
                                                                                                 //                        defaultComboSearchCodeFirstDictionary= "Word Plus Chinese";
@@ -4643,79 +4794,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeFirstDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 51:
+                    case 59:
                         defaultComboSearchCodeFirstDictionary= "Google translate to CHTW";
                         break;
-                    case 52:
+                    case 60:
                         defaultComboSearchCodeFirstDictionary= "Google translate to CHCN";
                         break;
-                    case 53:
+                    case 61:
                         defaultComboSearchCodeFirstDictionary= "Google translate to EN";
                         break;
-                    case 54:
+                    case 62:
                         defaultComboSearchCodeFirstDictionary= "Google translate to JP";
                         break;
-                    case 55:
+                    case 63:
                         defaultComboSearchCodeFirstDictionary= "Google translate to KR";
                         break;
-                    case 56:
+                    case 64:
                         defaultComboSearchCodeFirstDictionary= "Google translate to SP";
                         break;
-                    case 57:
+                    case 65:
                         defaultComboSearchCodeFirstDictionary= "Google Image";
                         break;
-                    case 58:
+                    case 66:
                         defaultComboSearchCodeFirstDictionary= "Ludwig";
                         break;
-                    case 59:
+                    case 67:
                         defaultComboSearchCodeFirstDictionary= "Your Dictionary Example Sentences";
                         break;
-                    case 60:
+                    case 68:
                         defaultComboSearchCodeFirstDictionary= "YouGlish";
                         break;
-                    case 61:
+                    case 69:
                         defaultComboSearchCodeFirstDictionary= "Word Cool EN-CH";
                         break;
-                    case 62:
+                    case 70:
                         defaultComboSearchCodeFirstDictionary= "Word Cool EN-JP";
                         break;
-                    case 63:
+                    case 71:
                         defaultComboSearchCodeFirstDictionary= "Word Cool JP-CH";
                         break;
-                    case 64:
+                    case 72:
                         defaultComboSearchCodeFirstDictionary= "Linguee CH-EN";
                         break;
-                    case 65:
+                    case 73:
                         defaultComboSearchCodeFirstDictionary= "Linguee JP-EN";
                         break;
-                    case 66:
+                    case 74:
                         defaultComboSearchCodeFirstDictionary= "Wikipedia TW";
                         break;
-                    case 67:
+                    case 75:
                         defaultComboSearchCodeFirstDictionary= "Wikipedia EN";
                         break;
-                    case 68:
+                    case 76:
                         defaultComboSearchCodeFirstDictionary= "English Encyclopedia";
                         break;
-                    case 69:
+                    case 77:
                         defaultComboSearchCodeFirstDictionary= "Forvo";
                         break;
-                    case 70:
+                    case 78:
                         defaultComboSearchCodeFirstDictionary= "Difference Between";
                         break;
-                    case 71:
+                    case 79:
                         defaultComboSearchCodeFirstDictionary= "Net Speak";
                         break;
-                    case 72:
+                    case 80:
                         defaultComboSearchCodeFirstDictionary= "Just the Word";
                         break;
-                    case 73:
+                    case 81:
                         defaultComboSearchCodeFirstDictionary= "Yomikata";
                         break;
-                    case 74:
+                    case 82:
                         defaultComboSearchCodeFirstDictionary= "Chigai";
                         break;
-                    case 75:
+                    case 83:
                         defaultComboSearchCodeFirstDictionary= "OJAD";
                         break;
                 }
@@ -4728,7 +4879,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDefaultComboSearchCodeFirstDictionarySimplified(){
 
-        defaultComboSearchAlertDialogFirstDictionary.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
+        defaultComboSearchAlertDialogFirstDictionaryBuilder.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -4784,7 +4935,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDefaultComboSearchCodeSecondDictionaryOriginal(){
 
-        defaultComboSearchAlertDialogSecondDictionary.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
+        defaultComboSearchAlertDialogSecondDictionaryBuilder.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -4810,136 +4961,161 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeSecondDictionary= "Cambridge EN-CH";
                         break;
                     case 7:
-                        defaultComboSearchCodeSecondDictionary= "Merriam Webster";
+                        defaultComboSearchCodeSecondDictionary= "WordReference EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeSecondDictionary= "Macmillan Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "WordReference CH-EN";
                         break;
                     case 9:
-                        defaultComboSearchCodeSecondDictionary= "Collins";
+                        defaultComboSearchCodeSecondDictionary= "Merriam Webster";
                         break;
                     case 10:
-                        defaultComboSearchCodeSecondDictionary= "Oxford";
+                        defaultComboSearchCodeSecondDictionary= "Macmillan Dictionary";
                         break;
                     case 11:
-                        defaultComboSearchCodeSecondDictionary= "Vocabulary";
+                        defaultComboSearchCodeSecondDictionary= "Collins";
                         break;
                     case 12:
-                        defaultComboSearchCodeSecondDictionary= "Dictionary.com";
+                        defaultComboSearchCodeSecondDictionary= "Oxford";
                         break;
                     case 13:
-                        defaultComboSearchCodeSecondDictionary= "The Free Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Vocabulary";
                         break;
                     case 14:
-                        defaultComboSearchCodeSecondDictionary= "Fine Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Dictionary.com";
                         break;
                     case 15:
-                        defaultComboSearchCodeSecondDictionary= "Your_Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "The Free Dictionary";
                         break;
                     case 16:
-                        defaultComboSearchCodeSecondDictionary= "Longman Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Fine Dictionary";
                         break;
                     case 17:
-                        defaultComboSearchCodeSecondDictionary= "WordWeb";
+                        defaultComboSearchCodeSecondDictionary= "Your_Dictionary";
                         break;
                     case 18:
-                        defaultComboSearchCodeSecondDictionary= "WordNik";
+                        defaultComboSearchCodeSecondDictionary= "Longman Dictionary";
                         break;
                     case 19:
-                        defaultComboSearchCodeSecondDictionary= "Wiki Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "WordWeb";
                         break;
                     case 20:
-                        defaultComboSearchCodeSecondDictionary= "Business Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "WordNik";
                         break;
                     case 21:
-                        defaultComboSearchCodeSecondDictionary= "Slang";
+                        defaultComboSearchCodeSecondDictionary= "Wiki Dictionary";
                         break;
                     case 22:
-                        defaultComboSearchCodeSecondDictionary= "The Online Slang Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Business Dictionary";
                         break;
                     case 23:
-                        defaultComboSearchCodeSecondDictionary= "Idioms 4 You";
+                        defaultComboSearchCodeSecondDictionary= "Slang";
                         break;
                     case 24:
-                        defaultComboSearchCodeSecondDictionary= "Greens dictionary of slang";
+                        defaultComboSearchCodeSecondDictionary= "The Online Slang Dictionary";
                         break;
                     case 25:
-                        defaultComboSearchCodeSecondDictionary= "SCI Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Idioms 4 You";
                         break;
                     case 26:
-                        defaultComboSearchCodeSecondDictionary= "TechDico";
+                        defaultComboSearchCodeSecondDictionary= "Greens dictionary of slang";
                         break;
                     case 27:
-                        defaultComboSearchCodeSecondDictionary= "BioMedical Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "SCI Dictionary";
                         break;
                     case 28:
-                        defaultComboSearchCodeSecondDictionary= "IsPlural Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "TechDico";
                         break;
                     case 29:
-                        defaultComboSearchCodeSecondDictionary= "LingoHelpPrepositions";
+                        defaultComboSearchCodeSecondDictionary= "BioMedical Dictionary";
                         break;
                     case 30:
-                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Synonym";
+                        defaultComboSearchCodeSecondDictionary= "IsPlural Dictionary";
                         break;
                     case 31:
-                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Antonym";
+                        defaultComboSearchCodeSecondDictionary= "LingoHelpPrepositions";
                         break;
                     case 32:
-                        defaultComboSearchCodeSecondDictionary= "Word Hippo";
+                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Synonym";
                         break;
                     case 33:
-                        defaultComboSearchCodeSecondDictionary= "Onelook";
+                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Antonym";
                         break;
                     case 34:
-                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
+                        defaultComboSearchCodeSecondDictionary= "Word Hippo";
                         break;
                     case 35:
-                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
+                        defaultComboSearchCodeSecondDictionary= "Onelook";
                         break;
                     case 36:
-                        defaultComboSearchCodeSecondDictionary= "Weblio EN";
+                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
                         break;
                     case 37:
-                        defaultComboSearchCodeSecondDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
                         break;
                     case 38:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Word";
+                        defaultComboSearchCodeSecondDictionary= "Weblio EN";
                         break;
                     case 39:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeSecondDictionary= "Weblio Synonym";
                         break;
                     case 40:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Names";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Word";
                         break;
                     case 41:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Kanji";
                         break;
                     case 42:
-                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Names";
                         break;
                     case 43:
-                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Sentence";
                         break;
                     case 44:
-                        defaultComboSearchCodeSecondDictionary= "Goo";
+                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
                         break;
                     case 45:
-                        defaultComboSearchCodeSecondDictionary= "Sanseido";
+                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
                         break;
                     case 46:
-                        defaultComboSearchCodeSecondDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeSecondDictionary= "Goo";
                         break;
                     case 47:
-                        defaultComboSearchCodeSecondDictionary= "J Logos";
+                        defaultComboSearchCodeSecondDictionary= "Sanseido";
                         break;
                     case 48:
-                        defaultComboSearchCodeSecondDictionary= "Eijirou";
+                        defaultComboSearchCodeSecondDictionary= "Kotoba Bank";
                         break;
                     case 49:
-                        defaultComboSearchCodeSecondDictionary= "How do you say this in English";
+                        defaultComboSearchCodeSecondDictionary= "J Logos";
                         break;
                     case 50:
+                        defaultComboSearchCodeSecondDictionary= "Eijirou";
+                        break;
+                    case 51:
+                        defaultComboSearchCodeSecondDictionary= "How do you say this in English";
+                        break;
+                    case 52:
                         defaultComboSearchCodeSecondDictionary= "Jisho";
+                        break;
+                    case 53:
+                        defaultComboSearchCodeSecondDictionary= "Cambridge JP-EN";
+                        break;
+                    case 54:
+                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-JP";
+                        break;
+                    case 55:
+                        defaultComboSearchCodeSecondDictionary= "WWW JDIC JP-EN";
+                        break;
+                    case 56:
+                        defaultComboSearchCodeSecondDictionary= "WWW JDIC EN-JP";
+                        break;
+
+                    case 57:
+                        defaultComboSearchCodeSecondDictionary= "WordReference EN-JP";
+                        break;
+                    case 58:
+                        defaultComboSearchCodeSecondDictionary= "WordReference JP-EN";
                         break;
                                                                                                 //                    case 51:
                                                                                                 //                        defaultComboSearchCodeSecondDictionary= "Word Plus Chinese";
@@ -4968,79 +5144,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeSecondDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 51:
+                    case 59:
                         defaultComboSearchCodeSecondDictionary= "Google translate to CHTW";
                         break;
-                    case 52:
+                    case 60:
                         defaultComboSearchCodeSecondDictionary= "Google translate to CHCN";
                         break;
-                    case 53:
+                    case 61:
                         defaultComboSearchCodeSecondDictionary= "Google translate to EN";
                         break;
-                    case 54:
+                    case 62:
                         defaultComboSearchCodeSecondDictionary= "Google translate to JP";
                         break;
-                    case 55:
+                    case 63:
                         defaultComboSearchCodeSecondDictionary= "Google translate to KR";
                         break;
-                    case 56:
+                    case 64:
                         defaultComboSearchCodeSecondDictionary= "Google translate to SP";
                         break;
-                    case 57:
+                    case 65:
                         defaultComboSearchCodeSecondDictionary= "Google Image";
                         break;
-                    case 58:
+                    case 66:
                         defaultComboSearchCodeSecondDictionary= "Ludwig";
                         break;
-                    case 59:
+                    case 67:
                         defaultComboSearchCodeSecondDictionary= "Your Dictionary Example Sentences";
                         break;
-                    case 60:
+                    case 68:
                         defaultComboSearchCodeSecondDictionary= "YouGlish";
                         break;
-                    case 61:
+                    case 69:
                         defaultComboSearchCodeSecondDictionary= "Word Cool EN-CH";
                         break;
-                    case 62:
+                    case 70:
                         defaultComboSearchCodeSecondDictionary= "Word Cool EN-JP";
                         break;
-                    case 63:
+                    case 71:
                         defaultComboSearchCodeSecondDictionary= "Word Cool JP-CH";
                         break;
-                    case 64:
+                    case 72:
                         defaultComboSearchCodeSecondDictionary= "Linguee CH-EN";
                         break;
-                    case 65:
+                    case 73:
                         defaultComboSearchCodeSecondDictionary= "Linguee JP-EN";
                         break;
-                    case 66:
+                    case 74:
                         defaultComboSearchCodeSecondDictionary= "Wikipedia TW";
                         break;
-                    case 67:
+                    case 75:
                         defaultComboSearchCodeSecondDictionary= "Wikipedia EN";
                         break;
-                    case 68:
+                    case 76:
                         defaultComboSearchCodeSecondDictionary= "English Encyclopedia";
                         break;
-                    case 69:
+                    case 77:
                         defaultComboSearchCodeSecondDictionary= "Forvo";
                         break;
-                    case 70:
+                    case 78:
                         defaultComboSearchCodeSecondDictionary= "Difference Between";
                         break;
-                    case 71:
+                    case 79:
                         defaultComboSearchCodeSecondDictionary= "Net Speak";
                         break;
-                    case 72:
+                    case 80:
                         defaultComboSearchCodeSecondDictionary= "Just the Word";
                         break;
-                    case 73:
+                    case 81:
                         defaultComboSearchCodeSecondDictionary= "Yomikata";
                         break;
-                    case 74:
+                    case 82:
                         defaultComboSearchCodeSecondDictionary= "Chigai";
                         break;
-                    case 75:
+                    case 83:
                         defaultComboSearchCodeSecondDictionary= "OJAD";
                         break;
                 }
@@ -5053,7 +5229,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDefaultComboSearchCodeSecondDictionarySimplified(){
 
-        defaultComboSearchAlertDialogSecondDictionary.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
+        defaultComboSearchAlertDialogSecondDictionaryBuilder.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -5109,7 +5285,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDefaultComboSearchCodeThirdDictionaryOriginal(){
 
-        defaultComboSearchAlertDialogThirdDictionary.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
+        defaultComboSearchAlertDialogThirdDictionaryBuilder.setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -5135,136 +5311,160 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeThirdDictionary= "Cambridge EN-CH";
                         break;
                     case 7:
-                        defaultComboSearchCodeThirdDictionary= "Merriam Webster";
+                        defaultComboSearchCodeThirdDictionary= "WordReference EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeThirdDictionary= "Macmillan Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "WordReference CH-EN";
                         break;
                     case 9:
-                        defaultComboSearchCodeThirdDictionary= "Collins";
+                        defaultComboSearchCodeThirdDictionary= "Merriam Webster";
                         break;
                     case 10:
-                        defaultComboSearchCodeThirdDictionary= "Oxford";
+                        defaultComboSearchCodeThirdDictionary= "Macmillan Dictionary";
                         break;
                     case 11:
-                        defaultComboSearchCodeThirdDictionary= "Vocabulary";
+                        defaultComboSearchCodeThirdDictionary= "Collins";
                         break;
                     case 12:
-                        defaultComboSearchCodeThirdDictionary= "Dictionary.com";
+                        defaultComboSearchCodeThirdDictionary= "Oxford";
                         break;
                     case 13:
-                        defaultComboSearchCodeThirdDictionary= "The Free Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Vocabulary";
                         break;
                     case 14:
-                        defaultComboSearchCodeThirdDictionary= "Fine Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Dictionary.com";
                         break;
                     case 15:
-                        defaultComboSearchCodeThirdDictionary= "Your_Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "The Free Dictionary";
                         break;
                     case 16:
-                        defaultComboSearchCodeThirdDictionary= "Longman Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Fine Dictionary";
                         break;
                     case 17:
-                        defaultComboSearchCodeThirdDictionary= "WordWeb";
+                        defaultComboSearchCodeThirdDictionary= "Your_Dictionary";
                         break;
                     case 18:
-                        defaultComboSearchCodeThirdDictionary= "WordNik";
+                        defaultComboSearchCodeThirdDictionary= "Longman Dictionary";
                         break;
                     case 19:
-                        defaultComboSearchCodeThirdDictionary= "Wiki Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "WordWeb";
                         break;
                     case 20:
-                        defaultComboSearchCodeThirdDictionary= "Business Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "WordNik";
                         break;
                     case 21:
-                        defaultComboSearchCodeThirdDictionary= "Slang";
+                        defaultComboSearchCodeThirdDictionary= "Wiki Dictionary";
                         break;
                     case 22:
-                        defaultComboSearchCodeThirdDictionary= "The Online Slang Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Business Dictionary";
                         break;
                     case 23:
-                        defaultComboSearchCodeThirdDictionary= "Idioms 4 You";
+                        defaultComboSearchCodeThirdDictionary= "Slang";
                         break;
                     case 24:
-                        defaultComboSearchCodeThirdDictionary= "Greens dictionary of slang";
+                        defaultComboSearchCodeThirdDictionary= "The Online Slang Dictionary";
                         break;
                     case 25:
-                        defaultComboSearchCodeThirdDictionary= "SCI Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Idioms 4 You";
                         break;
                     case 26:
-                        defaultComboSearchCodeThirdDictionary= "TechDico";
+                        defaultComboSearchCodeThirdDictionary= "Greens dictionary of slang";
                         break;
                     case 27:
-                        defaultComboSearchCodeThirdDictionary= "BioMedical Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "SCI Dictionary";
                         break;
                     case 28:
-                        defaultComboSearchCodeThirdDictionary= "IsPlural Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "TechDico";
                         break;
                     case 29:
-                        defaultComboSearchCodeThirdDictionary= "LingoHelpPrepositions";
+                        defaultComboSearchCodeThirdDictionary= "BioMedical Dictionary";
                         break;
                     case 30:
-                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Synonym";
+                        defaultComboSearchCodeThirdDictionary= "IsPlural Dictionary";
                         break;
                     case 31:
-                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Antonym";
+                        defaultComboSearchCodeThirdDictionary= "LingoHelpPrepositions";
                         break;
                     case 32:
-                        defaultComboSearchCodeThirdDictionary= "Word Hippo";
+                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Synonym";
                         break;
                     case 33:
-                        defaultComboSearchCodeThirdDictionary= "Onelook";
+                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Antonym";
                         break;
                     case 34:
-                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
+                        defaultComboSearchCodeThirdDictionary= "Word Hippo";
                         break;
                     case 35:
-                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
+                        defaultComboSearchCodeThirdDictionary= "Onelook";
                         break;
                     case 36:
-                        defaultComboSearchCodeThirdDictionary= "Weblio EN";
+                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
                         break;
                     case 37:
-                        defaultComboSearchCodeThirdDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
                         break;
                     case 38:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Word";
+                        defaultComboSearchCodeThirdDictionary= "Weblio EN";
                         break;
                     case 39:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeThirdDictionary= "Weblio Synonym";
                         break;
                     case 40:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Names";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Word";
                         break;
                     case 41:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Kanji";
                         break;
                     case 42:
-                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Names";
                         break;
                     case 43:
-                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Sentence";
                         break;
                     case 44:
-                        defaultComboSearchCodeThirdDictionary= "Goo";
+                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
                         break;
                     case 45:
-                        defaultComboSearchCodeThirdDictionary= "Sanseido";
+                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
                         break;
                     case 46:
-                        defaultComboSearchCodeThirdDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeThirdDictionary= "Goo";
                         break;
                     case 47:
-                        defaultComboSearchCodeThirdDictionary= "J Logos";
+                        defaultComboSearchCodeThirdDictionary= "Sanseido";
                         break;
                     case 48:
-                        defaultComboSearchCodeThirdDictionary= "Eijirou";
+                        defaultComboSearchCodeThirdDictionary= "Kotoba Bank";
                         break;
                     case 49:
-                        defaultComboSearchCodeThirdDictionary= "How do you say this in English";
+                        defaultComboSearchCodeThirdDictionary= "J Logos";
                         break;
                     case 50:
+                        defaultComboSearchCodeThirdDictionary= "Eijirou";
+                        break;
+                    case 51:
+                        defaultComboSearchCodeThirdDictionary= "How do you say this in English";
+                        break;
+                    case 52:
                         defaultComboSearchCodeThirdDictionary= "Jisho";
+                        break;
+                    case 53:
+                        defaultComboSearchCodeThirdDictionary= "Cambridge JP-EN";
+                        break;
+                    case 54:
+                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-JP";
+                        break;
+                    case 55:
+                        defaultComboSearchCodeThirdDictionary= "WWW JDIC JP-EN";
+                        break;
+                    case 56:
+                        defaultComboSearchCodeThirdDictionary= "WWW JDIC EN-JP";
+                        break;
+                    case 57:
+                        defaultComboSearchCodeThirdDictionary= "WordReference EN-JP";
+                        break;
+                    case 58:
+                        defaultComboSearchCodeThirdDictionary= "WordReference JP-EN";
                         break;
                                                                                                 //                    case 51:
                                                                                                 //                        defaultComboSearchCodeThirdDictionary= "Word Plus Chinese";
@@ -5293,79 +5493,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeThirdDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 51:
+                    case 59:
                         defaultComboSearchCodeThirdDictionary= "Google translate to CHTW";
                         break;
-                    case 52:
+                    case 60:
                         defaultComboSearchCodeThirdDictionary= "Google translate to CHCN";
                         break;
-                    case 53:
+                    case 61:
                         defaultComboSearchCodeThirdDictionary= "Google translate to EN";
                         break;
-                    case 54:
+                    case 62:
                         defaultComboSearchCodeThirdDictionary= "Google translate to JP";
                         break;
-                    case 55:
+                    case 63:
                         defaultComboSearchCodeThirdDictionary= "Google translate to KR";
                         break;
-                    case 56:
+                    case 64:
                         defaultComboSearchCodeThirdDictionary= "Google translate to SP";
                         break;
-                    case 57:
+                    case 65:
                         defaultComboSearchCodeThirdDictionary= "Google Image";
                         break;
-                    case 58:
+                    case 66:
                         defaultComboSearchCodeThirdDictionary= "Ludwig";
                         break;
-                    case 59:
+                    case 67:
                         defaultComboSearchCodeThirdDictionary= "Your Dictionary Example Sentences";
                         break;
-                    case 60:
+                    case 68:
                         defaultComboSearchCodeThirdDictionary= "YouGlish";
                         break;
-                    case 61:
+                    case 69:
                         defaultComboSearchCodeThirdDictionary= "Word Cool EN-CH";
                         break;
-                    case 62:
+                    case 70:
                         defaultComboSearchCodeThirdDictionary= "Word Cool EN-JP";
                         break;
-                    case 63:
+                    case 71:
                         defaultComboSearchCodeThirdDictionary= "Word Cool JP-CH";
                         break;
-                    case 64:
+                    case 72:
                         defaultComboSearchCodeThirdDictionary= "Linguee CH-EN";
                         break;
-                    case 65:
+                    case 73:
                         defaultComboSearchCodeThirdDictionary= "Linguee JP-EN";
                         break;
-                    case 66:
+                    case 74:
                         defaultComboSearchCodeThirdDictionary= "Wikipedia TW";
                         break;
-                    case 67:
+                    case 75:
                         defaultComboSearchCodeThirdDictionary= "Wikipedia EN";
                         break;
-                    case 68:
+                    case 76:
                         defaultComboSearchCodeThirdDictionary= "English Encyclopedia";
                         break;
-                    case 69:
+                    case 77:
                         defaultComboSearchCodeThirdDictionary= "Forvo";
                         break;
-                    case 70:
+                    case 78:
                         defaultComboSearchCodeThirdDictionary= "Difference Between";
                         break;
-                    case 71:
+                    case 79:
                         defaultComboSearchCodeThirdDictionary= "Net Speak";
                         break;
-                    case 72:
+                    case 80:
                         defaultComboSearchCodeThirdDictionary= "Just the Word";
                         break;
-                    case 73:
+                    case 81:
                         defaultComboSearchCodeThirdDictionary= "Yomikata";
                         break;
-                    case 74:
+                    case 82:
                         defaultComboSearchCodeThirdDictionary= "Chigai";
                         break;
-                    case 75:
+                    case 83:
                         defaultComboSearchCodeThirdDictionary= "OJAD";
                         break;
                 }
@@ -5378,7 +5578,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setDefaultComboSearchCodeThirdDictionarySimplified(){
 
-        defaultComboSearchAlertDialogThirdDictionary.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
+        defaultComboSearchAlertDialogThirdDictionaryBuilder.setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int position) {
                 switch (position) {
@@ -5479,6 +5679,14 @@ public class MainActivity extends AppCompatActivity {
                     case "Cambridge EN-CH":
                         String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
                         webViewBrowser.loadUrl(cambridgeDictionaryUrl);
+                        break;
+                    case "WordReference EN-CH":
+                        String wordReferenceEnChDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
+                        webViewBrowser.loadUrl(wordReferenceEnChDictionaryUrl);
+                        break;
+                    case "WordReference CH-EN":
+                        String wordReferenceChEnDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
+                        webViewBrowser.loadUrl(wordReferenceChEnDictionaryUrl);
                         break;
                     case "Merriam Webster":
                         String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
@@ -5633,7 +5841,7 @@ public class MainActivity extends AppCompatActivity {
                         webViewBrowser.loadUrl(gooDictionaryUrl);
                         break;
                     case "Sanseido":
-                        String sanseidoUrl= "https://www.sanseido.biz/User/Dic/Index.aspx?TWords="+searchKeyword+"&st=0&DORDER=151617&DailyJJ=checkbox&DailyEJ=checkbox&DailyJE=checkbox";
+                        String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+searchKeyword+"&search_type=0&start_index=0&selected_dic=";
                         webViewBrowser.loadUrl(sanseidoUrl);
                         break;
                     case "Kotoba Bank":
@@ -5655,6 +5863,30 @@ public class MainActivity extends AppCompatActivity {
                     case "Jisho":
                         String jishoUrl= "https://jisho.org/search/"+searchKeyword;
                         webViewBrowser.loadUrl(jishoUrl);
+                        break;
+                    case "Cambridge JP-EN":
+                        String CambridgeJPtoENUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+searchKeyword;
+                        webViewBrowser.loadUrl(CambridgeJPtoENUrl);
+                        break;
+                    case "Cambridge EN-JP":
+                        String CambridgeENtoJPUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
+                        webViewBrowser.loadUrl(CambridgeENtoJPUrl);
+                        break;
+                    case "WWW JDIC JP-EN":
+                        String wwwjdicJpToEnUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+searchKeyword;
+                        webViewBrowser.loadUrl(wwwjdicJpToEnUrl);
+                        break;
+                    case "WWW JDIC EN-JP":
+                        String wwwjdicEnToJaUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+searchKeyword;
+                        webViewBrowser.loadUrl(wwwjdicEnToJaUrl);
+                        break;
+                    case "WordReference EN-JP":
+                        String wordReferenceEnJpDictionaryUrl= "https://www.wordreference.com/enja/"+searchKeyword;
+                        webViewBrowser.loadUrl(wordReferenceEnJpDictionaryUrl);
+                        break;
+                    case "WordReference JP-EN":
+                        String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
+                        webViewBrowser.loadUrl(wordReferenceJpEnDictionaryUrl);
                         break;
                                                                                                                     //                    case "Word Plus Chinese":
                                                                                                                     //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -6587,6 +6819,156 @@ public class MainActivity extends AppCompatActivity {
         browserSwitch.setVisibility(View.GONE);
         browserNavigateBack.setVisibility(View.GONE);
         browserNavigateForward.setVisibility(View.GONE);
+    }
+
+
+    public void changeBackgroundImage() {
+        CFAlertDialog.Builder setBackgroundImageAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(R.string.Change_background)
+                .setTextColor(Color.BLUE)
+                .setMessage(getString(R.string.Change_background_through_the_folllowing_channels) + System.getProperty("line.separator") +
+                        getString(R.string.Lemat_works_explanation) + System.getProperty("line.separator") +
+                        getString(R.string.Giphy_explanation) + System.getProperty("line.separator") +
+                        getString(R.string.Open_my_album_explanation) + System.getProperty("line.separator") +
+                        getString(R.string.Restore_to_default_background_explanation))
+                .setCancelable(false)  //按到旁邊的空白處AlertDialog不會消失
+
+                //前往Lemat Works網站
+                .addButton(getString(R.string.Go_to_Lemat_Works), Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.behance.net/lematworks")));
+                    setBackgroundImageAlertDialog.dismiss();
+                })
+
+                //呼叫第三方「Giphy」app
+                .addButton(getString(R.string.Open_giphy_app), Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                    Intent callGiphyAppIntent = getPackageManager().getLaunchIntentForPackage("com.giphy.messenger");
+                    if (callGiphyAppIntent != null) {
+                        // If the Giphy app is found, start the app.
+                        callGiphyAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(callGiphyAppIntent);
+                    } else {
+                        // Bring user to the market or let them choose an app.
+                        callGiphyAppIntent = new Intent(Intent.ACTION_VIEW);
+                        callGiphyAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        callGiphyAppIntent.setData(Uri.parse("market://details?id=" + "com.giphy.messenger"));
+                        startActivity(callGiphyAppIntent);
+                        Toast.makeText(getApplicationContext(), getString(R.string.Must_get_Giphy_app), Toast.LENGTH_LONG).show();
+                    }
+
+                    setBackgroundImageAlertDialog.dismiss();
+                })
+
+                //打開相簿
+                .addButton(getString(R.string.Open_photo_album)
+                        , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                            //這裡顯示第二層AlertDialog讓用戶選擇圖片格式
+                            CFAlertDialog.Builder chooseJPEGorGIFimageAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                    .setCornerRadius(50)
+                                    .setTitle(getString(R.string.Choose_an_image_type))
+                                    .setTextColor(Color.BLUE)
+                                    .setCancelable(false)  //按到旁邊的空白處AlertDialog也不會消失
+
+                                    //AlertDialog的確定鈕，用戶選擇靜態圖片
+                                    .addButton(getString(R.string.Use_static_image_for_background)
+                                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLlayer2) -> {
+
+                                                changeBackgroundButtonIsPressed="yes";
+                                                Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+                                                intent.setType("image/*");
+                                                String[] mimeTypes = {"image/jpeg", "image/jpg","image/tiff", "image/bmp","image/png", "image/webp","image/svg"};
+                                                intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+                                                startActivityForResult(intent, PHOTOALBUM);
+
+                                                chooseJPEGorGIFimageAlertDialog.dismiss();
+                                            })
+
+                                    //AlertDialog的中立鈕，用戶選擇動態圖片
+                                    .addButton(getString(R.string.Use_gif_for_background)
+                                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLayer2) -> {
+
+                                                changeBackgroundButtonIsPressed="GIF";
+                                                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT, null);
+                                                intent.setType("image/gif");
+                                                startActivityForResult(intent, PHOTOALBUM);
+
+                                                chooseJPEGorGIFimageAlertDialog.dismiss();
+                                            })
+
+                                    //AlertDialog的取消鈕
+                                    .addButton(getString(R.string.Cancel)
+                                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLayer2) -> {
+
+                                                chooseJPEGorGIFimageAlertDialog.dismiss();
+                                            });
+
+                            chooseJPEGorGIFimageAlertDialogBuilder.show(); //顯示第二層AlertDialog
+                            setBackgroundImageAlertDialog.dismiss(); //同時讓第一層AlertDialog消失
+
+
+                        })
+
+                //恢復預設背景
+                .addButton(getString(R.string.Restore_to_default_background), Color.WHITE, Color.BLACK, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                    Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
+                    m_phone_for_background = defaultBackgroundBmp;
+                    //第一步:將Bitmap壓縮至字節數组輸出流ByteArrayOutputStream
+                    ByteArrayOutputStream byteArrayOutputStream=new ByteArrayOutputStream();
+                    //第二步:利用Base64將字節數组輸出流中的數據轉換成字符串String
+                    byte[] byteArray=byteArrayOutputStream.toByteArray();
+                    String imageString= Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //第三步:將String存至SharedPreferences
+                    SharedPreferences sharedPreferences=getSharedPreferences("testSP", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.putString("image", imageString);
+                    editor.apply();
+
+                    gifBackgroundSharedPreferences = getSharedPreferences("gifBackgroundSharedPreferences", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor gifBackgroundSharedPreferencesEditor = gifBackgroundSharedPreferences.edit();
+                    gifBackgroundSharedPreferencesEditor.putString("gifBackgroundURI", "null").apply();
+
+
+                    recreate(); //重新生成頁面
+                    Toast.makeText(getApplicationContext(), R.string.Reset_to_default_backgorund_image_message, Toast.LENGTH_LONG).show();
+                })
+
+                //AlertDialog的取消鈕
+                .addButton(getString(R.string.Cancel)
+                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                            setBackgroundImageAlertDialog.dismiss();
+                        })
+
+                .addButton(getString(R.string.Lemat_works_tutorial)
+                        , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/2ctYWzX-jtM")));
+                            setBackgroundImageAlertDialog.dismiss();
+                        })
+
+                .addButton(getString(R.string.Giphy_tutorial)
+                        , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/w5HwnZeIjdY")));
+                            setBackgroundImageAlertDialog.dismiss();
+                        })
+
+                .addButton(getString(R.string.Album_tutorial)
+                        , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (setBackgroundImageAlertDialog, whichLayer1) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/WGAV4tTtFR4")));
+                            setBackgroundImageAlertDialog.dismiss();
+                        });
+
+        setBackgroundImageAlertDialogBuilder.show();
     }
 
 
