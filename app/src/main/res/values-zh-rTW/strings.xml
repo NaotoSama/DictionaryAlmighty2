@@ -216,7 +216,6 @@
     <string name="Power_thesaurus_antonym">Power Thesaurus反義詞字典</string>
     <string name="WWWJDIC_jp_en">WWWJDIC日英字典</string>
     <string name="WWWJDIC_en_jp">WWWJDIC英日字典</string>
-    <string name="Kanji_recognizer">漢字手寫字典</string>
     <string name="Britannica_encyclopedia">大英百科全書</string>
     <string name="Search_text_here">搜尋文字...</string>
     <string name="Choose_one_preset_timing">選擇一個預設時機點</string>
@@ -388,14 +387,13 @@
     <string name="Quick_search_example_explanation">快搜模式：您可選擇一部快搜字典，例如若選擇劍橋字典，以後只要點擊快搜按鈕就會自動查劍橋字典。</string>
     <string name="Combo_search_example_explanation">三連搜：您可選擇三部預設字典，例如若選劍橋字典、例句字典和發音字典，點擊三連搜按鈕會同時查這三部字典。</string>
     <string name="Must_get_Giphy_app">您必須先安裝第三方的「Giphy」App才能使用此功能，請按上方的安裝鈕</string>
-    <string name="Change_background_through_the_folllowing_channels">您可透過以下管道更換背景：</string>
-    <string name="Lemat_works_explanation">Lemat Works網站：提供許多特色絢麗動圖供您下載</string>
+    <string name="Lemat_works_explanation">(1) Lemat Works網站：下載特色絢麗動圖</string>
     <string name="Go_to_Lemat_Works">前往LEMAT WORKS</string>
-    <string name="Giphy_explanation">動圖搜尋平台龍頭Giphy：提供數不盡的動圖供您下載</string>
+    <string name="Giphy_explanation">(2) Giphy：動圖搜尋平台龍頭</string>
     <string name="Open_giphy_app">呼叫Giphy App</string>
-    <string name="Open_my_album_explanation">前往我的相簿：打開手機相簿挑選自己最愛的靜態圖或動圖</string>
+    <string name="Open_my_album_explanation">(3) 手機相簿</string>
     <string name="Open_my_photo_album">前往我的相簿</string>
-    <string name="Restore_to_default_background_explanation">恢復預設背景：預設使用Lemat Works的宇宙動圖，官網 lematworks.myportfolio.com</string>
+    <string name="Restore_to_default_background_explanation">(4) 恢復預設背景：預設使用Lemat Works的宇宙動圖，官網 lematworks.myportfolio.com</string>
     <string name="Choose_an_image_type">選擇圖片類型</string>
     <string name="Use_static_image_for_background">選擇靜態圖做為背景圖</string>
     <string name="Use_gif_for_background">選擇動圖(GIF)做為背景圖</string>
@@ -409,5 +407,10 @@
     <string name="Word_reference_ch_to_en">WordReference漢英字典</string>
     <string name="Word_reference_en_to_jp">WordReference英日字典</string>
     <string name="Word_reference_jp_to_en">WordReference日英字典</string>
+    <string name="Forgetting_curve_explanation">我們的記憶會隨時間不斷遺忘，若不複習，20分鐘後忘掉40%，1天後忘掉70%，一周後幾乎快忘光，所以要不斷複習和回憶之前記過的內容。記憶經過遺忘後又回想起來，更能獲得強化。</string>
+    <string name="This_app_and_forgetting_curve">字典一指通在即將遺忘單字前發送複習通知，讓大腦牢牢抓住學過的字。有了貼心提醒，不怕學了又弄丟，只怕你懶得自主複習！</string>
+    <string name="Romaji_desu_enjp_jpen_dictionary">Romaji Desu日英英日字典</string>
+    <string name="Romaji_desu_kanji_dictionary">Romaji Desu漢字字典</string>
+    <string name="Kanji_recognizer">漢字手寫字典</string>
 </resources>
 

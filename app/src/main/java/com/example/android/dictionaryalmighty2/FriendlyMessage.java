@@ -5,6 +5,7 @@ public class FriendlyMessage {
     private String text;
     private String name;
     private String photoUrl;
+    private long messageTime;
 
     public FriendlyMessage() {   //Empty constructor
     }
@@ -13,6 +14,9 @@ public class FriendlyMessage {
         this.text = text;
         this.name = name;
         this.photoUrl = photoUrl;
+
+        // Initialize to current time
+        messageTime = System.currentTimeMillis();
     }
 
 
@@ -40,6 +44,10 @@ public class FriendlyMessage {
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
     }
+
+    public long getMessageTime() {return messageTime;}
+
+    public void setMessageTime(long messageTime) {this.messageTime = messageTime;}
 
 
 

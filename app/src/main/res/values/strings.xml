@@ -19,7 +19,7 @@
         <item>@string/Change_background</item>
         <item>@string/Set_default_dictionary</item>
         <item>@string/Show_tutorial</item>
-        <item>@string/Online_chat_room</item>
+<!--        <item>@string/Online_chat_room</item>-->
                                                             <!--        <item>@string/Restore_to_default_background</item>-->
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
                                                             <!--        <item>@string/Clear_search_input</item>-->
@@ -134,6 +134,8 @@
         <item>@string/WWWJDIC_en_jp</item>
         <item>@string/Word_reference_en_to_jp</item>
         <item>@string/Word_reference_jp_to_en</item>
+        <item>@string/Romaji_desu_enjp_jpen_dictionary</item>
+        <item>@string/Romaji_desu_kanji_dictionary</item>
 
                                                             <!--        <item>@string/Word_Plus_Chinese</item>-->
                                                             <!--        <item>@string/Word_Plus_English1</item>-->
@@ -541,7 +543,6 @@
     <string name="Power_thesaurus_antonym">Power Thesaurus Antonym</string>
     <string name="WWWJDIC_jp_en">WWWJDIC JP to EN</string>
     <string name="WWWJDIC_en_jp">WWWJDIC EN to JP</string>
-    <string name="Kanji_recognizer">Kanji Recognizer</string>
     <string name="Britannica_encyclopedia">Britannica Encyclopedia</string>
     <string name="Search_text_here">Search text here...</string>
     <string name="Choose_one_preset_timing">Choose one preset timing</string>
@@ -657,14 +658,13 @@
     <string name="Quick_search_example_explanation">Quick search: You can choose 1 dictionary for quick search. Say if you choose Cambridge, as soon as you hit the Quick Search Button you\'ll be automatically taken to Cambridge Dictionary.</string>
     <string name="Combo_search_example_explanation">Combo Search: You can choose 3 default dictionaries. Say if you choose Cambridge Dictionary, example sentences dictionary and pronunciation dictionary, hitting the Combo Search button will look up those dictionaries simultaneously.</string>
     <string name="Must_get_Giphy_app">The 3rd-party Giphy App must be installed to proceed with this function</string>
-    <string name="Change_background_through_the_folllowing_channels">Change background through the folllowing channels</string>
-    <string name="Lemat_works_explanation">Lemat Works: Available with characterized gifs for download.</string>
+    <string name="Lemat_works_explanation">(1) Lemat Works: Download characterized gifs</string>
     <string name="Go_to_Lemat_Works">Go to Lemat Works</string>
-    <string name="Giphy_explanation">The top GIFs serach platform has all the gifs for download.</string>
+    <string name="Giphy_explanation">(2) Giphy: Top GIFs serach platform</string>
     <string name="Open_giphy_app">Open Giphy App</string>
-    <string name="Open_my_album_explanation">Photo Album: Use you own favorite static images or gifs in your phone album.</string>
+    <string name="Open_my_album_explanation">(3) Your own photo album</string>
     <string name="Open_my_photo_album">Open Photo Album</string>
-    <string name="Restore_to_default_background_explanation">Restore to default background: This app by default uses cosmos gif by LematWorks. Official site: lematworks.myportfolio.com</string>
+    <string name="Restore_to_default_background_explanation">(4) Restore to default background: This app by default uses cosmos gif by LematWorks. Official site: lematworks.myportfolio.com</string>
     <string name="Choose_an_image_type">Choose an image type</string>
     <string name="Use_static_image_for_background">Use Static Image for Backgorund</string>
     <string name="Use_gif_for_background">Use Gif for Background</string>
@@ -678,6 +678,11 @@
     <string name="Word_reference_ch_to_en">WordReference CH/EN Dictionary</string>
     <string name="Word_reference_en_to_jp">WordReference EN/JP Dictionary</string>
     <string name="Word_reference_jp_to_en">WordReference JP/EN Dictionary</string>
+    <string name="Forgetting_curve_explanation">Our memory looses with time. Without revisiting memories, we loose 40% of them in 20 min., 70% in a day, and almost all of them in a week, so we must continuously revisit and recall them. Memories last stronger when they are lost and recalled again.</string>
+    <string name="This_app_and_forgetting_curve">Dictionary Almighty notifies of revisiting the words you want to memorize before you forget them. No worries about forgetting a word unless you don\'t revisit it when a notification comes!</string>
+    <string name="Romaji_desu_enjp_jpen_dictionary">Romaji Desu JP⇄EN Dictionary</string>
+    <string name="Romaji_desu_kanji_dictionary">Romaji Desu Kanji Dictionary</string>
+    <string name="Kanji_recognizer">Kanji Recognizer</string>
 
 </resources>
 

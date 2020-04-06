@@ -90,11 +90,13 @@ public class ComboSearchActivity extends AppCompatActivity {
 
 
         WebSettings comboSearchWebSettings3 = comboSearchWebViewBrowser3.getSettings();
+        comboSearchWebSettings3.setUserAgentString("Android");
+        comboSearchWebSettings3.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         comboSearchWebSettings3.setJavaScriptEnabled(true);
         comboSearchWebSettings3.setSupportZoom(true);
         comboSearchWebSettings3.setBuiltInZoomControls(true);
-        comboSearchWebSettings3.setLoadWithOverviewMode(false);
-        comboSearchWebSettings3.setUseWideViewPort(false);
+        comboSearchWebSettings3.setLoadWithOverviewMode(true);
+        comboSearchWebSettings3.setUseWideViewPort(true);
         comboSearchWebViewBrowser3.setWebViewClient(new comboSearchWebViewClientImpl3());
         comboSearchWebViewBrowser3.requestFocus();
 
@@ -542,7 +544,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                         comboSearchWebViewBrowser1.loadUrl(jlogosUrl);
                         break;
                     case "Eijirou":
-                        String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
+                        String eijiroDictionryUrl= "https://eow.alc.co.jp/sp/search.html?q="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(eijiroDictionryUrl);
                         break;
                     case "How do you say this in English":
@@ -576,6 +578,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "WordReference JP-EN":
                         String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(wordReferenceJpEnDictionaryUrl);
+                        break;
+                    case "RomajiDesu JP-EN EN-JP":
+                        String RomajiDesuJpEnEnJpDictionaryUrl= "http://m.romajidesu.com/dictionary/meaning-of-"+searchKeyword+".html";
+                        comboSearchWebViewBrowser1.loadUrl(RomajiDesuJpEnEnJpDictionaryUrl);
+                        break;
+                    case "RomajiDesu Kanji":
+                        String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(RomajiDesuKanjiDictionaryUrl);
                         break;
                                                                                                                 //                    case "Word Plus Chinese":
                                                                                                                 //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -688,7 +698,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                         comboSearchWebViewBrowser1.loadUrl(enEncyclopediaUrl);
                         break;
                     case "Forvo":
-                        String forvoUrl= "https://forvo.com/search/"+searchKeyword;
+                        String forvoUrl= "https://zh.forvo.com/search/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(forvoUrl);
                         break;
                     case "Difference Between":
@@ -930,7 +940,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser2.loadUrl(jlogosUrl);
                 break;
             case "Eijirou":
-                String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
+                String eijiroDictionryUrl= "https://eow.alc.co.jp/sp/search.html?q="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(eijiroDictionryUrl);
                 break;
             case "How do you say this in English":
@@ -964,6 +974,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "WordReference JP-EN":
                 String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(wordReferenceJpEnDictionaryUrl);
+                break;
+            case "RomajiDesu JP-EN EN-JP":
+                String RomajiDesuJpEnEnJpDictionaryUrl= "http://m.romajidesu.com/dictionary/meaning-of-"+searchKeyword+".html";
+                comboSearchWebViewBrowser2.loadUrl(RomajiDesuJpEnEnJpDictionaryUrl);
+                break;
+            case "RomajiDesu Kanji":
+                String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(RomajiDesuKanjiDictionaryUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -1076,7 +1094,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser2.loadUrl(enEncyclopediaUrl);
                 break;
             case "Forvo":
-                String forvoUrl= "https://forvo.com/search/"+searchKeyword;
+                String forvoUrl= "https://zh.forvo.com/search/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(forvoUrl);
                 break;
             case "Difference Between":
@@ -1318,7 +1336,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser3.loadUrl(jlogosUrl);
                 break;
             case "Eijirou":
-                String eijiroDictionryUrl= "https://eow.alc.co.jp/search?q="+searchKeyword;
+                String eijiroDictionryUrl= "https://eow.alc.co.jp/sp/search.html?q="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(eijiroDictionryUrl);
                 break;
             case "How do you say this in English":
@@ -1352,6 +1370,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "WordReference JP-EN":
                 String wordReferenceJpEnDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(wordReferenceJpEnDictionaryUrl);
+                break;
+            case "RomajiDesu JP-EN EN-JP":
+                String RomajiDesuJpEnEnJpDictionaryUrl= "http://m.romajidesu.com/dictionary/meaning-of-"+searchKeyword+".html";
+                comboSearchWebViewBrowser3.loadUrl(RomajiDesuJpEnEnJpDictionaryUrl);
+                break;
+            case "RomajiDesu Kanji":
+                String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(RomajiDesuKanjiDictionaryUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -1464,7 +1490,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser3.loadUrl(enEncyclopediaUrl);
                 break;
             case "Forvo":
-                String forvoUrl= "https://forvo.com/search/"+searchKeyword;
+                String forvoUrl= "https://zh.forvo.com/search/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(forvoUrl);
                 break;
             case "Difference Between":

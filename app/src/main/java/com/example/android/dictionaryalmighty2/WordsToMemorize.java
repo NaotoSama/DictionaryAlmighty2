@@ -293,7 +293,7 @@ public class WordsToMemorize extends AppCompatActivity {
                                     });
 
 
-                                    myVocabularyArrayList.remove(position);  //同時本從地的list移除該字
+                                    myVocabularyArrayList.remove(wordToDelete);  //同時本從地的list移除該字
                                     myVocabularyArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences

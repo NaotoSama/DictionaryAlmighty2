@@ -538,7 +538,7 @@ public class UserInputHistory extends AppCompatActivity {
                                     }
 
 
-                                    userInputArraylist.remove(position);  //同時本從地的list移除該字
+                                    userInputArraylist.remove(wordToDelete);  //同時本從地的list移除該字
                                     userInputArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences
