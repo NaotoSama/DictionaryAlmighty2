@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
                                                                                 //static String googleIdToken;
                                                                                 //static String logInProviderCheckCode; //用來檢查用戶透過哪個方式登入帳戶
     String LOG_TAG;  //Log tag for the external storage permission request error message
-    static String localOrCloudSaveSwitchCode; //本地端或雲端備份的代碼
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
     String defaultSingleSearchCode; //用以設定單一預設快搜字典
@@ -141,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
     String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
     String[] quickSearchComboSearchOrGoogleTranslateList; //讓用戶選擇快搜模式、三連搜模式或估狗翻譯
     public static final String IMAGE_UNSPECIFIED = "image/*";
-    static String intentReceivedText;  //接收其他外部App傳來的文字
     String FriebaseUrl; //接收Firebase傳來的URL
     private static final String SHOWCASE_ID = "Sequence Showcase";
 
@@ -190,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
 
     Calendar c;
 
-    static SharedPreferences localOrCloudSaveSwitchPreferences;  //儲存用戶使用本地端或雲端存儲單字紀錄的SharedPreferences
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
+    SharedPreferences wordsToMemorizeSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
     static SharedPreferences usernameSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
     static SharedPreferences userScreenNameSharedPreferences;  //儲存用戶顯示暱稱的SharedPreferences
                                                                                 //static SharedPreferences userInputLoginEmailSharedPreferences;  //儲存用戶登入信箱的SharedPreferences
@@ -404,14 +402,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         /**
-         * 頁面生成時讀取用戶的本地或雲端備份狀態
-         */
-        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-        localOrCloudSaveSwitchCode = localOrCloudSaveSwitchPreferences.getString("CloudSaveMode", "");
-
-
-
-        /**
          * 頁面生成時讀取用戶搜尋紀錄userInputArrayList
          */
         userInputArrayListSharedPreferences = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE);
@@ -425,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 頁面生成時讀取用戶搜尋紀錄myVocabularyArrayList
          */
-        SharedPreferences wordsToMemorizeSharedPreferences = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE);
+        wordsToMemorizeSharedPreferences = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE);
         int myVocabularyArrayListValues = wordsToMemorizeSharedPreferences.getInt("myVocabularyArrayListValues", 0);
         for (int i = 0; i < myVocabularyArrayListValues; i++) {
             String myVocabularyArrayListItem = wordsToMemorizeSharedPreferences.getString("myVocabularyArrayListValues" + i, null);
@@ -594,16 +584,11 @@ public class MainActivity extends AppCompatActivity {
             //Content is being shared. Handle received data of the MIME types.
             if (receivedType.startsWith("text/")) {
                 //Handle sent text
-                intentReceivedText = received3rdPartyAppIntent.getStringExtra(Intent.EXTRA_TEXT);  //Get the received text
-                if (intentReceivedText != null) {              //Check we have a string
-                    searchKeyword = intentReceivedText;
+                searchKeyword = received3rdPartyAppIntent.getStringExtra(Intent.EXTRA_TEXT);  //Get the received text
+                if (searchKeyword != null) {              //Check we have a string
                     wordInputView.setText(searchKeyword); //Set the text to the search box in MainActivity
 
                     chooseActionAlertDialog();
-
-                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                 }
             }
         } else if (Objects.equals(receivedAction, Intent.ACTION_MAIN)) {
@@ -736,6 +721,7 @@ public class MainActivity extends AppCompatActivity {
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.National_Academy_for_Educational_Research, R.mipmap.national_academy_for_educational_research));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Fast_dict, R.mipmap.fast_dict));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Dict_dot_cn, R.mipmap.dict_cn));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Google_dictionary, R.mipmap.google_dictionary));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
@@ -759,7 +745,7 @@ public class MainActivity extends AppCompatActivity {
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.The_online_slang_dictionary, R.mipmap.the_online_slang_dictionary));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Idioms_4_you, R.mipmap.idioms_4_you));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Greens_dictionary_of_slang, R.mipmap.greens_dictionary_of_slang));
-        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.SCI_Dictionary, R.mipmap.sci_dict));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Etymonline, R.mipmap.etymonline));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Academic_dictionaries_and_encyclopedias, R.mipmap.academic_dictionaries));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.TechDico, R.mipmap.tech_dico));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.BioMedical_dictionary, R.mipmap.bio_medical_dictionary));
@@ -778,6 +764,7 @@ public class MainActivity extends AppCompatActivity {
         mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.National_Academy_for_Educational_Research, R.mipmap.national_academy_for_educational_research));
         mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Dict_site, R.mipmap.dict_dot_site));
         mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Fast_dict, R.mipmap.fast_dict));
+        mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Dict_dot_cn, R.mipmap.dict_cn));
         mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Google_dictionary, R.mipmap.google_dictionary));
         mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.VoiceTube, R.mipmap.voicetube));
         mEnglishDictionarySpinnerItemListSimplified.add(new DictionaryItem(R.string.Cambridge_EN_CH, R.mipmap.cambridge));
@@ -810,6 +797,8 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_reference_jp_to_en, R.mipmap.word_reference_dot_com));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Romaji_desu_enjp_jpen_dictionary, R.mipmap.romaji_desu));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Romaji_desu_kanji_dictionary, R.mipmap.romaji_desu));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Japan_dict, R.mipmap.japan_dict));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Japan_dict_kanji_dictionary, R.mipmap.japan_dict));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Kanji_recognizer, R.mipmap.kanji_recognizer));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Japanese_food_dictionary, R.mipmap.japanese_food_dictionary));
@@ -1238,9 +1227,9 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 NavUtils.navigateUpFromSameTask(this); //按返回鍵時返回到前一個Activity 而非webView網頁的前一頁
                 return true;
-            case R.id.log_in_button: //登入Google帳戶
-                Intent launchGoogleSignInActivity = new Intent(MainActivity.this, SignInActivity.class);
-                startActivity(launchGoogleSignInActivity);
+            case R.id.log_in_button: //登入帳戶
+                Intent launchSignInActivity = new Intent(MainActivity.this, SignInActivity.class);
+                startActivity(launchSignInActivity);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -1551,8 +1540,8 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0){
                     return;
 
-                } else if (position == 1) {  //更換背景圖
-
+                } else if (position == 1) {
+                    //更換背景圖
                     changeBackgroundImage();
 
                 }
@@ -1610,18 +1599,22 @@ public class MainActivity extends AppCompatActivity {
                                                                                         //
                                                                                         //}
                   else if (position == 2) {
-
-                    setDefaultDictionariesOriginal(); //設置專業版預設字典
+                    //設置專業版預設字典
+                    setDefaultDictionariesOriginal();
 
                                                                                         //} else if (position == 5) {//註冊登入、更改或刪除用戶名稱 (已移轉到Action bar menu，目前用不到)
                                                                                         //
                                                                                         //    registerLoginRenameDeleteUsername();
                 } else if (position == 3) {
+                    //設置記憶單字的捷徑
+                    chooseCustomizedOrPredefinedNotification();
+
+                } else if (position == 4) {
                     //顯示使用教學
                     MaterialShowcaseView.resetAll(getApplicationContext());
                     showTutorSequence();
 
-                } else if (position == 4) {
+                } else if (position == 5) {
                     //進入聊天室
                     Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                     startActivity(goToChatRoomIntent);
@@ -1663,8 +1656,8 @@ public class MainActivity extends AppCompatActivity {
                 if (position == 0){
                     return;
 
-                } else if (position == 1) {  //更換背景圖
-
+                } else if (position == 1) {
+                    //更換背景圖
                     changeBackgroundImage();
 
                 }
@@ -1688,8 +1681,8 @@ public class MainActivity extends AppCompatActivity {
                                                                                         //
                                                                                         //}
                   else if (position == 2) {
-
-                    setDefaultDictionariesSimplified();  //設置簡易版預設字典
+                    //設置簡易版預設字典
+                    setDefaultDictionariesSimplified();
 
                                                                                         // } else if (position == 4) {//註冊登入、更改或刪除用戶名稱 (已移轉到Action bar menu，目前用不到)
                                                                                         //
@@ -1731,11 +1724,15 @@ public class MainActivity extends AppCompatActivity {
                                                                                         //
                                                                                         //}
                   else if (position == 3) {
+                    //設置記憶單字的捷徑
+                    chooseCustomizedOrPredefinedNotification();
+
+                } else if (position == 4) {
                     //顯示使用教學
                     MaterialShowcaseView.resetAll(getApplicationContext());
                     showTutorSequence();
 
-                } else if (position == 4) {
+                } else if (position == 5) {
                     //進入聊天室
                     Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                     startActivity(goToChatRoomIntent);
@@ -2418,198 +2415,204 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 5) {
+                    String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;
+                    webViewBrowser.loadUrl(DictDotCnUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 6) {
                     String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;
                     webViewBrowser.loadUrl(googleDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 6) {
+                }else if (position == 7) {
                     String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
                     webViewBrowser.loadUrl(voicetubeUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 7) {
+                }else if (position == 8) {
                     String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
                     webViewBrowser.loadUrl(cambridgeDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 8) {
+                }else if (position == 9) {
                     String wordReferenceEnChDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
                     webViewBrowser.loadUrl(wordReferenceEnChDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 9) {
+                }else if (position == 10) {
                     String wordReferenceChEnDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
                     webViewBrowser.loadUrl(wordReferenceChEnDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 10){
+                }else if (position == 11){
                     String merriamDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
                     webViewBrowser.loadUrl(merriamDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 11){
+                }else if (position == 12){
                     String macmillanDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+searchKeyword+"_1";
                     webViewBrowser.loadUrl(macmillanDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 12) {
+                }else if (position == 13) {
                     String collinsDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
                     webViewBrowser.loadUrl(collinsDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 13) {
+                }else if (position == 14) {
                     String oxfordDictionaryUrl= "https://en.oxforddictionaries.com/definition/"+searchKeyword;
                     webViewBrowser.loadUrl(oxfordDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 14) {
+                }else if (position == 15) {
                     String vocabularyDotComUrl= "https://www.vocabulary.com/dictionary/"+searchKeyword;
                     webViewBrowser.loadUrl(vocabularyDotComUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 15) {
+                }else if (position == 16) {
                     String dictionaryDotComUrl= "https://www.dictionary.com/browse/"+searchKeyword;
                     webViewBrowser.loadUrl(dictionaryDotComUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 16) {
+                }else if (position == 17) {
                     String theFreeDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
                     webViewBrowser.loadUrl(theFreeDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 17) {
+                }else if (position == 18) {
                     String fineDictionaryUrl= "http://www.finedictionary.com/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(fineDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 18) {
+                }else if (position == 19) {
                     String yourDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
                     webViewBrowser.loadUrl(yourDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 19) {
+                }else if (position == 20) {
                     String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                     webViewBrowser.loadUrl(longmanDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 20) {
+                }else if (position == 21) {
                     String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                     webViewBrowser.loadUrl(wordWebUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 21) {
+                }else if (position == 22) {
                     String wordNikUrl= "https://www.wordnik.com/words/"+searchKeyword;
                     webViewBrowser.loadUrl(wordNikUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 22) {
+                }else if (position == 23) {
                     String wiktionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
                     webViewBrowser.loadUrl(wiktionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 23) {
+                }else if (position == 24) {
                     String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(businessDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 24) {
+                }else if (position == 25) {
                     String slangDictionary= "http://www.yiym.com/?s="+searchKeyword;
                     webViewBrowser.loadUrl(slangDictionary);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 25) {
+                }else if (position == 26) {
                     String theOnlineSlangDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+searchKeyword+"&sa=Search";
                     webViewBrowser.loadUrl(theOnlineSlangDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 26) {
+                }else if (position == 27) {
                     String idioms4YouUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+searchKeyword;
                     webViewBrowser.loadUrl(idioms4YouUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 27) {
+                }else if (position == 28) {
                     String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                     webViewBrowser.loadUrl(greensDictionaryOfSlangUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 28) {
-                    String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
-                    webViewBrowser.loadUrl(academiaDictionaryUrl);
+                }else if (position == 29) {
+                    String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+searchKeyword;
+                    webViewBrowser.loadUrl(etymologyDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 29) {
+                }else if (position == 30) {
                     String academiaDictionaryAndEncyclopediaUrl= "https://en.academic.ru/searchall.php?SWord="+searchKeyword+"&from=xx&to=en&did=&stype=0#";
                     webViewBrowser.loadUrl(academiaDictionaryAndEncyclopediaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 30) {
+                }else if (position == 31) {
                     String techDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(techDicoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 31) {
+                }else if (position == 32) {
                     String bioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
                     webViewBrowser.loadUrl(bioMedicalDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 32) {
+                }else if (position == 33) {
                     String isPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
                     webViewBrowser.loadUrl(isPluralDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 33) {
+                }else if (position == 34) {
                     String lingoHelpPrepositionUrl= "https://lingohelp.me/q/?w="+searchKeyword;
                     webViewBrowser.loadUrl(lingoHelpPrepositionUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 34) {
+                }else if (position == 35) {
                     String powerThesaurusSynonymUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
                     webViewBrowser.loadUrl(powerThesaurusSynonymUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 35) {
+                }else if (position == 36) {
                     String powerThesaurusAntonymsUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
                     webViewBrowser.loadUrl(powerThesaurusAntonymsUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 36) {
+                }else if (position == 37) {
                     String wordHippoUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
                     webViewBrowser.loadUrl(wordHippoUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 37) {
+                }else if (position == 38) {
                     String oneLookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                     webViewBrowser.loadUrl(oneLookUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
@@ -2680,18 +2683,24 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 5) {
+                    String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;
+                    webViewBrowser.loadUrl(DictDotCnUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 6) {
                     String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;
                     webViewBrowser.loadUrl(googleDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 6) {
+                }else if (position == 7) {
                     String voicetubeUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
                     webViewBrowser.loadUrl(voicetubeUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 7) {
+                }else if (position == 8) {
                     String cambridgeDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
                     webViewBrowser.loadUrl(cambridgeDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
@@ -2891,12 +2900,24 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 26) {
+                    String JapanDictDictionaryUrl= "https://www.japandict.com/?s="+searchKeyword+"&lang=eng";
+                    webViewBrowser.loadUrl(JapanDictDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 27) {
+                    String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
+                    webViewBrowser.loadUrl(JapanDictKanjiDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 28) {
                     String kanjiRecognizerUrl= "https://kanji.sljfaq.org/draw-canvas.html";
                     webViewBrowser.loadUrl(kanjiRecognizerUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 27) {
+                }else if (position == 29) {
                     //呼叫第三方「Yomiwa」app
                     Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
                     if (callYomiwaAppIntent != null) {
@@ -2939,7 +2960,7 @@ public class MainActivity extends AppCompatActivity {
                         h.postDelayed(r, 100);
 
                     }
-                } else if (position == 28) {
+                } else if (position == 30) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {
@@ -3646,12 +3667,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     //==============================================================================================
-    // Helper method for saving users' input
+    // Helper method for saving Keywords to UserInputListView
     //==============================================================================================
 
-    /**
-     * Helper method for saving Keywords to UserInputListView
-     */
     public static void saveKeywordtoUserInputListView() {
         if (searchKeyword != null && !searchKeyword.equals("")) {  //檢查用戶是否有輸入要查的單字
 
@@ -3697,9 +3715,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Helper method for saving UserInputArrayList to SharedPreferences
-     */
+    //==============================================================================================
+    // Helper method for saving UserInputArrayList to SharedPreferences
+    //==============================================================================================
     public void saveUserInputArrayListToSharedPreferences() {
         SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
         editor.putInt("userInputArrayListValues", userInputArraylist.size());
@@ -3710,6 +3728,64 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
     }
 
+
+    //==============================================================================================
+    // Helper method for saving Keywords to UserInputListView
+    //==============================================================================================
+    public static void saveKeywordToMyVocabularyListView() {
+        if (username!=null && !username.equals("")) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
+
+            //檢查資料庫中是否有重複的字
+            Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(searchKeyword);
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                        snapshot.getRef().setValue(null); //若有，先移除該重複的字
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    throw databaseError.toException();
+                }
+            });
+
+            mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword); //加入單字到資料庫
+
+            //                if (!userInputArraylist.contains(searchKeyword)){
+            //                    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);
+            //                }
+        }
+
+
+        myVocabularyArrayList.add(searchKeyword); //同時加入單字到本地的list
+
+        //透過HashSet自動過濾掉myVocabularyArraylist中重複的字
+        HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
+        myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
+        myVocabularyArrayList.clear();
+        myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
+
+        //Alphabetic sorting
+        Collections.sort(myVocabularyArrayList);
+    }
+
+
+    //==============================================================================================
+    // Helper method for saving myVocabularyArrayList to SharedPreferences
+    //==============================================================================================
+    public void saveMyVocabularyArrayListToSharedPreferences() {
+        SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
+        editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
+        for (int i = 0; i < myVocabularyArrayList.size(); i++)
+        {
+            editor.putString("myVocabularyArrayListValues"+i, myVocabularyArrayList.get(i));
+        }
+        editor.apply();
+
+    }
 
 
     //==============================================================================================
@@ -4266,175 +4342,184 @@ public class MainActivity extends AppCompatActivity {
                         defaultSingleSearchCode= "Fast Dict";
                         break;
                     case 4:
-                        defaultSingleSearchCode= "Google Dictionary";
+                        defaultSingleSearchCode= "Dict CN";
                         break;
                     case 5:
-                        defaultSingleSearchCode= "VoiceTube";
+                        defaultSingleSearchCode= "Google Dictionary";
                         break;
                     case 6:
-                        defaultSingleSearchCode= "Cambridge EN-CH";
+                        defaultSingleSearchCode= "VoiceTube";
                         break;
                     case 7:
-                        defaultSingleSearchCode= "WordReference EN-CH";
+                        defaultSingleSearchCode= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultSingleSearchCode= "WordReference CH-EN";
+                        defaultSingleSearchCode= "WordReference EN-CH";
                         break;
                     case 9:
-                        defaultSingleSearchCode= "Merriam Webster";
+                        defaultSingleSearchCode= "WordReference CH-EN";
                         break;
                     case 10:
-                        defaultSingleSearchCode= "Macmillan Dictionary";
+                        defaultSingleSearchCode= "Merriam Webster";
                         break;
                     case 11:
-                        defaultSingleSearchCode= "Collins";
+                        defaultSingleSearchCode= "Macmillan Dictionary";
                         break;
                     case 12:
-                        defaultSingleSearchCode= "Oxford";
+                        defaultSingleSearchCode= "Collins";
                         break;
                     case 13:
-                        defaultSingleSearchCode= "Vocabulary";
+                        defaultSingleSearchCode= "Oxford";
                         break;
                     case 14:
-                        defaultSingleSearchCode= "Dictionary.com";
+                        defaultSingleSearchCode= "Vocabulary";
                         break;
                     case 15:
-                        defaultSingleSearchCode= "The Free Dictionary";
+                        defaultSingleSearchCode= "Dictionary.com";
                         break;
                     case 16:
-                        defaultSingleSearchCode= "Fine Dictionary";
+                        defaultSingleSearchCode= "The Free Dictionary";
                         break;
                     case 17:
-                        defaultSingleSearchCode= "Your_Dictionary";
+                        defaultSingleSearchCode= "Fine Dictionary";
                         break;
                     case 18:
-                        defaultSingleSearchCode= "Longman Dictionary";
+                        defaultSingleSearchCode= "Your_Dictionary";
                         break;
                     case 19:
-                        defaultSingleSearchCode= "WordWeb";
+                        defaultSingleSearchCode= "Longman Dictionary";
                         break;
                     case 20:
-                        defaultSingleSearchCode= "WordNik";
+                        defaultSingleSearchCode= "WordWeb";
                         break;
                     case 21:
-                        defaultSingleSearchCode= "Wiki Dictionary";
+                        defaultSingleSearchCode= "WordNik";
                         break;
                     case 22:
-                        defaultSingleSearchCode= "Business Dictionary";
+                        defaultSingleSearchCode= "Wiki Dictionary";
                         break;
                     case 23:
-                        defaultSingleSearchCode= "Slang";
+                        defaultSingleSearchCode= "Business Dictionary";
                         break;
                     case 24:
-                        defaultSingleSearchCode= "The Online Slang Dictionary";
+                        defaultSingleSearchCode= "Slang";
                         break;
                     case 25:
-                        defaultSingleSearchCode= "Idioms 4 You";
+                        defaultSingleSearchCode= "The Online Slang Dictionary";
                         break;
                     case 26:
-                        defaultSingleSearchCode= "Greens dictionary of slang";
+                        defaultSingleSearchCode= "Idioms 4 You";
                         break;
                     case 27:
-                        defaultSingleSearchCode= "SCI Dictionary";
+                        defaultSingleSearchCode= "Greens dictionary of slang";
                         break;
                     case 28:
-                        defaultSingleSearchCode= "TechDico";
+                        defaultSingleSearchCode= "Etymology Dictionary";
                         break;
                     case 29:
-                        defaultSingleSearchCode= "BioMedical Dictionary";
+                        defaultSingleSearchCode= "TechDico";
                         break;
                     case 30:
-                        defaultSingleSearchCode= "IsPlural Dictionary";
+                        defaultSingleSearchCode= "BioMedical Dictionary";
                         break;
                     case 31:
-                        defaultSingleSearchCode= "LingoHelpPrepositions";
+                        defaultSingleSearchCode= "IsPlural Dictionary";
                         break;
                     case 32:
-                        defaultSingleSearchCode= "Power Thesaurus Synonym";
+                        defaultSingleSearchCode= "LingoHelpPrepositions";
                         break;
                     case 33:
-                        defaultSingleSearchCode= "Power_thesaurus_antonym";
+                        defaultSingleSearchCode= "Power Thesaurus Synonym";
                         break;
                     case 34:
-                        defaultSingleSearchCode= "Word Hippo";
+                        defaultSingleSearchCode= "Power_thesaurus_antonym";
                         break;
                     case 35:
-                        defaultSingleSearchCode= "Onelook";
+                        defaultSingleSearchCode= "Word Hippo";
                         break;
                     case 36:
-                        defaultSingleSearchCode= "Weblio JP";
+                        defaultSingleSearchCode= "Onelook";
                         break;
                     case 37:
-                        defaultSingleSearchCode= "Weblio CN";
+                        defaultSingleSearchCode= "Weblio JP";
                         break;
                     case 38:
-                        defaultSingleSearchCode= "Weblio EN";
+                        defaultSingleSearchCode= "Weblio CN";
                         break;
                     case 39:
-                        defaultSingleSearchCode= "Weblio Synonym";
+                        defaultSingleSearchCode= "Weblio EN";
                         break;
                     case 40:
-                        defaultSingleSearchCode= "Tangorin Word";
+                        defaultSingleSearchCode= "Weblio Synonym";
                         break;
                     case 41:
-                        defaultSingleSearchCode= "Tangorin Kanji";
+                        defaultSingleSearchCode= "Tangorin Word";
                         break;
                     case 42:
-                        defaultSingleSearchCode= "Tangorin Names";
+                        defaultSingleSearchCode= "Tangorin Kanji";
                         break;
                     case 43:
-                        defaultSingleSearchCode= "Tangorin Sentence";
+                        defaultSingleSearchCode= "Tangorin Names";
                         break;
                     case 44:
-                        defaultSingleSearchCode= "DA JP-TW Dictionary";
+                        defaultSingleSearchCode= "Tangorin Sentence";
                         break;
                     case 45:
-                        defaultSingleSearchCode= "DA TW-JP Dictionary";
+                        defaultSingleSearchCode= "DA JP-TW Dictionary";
                         break;
                     case 46:
-                        defaultSingleSearchCode= "Goo";
+                        defaultSingleSearchCode= "DA TW-JP Dictionary";
                         break;
                     case 47:
-                        defaultSingleSearchCode= "Sanseido";
+                        defaultSingleSearchCode= "Goo";
                         break;
                     case 48:
-                        defaultSingleSearchCode= "Kotoba Bank";
+                        defaultSingleSearchCode= "Sanseido";
                         break;
                     case 49:
-                        defaultSingleSearchCode= "J Logos";
+                        defaultSingleSearchCode= "Kotoba Bank";
                         break;
                     case 50:
-                        defaultSingleSearchCode= "Eijirou";
+                        defaultSingleSearchCode= "J Logos";
                         break;
                     case 51:
-                        defaultSingleSearchCode= "How do you say this in English";
+                        defaultSingleSearchCode= "Eijirou";
                         break;
                     case 52:
-                        defaultSingleSearchCode= "Jisho";
+                        defaultSingleSearchCode= "How do you say this in English";
                         break;
                     case 53:
-                        defaultSingleSearchCode= "Cambridge JP-EN";
+                        defaultSingleSearchCode= "Jisho";
                         break;
                     case 54:
-                        defaultSingleSearchCode= "Cambridge EN-JP";
+                        defaultSingleSearchCode= "Cambridge JP-EN";
                         break;
                     case 55:
-                        defaultSingleSearchCode= "WWW JDIC JP-EN";
+                        defaultSingleSearchCode= "Cambridge EN-JP";
                         break;
                     case 56:
-                        defaultSingleSearchCode= "WWW JDIC EN-JP";
+                        defaultSingleSearchCode= "WWW JDIC JP-EN";
                         break;
                     case 57:
-                        defaultSingleSearchCode= "WordReference EN-JP";
+                        defaultSingleSearchCode= "WWW JDIC EN-JP";
                         break;
                     case 58:
-                        defaultSingleSearchCode= "WordReference JP-EN";
+                        defaultSingleSearchCode= "WordReference EN-JP";
                         break;
                     case 59:
-                        defaultSingleSearchCode= "RomajiDesu JP-EN EN-JP";
+                        defaultSingleSearchCode= "WordReference JP-EN";
                         break;
                     case 60:
+                        defaultSingleSearchCode= "RomajiDesu JP-EN EN-JP";
+                        break;
+                    case 61:
                         defaultSingleSearchCode= "RomajiDesu Kanji";
+                        break;
+                    case 62:
+                        defaultSingleSearchCode= "JapanDict";
+                        break;
+                    case 63:
+                        defaultSingleSearchCode= "JapanDict Kanji";
                         break;
                                                                                     //                    case 51:
                                                                                     //                        defaultSingleSearchCode= "Word Plus Chinese";
@@ -4463,79 +4548,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                     //                    case 59:
                                                                                     //                        defaultSingleSearchCode= "Word Plus Meaning 2";
                                                                                     //                        break;
-                    case 61:
+                    case 64:
                         defaultSingleSearchCode= "Google translate to CHTW";
                         break;
-                    case 62:
+                    case 65:
                         defaultSingleSearchCode= "Google translate to CHCN";
                         break;
-                    case 63:
+                    case 66:
                         defaultSingleSearchCode= "Google translate to EN";
                         break;
-                    case 64:
+                    case 67:
                         defaultSingleSearchCode= "Google translate to JP";
                         break;
-                    case 65:
+                    case 68:
                         defaultSingleSearchCode= "Google translate to KR";
                         break;
-                    case 66:
+                    case 69:
                         defaultSingleSearchCode= "Google translate to SP";
                         break;
-                    case 67:
+                    case 70:
                         defaultSingleSearchCode= "Google Image";
                         break;
-                    case 68:
+                    case 71:
                         defaultSingleSearchCode= "Ludwig";
                         break;
-                    case 69:
+                    case 72:
                         defaultSingleSearchCode= "Your Dictionary Example Sentences";
                         break;
-                    case 70:
+                    case 73:
                         defaultSingleSearchCode= "YouGlish";
                         break;
-                    case 71:
+                    case 74:
                         defaultSingleSearchCode= "Word Cool EN-CH";
                         break;
-                    case 72:
+                    case 75:
                         defaultSingleSearchCode= "Word Cool EN-JP";
                         break;
-                    case 73:
+                    case 76:
                         defaultSingleSearchCode= "Word Cool JP-CH";
                         break;
-                    case 74:
+                    case 77:
                         defaultSingleSearchCode= "Linguee CH-EN";
                         break;
-                    case 75:
+                    case 78:
                         defaultSingleSearchCode= "Linguee JP-EN";
                         break;
-                    case 76:
+                    case 79:
                         defaultSingleSearchCode= "Wikipedia TW";
                         break;
-                    case 77:
+                    case 80:
                         defaultSingleSearchCode= "Wikipedia EN";
                         break;
-                    case 78:
+                    case 81:
                         defaultSingleSearchCode= "English Encyclopedia";
                         break;
-                    case 79:
+                    case 82:
                         defaultSingleSearchCode= "Forvo";
                         break;
-                    case 80:
+                    case 83:
                         defaultSingleSearchCode= "Difference Between";
                         break;
-                    case 81:
+                    case 84:
                         defaultSingleSearchCode= "Net Speak";
                         break;
-                    case 82:
+                    case 85:
                         defaultSingleSearchCode= "Just the Word";
                         break;
-                    case 83:
+                    case 86:
                         defaultSingleSearchCode= "Yomikata";
                         break;
-                    case 84:
+                    case 87:
                         defaultSingleSearchCode= "Chigai";
                         break;
-                    case 85:
+                    case 88:
                         defaultSingleSearchCode= "OJAD";
                         break;
                 }
@@ -4565,33 +4650,36 @@ public class MainActivity extends AppCompatActivity {
                         defaultSingleSearchCode= "Fast Dict";
                         break;
                     case 4:
-                        defaultSingleSearchCode= "Google Dictionary";
+                        defaultSingleSearchCode= "Dict CN";
                         break;
                     case 5:
-                        defaultSingleSearchCode= "VoiceTube";
+                        defaultSingleSearchCode= "Google Dictionary";
                         break;
                     case 6:
-                        defaultSingleSearchCode= "Cambridge EN-CH";
+                        defaultSingleSearchCode= "VoiceTube";
                         break;
                     case 7:
-                        defaultSingleSearchCode= "Weblio JP";
+                        defaultSingleSearchCode= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultSingleSearchCode= "Weblio CN";
+                        defaultSingleSearchCode= "Weblio JP";
                         break;
                     case 9:
-                        defaultSingleSearchCode= "DA JP-TW Dictionary";
+                        defaultSingleSearchCode= "Weblio CN";
                         break;
                     case 10:
-                        defaultSingleSearchCode= "DA TW-JP Dictionary";
+                        defaultSingleSearchCode= "DA JP-TW Dictionary";
                         break;
                     case 11:
-                        defaultSingleSearchCode= "Google translate to CHTW";
+                        defaultSingleSearchCode= "DA TW-JP Dictionary";
                         break;
                     case 12:
-                        defaultSingleSearchCode= "Google translate to CHCN";
+                        defaultSingleSearchCode= "Google translate to CHTW";
                         break;
                     case 13:
+                        defaultSingleSearchCode= "Google translate to CHCN";
+                        break;
+                    case 14:
                         defaultSingleSearchCode= "Google Image";
                         break;
                 }
@@ -4625,175 +4713,184 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeFirstDictionary= "Fast Dict";
                         break;
                     case 4:
-                        defaultComboSearchCodeFirstDictionary= "Google Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Dict CN";
                         break;
                     case 5:
-                        defaultComboSearchCodeFirstDictionary= "VoiceTube";
+                        defaultComboSearchCodeFirstDictionary= "Google Dictionary";
                         break;
                     case 6:
-                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-CH";
+                        defaultComboSearchCodeFirstDictionary= "VoiceTube";
                         break;
                     case 7:
-                        defaultComboSearchCodeFirstDictionary= "WordReference EN-CH";
+                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeFirstDictionary= "WordReference CH-EN";
+                        defaultComboSearchCodeFirstDictionary= "WordReference EN-CH";
                         break;
                     case 9:
-                        defaultComboSearchCodeFirstDictionary= "Merriam Webster";
+                        defaultComboSearchCodeFirstDictionary= "WordReference CH-EN";
                         break;
                     case 10:
-                        defaultComboSearchCodeFirstDictionary= "Macmillan Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Merriam Webster";
                         break;
                     case 11:
-                        defaultComboSearchCodeFirstDictionary= "Collins";
+                        defaultComboSearchCodeFirstDictionary= "Macmillan Dictionary";
                         break;
                     case 12:
-                        defaultComboSearchCodeFirstDictionary= "Oxford";
+                        defaultComboSearchCodeFirstDictionary= "Collins";
                         break;
                     case 13:
-                        defaultComboSearchCodeFirstDictionary= "Vocabulary";
+                        defaultComboSearchCodeFirstDictionary= "Oxford";
                         break;
                     case 14:
-                        defaultComboSearchCodeFirstDictionary= "Dictionary.com";
+                        defaultComboSearchCodeFirstDictionary= "Vocabulary";
                         break;
                     case 15:
-                        defaultComboSearchCodeFirstDictionary= "The Free Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Dictionary.com";
                         break;
                     case 16:
-                        defaultComboSearchCodeFirstDictionary= "Fine Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "The Free Dictionary";
                         break;
                     case 17:
-                        defaultComboSearchCodeFirstDictionary= "Your_Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Fine Dictionary";
                         break;
                     case 18:
-                        defaultComboSearchCodeFirstDictionary= "Longman Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Your_Dictionary";
                         break;
                     case 19:
-                        defaultComboSearchCodeFirstDictionary= "WordWeb";
+                        defaultComboSearchCodeFirstDictionary= "Longman Dictionary";
                         break;
                     case 20:
-                        defaultComboSearchCodeFirstDictionary= "WordNik";
+                        defaultComboSearchCodeFirstDictionary= "WordWeb";
                         break;
                     case 21:
-                        defaultComboSearchCodeFirstDictionary= "Wiki Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "WordNik";
                         break;
                     case 22:
-                        defaultComboSearchCodeFirstDictionary= "Business Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Wiki Dictionary";
                         break;
                     case 23:
-                        defaultComboSearchCodeFirstDictionary= "Slang";
+                        defaultComboSearchCodeFirstDictionary= "Business Dictionary";
                         break;
                     case 24:
-                        defaultComboSearchCodeFirstDictionary= "The Online Slang Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Slang";
                         break;
                     case 25:
-                        defaultComboSearchCodeFirstDictionary= "Idioms 4 You";
+                        defaultComboSearchCodeFirstDictionary= "The Online Slang Dictionary";
                         break;
                     case 26:
-                        defaultComboSearchCodeFirstDictionary= "Greens dictionary of slang";
+                        defaultComboSearchCodeFirstDictionary= "Idioms 4 You";
                         break;
                     case 27:
-                        defaultComboSearchCodeFirstDictionary= "SCI Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Greens dictionary of slang";
                         break;
                     case 28:
-                        defaultComboSearchCodeFirstDictionary= "TechDico";
+                        defaultComboSearchCodeFirstDictionary= "Etymology Dictionary";
                         break;
                     case 29:
-                        defaultComboSearchCodeFirstDictionary= "BioMedical Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "TechDico";
                         break;
                     case 30:
-                        defaultComboSearchCodeFirstDictionary= "IsPlural Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "BioMedical Dictionary";
                         break;
                     case 31:
-                        defaultComboSearchCodeFirstDictionary= "LingoHelpPrepositions";
+                        defaultComboSearchCodeFirstDictionary= "IsPlural Dictionary";
                         break;
                     case 32:
-                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Synonym";
+                        defaultComboSearchCodeFirstDictionary= "LingoHelpPrepositions";
                         break;
                     case 33:
-                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Antonym";
+                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Synonym";
                         break;
                     case 34:
-                        defaultComboSearchCodeFirstDictionary= "Word Hippo";
+                        defaultComboSearchCodeFirstDictionary= "Power Thesaurus Antonym";
                         break;
                     case 35:
-                        defaultComboSearchCodeFirstDictionary= "Onelook";
+                        defaultComboSearchCodeFirstDictionary= "Word Hippo";
                         break;
                     case 36:
-                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
+                        defaultComboSearchCodeFirstDictionary= "Onelook";
                         break;
                     case 37:
-                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
+                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
                         break;
                     case 38:
-                        defaultComboSearchCodeFirstDictionary= "Weblio EN";
+                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
                         break;
                     case 39:
-                        defaultComboSearchCodeFirstDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeFirstDictionary= "Weblio EN";
                         break;
                     case 40:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Word";
+                        defaultComboSearchCodeFirstDictionary= "Weblio Synonym";
                         break;
                     case 41:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Word";
                         break;
                     case 42:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Names";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Kanji";
                         break;
                     case 43:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Names";
                         break;
                     case 44:
-                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Sentence";
                         break;
                     case 45:
-                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
                         break;
                     case 46:
-                        defaultComboSearchCodeFirstDictionary= "Goo";
+                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
                         break;
                     case 47:
-                        defaultComboSearchCodeFirstDictionary= "Sanseido";
+                        defaultComboSearchCodeFirstDictionary= "Goo";
                         break;
                     case 48:
-                        defaultComboSearchCodeFirstDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeFirstDictionary= "Sanseido";
                         break;
                     case 49:
-                        defaultComboSearchCodeFirstDictionary= "J Logos";
+                        defaultComboSearchCodeFirstDictionary= "Kotoba Bank";
                         break;
                     case 50:
-                        defaultComboSearchCodeFirstDictionary= "Eijirou";
+                        defaultComboSearchCodeFirstDictionary= "J Logos";
                         break;
                     case 51:
-                        defaultComboSearchCodeFirstDictionary= "How do you say this in English";
+                        defaultComboSearchCodeFirstDictionary= "Eijirou";
                         break;
                     case 52:
-                        defaultComboSearchCodeFirstDictionary= "Jisho";
+                        defaultComboSearchCodeFirstDictionary= "How do you say this in English";
                         break;
                     case 53:
-                        defaultComboSearchCodeFirstDictionary= "Cambridge JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "Jisho";
                         break;
                     case 54:
-                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "Cambridge JP-EN";
                         break;
                     case 55:
-                        defaultComboSearchCodeFirstDictionary= "WWW JDIC JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-JP";
                         break;
                     case 56:
-                        defaultComboSearchCodeFirstDictionary= "WWW JDIC EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "WWW JDIC JP-EN";
                         break;
                     case 57:
-                        defaultComboSearchCodeFirstDictionary= "WordReference EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "WWW JDIC EN-JP";
                         break;
                     case 58:
-                        defaultComboSearchCodeFirstDictionary= "WordReference JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "WordReference EN-JP";
                         break;
                     case 59:
-                        defaultComboSearchCodeFirstDictionary= "RomajiDesu JP-EN EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "WordReference JP-EN";
                         break;
                     case 60:
+                        defaultComboSearchCodeFirstDictionary= "RomajiDesu JP-EN EN-JP";
+                        break;
+                    case 61:
                         defaultComboSearchCodeFirstDictionary= "RomajiDesu Kanji";
+                        break;
+                    case 62:
+                        defaultComboSearchCodeFirstDictionary= "JapanDict";
+                        break;
+                    case 63:
+                        defaultComboSearchCodeFirstDictionary= "JapanDict Kanji";
                         break;
                                                                                                 //                    case 51:
                                                                                                 //                        defaultComboSearchCodeFirstDictionary= "Word Plus Chinese";
@@ -4822,79 +4919,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeFirstDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 61:
+                    case 64:
                         defaultComboSearchCodeFirstDictionary= "Google translate to CHTW";
                         break;
-                    case 62:
+                    case 65:
                         defaultComboSearchCodeFirstDictionary= "Google translate to CHCN";
                         break;
-                    case 63:
+                    case 66:
                         defaultComboSearchCodeFirstDictionary= "Google translate to EN";
                         break;
-                    case 64:
+                    case 67:
                         defaultComboSearchCodeFirstDictionary= "Google translate to JP";
                         break;
-                    case 65:
+                    case 68:
                         defaultComboSearchCodeFirstDictionary= "Google translate to KR";
                         break;
-                    case 66:
+                    case 69:
                         defaultComboSearchCodeFirstDictionary= "Google translate to SP";
                         break;
-                    case 67:
+                    case 70:
                         defaultComboSearchCodeFirstDictionary= "Google Image";
                         break;
-                    case 68:
+                    case 71:
                         defaultComboSearchCodeFirstDictionary= "Ludwig";
                         break;
-                    case 69:
+                    case 72:
                         defaultComboSearchCodeFirstDictionary= "Your Dictionary Example Sentences";
                         break;
-                    case 70:
+                    case 73:
                         defaultComboSearchCodeFirstDictionary= "YouGlish";
                         break;
-                    case 71:
+                    case 74:
                         defaultComboSearchCodeFirstDictionary= "Word Cool EN-CH";
                         break;
-                    case 72:
+                    case 75:
                         defaultComboSearchCodeFirstDictionary= "Word Cool EN-JP";
                         break;
-                    case 73:
+                    case 76:
                         defaultComboSearchCodeFirstDictionary= "Word Cool JP-CH";
                         break;
-                    case 74:
+                    case 77:
                         defaultComboSearchCodeFirstDictionary= "Linguee CH-EN";
                         break;
-                    case 75:
+                    case 78:
                         defaultComboSearchCodeFirstDictionary= "Linguee JP-EN";
                         break;
-                    case 76:
+                    case 79:
                         defaultComboSearchCodeFirstDictionary= "Wikipedia TW";
                         break;
-                    case 77:
+                    case 80:
                         defaultComboSearchCodeFirstDictionary= "Wikipedia EN";
                         break;
-                    case 78:
+                    case 81:
                         defaultComboSearchCodeFirstDictionary= "English Encyclopedia";
                         break;
-                    case 79:
+                    case 82:
                         defaultComboSearchCodeFirstDictionary= "Forvo";
                         break;
-                    case 80:
+                    case 83:
                         defaultComboSearchCodeFirstDictionary= "Difference Between";
                         break;
-                    case 81:
+                    case 84:
                         defaultComboSearchCodeFirstDictionary= "Net Speak";
                         break;
-                    case 82:
+                    case 85:
                         defaultComboSearchCodeFirstDictionary= "Just the Word";
                         break;
-                    case 83:
+                    case 86:
                         defaultComboSearchCodeFirstDictionary= "Yomikata";
                         break;
-                    case 84:
+                    case 87:
                         defaultComboSearchCodeFirstDictionary= "Chigai";
                         break;
-                    case 85:
+                    case 88:
                         defaultComboSearchCodeFirstDictionary= "OJAD";
                         break;
                 }
@@ -4924,33 +5021,36 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeFirstDictionary= "Fast Dict";
                         break;
                     case 4:
-                        defaultComboSearchCodeFirstDictionary= "Google Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Dict CN";
                         break;
                     case 5:
-                        defaultComboSearchCodeFirstDictionary= "VoiceTube";
+                        defaultComboSearchCodeFirstDictionary= "Google Dictionary";
                         break;
                     case 6:
-                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-CH";
+                        defaultComboSearchCodeFirstDictionary= "VoiceTube";
                         break;
                     case 7:
-                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
+                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
+                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
                         break;
                     case 9:
-                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
                         break;
                     case 10:
-                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
                         break;
                     case 11:
-                        defaultComboSearchCodeFirstDictionary= "Google translate to CHTW";
+                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
                         break;
                     case 12:
-                        defaultComboSearchCodeFirstDictionary= "Google translate to CHCN";
+                        defaultComboSearchCodeFirstDictionary= "Google translate to CHTW";
                         break;
                     case 13:
+                        defaultComboSearchCodeFirstDictionary= "Google translate to CHCN";
+                        break;
+                    case 14:
                         defaultComboSearchCodeFirstDictionary= "Google Image";
                         break;
                 }
@@ -4980,176 +5080,185 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeSecondDictionary= "Fast Dict";
                         break;
                     case 4:
-                        defaultComboSearchCodeSecondDictionary= "Google Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Dict CN";
                         break;
                     case 5:
-                        defaultComboSearchCodeSecondDictionary= "VoiceTube";
+                        defaultComboSearchCodeSecondDictionary= "Google Dictionary";
                         break;
                     case 6:
-                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-CH";
+                        defaultComboSearchCodeSecondDictionary= "VoiceTube";
                         break;
                     case 7:
-                        defaultComboSearchCodeSecondDictionary= "WordReference EN-CH";
+                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeSecondDictionary= "WordReference CH-EN";
+                        defaultComboSearchCodeSecondDictionary= "WordReference EN-CH";
                         break;
                     case 9:
-                        defaultComboSearchCodeSecondDictionary= "Merriam Webster";
+                        defaultComboSearchCodeSecondDictionary= "WordReference CH-EN";
                         break;
                     case 10:
-                        defaultComboSearchCodeSecondDictionary= "Macmillan Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Merriam Webster";
                         break;
                     case 11:
-                        defaultComboSearchCodeSecondDictionary= "Collins";
+                        defaultComboSearchCodeSecondDictionary= "Macmillan Dictionary";
                         break;
                     case 12:
-                        defaultComboSearchCodeSecondDictionary= "Oxford";
+                        defaultComboSearchCodeSecondDictionary= "Collins";
                         break;
                     case 13:
-                        defaultComboSearchCodeSecondDictionary= "Vocabulary";
+                        defaultComboSearchCodeSecondDictionary= "Oxford";
                         break;
                     case 14:
-                        defaultComboSearchCodeSecondDictionary= "Dictionary.com";
+                        defaultComboSearchCodeSecondDictionary= "Vocabulary";
                         break;
                     case 15:
-                        defaultComboSearchCodeSecondDictionary= "The Free Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Dictionary.com";
                         break;
                     case 16:
-                        defaultComboSearchCodeSecondDictionary= "Fine Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "The Free Dictionary";
                         break;
                     case 17:
-                        defaultComboSearchCodeSecondDictionary= "Your_Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Fine Dictionary";
                         break;
                     case 18:
-                        defaultComboSearchCodeSecondDictionary= "Longman Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Your_Dictionary";
                         break;
                     case 19:
-                        defaultComboSearchCodeSecondDictionary= "WordWeb";
+                        defaultComboSearchCodeSecondDictionary= "Longman Dictionary";
                         break;
                     case 20:
-                        defaultComboSearchCodeSecondDictionary= "WordNik";
+                        defaultComboSearchCodeSecondDictionary= "WordWeb";
                         break;
                     case 21:
-                        defaultComboSearchCodeSecondDictionary= "Wiki Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "WordNik";
                         break;
                     case 22:
-                        defaultComboSearchCodeSecondDictionary= "Business Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Wiki Dictionary";
                         break;
                     case 23:
-                        defaultComboSearchCodeSecondDictionary= "Slang";
+                        defaultComboSearchCodeSecondDictionary= "Business Dictionary";
                         break;
                     case 24:
-                        defaultComboSearchCodeSecondDictionary= "The Online Slang Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Slang";
                         break;
                     case 25:
-                        defaultComboSearchCodeSecondDictionary= "Idioms 4 You";
+                        defaultComboSearchCodeSecondDictionary= "The Online Slang Dictionary";
                         break;
                     case 26:
-                        defaultComboSearchCodeSecondDictionary= "Greens dictionary of slang";
+                        defaultComboSearchCodeSecondDictionary= "Idioms 4 You";
                         break;
                     case 27:
-                        defaultComboSearchCodeSecondDictionary= "SCI Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Greens dictionary of slang";
                         break;
                     case 28:
-                        defaultComboSearchCodeSecondDictionary= "TechDico";
+                        defaultComboSearchCodeSecondDictionary= "Etymology Dictionary";
                         break;
                     case 29:
-                        defaultComboSearchCodeSecondDictionary= "BioMedical Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "TechDico";
                         break;
                     case 30:
-                        defaultComboSearchCodeSecondDictionary= "IsPlural Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "BioMedical Dictionary";
                         break;
                     case 31:
-                        defaultComboSearchCodeSecondDictionary= "LingoHelpPrepositions";
+                        defaultComboSearchCodeSecondDictionary= "IsPlural Dictionary";
                         break;
                     case 32:
-                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Synonym";
+                        defaultComboSearchCodeSecondDictionary= "LingoHelpPrepositions";
                         break;
                     case 33:
-                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Antonym";
+                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Synonym";
                         break;
                     case 34:
-                        defaultComboSearchCodeSecondDictionary= "Word Hippo";
+                        defaultComboSearchCodeSecondDictionary= "Power Thesaurus Antonym";
                         break;
                     case 35:
-                        defaultComboSearchCodeSecondDictionary= "Onelook";
+                        defaultComboSearchCodeSecondDictionary= "Word Hippo";
                         break;
                     case 36:
-                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
+                        defaultComboSearchCodeSecondDictionary= "Onelook";
                         break;
                     case 37:
-                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
+                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
                         break;
                     case 38:
-                        defaultComboSearchCodeSecondDictionary= "Weblio EN";
+                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
                         break;
                     case 39:
-                        defaultComboSearchCodeSecondDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeSecondDictionary= "Weblio EN";
                         break;
                     case 40:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Word";
+                        defaultComboSearchCodeSecondDictionary= "Weblio Synonym";
                         break;
                     case 41:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Word";
                         break;
                     case 42:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Names";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Kanji";
                         break;
                     case 43:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Names";
                         break;
                     case 44:
-                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Sentence";
                         break;
                     case 45:
-                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
                         break;
                     case 46:
-                        defaultComboSearchCodeSecondDictionary= "Goo";
+                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
                         break;
                     case 47:
-                        defaultComboSearchCodeSecondDictionary= "Sanseido";
+                        defaultComboSearchCodeSecondDictionary= "Goo";
                         break;
                     case 48:
-                        defaultComboSearchCodeSecondDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeSecondDictionary= "Sanseido";
                         break;
                     case 49:
-                        defaultComboSearchCodeSecondDictionary= "J Logos";
+                        defaultComboSearchCodeSecondDictionary= "Kotoba Bank";
                         break;
                     case 50:
-                        defaultComboSearchCodeSecondDictionary= "Eijirou";
+                        defaultComboSearchCodeSecondDictionary= "J Logos";
                         break;
                     case 51:
-                        defaultComboSearchCodeSecondDictionary= "How do you say this in English";
+                        defaultComboSearchCodeSecondDictionary= "Eijirou";
                         break;
                     case 52:
-                        defaultComboSearchCodeSecondDictionary= "Jisho";
+                        defaultComboSearchCodeSecondDictionary= "How do you say this in English";
                         break;
                     case 53:
-                        defaultComboSearchCodeSecondDictionary= "Cambridge JP-EN";
+                        defaultComboSearchCodeSecondDictionary= "Jisho";
                         break;
                     case 54:
-                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-JP";
+                        defaultComboSearchCodeSecondDictionary= "Cambridge JP-EN";
                         break;
                     case 55:
-                        defaultComboSearchCodeSecondDictionary= "WWW JDIC JP-EN";
+                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-JP";
                         break;
                     case 56:
+                        defaultComboSearchCodeSecondDictionary= "WWW JDIC JP-EN";
+                        break;
+                    case 57:
                         defaultComboSearchCodeSecondDictionary= "WWW JDIC EN-JP";
                         break;
 
-                    case 57:
+                    case 58:
                         defaultComboSearchCodeSecondDictionary= "WordReference EN-JP";
                         break;
-                    case 58:
+                    case 59:
                         defaultComboSearchCodeSecondDictionary= "WordReference JP-EN";
                         break;
-                    case 59:
+                    case 60:
                         defaultComboSearchCodeSecondDictionary= "RomajiDesu JP-EN EN-JP";
                         break;
-                    case 60:
+                    case 61:
                         defaultComboSearchCodeSecondDictionary= "RomajiDesu Kanji";
+                        break;
+                    case 62:
+                        defaultComboSearchCodeSecondDictionary= "JapanDict";
+                        break;
+                    case 63:
+                        defaultComboSearchCodeSecondDictionary= "JapanDict Kanji";
                         break;
                                                                                                 //                    case 51:
                                                                                                 //                        defaultComboSearchCodeSecondDictionary= "Word Plus Chinese";
@@ -5178,79 +5287,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeSecondDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 61:
+                    case 64:
                         defaultComboSearchCodeSecondDictionary= "Google translate to CHTW";
                         break;
-                    case 62:
+                    case 65:
                         defaultComboSearchCodeSecondDictionary= "Google translate to CHCN";
                         break;
-                    case 63:
+                    case 66:
                         defaultComboSearchCodeSecondDictionary= "Google translate to EN";
                         break;
-                    case 64:
+                    case 67:
                         defaultComboSearchCodeSecondDictionary= "Google translate to JP";
                         break;
-                    case 65:
+                    case 68:
                         defaultComboSearchCodeSecondDictionary= "Google translate to KR";
                         break;
-                    case 66:
+                    case 69:
                         defaultComboSearchCodeSecondDictionary= "Google translate to SP";
                         break;
-                    case 67:
+                    case 70:
                         defaultComboSearchCodeSecondDictionary= "Google Image";
                         break;
-                    case 68:
+                    case 71:
                         defaultComboSearchCodeSecondDictionary= "Ludwig";
                         break;
-                    case 69:
+                    case 72:
                         defaultComboSearchCodeSecondDictionary= "Your Dictionary Example Sentences";
                         break;
-                    case 70:
+                    case 73:
                         defaultComboSearchCodeSecondDictionary= "YouGlish";
                         break;
-                    case 71:
+                    case 74:
                         defaultComboSearchCodeSecondDictionary= "Word Cool EN-CH";
                         break;
-                    case 72:
+                    case 75:
                         defaultComboSearchCodeSecondDictionary= "Word Cool EN-JP";
                         break;
-                    case 73:
+                    case 76:
                         defaultComboSearchCodeSecondDictionary= "Word Cool JP-CH";
                         break;
-                    case 74:
+                    case 77:
                         defaultComboSearchCodeSecondDictionary= "Linguee CH-EN";
                         break;
-                    case 75:
+                    case 78:
                         defaultComboSearchCodeSecondDictionary= "Linguee JP-EN";
                         break;
-                    case 76:
+                    case 79:
                         defaultComboSearchCodeSecondDictionary= "Wikipedia TW";
                         break;
-                    case 77:
+                    case 80:
                         defaultComboSearchCodeSecondDictionary= "Wikipedia EN";
                         break;
-                    case 78:
+                    case 81:
                         defaultComboSearchCodeSecondDictionary= "English Encyclopedia";
                         break;
-                    case 79:
+                    case 82:
                         defaultComboSearchCodeSecondDictionary= "Forvo";
                         break;
-                    case 80:
+                    case 83:
                         defaultComboSearchCodeSecondDictionary= "Difference Between";
                         break;
-                    case 81:
+                    case 84:
                         defaultComboSearchCodeSecondDictionary= "Net Speak";
                         break;
-                    case 82:
+                    case 85:
                         defaultComboSearchCodeSecondDictionary= "Just the Word";
                         break;
-                    case 83:
+                    case 86:
                         defaultComboSearchCodeSecondDictionary= "Yomikata";
                         break;
-                    case 84:
+                    case 87:
                         defaultComboSearchCodeSecondDictionary= "Chigai";
                         break;
-                    case 85:
+                    case 88:
                         defaultComboSearchCodeSecondDictionary= "OJAD";
                         break;
                 }
@@ -5280,33 +5389,36 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeSecondDictionary= "Fast Dict";
                         break;
                     case 4:
-                        defaultComboSearchCodeSecondDictionary= "Google Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Dict CN";
                         break;
                     case 5:
-                        defaultComboSearchCodeSecondDictionary= "VoiceTube";
+                        defaultComboSearchCodeSecondDictionary= "Google Dictionary";
                         break;
                     case 6:
-                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-CH";
+                        defaultComboSearchCodeSecondDictionary= "VoiceTube";
                         break;
                     case 7:
-                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
+                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
+                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
                         break;
                     case 9:
-                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
                         break;
                     case 10:
-                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
                         break;
                     case 11:
-                        defaultComboSearchCodeSecondDictionary= "Google translate to CHTW";
+                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
                         break;
                     case 12:
-                        defaultComboSearchCodeSecondDictionary= "Google translate to CHCN";
+                        defaultComboSearchCodeSecondDictionary= "Google translate to CHTW";
                         break;
                     case 13:
+                        defaultComboSearchCodeSecondDictionary= "Google translate to CHCN";
+                        break;
+                    case 14:
                         defaultComboSearchCodeSecondDictionary= "Google Image";
                         break;
                 }
@@ -5336,175 +5448,184 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeThirdDictionary= "Fast Dict";
                         break;
                     case 4:
-                        defaultComboSearchCodeThirdDictionary= "Google Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Dict CN";
                         break;
                     case 5:
-                        defaultComboSearchCodeThirdDictionary= "VoiceTube";
+                        defaultComboSearchCodeThirdDictionary= "Google Dictionary";
                         break;
                     case 6:
-                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-CH";
+                        defaultComboSearchCodeThirdDictionary= "VoiceTube";
                         break;
                     case 7:
-                        defaultComboSearchCodeThirdDictionary= "WordReference EN-CH";
+                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeThirdDictionary= "WordReference CH-EN";
+                        defaultComboSearchCodeThirdDictionary= "WordReference EN-CH";
                         break;
                     case 9:
-                        defaultComboSearchCodeThirdDictionary= "Merriam Webster";
+                        defaultComboSearchCodeThirdDictionary= "WordReference CH-EN";
                         break;
                     case 10:
-                        defaultComboSearchCodeThirdDictionary= "Macmillan Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Merriam Webster";
                         break;
                     case 11:
-                        defaultComboSearchCodeThirdDictionary= "Collins";
+                        defaultComboSearchCodeThirdDictionary= "Macmillan Dictionary";
                         break;
                     case 12:
-                        defaultComboSearchCodeThirdDictionary= "Oxford";
+                        defaultComboSearchCodeThirdDictionary= "Collins";
                         break;
                     case 13:
-                        defaultComboSearchCodeThirdDictionary= "Vocabulary";
+                        defaultComboSearchCodeThirdDictionary= "Oxford";
                         break;
                     case 14:
-                        defaultComboSearchCodeThirdDictionary= "Dictionary.com";
+                        defaultComboSearchCodeThirdDictionary= "Vocabulary";
                         break;
                     case 15:
-                        defaultComboSearchCodeThirdDictionary= "The Free Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Dictionary.com";
                         break;
                     case 16:
-                        defaultComboSearchCodeThirdDictionary= "Fine Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "The Free Dictionary";
                         break;
                     case 17:
-                        defaultComboSearchCodeThirdDictionary= "Your_Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Fine Dictionary";
                         break;
                     case 18:
-                        defaultComboSearchCodeThirdDictionary= "Longman Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Your_Dictionary";
                         break;
                     case 19:
-                        defaultComboSearchCodeThirdDictionary= "WordWeb";
+                        defaultComboSearchCodeThirdDictionary= "Longman Dictionary";
                         break;
                     case 20:
-                        defaultComboSearchCodeThirdDictionary= "WordNik";
+                        defaultComboSearchCodeThirdDictionary= "WordWeb";
                         break;
                     case 21:
-                        defaultComboSearchCodeThirdDictionary= "Wiki Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "WordNik";
                         break;
                     case 22:
-                        defaultComboSearchCodeThirdDictionary= "Business Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Wiki Dictionary";
                         break;
                     case 23:
-                        defaultComboSearchCodeThirdDictionary= "Slang";
+                        defaultComboSearchCodeThirdDictionary= "Business Dictionary";
                         break;
                     case 24:
-                        defaultComboSearchCodeThirdDictionary= "The Online Slang Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Slang";
                         break;
                     case 25:
-                        defaultComboSearchCodeThirdDictionary= "Idioms 4 You";
+                        defaultComboSearchCodeThirdDictionary= "The Online Slang Dictionary";
                         break;
                     case 26:
-                        defaultComboSearchCodeThirdDictionary= "Greens dictionary of slang";
+                        defaultComboSearchCodeThirdDictionary= "Idioms 4 You";
                         break;
                     case 27:
-                        defaultComboSearchCodeThirdDictionary= "SCI Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Greens dictionary of slang";
                         break;
                     case 28:
-                        defaultComboSearchCodeThirdDictionary= "TechDico";
+                        defaultComboSearchCodeThirdDictionary= "Etymology Dictionary";
                         break;
                     case 29:
-                        defaultComboSearchCodeThirdDictionary= "BioMedical Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "TechDico";
                         break;
                     case 30:
-                        defaultComboSearchCodeThirdDictionary= "IsPlural Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "BioMedical Dictionary";
                         break;
                     case 31:
-                        defaultComboSearchCodeThirdDictionary= "LingoHelpPrepositions";
+                        defaultComboSearchCodeThirdDictionary= "IsPlural Dictionary";
                         break;
                     case 32:
-                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Synonym";
+                        defaultComboSearchCodeThirdDictionary= "LingoHelpPrepositions";
                         break;
                     case 33:
-                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Antonym";
+                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Synonym";
                         break;
                     case 34:
-                        defaultComboSearchCodeThirdDictionary= "Word Hippo";
+                        defaultComboSearchCodeThirdDictionary= "Power Thesaurus Antonym";
                         break;
                     case 35:
-                        defaultComboSearchCodeThirdDictionary= "Onelook";
+                        defaultComboSearchCodeThirdDictionary= "Word Hippo";
                         break;
                     case 36:
-                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
+                        defaultComboSearchCodeThirdDictionary= "Onelook";
                         break;
                     case 37:
-                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
+                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
                         break;
                     case 38:
-                        defaultComboSearchCodeThirdDictionary= "Weblio EN";
+                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
                         break;
                     case 39:
-                        defaultComboSearchCodeThirdDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeThirdDictionary= "Weblio EN";
                         break;
                     case 40:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Word";
+                        defaultComboSearchCodeThirdDictionary= "Weblio Synonym";
                         break;
                     case 41:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Word";
                         break;
                     case 42:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Names";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Kanji";
                         break;
                     case 43:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Names";
                         break;
                     case 44:
-                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Sentence";
                         break;
                     case 45:
-                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
                         break;
                     case 46:
-                        defaultComboSearchCodeThirdDictionary= "Goo";
+                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
                         break;
                     case 47:
-                        defaultComboSearchCodeThirdDictionary= "Sanseido";
+                        defaultComboSearchCodeThirdDictionary= "Goo";
                         break;
                     case 48:
-                        defaultComboSearchCodeThirdDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeThirdDictionary= "Sanseido";
                         break;
                     case 49:
-                        defaultComboSearchCodeThirdDictionary= "J Logos";
+                        defaultComboSearchCodeThirdDictionary= "Kotoba Bank";
                         break;
                     case 50:
-                        defaultComboSearchCodeThirdDictionary= "Eijirou";
+                        defaultComboSearchCodeThirdDictionary= "J Logos";
                         break;
                     case 51:
-                        defaultComboSearchCodeThirdDictionary= "How do you say this in English";
+                        defaultComboSearchCodeThirdDictionary= "Eijirou";
                         break;
                     case 52:
-                        defaultComboSearchCodeThirdDictionary= "Jisho";
+                        defaultComboSearchCodeThirdDictionary= "How do you say this in English";
                         break;
                     case 53:
-                        defaultComboSearchCodeThirdDictionary= "Cambridge JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "Jisho";
                         break;
                     case 54:
-                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "Cambridge JP-EN";
                         break;
                     case 55:
-                        defaultComboSearchCodeThirdDictionary= "WWW JDIC JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-JP";
                         break;
                     case 56:
-                        defaultComboSearchCodeThirdDictionary= "WWW JDIC EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "WWW JDIC JP-EN";
                         break;
                     case 57:
-                        defaultComboSearchCodeThirdDictionary= "WordReference EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "WWW JDIC EN-JP";
                         break;
                     case 58:
-                        defaultComboSearchCodeThirdDictionary= "WordReference JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "WordReference EN-JP";
                         break;
                     case 59:
-                        defaultComboSearchCodeThirdDictionary= "RomajiDesu JP-EN EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "WordReference JP-EN";
                         break;
                     case 60:
+                        defaultComboSearchCodeThirdDictionary= "RomajiDesu JP-EN EN-JP";
+                        break;
+                    case 61:
                         defaultComboSearchCodeThirdDictionary= "RomajiDesu Kanji";
+                        break;
+                    case 62:
+                        defaultComboSearchCodeThirdDictionary= "JapanDict";
+                        break;
+                    case 63:
+                        defaultComboSearchCodeThirdDictionary= "JapanDict Kanji";
                         break;
                                                                                                 //                    case 51:
                                                                                                 //                        defaultComboSearchCodeThirdDictionary= "Word Plus Chinese";
@@ -5533,79 +5654,79 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeThirdDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 61:
+                    case 64:
                         defaultComboSearchCodeThirdDictionary= "Google translate to CHTW";
                         break;
-                    case 62:
+                    case 65:
                         defaultComboSearchCodeThirdDictionary= "Google translate to CHCN";
                         break;
-                    case 63:
+                    case 66:
                         defaultComboSearchCodeThirdDictionary= "Google translate to EN";
                         break;
-                    case 64:
+                    case 67:
                         defaultComboSearchCodeThirdDictionary= "Google translate to JP";
                         break;
-                    case 65:
+                    case 68:
                         defaultComboSearchCodeThirdDictionary= "Google translate to KR";
                         break;
-                    case 66:
+                    case 69:
                         defaultComboSearchCodeThirdDictionary= "Google translate to SP";
                         break;
-                    case 67:
+                    case 70:
                         defaultComboSearchCodeThirdDictionary= "Google Image";
                         break;
-                    case 68:
+                    case 71:
                         defaultComboSearchCodeThirdDictionary= "Ludwig";
                         break;
-                    case 69:
+                    case 72:
                         defaultComboSearchCodeThirdDictionary= "Your Dictionary Example Sentences";
                         break;
-                    case 70:
+                    case 73:
                         defaultComboSearchCodeThirdDictionary= "YouGlish";
                         break;
-                    case 71:
+                    case 74:
                         defaultComboSearchCodeThirdDictionary= "Word Cool EN-CH";
                         break;
-                    case 72:
+                    case 75:
                         defaultComboSearchCodeThirdDictionary= "Word Cool EN-JP";
                         break;
-                    case 73:
+                    case 76:
                         defaultComboSearchCodeThirdDictionary= "Word Cool JP-CH";
                         break;
-                    case 74:
+                    case 77:
                         defaultComboSearchCodeThirdDictionary= "Linguee CH-EN";
                         break;
-                    case 75:
+                    case 78:
                         defaultComboSearchCodeThirdDictionary= "Linguee JP-EN";
                         break;
-                    case 76:
+                    case 79:
                         defaultComboSearchCodeThirdDictionary= "Wikipedia TW";
                         break;
-                    case 77:
+                    case 80:
                         defaultComboSearchCodeThirdDictionary= "Wikipedia EN";
                         break;
-                    case 78:
+                    case 81:
                         defaultComboSearchCodeThirdDictionary= "English Encyclopedia";
                         break;
-                    case 79:
+                    case 82:
                         defaultComboSearchCodeThirdDictionary= "Forvo";
                         break;
-                    case 80:
+                    case 83:
                         defaultComboSearchCodeThirdDictionary= "Difference Between";
                         break;
-                    case 81:
+                    case 84:
                         defaultComboSearchCodeThirdDictionary= "Net Speak";
                         break;
-                    case 82:
+                    case 85:
                         defaultComboSearchCodeThirdDictionary= "Just the Word";
                         break;
-                    case 83:
+                    case 86:
                         defaultComboSearchCodeThirdDictionary= "Yomikata";
                         break;
-                    case 84:
+                    case 87:
                         defaultComboSearchCodeThirdDictionary= "Chigai";
                         break;
-                    case 85:
+                    case 88:
                         defaultComboSearchCodeThirdDictionary= "OJAD";
                         break;
                 }
@@ -5635,33 +5756,36 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeThirdDictionary= "Fast Dict";
                         break;
                     case 4:
-                        defaultComboSearchCodeThirdDictionary= "Google Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Dict CN";
                         break;
                     case 5:
-                        defaultComboSearchCodeThirdDictionary= "VoiceTube";
+                        defaultComboSearchCodeThirdDictionary= "Google Dictionary";
                         break;
                     case 6:
-                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-CH";
+                        defaultComboSearchCodeThirdDictionary= "VoiceTube";
                         break;
                     case 7:
-                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
+                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-CH";
                         break;
                     case 8:
-                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
+                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
                         break;
                     case 9:
-                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
                         break;
                     case 10:
-                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
                         break;
                     case 11:
-                        defaultComboSearchCodeThirdDictionary= "Google translate to CHTW";
+                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
                         break;
                     case 12:
-                        defaultComboSearchCodeThirdDictionary= "Google translate to CHCN";
+                        defaultComboSearchCodeThirdDictionary= "Google translate to CHTW";
                         break;
                     case 13:
+                        defaultComboSearchCodeThirdDictionary= "Google translate to CHCN";
+                        break;
+                    case 14:
                         defaultComboSearchCodeThirdDictionary= "Google Image";
                         break;
                 }
@@ -5707,6 +5831,10 @@ public class MainActivity extends AppCompatActivity {
                     case "Fast Dict":
                         String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
                         webViewBrowser.loadUrl(fastDictUrl);
+                        break;
+                    case "Dict CN":
+                        String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;;
+                        webViewBrowser.loadUrl(DictDotCnUrl);
                         break;
                     case "Google Dictionary":
                         String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;
@@ -5800,9 +5928,9 @@ public class MainActivity extends AppCompatActivity {
                         String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                         webViewBrowser.loadUrl(greensDictionaryOfSlangUrl);
                         break;
-                    case "SCI Dictionary":
-                        String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
-                        webViewBrowser.loadUrl(academiaDictionaryUrl);
+                    case "Etymology Dictionary":
+                        String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+searchKeyword;
+                        webViewBrowser.loadUrl(etymologyDictionaryUrl);
                         break;
                     case "TechDico":
                         String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
@@ -5935,6 +6063,14 @@ public class MainActivity extends AppCompatActivity {
                     case "RomajiDesu Kanji":
                         String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
                         webViewBrowser.loadUrl(RomajiDesuKanjiDictionaryUrl);
+                        break;
+                    case "JapanDict":
+                        String JapanDictDictionaryUrl= "https://www.japandict.com/?s="+searchKeyword+"&lang=eng";
+                        webViewBrowser.loadUrl(JapanDictDictionaryUrl);
+                        break;
+                    case "JapanDict Kanji":
+                        String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
+                        webViewBrowser.loadUrl(JapanDictKanjiDictionaryUrl);
                         break;
                                                                                                                     //                    case "Word Plus Chinese":
                                                                                                                     //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -6092,6 +6228,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //==============================================================================================
+    // 讓用戶選擇要查此單字、快搜模式或三連搜模式、估狗翻譯，或記憶單字的Helper Method
+    //==============================================================================================
     public void chooseActionAlertDialog() {
         //這邊設置第一層AlertDialog讓用戶選擇要查此單字、快搜模式或三連搜模式、估狗翻譯，或記憶單字
         CFAlertDialog.Builder chooseActionAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
@@ -6101,13 +6240,13 @@ public class MainActivity extends AppCompatActivity {
         .setTitle(getString(R.string.Do_you_want_to))
         .setMessage(getString(R.string.Search_this_word_explanation) + System.getProperty("line.separator") + getString(R.string.Memorize_this_word_explanation) + System.getProperty("line.separator") + getString(R.string.Quick_search_or_combo_search_or_google_translate_explanation))
         .setTextColor(Color.BLUE)
-        .setCancelable(true) //按到旁邊的空白處AlertDialog會消失
+        .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
 
         //第一層AlertDialog的確定鈕，把單字傳送到wordInputView查此單字
         .addButton(getString(R.string.Send_to_WordInputView)
                 , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) -> {
 
-                MainActivity.wordInputView.setText(intentReceivedText);
+                MainActivity.wordInputView.setText(searchKeyword);
                 chooseActionAlertDialog.dismiss();
         })
 
@@ -6146,11 +6285,16 @@ public class MainActivity extends AppCompatActivity {
                                         public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
                                             switch (position) {
                                                 case 0:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimings1Hour();
                                                     setPreDefinedNotificationTimings9Hours();
                                                     setPreDefinedNotificationTimings1Day();
                                                     setPreDefinedNotificationTimings2Days();
-                                                    setPreDefinedNotificationTimings6Days();
+                                                    setPreDefinedNotificationTimings7Days();
                                                     setPreDefinedNotificationTimings1Month();
                                                     setPreDefinedNotificationTimingsHalfYear();
                                                     setPreDefinedNotificationTimingsOneYear();
@@ -6159,34 +6303,74 @@ public class MainActivity extends AppCompatActivity {
                                                     Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
                                                     break;
                                                 case 1:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimings1Hour();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 2:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimings9Hours();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 3:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimings1Day();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 4:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimings2Days();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 5:
-                                                    setPreDefinedNotificationTimings6Days();
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                    setPreDefinedNotificationTimings7Days();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 6:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimings1Month();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 7:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimingsHalfYear();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
                                                 case 8:
+                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                     setPreDefinedNotificationTimingsOneYear();
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     break;
@@ -6236,7 +6420,7 @@ public class MainActivity extends AppCompatActivity {
 
         //第一層AlertDialog的中立鈕，使用快搜模式、三連搜模式或估狗翻譯
                 .addButton(getString(R.string.Quick_search_or_combo_search)
-                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+                        , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
 
                 //這邊設置第二層AlertDialog讓用戶選擇快搜模式、三連搜模式或估狗翻譯
                 quickSearchComboSearchOrGoogleTranslateList = getResources().getStringArray(R.array.quick_search_combo_search_or_google_translate);
@@ -6261,10 +6445,12 @@ public class MainActivity extends AppCompatActivity {
                                 chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
                                 break;
                             case 2:  //Google翻譯
-                                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + intentReceivedText;
+                                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + searchKeyword;
                                 webViewBrowser.loadUrl(intentAutoTranslationURL);
                                 searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                                 webViewBrowser.setVisibility(View.VISIBLE);
+                                saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
                                 chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
                                 break;
                         }
@@ -6276,13 +6462,224 @@ public class MainActivity extends AppCompatActivity {
                 //同時讓第一層的AlertDialog消失
                 chooseActionAlertDialog.dismiss();
 
-        });
+        })
 
+        //第一層AlertDialog的取消鈕
+        .addButton(getString(R.string.Cancel)
+                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+
+                    chooseActionAlertDialog.dismiss();
+        });
 
         chooseActionAlertDialogBuilder.setHeaderView(R.layout.custom_alert_diaglog_question_mark);
         //將第一層的AlertDialog顯示出來
         chooseActionAlertDialogBuilder.show();
 
+    }
+
+
+    //==============================================================================================
+    // 記憶單字的捷徑，讓用戶選擇自定義或預設通知時機的Helper Method
+    //==============================================================================================
+    public void chooseCustomizedOrPredefinedNotification() {
+        //這邊設置第一層AlertDialog讓用戶選擇自定義或預設的通知時機
+        final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
+              userInputView.setLines(2);
+              userInputView.setHint(getString(R.string.Word_input_to_memorize));
+        final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings))
+                .setTextColor(Color.BLUE)
+                .setMessage(getString(R.string.Predefined_timing_explanation) + System.getProperty("line.separator") + getString(R.string.User_configured_timing_explanation))
+                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                .setHeaderView(userInputView)
+
+
+                //第一層AlertDialog的確定鈕，預設的通知時機。
+                .addButton(getString(R.string.Use_predefined_timing)
+                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+
+
+                            if (!userInputView.getText().toString().equals("")) {
+                                presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
+
+                                //這邊設置第二層AlertDialog讓用戶選擇各種預設通知的時機點
+                                CFAlertDialog.Builder choosePresetNotificationTimingsAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                        .setCornerRadius(50)
+                                        .setTitle(getString(R.string.Choose_one_preset_timing))
+                                        .setTextColor(Color.BLUE)
+                                        .setMessage(getString(R.string.Use_with_caution))
+                                        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+
+                                        .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
+                                                switch (position) {
+                                                    case 0:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings1Hour();
+                                                        setPreDefinedNotificationTimings9Hours();
+                                                        setPreDefinedNotificationTimings1Day();
+                                                        setPreDefinedNotificationTimings2Days();
+                                                        setPreDefinedNotificationTimings7Days();
+                                                        setPreDefinedNotificationTimings1Month();
+                                                        setPreDefinedNotificationTimingsHalfYear();
+                                                        setPreDefinedNotificationTimingsOneYear();
+                                                        //點擊子項目後讓第三層的AlertDialog消失
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
+                                                        break;
+                                                    case 1:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings1Day();
+                                                        setPreDefinedNotificationTimings7Days();
+                                                        setPreDefinedNotificationTimings1Month();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
+                                                        break;
+                                                    case 2:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings1Hour();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 3:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings9Hours();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 4:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings1Day();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 5:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings2Days();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 6:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings7Days();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 7:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimings1Month();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 8:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimingsHalfYear();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                    case 9:
+                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
+                                                        setPreDefinedNotificationTimingsOneYear();
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                        break;
+                                                }
+
+                                            }
+                                        })
+
+                                        //第二層AlertDialog的取消鈕
+                                        .addButton(getString(R.string.Cancel)
+                                                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) -> {
+
+                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                });
+
+                                //把第二層的AlertDialog顯示出來
+                                choosePresetNotificationTimingsAlertDialogBuilder.show();
+                                //同時讓第一層的AlertDialog消失
+                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(),R.string.Word_input_to_memorize,Toast.LENGTH_LONG).show();
+                            }
+
+                        })
+
+                //第一層AlertDialog的中立鈕，自定義通知時機
+                .addButton(getString(R.string.Customize_timing)
+                        , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+
+                            if (!userInputView.getText().toString().equals("")) {
+
+                                searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+
+                                setCustomizedNotificationTiming();
+                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(),R.string.Word_input_to_memorize,Toast.LENGTH_LONG).show();
+                            }
+                        })
+
+                //第一層AlertDialog的取消鈕
+                .addButton(getString(R.string.Cancel)
+                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+
+                            chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                        });
+
+
+        //把第一層的AlertDialog顯示出來
+        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
     }
 
 
@@ -6319,7 +6716,7 @@ public class MainActivity extends AppCompatActivity {
                             ContentValues event = new ContentValues();
                             event.put(CalendarContract.Events.DTSTART, c.getTimeInMillis());
                             event.put(CalendarContract.Events.DTEND, c.getTimeInMillis()+60*60*1000);
-                            event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+                            event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
                             event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
                             event.put(CalendarContract.Events.ALL_DAY, false);
                             event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6340,6 +6737,13 @@ public class MainActivity extends AppCompatActivity {
                             reminder.put(CalendarContract.Reminders.MINUTES, 0);
                             reminder.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
                             Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
+
+
+                            saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                            saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                            saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                            saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+//                            Toast.makeText(getApplicationContext(),searchKeyword + getResources().getString(R.string.Word_saved_to_my_vocabulary_list),Toast.LENGTH_SHORT).show();
                         }
 
                     }
@@ -6378,7 +6782,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+ 60*60*1000);  //抓現在系統的時間的1小時後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*1000+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6406,7 +6810,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*9*1000);  //抓現在系統的時間的9小時後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*9*1000+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6434,7 +6838,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*1000);  //抓現在系統的時間的1天後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*1000+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6462,7 +6866,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*2*1000);  //抓現在系統的時間的2天後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*2*1000+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6483,14 +6887,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setPreDefinedNotificationTimings6Days() {
+    public void setPreDefinedNotificationTimings7Days() {
 
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues event = new ContentValues();
-        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*6*1000);  //抓現在系統的時間的6天後開始
-        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*6*1000+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*7*1000);  //抓現在系統的時間的7天後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*7*1000+60*60*1000);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6521,7 +6925,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond);  //抓現在系統的時間的1個月後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneMonth*oneSecond+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6552,7 +6956,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond);  //抓現在系統的時間的半年後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*halfYear*oneSecond+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6583,7 +6987,7 @@ public class MainActivity extends AppCompatActivity {
         ContentValues event = new ContentValues();
         event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond);  //抓現在系統的時間的一年後開始
         event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+OneMinute*OneHour*oneDay*oneYear*oneSecond+60*60*1000);
-        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + intentReceivedText);
+        event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + searchKeyword);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
         event.put(CalendarContract.Events.CALENDAR_ID, 3);
@@ -6600,7 +7004,6 @@ public class MainActivity extends AppCompatActivity {
         Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
         Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_at) + getString(R.string.In_1_year) + getString(R.string.blank_space),Toast.LENGTH_LONG).show();
-        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
 
     }
 
@@ -6870,6 +7273,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //==============================================================================================
+    // 更換背景的Helper Method
+    //==============================================================================================
     public void changeBackgroundImage() {
         CFAlertDialog.Builder setBackgroundImageAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
                 .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)

@@ -359,6 +359,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(fastDictUrl);
                         break;
+                    case "Dict CN":
+                        String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;;
+                        comboSearchWebViewBrowser1.loadUrl(DictDotCnUrl);
+                        break;
                     case "Google Dictionary":
                         String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
                         comboSearchWebViewBrowser1.loadUrl(googleDictionaryUrl);
@@ -451,9 +455,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(greensDictionaryOfSlangUrl);
                         break;
-                    case "SCI Dictionary":
-                        String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
-                        comboSearchWebViewBrowser1.loadUrl(academiaDictionaryUrl);
+                    case "Etymology Dictionary":
+                        String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(etymologyDictionaryUrl);
                         break;
                     case "TechDico":
                         String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
@@ -586,6 +590,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "RomajiDesu Kanji":
                         String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(RomajiDesuKanjiDictionaryUrl);
+                        break;
+                    case "JapanDict":
+                        String JapanDictDictionaryUrl= "https://www.japandict.com/?s="+searchKeyword+"&lang=eng";
+                        comboSearchWebViewBrowser1.loadUrl(JapanDictDictionaryUrl);
+                        break;
+                    case "JapanDict Kanji":
+                        String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(JapanDictKanjiDictionaryUrl);
                         break;
                                                                                                                 //                    case "Word Plus Chinese":
                                                                                                                 //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -755,6 +767,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(fastDictUrl);
                 break;
+            case "Dict CN":
+                String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;;
+                comboSearchWebViewBrowser2.loadUrl(DictDotCnUrl);
+                break;
             case "Google Dictionary":
                 String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
                 comboSearchWebViewBrowser2.loadUrl(googleDictionaryUrl);
@@ -847,9 +863,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(greensDictionaryOfSlangUrl);
                 break;
-            case "SCI Dictionary":
-                String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
-                comboSearchWebViewBrowser2.loadUrl(academiaDictionaryUrl);
+            case "Etymology Dictionary":
+                String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(etymologyDictionaryUrl);
                 break;
             case "TechDico":
                 String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
@@ -982,6 +998,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "RomajiDesu Kanji":
                 String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(RomajiDesuKanjiDictionaryUrl);
+                break;
+            case "JapanDict":
+                String JapanDictDictionaryUrl= "https://www.japandict.com/?s="+searchKeyword+"&lang=eng";
+                comboSearchWebViewBrowser2.loadUrl(JapanDictDictionaryUrl);
+                break;
+            case "JapanDict Kanji":
+                String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(JapanDictKanjiDictionaryUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -1151,6 +1175,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String fastDictUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(fastDictUrl);
                 break;
+            case "Dict CN":
+                String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;;
+                comboSearchWebViewBrowser3.loadUrl(DictDotCnUrl);
+                break;
             case "Google Dictionary":
                 String googleDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;;
                 comboSearchWebViewBrowser1.loadUrl(googleDictionaryUrl);
@@ -1243,9 +1271,9 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(greensDictionaryOfSlangUrl);
                 break;
-            case "SCI Dictionary":
-                String academiaDictionaryUrl= "http://www.scidict.org/index.aspx?word="+searchKeyword;
-                comboSearchWebViewBrowser3.loadUrl(academiaDictionaryUrl);
+            case "Etymology Dictionary":
+                String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(etymologyDictionaryUrl);
                 break;
             case "TechDico":
                 String TechDicoUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
@@ -1378,6 +1406,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "RomajiDesu Kanji":
                 String RomajiDesuKanjiDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(RomajiDesuKanjiDictionaryUrl);
+                break;
+            case "JapanDict":
+                String JapanDictDictionaryUrl= "https://www.japandict.com/?s="+searchKeyword+"&lang=eng";
+                comboSearchWebViewBrowser3.loadUrl(JapanDictDictionaryUrl);
+                break;
+            case "JapanDict Kanji":
+                String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(JapanDictKanjiDictionaryUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";

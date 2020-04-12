@@ -4,8 +4,9 @@
         <item>@string/Other_functions</item>
         <item>@string/Change_background</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
-        <item>@string/Online_chat_room</item>
+                                                            <!--        <item>@string/Online_chat_room</item>-->
                                                             <!--        <item>@string/Restore_to_default_background</item>-->
                                                             <!--        <item>@string/Clear_search_input</item>-->
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
@@ -18,8 +19,9 @@
         <item>@string/Other_functions</item>
         <item>@string/Change_background</item>
         <item>@string/Set_default_dictionary</item>
+        <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
-<!--        <item>@string/Online_chat_room</item>-->
+                                                            <!--        <item>@string/Online_chat_room</item>-->
                                                             <!--        <item>@string/Restore_to_default_background</item>-->
                                                             <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
                                                             <!--        <item>@string/Clear_search_input</item>-->
@@ -78,6 +80,7 @@
         <item>@string/National_Academy_for_Educational_Research</item>
         <item>@string/Dict_site</item>
         <item>@string/Fast_dict</item>
+        <item>@string/Dict_dot_cn</item>
         <item>@string/Google_dictionary</item>
         <item>@string/VoiceTube</item>
         <item>@string/Cambridge_EN_CH</item>
@@ -101,7 +104,7 @@
         <item>@string/The_online_slang_dictionary</item>
         <item>@string/Idioms_4_you</item>
         <item>@string/Greens_dictionary_of_slang</item>
-        <item>@string/SCI_Dictionary</item>
+        <item>@string/Etymonline</item>
         <item>@string/TechDico</item>
         <item>@string/BioMedical_dictionary</item>
         <item>@string/Is_plural_dictionary</item>
@@ -136,6 +139,8 @@
         <item>@string/Word_reference_jp_to_en</item>
         <item>@string/Romaji_desu_enjp_jpen_dictionary</item>
         <item>@string/Romaji_desu_kanji_dictionary</item>
+        <item>@string/Japan_dict</item>
+        <item>@string/Japan_dict_kanji_dictionary</item>
 
                                                             <!--        <item>@string/Word_Plus_Chinese</item>-->
                                                             <!--        <item>@string/Word_Plus_English1</item>-->
@@ -294,7 +299,6 @@
     <string name="Exit_app">Exit</string>
     <string name="Other_functions">Other Functions</string>
     <string name="External_storage_permission">You must allow permission write external storage to change the app\'s background</string>
-    <string name="SCI_Dictionary">SCI Dictionary</string>
     <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
     <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
     <string name="Speech_input">Speech input</string>
@@ -654,7 +658,6 @@
     <string name="Got_it">Got it!</string>
     <string name="After_saving_a_word">After saving a word, it will appear below as part of your vocabulary list and you can do the following actions</string>
     <string name="Finger_tap_words_to_memorize">Finger tap = Bring word to main page or memorize word</string>
-    <string name="Long_press_words_to_memorize">Long press = Quick search or combo search</string>
     <string name="Quick_search_example_explanation">Quick search: You can choose 1 dictionary for quick search. Say if you choose Cambridge, as soon as you hit the Quick Search Button you\'ll be automatically taken to Cambridge Dictionary.</string>
     <string name="Combo_search_example_explanation">Combo Search: You can choose 3 default dictionaries. Say if you choose Cambridge Dictionary, example sentences dictionary and pronunciation dictionary, hitting the Combo Search button will look up those dictionaries simultaneously.</string>
     <string name="Must_get_Giphy_app">The 3rd-party Giphy App must be installed to proceed with this function</string>
@@ -683,6 +686,16 @@
     <string name="Romaji_desu_enjp_jpen_dictionary">Romaji Desu JP⇄EN Dictionary</string>
     <string name="Romaji_desu_kanji_dictionary">Romaji Desu Kanji Dictionary</string>
     <string name="Kanji_recognizer">Kanji Recognizer</string>
+    <string name="Memorize_word_shortcut">Memorize Word (Shortcut)</string>
+    <string name="Word_input_to_memorize">Please type the word(s) you want to memorize</string>
+    <string name="Long_press_words_to_memorize">Long press = Quick search, combo search, or memorize the word</string>
+    <string name="Dict_dot_cn">Dict.cn</string>
+    <string name="Etymonline">Etymology Dictionary</string>
+    <string name="Japan_dict">JapanDict JP⇄EN Dictionary</string>
+    <string name="Japan_dict_kanji_dictionary">JapanDict Kanji Dictionary</string>
+    <string name="Please_log_in_to_access_your_vocabulary_list">Please log in your member account to access your vocabulary list.</string>
+    <string name="Take_me_to_register_sign_in_page">Take me to member sign in/registration page</string>
+    <string name="Your_vocabulary_list_will_be_stored_online">Your vocabulary list will be stored to your account online in case you lose the list.</string>
 
 </resources>
 

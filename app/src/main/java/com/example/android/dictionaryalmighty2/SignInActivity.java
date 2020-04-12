@@ -30,7 +30,6 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.util.Arrays;
 
-import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchPreferences;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
 import static com.example.android.dictionaryalmighty2.MainActivity.userScreenName;
@@ -108,10 +107,6 @@ public class SignInActivity extends AppCompatActivity {
                     userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
                     userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
 
-                    //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
-                    localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                    localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "1").apply();
-
 
                     //播放特效
                     YoYo.with(Techniques.ZoomIn)
@@ -153,10 +148,6 @@ public class SignInActivity extends AppCompatActivity {
 
                     userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
                     userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
-
-                    //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=0)存入SharedPreferences
-                    localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                    localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "0").apply();
 
 
                     startActivityForResult(
@@ -220,10 +211,6 @@ public class SignInActivity extends AppCompatActivity {
 
                                 userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
                                 userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
-
-                                //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=0)存入SharedPreferences
-                                localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                                localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "0").apply();
 
                                 onBackPressed();   //要加入這句把多餘的登入畫面退出，才不會卡在登入畫面
                                 relaunchApp();
@@ -648,10 +635,6 @@ public class SignInActivity extends AppCompatActivity {
 
                         userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
                         userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
-
-                        //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
-                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                        localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "1").apply();
 
                         relaunchApp();
                     }

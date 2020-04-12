@@ -10,7 +10,7 @@
     <string name="The_Free_Dictionary">The Free Dictionary英英字典</string>
     <string name="Your_Dictionary">Your Dictionary英英字典</string>
     <string name="Longman_Dictionary">朗文英英字典</string>
-    <string name="Dict_site">Dict.site英漢漢英字典</string>
+    <string name="Dict_site">Dict.site英漢字典</string>
     <string name="Business_Dictionary">商業英英字典</string>
     <string name="National_Academy_for_Educational_Research">國教院英漢漢英字典</string>
     <string name="Slang">英文俚語網</string>
@@ -71,7 +71,6 @@
     <string name="Exit_app">退出程式</string>
     <string name="Other_functions">⬇ 其他功能 ⬇</string>
     <string name="External_storage_permission">必須允許存取照片的權限才可更換背景圖</string>
-    <string name="SCI_Dictionary">SCI學術字典</string>
     <string name="DA_JP_TW_Dictionary">DA日中字典</string>
     <string name="DA_TW_JP_Dictionary">DA中日字典</string>
     <string name="Speech_input">⬇ 語音輸入 ⬇</string>
@@ -339,7 +338,7 @@
     <string name="Tutorial_for_voiceRecognitionImageView">懶得手打查單字? 語音辨識助理讓您用說的來查單字。</string>
     <string name="Tutorial_for_ocrImageView">不會打某個單字或單字太長懶得打字? 光學掃描助理讓您用相機掃描或掃描相簿的圖片來查單字。(需另外安裝第三方App)</string>
     <string name="Tutorial_for_otherFunctionsImageView">要設置預設字典和其他功能就按這裡。</string>
-    <string name="Google_dictionary">Google英漢漢英字典</string>
+    <string name="Google_dictionary">Google英漢字典</string>
     <string name="Macmillan_dictionary">麥克米倫英英字典</string>
     <string name="Just_the_word">Just the Word語料庫</string>
     <string name="Idioms_4_you">i4u 俚語英英字典</string>
@@ -361,7 +360,7 @@
     <string name="Type_your_new_email">輸入新信箱</string>
     <string name="Your_email_is_changed_successfully">用戶信箱更新成功，將重新啟動App</string>
     <string name="User_email_change_failed">信箱更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
-    <string name="Fast_dict">速譯通英漢漢英字典</string>
+    <string name="Fast_dict">速譯通英漢字典</string>
     <string name="Wordnik">Wordnik英英字典</string>
     <string name="Fine_dictionary">Fine Dictionary英英字典</string>
     <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
@@ -383,7 +382,6 @@
     <string name="Got_it">了解了!</string>
     <string name="After_saving_a_word">您儲存的單字會出現在下方單字庫，您可做以下動作：</string>
     <string name="Finger_tap_words_to_memorize">"點按 = 帶入單字到主頁 "</string>
-    <string name="Long_press_words_to_memorize">長按 = 快搜或三連搜模式</string>
     <string name="Quick_search_example_explanation">快搜模式：您可選擇一部快搜字典，例如若選擇劍橋字典，以後只要點擊快搜按鈕就會自動查劍橋字典。</string>
     <string name="Combo_search_example_explanation">三連搜：您可選擇三部預設字典，例如若選劍橋字典、例句字典和發音字典，點擊三連搜按鈕會同時查這三部字典。</string>
     <string name="Must_get_Giphy_app">您必須先安裝第三方的「Giphy」App才能使用此功能，請按上方的安裝鈕</string>
@@ -412,5 +410,15 @@
     <string name="Romaji_desu_enjp_jpen_dictionary">Romaji Desu日英英日字典</string>
     <string name="Romaji_desu_kanji_dictionary">Romaji Desu漢字字典</string>
     <string name="Kanji_recognizer">漢字手寫字典</string>
+    <string name="Memorize_word_shortcut">記憶單字(捷徑)</string>
+    <string name="Word_input_to_memorize">請輸入您想記憶的字</string>
+    <string name="Long_press_words_to_memorize">長按 = 快搜、三連搜模式或記憶單字</string>
+    <string name="Dict_dot_cn">海詞英漢字典</string>
+    <string name="Etymonline">語源字典</string>
+    <string name="Japan_dict">JapanDict英日日英字典</string>
+    <string name="Japan_dict_kanji_dictionary">JapanDict漢字字典</string>
+    <string name="Please_log_in_to_access_your_vocabulary_list">請登入您的會員帳號以使用單字本功能。</string>
+    <string name="Take_me_to_register_sign_in_page">帶我到會員登入/註冊頁面</string>
+    <string name="Your_vocabulary_list_will_be_stored_online">您的單字本將儲存在您專屬雲端帳號以避免未來遺失。</string>
 </resources>
 

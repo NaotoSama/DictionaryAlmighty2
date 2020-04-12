@@ -13,7 +13,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.crowdfire.cfalertdialog.CFAlertDialog;
@@ -52,14 +50,10 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchCode;
-import static com.example.android.dictionaryalmighty2.MainActivity.localOrCloudSaveSwitchPreferences;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
-import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
 import static com.example.android.dictionaryalmighty2.MainActivity.userInputArraylist;
 import static com.example.android.dictionaryalmighty2.MainActivity.username;
-import static com.example.android.dictionaryalmighty2.MainActivity.usernameSharedPreferences;
 
 public class UserInputHistory extends AppCompatActivity {
 
@@ -175,8 +169,40 @@ public class UserInputHistory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent= new Intent(UserInputHistory.this, WordsToMemorize.class);
-                startActivity(intent);
+                if (username!=null && !username.equals("")) {
+                    Intent intent= new Intent(UserInputHistory.this, WordsToMemorize.class);
+                    startActivity(intent);
+
+                } else {
+                    //這邊設置AlertDialog讓用戶選擇是否登入或註冊會員，是的話帶往註冊登入頁面
+                    CFAlertDialog.Builder logInToUseVocabularyBookAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
+                            .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                            .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                            .setCornerRadius(50)
+                            .setTitle(getResources().getString(R.string.Please_log_in_to_access_your_vocabulary_list) + getResources().getString(R.string.Your_vocabulary_list_will_be_stored_online))
+                            .setTextColor(Color.BLUE)
+                            .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                            .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
+
+                            //AlertDialog的確定鈕，帶往註冊登入頁面
+                            .addButton(getResources().getString(R.string.Take_me_to_register_sign_in_page)
+                                    , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                        Intent launchSignInActivity = new Intent(UserInputHistory.this, SignInActivity.class);
+                                        startActivity(launchSignInActivity);
+                                        dialog.dismiss();
+                                    })
+
+                            //AlertDialog的取消鈕
+                            .addButton(getResources().getString(R.string.Cancel)
+                                    , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                        dialog.dismiss();
+                                    });
+
+                    //把AlertDialog顯示出來
+                    logInToUseVocabularyBookAlertDialogBuilder.create().show();
+                }
 
             }
         });
@@ -332,7 +358,7 @@ public class UserInputHistory extends AppCompatActivity {
                                                 setPreDefinedNotificationTimings9Hours();
                                                 setPreDefinedNotificationTimings1Day();
                                                 setPreDefinedNotificationTimings2Days();
-                                                setPreDefinedNotificationTimings6Days();
+                                                setPreDefinedNotificationTimings7Days();
                                                 setPreDefinedNotificationTimings1Month();
                                                 setPreDefinedNotificationTimingsHalfYear();
                                                 setPreDefinedNotificationTimingsOneYear();
@@ -342,7 +368,7 @@ public class UserInputHistory extends AppCompatActivity {
                                                 break;
                                             case 1:
                                                 setPreDefinedNotificationTimings1Day();
-                                                setPreDefinedNotificationTimings6Days();
+                                                setPreDefinedNotificationTimings7Days();
                                                 setPreDefinedNotificationTimings1Month();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
@@ -364,7 +390,7 @@ public class UserInputHistory extends AppCompatActivity {
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
                                             case 6:
-                                                setPreDefinedNotificationTimings6Days();
+                                                setPreDefinedNotificationTimings7Days();
                                                 choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 break;
                                             case 7:
@@ -469,30 +495,30 @@ public class UserInputHistory extends AppCompatActivity {
 
                     mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
 
-                                                            //                if (!userInputArraylist.contains(searchKeyword)){
-                                                            //                    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);
-                                                            //                }
+                                                                                                    //if (!userInputArraylist.contains(searchKeyword)){
+                                                                                                    //    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);
+                                                                                                    //}
                 }
 
 
-                myVocabularyArrayList.add(selectedListviewItemValue); //同時加入單字到本地的list
-
-                //透過HashSet自動過濾掉myVocabularyArraylist中重複的字
-                HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
-                myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
-                myVocabularyArrayList.clear();
-                myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
-
-                //Alphabetic sorting
-                Collections.sort(myVocabularyArrayList);
-
-                saveMyVocabularyArrayListToSharedPreferences();
+                                                                                                    //myVocabularyArrayList.add(selectedListviewItemValue); //同時加入單字到本地的list
+                                                                                                    //
+                                                                                                    ////透過HashSet自動過濾掉myVocabularyArraylist中重複的字
+                                                                                                    //HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
+                                                                                                    //myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
+                                                                                                    //myVocabularyArrayList.clear();
+                                                                                                    //myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
+                                                                                                    //
+                                                                                                    ////Alphabetic sorting
+                                                                                                    //Collections.sort(myVocabularyArrayList);
+                                                                                                    //
+                                                                                                    //saveMyVocabularyArrayListToSharedPreferences();
 
                 Toast.makeText(getApplicationContext(),selectedListviewItemValue + getResources().getString(R.string.Word_saved_to_my_vocabulary_list),Toast.LENGTH_LONG).show();
 
-                                                            //                Intent intent = new Intent(UserInputHistory.this, WordsToMemorize.class);
-                                                            //                intent.putExtra("selectedListviewItemValue",myVocabularyArrayList);
-                                                            //                startActivity(intent);
+                                                                                                    //Intent intent = new Intent(UserInputHistory.this, WordsToMemorize.class);
+                                                                                                    //intent.putExtra("selectedListviewItemValue",myVocabularyArrayList);
+                                                                                                    //startActivity(intent);
 
                 return true;
             }
@@ -519,7 +545,7 @@ public class UserInputHistory extends AppCompatActivity {
 
                                     String wordToDelete = listView.getItemAtPosition(position).toString();
 
-                                    if (username!=null && localOrCloudSaveSwitchCode.equals("1")) {
+                                    if (username!=null && !username.equals("")) {
                                         Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
 
                                         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -551,6 +577,7 @@ public class UserInputHistory extends AppCompatActivity {
                                     editor.apply();
 
                                     Toast.makeText(getApplicationContext(), wordToDelete + getResources().getString(R.string.Has_benn_deleted), Toast.LENGTH_SHORT).show();
+                                    reloadCurrentActivity();
 
                                 }
                             }
@@ -663,80 +690,80 @@ public class UserInputHistory extends AppCompatActivity {
     }
 
 
-    //==============================================================================================
-    // Helper method for saving myVocabularyArrayList to SharedPreferences
-    //==============================================================================================
-    public void saveMyVocabularyArrayListToSharedPreferences() {
-        SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
-        editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
-        for (int i = 0; i < myVocabularyArrayList.size(); i++)
-        {
-            editor.putString("myVocabularyArrayListValues"+i, myVocabularyArrayList.get(i));
-        }
-        editor.apply();
+                                                                                                    ////==============================================================================================
+                                                                                                    //// Helper method for saving myVocabularyArrayList to SharedPreferences
+                                                                                                    ////==============================================================================================
+                                                                                                    //public void saveMyVocabularyArrayListToSharedPreferences() {
+                                                                                                    //    SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
+                                                                                                    //    editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
+                                                                                                    //    for (int i = 0; i < myVocabularyArrayList.size(); i++)
+                                                                                                    //    {
+                                                                                                    //        editor.putString("myVocabularyArrayListValues"+i, myVocabularyArrayList.get(i));
+                                                                                                    //    }
+                                                                                                    //    editor.apply();
+                                                                                                    //
+                                                                                                    //}
 
-    }
 
-
-    //==============================================================================================
-    // Helper method for saving myVocabularyArrayList to SharedPreferences
-    //==============================================================================================
-    public void registerLoginUsername() {
-        //這邊設置AlertDialog讓用戶輸入用戶名稱
-        final AlertDialog.Builder registerLoginRenameDeleteUsernameAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
-        registerLoginRenameDeleteUsernameAlertDialog.setTitle(getString(R.string.Input_a_username));
-        registerLoginRenameDeleteUsernameAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
-        final EditText usernameInputView = new EditText(getApplicationContext());
-        registerLoginRenameDeleteUsernameAlertDialog.setView(usernameInputView);
-
-        //AlertDialog的確定鈕，登入用戶名稱
-        registerLoginRenameDeleteUsernameAlertDialog.setPositiveButton(R.string.Register_or_log_in_username, new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                if (username!=null && !username.equals("")) { //若用戶名稱不是空的則提示已經登入了
-
-                    Toast.makeText(getApplicationContext(), R.string.You_are_already_logged_in, Toast.LENGTH_LONG).show();
-
-                }
-
-                else
-                {
-                    String userInputUsername = usernameInputView.getText().toString();
-
-                    if (userInputUsername!=null && !userInputUsername.equals("")) { //檢查用戶確實有輸入名稱時儲存該名稱
-
-                        usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
-                        usernameSharedPreferences.edit().putString("userName", userInputUsername).apply();
-
-                        //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
-                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
-                        localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "1").apply();
-
-                        //延遲2.5秒重啟App
-                        Runnable r = new Runnable() {
-                            @Override
-                            public void run() {
-                                relaunchApp();
-                            }
-                        };
-                        Handler h =new Handler();
-                        h.postDelayed(r, 2500);
-
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.Logged_in_as) + userInputUsername + " " + getResources().getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_LONG).show();
-                    }
-
-                    else {
-                        Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_anything, Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
-
-        //把AlertDialog顯示出來
-        registerLoginRenameDeleteUsernameAlertDialog.create().show();
-    }
+                                                                                                    //==============================================================================================
+                                                                                                    // Helper method for registering login username
+                                                                                                    //==============================================================================================
+                                                                                                    //    public void registerLoginUsername() {
+                                                                                                    //        //這邊設置AlertDialog讓用戶輸入用戶名稱
+                                                                                                    //        final AlertDialog.Builder registerLoginRenameDeleteUsernameAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
+                                                                                                    //        registerLoginRenameDeleteUsernameAlertDialog.setTitle(getString(R.string.Input_a_username));
+                                                                                                    //        registerLoginRenameDeleteUsernameAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+                                                                                                    //        final EditText usernameInputView = new EditText(getApplicationContext());
+                                                                                                    //        registerLoginRenameDeleteUsernameAlertDialog.setView(usernameInputView);
+                                                                                                    //
+                                                                                                    //        //AlertDialog的確定鈕，登入用戶名稱
+                                                                                                    //        registerLoginRenameDeleteUsernameAlertDialog.setPositiveButton(R.string.Register_or_log_in_username, new DialogInterface.OnClickListener() {
+                                                                                                    //
+                                                                                                    //            @Override
+                                                                                                    //            public void onClick(DialogInterface dialog, int which) {
+                                                                                                    //
+                                                                                                    //                if (username!=null && !username.equals("")) { //若用戶名稱不是空的則提示已經登入了
+                                                                                                    //
+                                                                                                    //                    Toast.makeText(getApplicationContext(), R.string.You_are_already_logged_in, Toast.LENGTH_LONG).show();
+                                                                                                    //
+                                                                                                    //                }
+                                                                                                    //
+                                                                                                    //                else
+                                                                                                    //                {
+                                                                                                    //                    String userInputUsername = usernameInputView.getText().toString();
+                                                                                                    //
+                                                                                                    //                    if (userInputUsername!=null && !userInputUsername.equals("")) { //檢查用戶確實有輸入名稱時儲存該名稱
+                                                                                                    //
+                                                                                                    //                        usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                                                                                                    //                        usernameSharedPreferences.edit().putString("userName", userInputUsername).apply();
+                                                                                                    //
+                                                                                                    //                        //同時把用戶使用雲端存儲單字紀錄的設定(localOrCloudSaveSwitchPreferences=1)存入SharedPreferences
+                                                                                                    //                        localOrCloudSaveSwitchPreferences = getSharedPreferences("localOrCloudSaveSwitchPreferences", MODE_PRIVATE);
+                                                                                                    //                        localOrCloudSaveSwitchPreferences.edit().putString("CloudSaveMode", "1").apply();
+                                                                                                    //
+                                                                                                    //                        //延遲2.5秒重啟App
+                                                                                                    //                        Runnable r = new Runnable() {
+                                                                                                    //                            @Override
+                                                                                                    //                            public void run() {
+                                                                                                    //                                relaunchApp();
+                                                                                                    //                            }
+                                                                                                    //                        };
+                                                                                                    //                        Handler h =new Handler();
+                                                                                                    //                        h.postDelayed(r, 2500);
+                                                                                                    //
+                                                                                                    //                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.Logged_in_as) + userInputUsername + " " + getResources().getString(R.string.You_are_using_cloud_storage), Toast.LENGTH_LONG).show();
+                                                                                                    //                    }
+                                                                                                    //
+                                                                                                    //                    else {
+                                                                                                    //                        Toast.makeText(getApplicationContext(), R.string.You_have_not_entered_anything, Toast.LENGTH_LONG).show();
+                                                                                                    //                    }
+                                                                                                    //                }
+                                                                                                    //            }
+                                                                                                    //        });
+                                                                                                    //
+                                                                                                    //        //把AlertDialog顯示出來
+                                                                                                    //        registerLoginRenameDeleteUsernameAlertDialog.create().show();
+                                                                                                    //    }
 
 
     //==============================================================================================
@@ -823,52 +850,6 @@ public class UserInputHistory extends AppCompatActivity {
     //==============================================================================================
     // 設置預設通知時機的Helper Method
     //==============================================================================================
-
-    //    實驗用
-    //    public void setPreDefinedNotificationTimings1Minute() {
-    //
-    //        //設置單字的通知事件
-    //        ContentResolver cr = getContentResolver();
-    //        ContentValues values = new ContentValues();
-    //        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
-    //        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*1*1000+60*60*1000);
-    //        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
-    //        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
-    //        values.put(CalendarContract.Events.ALL_DAY, false);
-    //        values.put(CalendarContract.Events.CALENDAR_ID, 3);
-    //        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-    //
-    //        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-    //        assert uri != null;
-    //        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
-    //
-    //        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-    //        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-    //
-    //    }
-    //
-    //    public void setPreDefinedNotificationTimings2Minutes() {
-    //
-    //        //設置單字的通知事件
-    //        ContentResolver cr = getContentResolver();
-    //        ContentValues values = new ContentValues();
-    //        values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
-    //        values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*2*1000+60*60*1000);
-    //        values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
-    //        values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
-    //        values.put(CalendarContract.Events.ALL_DAY, false);
-    //        values.put(CalendarContract.Events.CALENDAR_ID, 3);
-    //        values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
-    //
-    //        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-    //        assert uri != null;
-    //        long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
-    //
-    //        Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
-    //        //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
-    //
-    //    }
-
     public void setPreDefinedNotificationTimings1Hour() {
 
         //設置單字的通知事件
@@ -981,13 +962,13 @@ public class UserInputHistory extends AppCompatActivity {
 
     }
 
-    public void setPreDefinedNotificationTimings6Days() {
+    public void setPreDefinedNotificationTimings7Days() {
 
         //設置單字的通知事件
         ContentResolver cr = getContentResolver();
         ContentValues event = new ContentValues();
-        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*6*1000);  //抓現在系統的時間的6天後開始
-        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*6*1000+60*60*1000);
+        event.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*60*24*7*1000);  //抓現在系統的時間的6天後開始
+        event.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*60*24*7*1000+60*60*1000);
         event.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
         event.put(CalendarContract.Events.DESCRIPTION, getResources().getString(R.string.app_name));
         event.put(CalendarContract.Events.ALL_DAY, false);
@@ -1102,7 +1083,56 @@ public class UserInputHistory extends AppCompatActivity {
 
     }
 
+                                                                                                        //實驗用
+                                                                                                    //public void setPreDefinedNotificationTimings1Minute() {
+                                                                                                    //
+                                                                                                    //    //設置單字的通知事件
+                                                                                                    //    ContentResolver cr = getContentResolver();
+                                                                                                    //    ContentValues values = new ContentValues();
+                                                                                                    //    values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*1*1000);  //抓現在系統的時間的1分鐘後
+                                                                                                    //    values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*1*1000+60*60*1000);
+                                                                                                    //    values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
+                                                                                                    //    values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+                                                                                                    //    values.put(CalendarContract.Events.ALL_DAY, false);
+                                                                                                    //    values.put(CalendarContract.Events.CALENDAR_ID, 3);
+                                                                                                    //    values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+                                                                                                    //
+                                                                                                    //    Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+                                                                                                    //    assert uri != null;
+                                                                                                    //    long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+                                                                                                    //
+                                                                                                    //    Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+                                                                                                    //    //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+                                                                                                    //
+                                                                                                    //}
+                                                                                                    //
+                                                                                                    //public void setPreDefinedNotificationTimings2Minutes() {
+                                                                                                    //
+                                                                                                    //    //設置單字的通知事件
+                                                                                                    //    ContentResolver cr = getContentResolver();
+                                                                                                    //    ContentValues values = new ContentValues();
+                                                                                                    //    values.put(CalendarContract.Events.DTSTART, System.currentTimeMillis()+60*2*1000);  //抓現在系統的時間的1分鐘後
+                                                                                                    //    values.put(CalendarContract.Events.DTEND, System.currentTimeMillis()+60*2*1000+60*60*1000);
+                                                                                                    //    values.put(CalendarContract.Events.TITLE, getResources().getString(R.string.Do_you_remember_this_word) + selectedListviewItemValue);
+                                                                                                    //    values.put(CalendarContract.Events.DESCRIPTION, "字典譯指通");
+                                                                                                    //    values.put(CalendarContract.Events.ALL_DAY, false);
+                                                                                                    //    values.put(CalendarContract.Events.CALENDAR_ID, 3);
+                                                                                                    //    values.put(CalendarContract.Events.EVENT_TIMEZONE, Calendar.getInstance().getTimeZone().getID());
+                                                                                                    //
+                                                                                                    //    Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+                                                                                                    //    assert uri != null;
+                                                                                                    //    long eventID = Long.parseLong(Objects.requireNonNull(uri.getLastPathSegment())); // get the event ID that is the last element in the Uri
+                                                                                                    //
+                                                                                                    //    Toast.makeText(getApplicationContext(), getString(R.string.Will_send_the_notification_after_an_hour_halfDay_day_week_month_year),Toast.LENGTH_LONG).show();
+                                                                                                    //    //Toast.makeText(getApplicationContext(), getString(R.string.You_can_cancel_the_notifications_any_time),Toast.LENGTH_SHORT).show();
+                                                                                                    //
+                                                                                                    //}
 
+
+
+    //==============================================================================================
+    // 搜尋記錄頁面使用教學的Helper Method
+    //==============================================================================================
     public void userInputHistoryInstructionsAlertDialog() {
         CFAlertDialog.Builder userInputHistoryInstructionsAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
                 .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
@@ -1132,86 +1162,86 @@ public class UserInputHistory extends AppCompatActivity {
     }
 
 
-    //將字母轉換成數字  A-Z ：1-26
-    //    public long convertStringToLong() {
-    //        int length = selectedListviewItemValue.length();
-    //        int num = 0;
-    //        int number = 0;
-    //        for(int i = 0; i < length; i++) {
-    //            char ch = selectedListviewItemValue.charAt(length - i - 1);
-    //            num = ch - 'A' + 1;
-    //            num *= Math.pow(26, i);
-    //            number += num;
-    //        }
-    //        return eventID = (long) number;
-    //    }
-    //
-    //
-    //    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
-    //    void deleteEventById() {
-    //        ContentResolver cr = getApplicationContext().getContentResolver();
-    //        ContentValues values = new ContentValues();
-    //        Uri deleteUri;
-    //        deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
-    //        int rows = getApplicationContext().getContentResolver().delete(deleteUri, null, null);
-    //        Log.i("TAG", "Rows deleted: " + rows);
-    //    }
+                                                                                                    //將字母轉換成數字  A-Z ：1-26
+                                                                                                    //    public long convertStringToLong() {
+                                                                                                    //        int length = selectedListviewItemValue.length();
+                                                                                                    //        int num = 0;
+                                                                                                    //        int number = 0;
+                                                                                                    //        for(int i = 0; i < length; i++) {
+                                                                                                    //            char ch = selectedListviewItemValue.charAt(length - i - 1);
+                                                                                                    //            num = ch - 'A' + 1;
+                                                                                                    //            num *= Math.pow(26, i);
+                                                                                                    //            number += num;
+                                                                                                    //        }
+                                                                                                    //        return eventID = (long) number;
+                                                                                                    //    }
+                                                                                                    //
+                                                                                                    //
+                                                                                                    //    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+                                                                                                    //    void deleteEventById() {
+                                                                                                    //        ContentResolver cr = getApplicationContext().getContentResolver();
+                                                                                                    //        ContentValues values = new ContentValues();
+                                                                                                    //        Uri deleteUri;
+                                                                                                    //        deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
+                                                                                                    //        int rows = getApplicationContext().getContentResolver().delete(deleteUri, null, null);
+                                                                                                    //        Log.i("TAG", "Rows deleted: " + rows);
+                                                                                                    //    }
 
 
 
-    ///**
-    // * 讓用戶清空列表 (已換成別的外掛，目前用不到)
-    // */
-    //    clearUserInputList.setOnClickListener(new View.OnClickListener() {
-    //    @Override
-    //    public void onClick(View v) {
-    //
-    //        //這邊設置AlertDialog讓用戶確認是否真要清除列表
-    //        AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
-    //        doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
-    //        doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-    //        doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
-    //
-    //        //AlertDialog的確定鈕，清除列表
-    //        doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-    //
-    //            @Override
-    //            public void onClick(DialogInterface dialog, int which) {
-    //
-    //                mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
-    //
-    //                userInputArraylist.clear(); //同時清除本地的list
-    //                userInputArrayAdapter.notifyDataSetChanged();
-    //
-    //                //將搜尋紀錄的列表存到SharedPreferences
-    //                SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
-    //                editor.putInt("userInputArrayListValues", userInputArraylist.size());
-    //                for (int i = 0; i < userInputArraylist.size(); i++) {
-    //                    editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
-    //                }
-    //                editor.apply();
-    //
-    //                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
-    //
-    //            }
-    //        });
-    //
-    //
-    //        //AlertDialog的取消鈕
-    //        doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-    //
-    //            @Override
-    //            public void onClick(DialogInterface dialog, int which) {
-    //                dialog.dismiss();
-    //            }
-    //        });
-    //
-    //        //把AlertDialog顯示出來
-    //        doYouReallyWantToClearListAlertDialog.create().show();
-    //
-    //    }
-    //
-    //});
+                                                                                                    ///**
+                                                                                                    // * 讓用戶清空列表 (已換成別的外掛，目前用不到)
+                                                                                                    // */
+                                                                                                    //    clearUserInputList.setOnClickListener(new View.OnClickListener() {
+                                                                                                    //    @Override
+                                                                                                    //    public void onClick(View v) {
+                                                                                                    //
+                                                                                                    //        //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                                                                                                    //        AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(UserInputHistory.this);
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                                                                                                    //
+                                                                                                    //        //AlertDialog的確定鈕，清除列表
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                                                                                                    //
+                                                                                                    //            @Override
+                                                                                                    //            public void onClick(DialogInterface dialog, int which) {
+                                                                                                    //
+                                                                                                    //                mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
+                                                                                                    //
+                                                                                                    //                userInputArraylist.clear(); //同時清除本地的list
+                                                                                                    //                userInputArrayAdapter.notifyDataSetChanged();
+                                                                                                    //
+                                                                                                    //                //將搜尋紀錄的列表存到SharedPreferences
+                                                                                                    //                SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
+                                                                                                    //                editor.putInt("userInputArrayListValues", userInputArraylist.size());
+                                                                                                    //                for (int i = 0; i < userInputArraylist.size(); i++) {
+                                                                                                    //                    editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
+                                                                                                    //                }
+                                                                                                    //                editor.apply();
+                                                                                                    //
+                                                                                                    //                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+                                                                                                    //
+                                                                                                    //            }
+                                                                                                    //        });
+                                                                                                    //
+                                                                                                    //
+                                                                                                    //        //AlertDialog的取消鈕
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                                                                                    //
+                                                                                                    //            @Override
+                                                                                                    //            public void onClick(DialogInterface dialog, int which) {
+                                                                                                    //                dialog.dismiss();
+                                                                                                    //            }
+                                                                                                    //        });
+                                                                                                    //
+                                                                                                    //        //把AlertDialog顯示出來
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.create().show();
+                                                                                                    //
+                                                                                                    //    }
+                                                                                                    //
+                                                                                                    //});
 
 
 
