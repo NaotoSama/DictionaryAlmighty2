@@ -6,11 +6,11 @@
         <item>@string/Set_default_dictionary</item>
         <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
-                                                            <!--        <item>@string/Online_chat_room</item>-->
-                                                            <!--        <item>@string/Restore_to_default_background</item>-->
-                                                            <!--        <item>@string/Clear_search_input</item>-->
-                                                            <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
-                                                            <!--        <item>@string/Call_Japanese_food_dictionary</item> (已移轉到日文字典區，目前用不到) -->
+        <!--        <item>@string/Online_chat_room</item>-->
+        <!--        <item>@string/Restore_to_default_background</item>-->
+        <!--        <item>@string/Clear_search_input</item>-->
+        <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
+        <!--        <item>@string/Call_Japanese_food_dictionary</item> (已移轉到日文字典區，目前用不到) -->
 
     </string-array>
 
@@ -21,29 +21,29 @@
         <item>@string/Set_default_dictionary</item>
         <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
-                                                            <!--        <item>@string/Online_chat_room</item>-->
-                                                            <!--        <item>@string/Restore_to_default_background</item>-->
-                                                            <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
-                                                            <!--        <item>@string/Clear_search_input</item>-->
+        <!--        <item>@string/Online_chat_room</item>-->
+        <!--        <item>@string/Restore_to_default_background</item>-->
+        <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
+        <!--        <item>@string/Clear_search_input</item>-->
 
     </string-array>
 
 
-<!--    以下功能廢除不使用了-->
-<!--    <string-array name="OCR_spinner_array">-->
-<!--        <item>@string/Select_an_OCR_third_party_app</item>-->
-<!--        <item>@string/Call_TextScanner_app</item>-->
-<!--        <item>@string/Call_google_translate_app</item>-->
-<!--        <item>@string/Call_microsoft_translator_app_ocr_recognition</item>-->
-<!--        <item>@string/Call_Yomiwa_app</item>-->
-<!--        <item>@string/Google_optical_recognition</item>-->
-<!--        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>-->
-<!--        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>-->
-<!--        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>-->
-<!--        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>-->
-<!--        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>-->
+    <!--    以下功能廢除不使用了-->
+    <!--    <string-array name="OCR_spinner_array">-->
+    <!--        <item>@string/Select_an_OCR_third_party_app</item>-->
+    <!--        <item>@string/Call_TextScanner_app</item>-->
+    <!--        <item>@string/Call_google_translate_app</item>-->
+    <!--        <item>@string/Call_microsoft_translator_app_ocr_recognition</item>-->
+    <!--        <item>@string/Call_Yomiwa_app</item>-->
+    <!--        <item>@string/Google_optical_recognition</item>-->
+    <!--        <item>@string/Tessearct_opencv_ocr_recognition_EN</item>-->
+    <!--        <item>@string/Tessearct_opencv_ocr_recognition_CH_TW</item>-->
+    <!--        <item>@string/Tessearct_opencv_ocr_recognition_CH_CN</item>-->
+    <!--        <item>@string/Tessearct_opencv_ocr_recognition_JP</item>-->
+    <!--        <item>@string/Tessearct_opencv_ocr_recognition_KOR</item>-->
 
-<!--    </string-array>-->
+    <!--    </string-array>-->
 
 
     <string-array name="Speech_recognition_spinner_array_original">
@@ -142,15 +142,15 @@
         <item>@string/Japan_dict</item>
         <item>@string/Japan_dict_kanji_dictionary</item>
 
-                                                            <!--        <item>@string/Word_Plus_Chinese</item>-->
-                                                            <!--        <item>@string/Word_Plus_English1</item>-->
-                                                            <!--        <item>@string/Word_Plus_English2</item>-->
-                                                            <!--        <item>@string/Word_Plus_Translation</item>-->
-                                                            <!--        <item>@string/Word_Plus_Japanese1</item>-->
-                                                            <!--        <item>@string/Word_Plus_Japanese2</item>-->
-                                                            <!--        <item>@string/Word_Plus_Japanese3</item>-->
-                                                            <!--        <item>@string/Word_Plus_Meaning1</item>-->
-                                                            <!--        <item>@string/Word_Plus_Meaning2</item>-->
+        <!--        <item>@string/Word_Plus_Chinese</item>-->
+        <!--        <item>@string/Word_Plus_English1</item>-->
+        <!--        <item>@string/Word_Plus_English2</item>-->
+        <!--        <item>@string/Word_Plus_Translation</item>-->
+        <!--        <item>@string/Word_Plus_Japanese1</item>-->
+        <!--        <item>@string/Word_Plus_Japanese2</item>-->
+        <!--        <item>@string/Word_Plus_Japanese3</item>-->
+        <!--        <item>@string/Word_Plus_Meaning1</item>-->
+        <!--        <item>@string/Word_Plus_Meaning2</item>-->
         <item>@string/Google_translate_to_CHTW</item>
         <item>@string/Google_translate_to_CHCN</item>
         <item>@string/Google_translate_to_EN</item>
@@ -223,9 +223,6 @@
         <item>@string/Google_translate</item>
 
     </string-array>
-
-
-
 
 
     <string name="Yahoo_Dictionary">Yahoo Dictionary</string>
@@ -317,8 +314,6 @@
     <string name="KR_speech_auto_translate_to_CH">Korean to Chinese</string>
     <string name="CH_speech_auto_translate_to_ES">Chinese to Spanish</string>
     <string name="ES_speech_auto_translate_to_CH">Spanish to Chinese</string>
-
-
 
 
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
@@ -416,9 +411,6 @@
     <string name="Custom_auth_signin_status_failed">Error: sign in failed</string>
 
     <string name="error_sign_in_failed">Sign in failed, see logs for details.</string>
-
-
-
 
 
     <string name="OK">OK</string>
@@ -696,6 +688,9 @@
     <string name="Please_log_in_to_access_your_vocabulary_list">Please log in your member account to access your vocabulary list.</string>
     <string name="Take_me_to_register_sign_in_page">Take me to member sign in/registration page</string>
     <string name="Your_vocabulary_list_will_be_stored_online">Your vocabulary list will be stored to your account online in case you lose the list.</string>
+    <string name="Appwidget_text">Quick Word</string>
+    <string name="Add_widget">Add widget</string>
+    <string name="Put_in_the_words_you_want_to_search_or_memorize">Put in the word(s) you want to search or memorize here</string>
 
 </resources>
 

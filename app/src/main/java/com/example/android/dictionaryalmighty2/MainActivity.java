@@ -142,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String IMAGE_UNSPECIFIED = "image/*";
     String FriebaseUrl; //接收Firebase傳來的URL
     private static final String SHOWCASE_ID = "Sequence Showcase";
+    String widgetCallQuickSearchCode;
 
     CFAlertDialog.Builder defaultSearchAlertDialogBuilder; //專業版自訂單一預設字典名單的對話方塊
     CFAlertDialog.Builder defaultComboSearchAlertDialogFirstDictionaryBuilder; //專業版自訂第一個預設字典名單的對話方塊
@@ -189,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     Calendar c;
 
     SharedPreferences userInputArrayListSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
-    SharedPreferences wordsToMemorizeSharedPreferences;  //儲存用戶搜尋紀錄的SharedPreferences
+    SharedPreferences wordsToMemorizeSharedPreferences;  //儲存用戶單字本的SharedPreferences
     static SharedPreferences usernameSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
     static SharedPreferences userScreenNameSharedPreferences;  //儲存用戶顯示暱稱的SharedPreferences
                                                                                 //static SharedPreferences userInputLoginEmailSharedPreferences;  //儲存用戶登入信箱的SharedPreferences
@@ -291,6 +292,14 @@ public class MainActivity extends AppCompatActivity {
         browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
         selectSentenceSearcherView = findViewById(R.id.Select_Sentence_Searcher_View);
         miscellaneousView = findViewById(R.id.Miscellaneous_View);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle !=null){
+            widgetCallQuickSearchCode = Objects.requireNonNull(bundle).getString("widgetCallQuickSearchCode");
+            if (widgetCallQuickSearchCode!=null && widgetCallQuickSearchCode.equals("on")){
+                chooseActionAlertDialog();
+            }
+        }
 
 
         /**
@@ -3730,10 +3739,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     //==============================================================================================
-    // Helper method for saving Keywords to UserInputListView
+    // Helper method for saving Keywords to MyVocabularyListView
     //==============================================================================================
     public static void saveKeywordToMyVocabularyListView() {
         if (username!=null && !username.equals("")) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
+
+            //先送出文字
+            mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword); //加入單字到資料庫
 
             //檢查資料庫中是否有重複的字
             Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(searchKeyword);
@@ -3742,6 +3754,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+
                         snapshot.getRef().setValue(null); //若有，先移除該重複的字
                     }
                 }
@@ -3752,24 +3765,35 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword); //加入單字到資料庫
+            //延遲1秒再送出文字
+            Runnable r = new Runnable() {
+                @Override
+                public void run() {
 
-            //                if (!userInputArraylist.contains(searchKeyword)){
-            //                    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);
-            //                }
+                    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword); //加入單字到資料庫
+
+                }
+            };
+            Handler h =new Handler();
+            h.postDelayed(r, 1000);
+
+
+                                                                                                    //if (!userInputArraylist.contains(searchKeyword)){
+                                                                                                    //    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);
+                                                                                                    //}
         }
 
 
-        myVocabularyArrayList.add(searchKeyword); //同時加入單字到本地的list
-
-        //透過HashSet自動過濾掉myVocabularyArraylist中重複的字
-        HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
-        myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
-        myVocabularyArrayList.clear();
-        myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
-
-        //Alphabetic sorting
-        Collections.sort(myVocabularyArrayList);
+                                                                                                    //myVocabularyArrayList.add(searchKeyword); //同時加入單字到本地的list
+                                                                                                    //
+                                                                                                    ////透過HashSet自動過濾掉myVocabularyArraylist中重複的字
+                                                                                                    //HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
+                                                                                                    //myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
+                                                                                                    //myVocabularyArrayList.clear();
+                                                                                                    //myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
+                                                                                                    //
+                                                                                                    ////Alphabetic sorting
+                                                                                                    //Collections.sort(myVocabularyArrayList);
     }
 
 
@@ -6233,6 +6257,13 @@ public class MainActivity extends AppCompatActivity {
     //==============================================================================================
     public void chooseActionAlertDialog() {
         //這邊設置第一層AlertDialog讓用戶選擇要查此單字、快搜模式或三連搜模式、估狗翻譯，或記憶單字
+        final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
+        userInputView.setLines(2);
+        if (searchKeyword!=null && !searchKeyword.equals("")) {
+            userInputView.setText(searchKeyword);
+        } else {
+            userInputView.setHint(getString(R.string.Put_in_the_words_you_want_to_search_or_memorize));
+        }
         CFAlertDialog.Builder chooseActionAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
         .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
         .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
@@ -6241,226 +6272,223 @@ public class MainActivity extends AppCompatActivity {
         .setMessage(getString(R.string.Search_this_word_explanation) + System.getProperty("line.separator") + getString(R.string.Memorize_this_word_explanation) + System.getProperty("line.separator") + getString(R.string.Quick_search_or_combo_search_or_google_translate_explanation))
         .setTextColor(Color.BLUE)
         .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
+        .setHeaderView(userInputView)
 
         //第一層AlertDialog的確定鈕，把單字傳送到wordInputView查此單字
         .addButton(getString(R.string.Send_to_WordInputView)
                 , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) -> {
 
-                MainActivity.wordInputView.setText(searchKeyword);
-                chooseActionAlertDialog.dismiss();
+                wordInputView.setText(searchKeyword);
+
+                    if (!userInputView.getText().toString().equals("")) {
+
+                        wordInputView.setText(userInputView.getText().toString());
+
+                        chooseActionAlertDialog.dismiss();
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                    }
         })
 
         //第一層AlertDialog的取消鈕，記憶單字
         .addButton(getString(R.string.Memorize_this_word)
                 , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) -> {
 
-                //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
-                final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder  = new CFAlertDialog.Builder(MainActivity.this)
-                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
-                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
-                        .setCornerRadius(50)
-                        .setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings))
-                        .setMessage(getString(R.string.Predefined_timing_explanation) + System.getProperty("line.separator") + getString(R.string.User_configured_timing_explanation))
-                        .setTextColor(Color.BLUE)
-                        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                    searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
+                    wordInputView.setText(searchKeyword);
+
+                    if (!searchKeyword.equals("")) {
+                        //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
+                        final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder  = new CFAlertDialog.Builder(MainActivity.this)
+                                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                .setCornerRadius(50)
+                                .setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings))
+                                .setMessage(getString(R.string.Predefined_timing_explanation) + System.getProperty("line.separator") + getString(R.string.User_configured_timing_explanation))
+                                .setTextColor(Color.BLUE)
+                                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
 
-                //第二層AlertDialog的確定鈕，預設的通知時機。
-                .addButton(getString(R.string.Use_predefined_timing)
-                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+                        //第二層AlertDialog的確定鈕，預設的通知時機。
+                        .addButton(getString(R.string.Use_predefined_timing)
+                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
-                            presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
+                                    presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
 
-                            //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
-                            CFAlertDialog.Builder choosePresetNotificationTimingsAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
-                                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
-                                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
-                                    .setCornerRadius(50)
-                                    .setTitle(getString(R.string.Choose_one_preset_timing))
-                                    .setTextColor(Color.BLUE)
-                                    .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                                    //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
+                                    CFAlertDialog.Builder choosePresetNotificationTimingsAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                                            .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                            .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                            .setCornerRadius(50)
+                                            .setTitle(getString(R.string.Choose_one_preset_timing))
+                                            .setTextColor(Color.BLUE)
+                                            .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
-                                    .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
-                                            switch (position) {
-                                                case 0:
+                                            .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
+
                                                     saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
                                                     saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
                                                     saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
                                                     saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
 
-                                                    setPreDefinedNotificationTimings1Hour();
-                                                    setPreDefinedNotificationTimings9Hours();
-                                                    setPreDefinedNotificationTimings1Day();
-                                                    setPreDefinedNotificationTimings2Days();
-                                                    setPreDefinedNotificationTimings7Days();
-                                                    setPreDefinedNotificationTimings1Month();
-                                                    setPreDefinedNotificationTimingsHalfYear();
-                                                    setPreDefinedNotificationTimingsOneYear();
-                                                    //點擊子項目後讓第三層的AlertDialog消失
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
-                                                    break;
-                                                case 1:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                    switch (position) {
+                                                        case 0:
+                                                            setPreDefinedNotificationTimings1Hour();
+                                                            setPreDefinedNotificationTimings9Hours();
+                                                            setPreDefinedNotificationTimings1Day();
+                                                            setPreDefinedNotificationTimings2Days();
+                                                            setPreDefinedNotificationTimings7Days();
+                                                            setPreDefinedNotificationTimings1Month();
+                                                            setPreDefinedNotificationTimingsHalfYear();
+                                                            setPreDefinedNotificationTimingsOneYear();
+                                                            //點擊子項目後讓第三層的AlertDialog消失
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
+                                                            break;
+                                                        case 1:
+                                                            setPreDefinedNotificationTimings1Day();
+                                                            setPreDefinedNotificationTimings7Days();
+                                                            setPreDefinedNotificationTimings1Month();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 2:
+                                                            setPreDefinedNotificationTimings1Hour();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 3:
+                                                            setPreDefinedNotificationTimings9Hours();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 4:
+                                                            setPreDefinedNotificationTimings1Day();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 5:
+                                                            setPreDefinedNotificationTimings2Days();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 6:
+                                                            setPreDefinedNotificationTimings7Days();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 7:
+                                                            setPreDefinedNotificationTimings1Month();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 8:
+                                                            setPreDefinedNotificationTimingsHalfYear();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                        case 9:
+                                                            setPreDefinedNotificationTimingsOneYear();
+                                                            choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            break;
+                                                    }
+                                                }
+                                            })
 
-                                                    setPreDefinedNotificationTimings1Hour();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 2:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                            //第三層AlertDialog的取消鈕
+                                            .addButton(getString(R.string.Cancel)
+                                                    , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
 
-                                                    setPreDefinedNotificationTimings9Hours();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 3:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                    });
 
-                                                    setPreDefinedNotificationTimings1Day();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 4:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
-                                                    setPreDefinedNotificationTimings2Days();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 5:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
-                                                    setPreDefinedNotificationTimings7Days();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 6:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
-                                                    setPreDefinedNotificationTimings1Month();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 7:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
-                                                    setPreDefinedNotificationTimingsHalfYear();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                                case 8:
-                                                    saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                    saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                    saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
-                                                    setPreDefinedNotificationTimingsOneYear();
-                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                    break;
-                                            }
-                                        }
-                                    })
-
-                                    //第三層AlertDialog的取消鈕
-                                    .addButton(getString(R.string.Cancel)
-                                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
-
-                                                choosePresetNotificationTimingsAlertDialog.dismiss();
-                                            });
-
-                            //把第三層的AlertDialog顯示出來
-                            choosePresetNotificationTimingsAlertDialogBuilder.show();
-                            //同時讓第二層的AlertDialog消失
-                            chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                                    //把第三層的AlertDialog顯示出來
+                                    choosePresetNotificationTimingsAlertDialogBuilder.show();
+                                    //同時讓第二層的AlertDialog消失
+                                    chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
                         })
 
 
-                //第二層AlertDialog的中立鈕，自定義通知時機
-                .addButton(getString(R.string.Customize_timing)
-                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
+                        //第二層AlertDialog的中立鈕，自定義通知時機
+                        .addButton(getString(R.string.Customize_timing)
+                                    , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
 
-                        setCustomizedNotificationTiming();
+                                setCustomizedNotificationTiming();
 
-                        chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                        })
+
+
+                        //第二層AlertDialog的取消鈕
+                                .addButton(getString(R.string.Cancel)
+                                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
+
+                                            chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                        });
+
+
+                        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.setHeaderView(R.layout.custom_alert_dialog_clock);
+                        //把第二層的AlertDialog顯示出來
+                        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
+                        //同時讓第一層的AlertDialog消失
+                        chooseActionAlertDialog.dismiss();
+                    }
+
+                    else {
+                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                    }
+
                 })
 
-
-                //第二層AlertDialog的取消鈕
-                        .addButton(getString(R.string.Cancel)
-                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
-
-                                    chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
-                });
-
-
-                chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.setHeaderView(R.layout.custom_alert_dialog_clock);
-                //把第二層的AlertDialog顯示出來
-                chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
-                //同時讓第一層的AlertDialog消失
-                chooseActionAlertDialog.dismiss();
-
-        })
-
         //第一層AlertDialog的中立鈕，使用快搜模式、三連搜模式或估狗翻譯
-                .addButton(getString(R.string.Quick_search_or_combo_search)
-                        , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+        .addButton(getString(R.string.Quick_search_or_combo_search)
+                , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
 
-                //這邊設置第二層AlertDialog讓用戶選擇快搜模式、三連搜模式或估狗翻譯
-                quickSearchComboSearchOrGoogleTranslateList = getResources().getStringArray(R.array.quick_search_combo_search_or_google_translate);
+                    searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
+                    wordInputView.setText(searchKeyword);
 
-                AlertDialog.Builder chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setTitle(getString(R.string.Do_you_want_to));
-                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
-                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                    if (!searchKeyword.equals("")) {
+                        //這邊設置第二層AlertDialog讓用戶選擇快搜模式、三連搜模式或估狗翻譯
+                        quickSearchComboSearchOrGoogleTranslateList = getResources().getStringArray(R.array.quick_search_combo_search_or_google_translate);
 
-                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setSingleChoiceItems(quickSearchComboSearchOrGoogleTranslateList, -1, new DialogInterface.OnClickListener() {
+                        AlertDialog.Builder chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setTitle(getString(R.string.Do_you_want_to));
+                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
 
-                    @Override
-                    public void onClick(DialogInterface chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog, int position) {
-                        switch (position) {
-                            case 0:  //快搜
-                                defaultSearchButton.performClick();
-                                //點擊子項目後讓第三層的AlertDialog消失
-                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
-                                break;
-                            case 1:  //三連搜
-                                comboSearchButton.performClick();
-                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
-                                break;
-                            case 2:  //Google翻譯
-                                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + searchKeyword;
-                                webViewBrowser.loadUrl(intentAutoTranslationURL);
-                                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                                webViewBrowser.setVisibility(View.VISIBLE);
-                                saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
-                                break;
-                        }
+                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setSingleChoiceItems(quickSearchComboSearchOrGoogleTranslateList, -1, new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog, int position) {
+
+                                switch (position) {
+                                    case 0:  //快搜
+                                        defaultSearchButton.performClick();
+                                        //點擊子項目後讓第三層的AlertDialog消失
+                                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                        break;
+                                    case 1:  //三連搜
+                                        comboSearchButton.performClick();
+                                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                        break;
+                                    case 2:  //Google翻譯
+                                        String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + searchKeyword;
+                                        webViewBrowser.loadUrl(intentAutoTranslationURL);
+                                        searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                                        webViewBrowser.setVisibility(View.VISIBLE);
+                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                        break;
+                                }
+                            }
+                        });
+
+                        //把第二層的AlertDialog顯示出來
+                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.create().show();
+                        //同時讓第一層的AlertDialog消失
+                        chooseActionAlertDialog.dismiss();
                     }
-                });
 
-                //把第二層的AlertDialog顯示出來
-                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.create().show();
-                //同時讓第一層的AlertDialog消失
-                chooseActionAlertDialog.dismiss();
+                    else {
+                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                    }
 
         })
 
@@ -6471,8 +6499,6 @@ public class MainActivity extends AppCompatActivity {
                     chooseActionAlertDialog.dismiss();
         });
 
-        chooseActionAlertDialogBuilder.setHeaderView(R.layout.custom_alert_diaglog_question_mark);
-        //將第一層的AlertDialog顯示出來
         chooseActionAlertDialogBuilder.show();
 
     }
@@ -6501,6 +6527,8 @@ public class MainActivity extends AppCompatActivity {
                 .addButton(getString(R.string.Use_predefined_timing)
                         , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
+                            searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                            wordInputView.setText(searchKeyword);
 
                             if (!userInputView.getText().toString().equals("")) {
                                 presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
@@ -6518,14 +6546,14 @@ public class MainActivity extends AppCompatActivity {
                                         .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
+
+                                                saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+
                                                 switch (position) {
                                                     case 0:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings1Hour();
                                                         setPreDefinedNotificationTimings9Hours();
                                                         setPreDefinedNotificationTimings1Day();
@@ -6539,12 +6567,6 @@ public class MainActivity extends AppCompatActivity {
                                                         Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
                                                         break;
                                                     case 1:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings1Day();
                                                         setPreDefinedNotificationTimings7Days();
                                                         setPreDefinedNotificationTimings1Month();
@@ -6552,82 +6574,34 @@ public class MainActivity extends AppCompatActivity {
                                                         Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
                                                         break;
                                                     case 2:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings1Hour();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 3:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings9Hours();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 4:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings1Day();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 5:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings2Days();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 6:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings7Days();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 7:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimings1Month();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 8:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimingsHalfYear();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
                                                     case 9:
-                                                        searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
-                                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                                        saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
-                                                        saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-
                                                         setPreDefinedNotificationTimingsOneYear();
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                         break;
@@ -6661,6 +6635,7 @@ public class MainActivity extends AppCompatActivity {
                             if (!userInputView.getText().toString().equals("")) {
 
                                 searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
+                                wordInputView.setText(searchKeyword);
 
                                 setCustomizedNotificationTiming();
                                 chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();

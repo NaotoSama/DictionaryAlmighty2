@@ -491,34 +491,40 @@ public class WordsToMemorize extends AppCompatActivity {
                                                                         Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
                                                                         break;
                                                                     case 1:
-                                                                        setPreDefinedNotificationTimings1Hour();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 2:
-                                                                        setPreDefinedNotificationTimings9Hours();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 3:
                                                                         setPreDefinedNotificationTimings1Day();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 4:
-                                                                        setPreDefinedNotificationTimings2Days();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 5:
                                                                         setPreDefinedNotificationTimings7Days();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 6:
                                                                         setPreDefinedNotificationTimings1Month();
                                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                                         break;
+                                                                    case 2:
+                                                                        setPreDefinedNotificationTimings1Hour();
+                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        break;
+                                                                    case 3:
+                                                                        setPreDefinedNotificationTimings9Hours();
+                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        break;
+                                                                    case 4:
+                                                                        setPreDefinedNotificationTimings1Day();
+                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        break;
+                                                                    case 5:
+                                                                        setPreDefinedNotificationTimings2Days();
+                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        break;
+                                                                    case 6:
+                                                                        setPreDefinedNotificationTimings7Days();
+                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        break;
                                                                     case 7:
-                                                                        setPreDefinedNotificationTimingsHalfYear();
+                                                                        setPreDefinedNotificationTimings1Month();
                                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                                         break;
                                                                     case 8:
+                                                                        setPreDefinedNotificationTimingsHalfYear();
+                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        break;
+                                                                    case 9:
                                                                         setPreDefinedNotificationTimingsOneYear();
                                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                                         break;
@@ -925,59 +931,59 @@ public class WordsToMemorize extends AppCompatActivity {
 
 
 
-///**
-// * 讓用戶清空列表 (已換成別的外掛，目前用不到)
-// */
-//    clearMyVocabularyList.setOnClickListener(new View.OnClickListener() {
-//    @Override
-//    public void onClick(View v) {
-//
-//        //這邊設置AlertDialog讓用戶確認是否真要清除列表
-//        AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(WordsToMemorize.this);
-//        doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
-//        doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
-//        doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
-//
-//        //AlertDialog的確定鈕，清除列表
-//        doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//
-//                mChildReferenceForVocabularyList.child(username).removeValue(); //清除雲端用戶名稱的node
-//
-//                myVocabularyArrayList.clear(); //同時清除本地的list
-//                myVocabularyArrayAdapter.notifyDataSetChanged();
-//
-//                //將搜尋紀錄的列表存到SharedPreferences
-//                SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
-//                editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
-//                for (int i = 0; i < myVocabularyArrayList.size(); i++) {
-//                    editor.putString("myVocabularyArrayListItem_" + i, myVocabularyArrayList.get(i));
-//                }
-//                editor.apply();
-//
-//                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//
-//
-//        //AlertDialog的取消鈕
-//        doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//
-//        //把AlertDialog顯示出來
-//        doYouReallyWantToClearListAlertDialog.create().show();
-//
-//    }
-//
-//});
+                                                                                                    ///**
+                                                                                                    // * 讓用戶清空列表 (已換成別的外掛，目前用不到)
+                                                                                                    // */
+                                                                                                    //    clearMyVocabularyList.setOnClickListener(new View.OnClickListener() {
+                                                                                                    //    @Override
+                                                                                                    //    public void onClick(View v) {
+                                                                                                    //
+                                                                                                    //        //這邊設置AlertDialog讓用戶確認是否真要清除列表
+                                                                                                    //        AlertDialog.Builder doYouReallyWantToClearListAlertDialog = new AlertDialog.Builder(WordsToMemorize.this);
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setTitle(getString(R.string.Do_you_really_want_to_clear_the_list));
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                                                                                                    //
+                                                                                                    //        //AlertDialog的確定鈕，清除列表
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setPositiveButton(R.string.Confirm, new DialogInterface.OnClickListener() {
+                                                                                                    //
+                                                                                                    //            @Override
+                                                                                                    //            public void onClick(DialogInterface dialog, int which) {
+                                                                                                    //
+                                                                                                    //                mChildReferenceForVocabularyList.child(username).removeValue(); //清除雲端用戶名稱的node
+                                                                                                    //
+                                                                                                    //                myVocabularyArrayList.clear(); //同時清除本地的list
+                                                                                                    //                myVocabularyArrayAdapter.notifyDataSetChanged();
+                                                                                                    //
+                                                                                                    //                //將搜尋紀錄的列表存到SharedPreferences
+                                                                                                    //                SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
+                                                                                                    //                editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
+                                                                                                    //                for (int i = 0; i < myVocabularyArrayList.size(); i++) {
+                                                                                                    //                    editor.putString("myVocabularyArrayListItem_" + i, myVocabularyArrayList.get(i));
+                                                                                                    //                }
+                                                                                                    //                editor.apply();
+                                                                                                    //
+                                                                                                    //                Toast.makeText(getApplicationContext(), R.string.List_cleared, Toast.LENGTH_SHORT).show();
+                                                                                                    //
+                                                                                                    //            }
+                                                                                                    //        });
+                                                                                                    //
+                                                                                                    //
+                                                                                                    //        //AlertDialog的取消鈕
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
+                                                                                                    //
+                                                                                                    //            @Override
+                                                                                                    //            public void onClick(DialogInterface dialog, int which) {
+                                                                                                    //                dialog.dismiss();
+                                                                                                    //            }
+                                                                                                    //        });
+                                                                                                    //
+                                                                                                    //        //把AlertDialog顯示出來
+                                                                                                    //        doYouReallyWantToClearListAlertDialog.create().show();
+                                                                                                    //
+                                                                                                    //    }
+                                                                                                    //
+                                                                                                    //});
 
 
 

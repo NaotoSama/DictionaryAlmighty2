@@ -13,6 +13,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -476,6 +477,9 @@ public class UserInputHistory extends AppCompatActivity {
 
                 if (username!=null && !username.equals("")) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
 
+                    //先送出文字
+                    mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
+
                     //檢查資料庫中是否有重複的字
                     Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(selectedListviewItemValue);
 
@@ -493,7 +497,18 @@ public class UserInputHistory extends AppCompatActivity {
                         }
                     });
 
-                    mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
+
+                    //延遲1秒再送出文字
+                    Runnable r = new Runnable() {
+                        @Override
+                        public void run() {
+
+                            mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
+
+                        }
+                    };
+                    Handler h =new Handler();
+                    h.postDelayed(r, 1000);
 
                                                                                                     //if (!userInputArraylist.contains(searchKeyword)){
                                                                                                     //    mChildReferenceForVocabularyList.child(username).push().setValue(searchKeyword);

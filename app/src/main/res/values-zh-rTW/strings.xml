@@ -420,5 +420,7 @@
     <string name="Please_log_in_to_access_your_vocabulary_list">請登入您的會員帳號以使用單字本功能。</string>
     <string name="Take_me_to_register_sign_in_page">帶我到會員登入/註冊頁面</string>
     <string name="Your_vocabulary_list_will_be_stored_online">您的單字本將儲存在您專屬雲端帳號以避免未來遺失。</string>
+    <string name="Appwidget_text">快速查字</string>
+    <string name="Put_in_the_words_you_want_to_search_or_memorize">請輸入您想查詢或記憶的字</string>
 </resources>
 
