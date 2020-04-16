@@ -52,7 +52,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
@@ -70,6 +69,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
+import com.google.firebase.remoteconfig.BuildConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.google.firebase.storage.FirebaseStorage;
@@ -3857,7 +3857,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //單一預設字典的確定鈕
                     defaultSearchAlertDialogBuilder.addButton(getString(R.string.Confirm)
-                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
+                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
@@ -3872,7 +3872,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //單一預設字典的取消鈕
                     defaultSearchAlertDialogBuilder.addButton(getString(R.string.Cancel)
-                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) ->{
+                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) ->{
 
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
@@ -3924,7 +3924,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //第一個預設字典的確定鈕
                     defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton("儲存第一個預設字典"
-                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
+                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -3949,7 +3949,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 //第二個預設字典的確定鈕
                                 defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton("儲存第二個預設字典"
-                                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
+                                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                         //把選取的字典代碼存到sharedPreferences
                                         defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -3974,7 +3974,7 @@ public class MainActivity extends AppCompatActivity {
 
                                             //第三個預設字典的確定鈕
                                             defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton("儲存第三個預設字典"
-                                                    , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
+                                                    , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                                     //把選取的字典代碼存到sharedPreferences
                                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -3989,7 +3989,7 @@ public class MainActivity extends AppCompatActivity {
 
                                             //第三個預設字典的取消鈕
                                             defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton(getString(R.string.Cancel)
-                                                    , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
+                                                    , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
                                                     SharedPreferences.Editor editor4=defaultComboDictionarySearchSharedPreferences.edit();
@@ -4008,7 +4008,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 //第二個預設字典的取消鈕
                                 defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton(getString(R.string.Cancel)
-                                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
+                                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                         defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor2=defaultComboDictionarySearchSharedPreferences.edit();
@@ -4028,7 +4028,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //第一個預設字典的取消鈕
                     defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Cancel)
-                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
+                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
@@ -4072,7 +4072,7 @@ public class MainActivity extends AppCompatActivity {
 
         //第一層AlertDialog的取消鈕
         .addButton(getString(R.string.Cancel)
-                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseSingleOrComboDefaultDictionaryDialogInterface, whichLayer1) -> {
+                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseSingleOrComboDefaultDictionaryDialogInterface, whichLayer1) -> {
 
                         chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
         });
@@ -4120,7 +4120,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //單一預設字典的確定鈕
                     defaultSearchAlertDialogBuilder.addButton(getString(R.string.Confirm)
-                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
+                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
@@ -4135,7 +4135,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //單一預設字典的取消鈕
                     defaultSearchAlertDialogBuilder.addButton(getString(R.string.Cancel)
-                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
+                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultSearchAlertDialog, whichLayer2) -> {
 
                             defaultDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultDictionarySearchSharedPreferences.edit();
@@ -4187,7 +4187,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //第一個預設字典的確定鈕
                     defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton("儲存第一個預設字典"
-                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
+                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -4212,7 +4212,7 @@ public class MainActivity extends AppCompatActivity {
 
                             //第二個預設字典的確定鈕
                                 defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton("儲存第二個預設字典"
-                                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
+                                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                     //把選取的字典代碼存到sharedPreferences
                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -4237,7 +4237,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     //第三個預設字典的確定鈕
                                             defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton("儲存第三個預設字典"
-                                                    , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
+                                                    , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                             //把選取的字典代碼存到sharedPreferences
                                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
@@ -4252,7 +4252,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     //第三個預設字典的取消鈕
                                             defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton(getString(R.string.Cancel)
-                                                    , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
+                                                    , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveComboDefaultDictionary", Context.MODE_PRIVATE);
                                             SharedPreferences.Editor editor5=defaultComboDictionarySearchSharedPreferences.edit();
@@ -4271,7 +4271,7 @@ public class MainActivity extends AppCompatActivity {
 
                             //第二個預設字典的取消鈕
                                 defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton(getString(R.string.Cancel)
-                                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
+                                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                     defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                                     SharedPreferences.Editor editor3=defaultComboDictionarySearchSharedPreferences.edit();
@@ -4290,7 +4290,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //第一個預設字典的取消鈕
                     defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Cancel)
-                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
+                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboDictionarySearchSharedPreferences=getSharedPreferences("saveChosenDefaultSingleDictionary", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor=defaultComboDictionarySearchSharedPreferences.edit();
@@ -4301,7 +4301,8 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     //使用建議的三連搜預設字典
-                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Use_default_settings), Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getString(R.string.Use_default_settings),
+                            Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             defaultComboSearchCodeFirstDictionary="Yahoo Dictionary";
                             defaultComboSearchCodeSecondDictionary="Forvo";
@@ -4333,7 +4334,7 @@ public class MainActivity extends AppCompatActivity {
 
         //第一層AlertDialog的取消鈕
         chooseSingleOrComboDefaultDictionaryAlertDialogBuilder.addButton(getString(R.string.Cancel)
-                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseSingleOrComboDefaultDictionaryDialogInterface, whichLayer1) -> {
+                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseSingleOrComboDefaultDictionaryDialogInterface, whichLayer1) -> {
 
                     chooseSingleOrComboDefaultDictionaryDialogInterface.dismiss();
         });
@@ -6276,7 +6277,7 @@ public class MainActivity extends AppCompatActivity {
 
         //第一層AlertDialog的確定鈕，把單字傳送到wordInputView查此單字
         .addButton(getString(R.string.Send_to_WordInputView)
-                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) -> {
+                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) -> {
 
                 wordInputView.setText(searchKeyword);
 
@@ -6288,6 +6289,56 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     else {
+                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                    }
+        })
+
+        //第一層AlertDialog的中立鈕，使用快搜模式
+        .addButton(getString(R.string.Quick_search)
+                , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+
+                    searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
+                    wordInputView.setText(searchKeyword);
+
+                    if (!searchKeyword.equals("")) {
+                        defaultSearchButton.performClick();
+                        chooseActionAlertDialog.dismiss();
+                    }else {
+                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                    }
+        })
+
+        //第一層AlertDialog的中立鈕，使用三連搜模式
+        .addButton(getString(R.string.Combo_search)
+                , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+
+                    searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
+                    wordInputView.setText(searchKeyword);
+
+                    if (!searchKeyword.equals("")) {
+                        comboSearchButton.performClick();
+                        chooseActionAlertDialog.dismiss();
+                    }else {
+                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                    }
+        })
+
+        //第一層AlertDialog的中立鈕，使用估狗翻譯
+        .addButton(getString(R.string.Google_translate)
+                , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+
+                    searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
+                    wordInputView.setText(searchKeyword);
+
+                    if (!searchKeyword.equals("")) {
+                        String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + searchKeyword;
+                        webViewBrowser.loadUrl(intentAutoTranslationURL);
+                        searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                        webViewBrowser.setVisibility(View.VISIBLE);
+                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                        chooseActionAlertDialog.dismiss();
+                    }else {
                         Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
                     }
         })
@@ -6313,7 +6364,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的確定鈕，預設的通知時機。
                         .addButton(getString(R.string.Use_predefined_timing)
-                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+                                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
                                     presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
 
@@ -6393,7 +6444,7 @@ public class MainActivity extends AppCompatActivity {
 
                                             //第三層AlertDialog的取消鈕
                                             .addButton(getString(R.string.Cancel)
-                                                    , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
+                                                    , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
 
                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
                                                     });
@@ -6417,7 +6468,7 @@ public class MainActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的取消鈕
                                 .addButton(getString(R.string.Cancel)
-                                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
+                                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
 
                                             chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
                         });
@@ -6436,65 +6487,65 @@ public class MainActivity extends AppCompatActivity {
 
                 })
 
-        //第一層AlertDialog的中立鈕，使用快搜模式、三連搜模式或估狗翻譯
-        .addButton(getString(R.string.Quick_search_or_combo_search)
-                , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
-
-                    searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
-                    wordInputView.setText(searchKeyword);
-
-                    if (!searchKeyword.equals("")) {
-                        //這邊設置第二層AlertDialog讓用戶選擇快搜模式、三連搜模式或估狗翻譯
-                        quickSearchComboSearchOrGoogleTranslateList = getResources().getStringArray(R.array.quick_search_combo_search_or_google_translate);
-
-                        AlertDialog.Builder chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setTitle(getString(R.string.Do_you_want_to));
-                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
-                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
-
-                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setSingleChoiceItems(quickSearchComboSearchOrGoogleTranslateList, -1, new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog, int position) {
-
-                                switch (position) {
-                                    case 0:  //快搜
-                                        defaultSearchButton.performClick();
-                                        //點擊子項目後讓第三層的AlertDialog消失
-                                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
-                                        break;
-                                    case 1:  //三連搜
-                                        comboSearchButton.performClick();
-                                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
-                                        break;
-                                    case 2:  //Google翻譯
-                                        String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + searchKeyword;
-                                        webViewBrowser.loadUrl(intentAutoTranslationURL);
-                                        searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                                        webViewBrowser.setVisibility(View.VISIBLE);
-                                        saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
-                                        saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
-                                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
-                                        break;
-                                }
-                            }
-                        });
-
-                        //把第二層的AlertDialog顯示出來
-                        chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.create().show();
-                        //同時讓第一層的AlertDialog消失
-                        chooseActionAlertDialog.dismiss();
-                    }
-
-                    else {
-                        Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
-                    }
-
-        })
+                                                                                                    ////第一層AlertDialog的中立鈕，使用快搜模式、三連搜模式或估狗翻譯
+                                                                                                    //.addButton(getString(R.string.Quick_search_or_combo_search)
+                                                                                                    //        , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+                                                                                                    //
+                                                                                                    //            searchKeyword = (userInputView.getText().toString()); //抓文字框內用戶輸入的字
+                                                                                                    //            wordInputView.setText(searchKeyword);
+                                                                                                    //
+                                                                                                    //            if (!searchKeyword.equals("")) {
+                                                                                                    //                //這邊設置第二層AlertDialog讓用戶選擇快搜模式、三連搜模式或估狗翻譯
+                                                                                                    //                quickSearchComboSearchOrGoogleTranslateList = getResources().getStringArray(R.array.quick_search_combo_search_or_google_translate);
+                                                                                                    //
+                                                                                                    //                AlertDialog.Builder chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog = new AlertDialog.Builder(MainActivity.this);
+                                                                                                    //                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setTitle(getString(R.string.Do_you_want_to));
+                                                                                                    //                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setCancelable(true); //按到旁邊的空白處AlertDialog會消失
+                                                                                                    //                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setView(R.layout.custom_alert_dialog_dictionary_providers); //沿用字典選單的佈局檔
+                                                                                                    //
+                                                                                                    //                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.setSingleChoiceItems(quickSearchComboSearchOrGoogleTranslateList, -1, new DialogInterface.OnClickListener() {
+                                                                                                    //
+                                                                                                    //                    @Override
+                                                                                                    //                    public void onClick(DialogInterface chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog, int position) {
+                                                                                                    //
+                                                                                                    //                        switch (position) {
+                                                                                                    //                            case 0:  //快搜
+                                                                                                    //                                defaultSearchButton.performClick();
+                                                                                                    //                                //點擊子項目後讓第三層的AlertDialog消失
+                                                                                                    //                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                                                                                    //                                break;
+                                                                                                    //                            case 1:  //三連搜
+                                                                                                    //                                comboSearchButton.performClick();
+                                                                                                    //                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                                                                                    //                                break;
+                                                                                                    //                            case 2:  //Google翻譯
+                                                                                                    //                                String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + searchKeyword;
+                                                                                                    //                                webViewBrowser.loadUrl(intentAutoTranslationURL);
+                                                                                                    //                                searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                                                                                                    //                                webViewBrowser.setVisibility(View.VISIBLE);
+                                                                                                    //                                saveKeywordtoUserInputListView();            //Helper method。把用戶查的單字存到搜尋紀錄頁面
+                                                                                                    //                                saveUserInputArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
+                                                                                                    //                                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.dismiss();
+                                                                                                    //                                break;
+                                                                                                    //                        }
+                                                                                                    //                    }
+                                                                                                    //                });
+                                                                                                    //
+                                                                                                    //                //把第二層的AlertDialog顯示出來
+                                                                                                    //                chooseQuickSearchComboSearchOrGoogleTranslateAlertDialog.create().show();
+                                                                                                    //                //同時讓第一層的AlertDialog消失
+                                                                                                    //                chooseActionAlertDialog.dismiss();
+                                                                                                    //            }
+                                                                                                    //
+                                                                                                    //            else {
+                                                                                                    //                Toast.makeText(getApplicationContext(),R.string.You_have_not_entered_anything,Toast.LENGTH_LONG).show();
+                                                                                                    //            }
+                                                                                                    //
+                                                                                                    //})
 
         //第一層AlertDialog的取消鈕
         .addButton(getString(R.string.Cancel)
-                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
+                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
 
                     chooseActionAlertDialog.dismiss();
         });
@@ -6525,7 +6576,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //第一層AlertDialog的確定鈕，預設的通知時機。
                 .addButton(getString(R.string.Use_predefined_timing)
-                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
                             searchKeyword = userInputView.getText().toString(); //抓取文字輸入框內的字
                             wordInputView.setText(searchKeyword);
@@ -6612,7 +6663,7 @@ public class MainActivity extends AppCompatActivity {
 
                                         //第二層AlertDialog的取消鈕
                                         .addButton(getString(R.string.Cancel)
-                                                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) -> {
+                                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) -> {
 
                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                 });
@@ -6647,7 +6698,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //第一層AlertDialog的取消鈕
                 .addButton(getString(R.string.Cancel)
-                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
                             chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
                         });
@@ -7265,14 +7316,16 @@ public class MainActivity extends AppCompatActivity {
                 .setCancelable(false)  //按到旁邊的空白處AlertDialog不會消失
 
                 //前往Lemat Works網站
-                .addButton(getString(R.string.Go_to_Lemat_Works), Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+                .addButton(getString(R.string.Go_to_Lemat_Works),
+                        Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
 
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.behance.net/lematworks")));
                     setBackgroundImageAlertDialog.dismiss();
                 })
 
                 //呼叫第三方「Giphy」app
-                .addButton(getString(R.string.Open_giphy_app), Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+                .addButton(getString(R.string.Open_giphy_app),
+                        Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
 
                     Intent callGiphyAppIntent = getPackageManager().getLaunchIntentForPackage("com.giphy.messenger");
                     if (callGiphyAppIntent != null) {
@@ -7293,7 +7346,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //打開相簿
                 .addButton(getString(R.string.Open_photo_album)
-                        , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+                        , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
 
                             //這裡顯示第二層AlertDialog讓用戶選擇圖片格式
                             CFAlertDialog.Builder chooseJPEGorGIFimageAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
@@ -7306,7 +7359,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     //AlertDialog的確定鈕，用戶選擇靜態圖片
                                     .addButton(getString(R.string.Use_static_image_for_background)
-                                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLlayer2) -> {
+                                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLlayer2) -> {
 
                                                 changeBackgroundButtonIsPressed="yes";
                                                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
@@ -7332,7 +7385,7 @@ public class MainActivity extends AppCompatActivity {
 
                                     //AlertDialog的取消鈕
                                     .addButton(getString(R.string.Cancel)
-                                            , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLayer2) -> {
+                                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseJPEGorGIFimageAlertDialog, whichLayer2) -> {
 
                                                 chooseJPEGorGIFimageAlertDialog.dismiss();
                                             });
@@ -7344,7 +7397,8 @@ public class MainActivity extends AppCompatActivity {
                         })
 
                 //恢復預設背景
-                .addButton(getString(R.string.Restore_to_default_background), Color.WHITE, Color.BLACK, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+                .addButton(getString(R.string.Restore_to_default_background),
+                        Color.WHITE, Color.DKGRAY, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
 
                     Bitmap defaultBackgroundBmp = BitmapFactory.decodeResource(getResources(), R.drawable.universe2);  //透過BitmapFactory把Drawable轉換成Bitmap
                     m_phone_for_background = defaultBackgroundBmp;
@@ -7370,7 +7424,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //AlertDialog的取消鈕
                 .addButton(getString(R.string.Cancel)
-                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (setBackgroundImageAlertDialog, whichLayer1) -> {
 
                             setBackgroundImageAlertDialog.dismiss();
                         })

@@ -474,7 +474,7 @@
     <string name="Browser_switch">Browser Switch</string>
     <string name="Restore_to_default_background">Restore to default background</string>
     <string name="Reset_to_default_backgorund_image_message">Default background image is loaded.</string>
-    <string name="Finger_tap_user_input_history">Finger tap = search/memorize word</string>
+    <string name="Finger_tap">Finger tap = search/memorize word</string>
     <string name="Has_benn_deleted">" has benn deleted"</string>
     <string name="Cambridge_JP_EN">Cambridge JP-EN</string>
     <string name="Cambridge_EN_JP">Cambridge EN-JP</string>
@@ -649,7 +649,6 @@
     <string name="Swipe">Swipe = Delete the word</string>
     <string name="Got_it">Got it!</string>
     <string name="After_saving_a_word">After saving a word, it will appear below as part of your vocabulary list and you can do the following actions</string>
-    <string name="Finger_tap_words_to_memorize">Finger tap = Bring word to main page or memorize word</string>
     <string name="Quick_search_example_explanation">Quick search: You can choose 1 dictionary for quick search. Say if you choose Cambridge, as soon as you hit the Quick Search Button you\'ll be automatically taken to Cambridge Dictionary.</string>
     <string name="Combo_search_example_explanation">Combo Search: You can choose 3 default dictionaries. Say if you choose Cambridge Dictionary, example sentences dictionary and pronunciation dictionary, hitting the Combo Search button will look up those dictionaries simultaneously.</string>
     <string name="Must_get_Giphy_app">The 3rd-party Giphy App must be installed to proceed with this function</string>
@@ -680,7 +679,7 @@
     <string name="Kanji_recognizer">Kanji Recognizer</string>
     <string name="Memorize_word_shortcut">Memorize Word (Shortcut)</string>
     <string name="Word_input_to_memorize">Please type the word(s) you want to memorize</string>
-    <string name="Long_press_words_to_memorize">Long press = Quick search, combo search, or memorize the word</string>
+    <string name="Long_press_words_to_memorize">Long press = Share word(s)</string>
     <string name="Dict_dot_cn">Dict.cn</string>
     <string name="Etymonline">Etymology Dictionary</string>
     <string name="Japan_dict">JapanDict JP⇄EN Dictionary</string>

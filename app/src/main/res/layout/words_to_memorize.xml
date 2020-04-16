@@ -52,6 +52,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="32dp"
+        android:fastScrollAlwaysVisible="true"
         app:layout_constraintBottom_toTopOf="@+id/clear_my_vocabulary_list_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/words_to_memorize_search_box"

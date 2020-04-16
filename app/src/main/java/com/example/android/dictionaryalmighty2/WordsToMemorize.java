@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -51,7 +50,9 @@ import static com.example.android.dictionaryalmighty2.MainActivity.comboSearchBu
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultSearchButton;
 import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
 import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
+import static com.example.android.dictionaryalmighty2.MainActivity.searchResultWillBeDisplayedHere;
 import static com.example.android.dictionaryalmighty2.MainActivity.username;
+import static com.example.android.dictionaryalmighty2.MainActivity.webViewBrowser;
 import static com.example.android.dictionaryalmighty2.MainActivity.wordInputView;
 import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
 
@@ -245,10 +246,13 @@ public class WordsToMemorize extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 selectedMyVocabularyListviewItemValue=myVocabularyListview.getItemAtPosition(position).toString();
-
                 wordInputView.setText(selectedMyVocabularyListviewItemValue);
 
-                finish(); //結束此Activity並返回上一個Activity
+                setChooseQuickSearchOrComboSearchAlertDialog();
+
+                                                                                                    //selectedMyVocabularyListviewItemValue=myVocabularyListview.getItemAtPosition(position).toString();
+                                                                                                    //wordInputView.setText(selectedMyVocabularyListviewItemValue);
+                                                                                                    //finish(); //結束此Activity並返回上一個Activity
 
             }
         });
@@ -263,10 +267,7 @@ public class WordsToMemorize extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-                selectedMyVocabularyListviewItemValue=myVocabularyListview.getItemAtPosition(position).toString();
-                wordInputView.setText(selectedMyVocabularyListviewItemValue);
-
-                setChooseQuickSearchOrComboSearchAlertDialog();
+                //預計做分享字庫的功能
 
                 return true;
             }
@@ -417,35 +418,54 @@ public class WordsToMemorize extends AppCompatActivity {
         .setCornerRadius(50)
         .setTitle(getString(R.string.Do_you_want_to))
         .setTextColor(Color.BLUE)
-        .setMessage(getString(R.string.Quick_search_explanation) + System.getProperty("line.separator") + getString(R.string.Combo_search_explanation))
+        .setMessage(getString(R.string.Search_this_word_explanation) + System.getProperty("line.separator")
+                + getString(R.string.Quick_search) +"/"+ getString(R.string.Combo_search) +"/"+ getString(R.string.Google_translate) + "：" + getString(R.string.Appwidget_text) + System.getProperty("line.separator")
+                + getString(R.string.Memorize_this_word_explanation))
         .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
 
-        //第一層AlertDialog的確定鈕，使用快搜模式
+        //第一層AlertDialog的確定鈕，帶入單字到首頁
+        .addButton(getString(R.string.Send_to_WordInputView)
+                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
+
+                    wordInputView.setText(selectedMyVocabularyListviewItemValue);
+                    chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+                    finish();
+        })
+
+        //第一層AlertDialog的中立鈕，使用快搜模式
         .addButton(getString(R.string.Quick_search)
-                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
+                , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
-                defaultSearchButton.performClick();
-
-                //Bring MainActivity to the top of the stack
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                startActivity(intent);
-
-                chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+                    defaultSearchButton.performClick();
+                    chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+                    finish();
         })
 
         //第一層AlertDialog的中立鈕，使用三連搜模式
         .addButton(getString(R.string.Combo_search)
-                        , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
+                        , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
-                comboSearchButton.performClick();
+                    comboSearchButton.performClick();
+                    chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+                    finish();
+        })
 
-                chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+        //第一層AlertDialog的中立鈕，使用Google翻譯
+        .addButton(getString(R.string.Google_translate)
+                , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
+
+                    wordInputView.setText(selectedMyVocabularyListviewItemValue);
+                    String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + selectedMyVocabularyListviewItemValue;
+                    webViewBrowser.loadUrl(intentAutoTranslationURL);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+                    chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+                    finish();
         })
 
         //第一層AlertDialog的取消鈕，記憶單字
         .addButton(getString(R.string.Memorize_this_word)
-                        , Color.WHITE, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) -> {
+                        , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, whichLayer1) -> {
 
                             //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
                             final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder  = new CFAlertDialog.Builder(WordsToMemorize.this)
@@ -460,7 +480,7 @@ public class WordsToMemorize extends AppCompatActivity {
 
                                     //第二層AlertDialog的確定鈕，預設的通知時機。
                                     .addButton(getString(R.string.Use_predefined_timing)
-                                            , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+                                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
                                                 presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
 
@@ -534,7 +554,7 @@ public class WordsToMemorize extends AppCompatActivity {
 
                                                         //第三層AlertDialog的取消鈕
                                                         .addButton(getString(R.string.Cancel)
-                                                                , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
+                                                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
 
                                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
                                                                 });
@@ -558,7 +578,7 @@ public class WordsToMemorize extends AppCompatActivity {
 
                                     //第二層AlertDialog的取消鈕
                                     .addButton(getString(R.string.Cancel)
-                                            , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
+                                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
 
                                                 chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
                                             });
@@ -568,13 +588,13 @@ public class WordsToMemorize extends AppCompatActivity {
                             //把第二層的AlertDialog顯示出來
                             chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
                             //同時讓第一層的AlertDialog消失
-                            chooseActionAlertDialog.dismiss();
+                            chooseQuickSearchOrComboSearchAlertDialog.dismiss();
 
-                        })
+        })
 
         //第一層AlertDialog的取消鈕
                 .addButton(getString(R.string.Cancel)
-                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
                 chooseQuickSearchOrComboSearchAlertDialog.dismiss();
         });
@@ -596,12 +616,12 @@ public class WordsToMemorize extends AppCompatActivity {
                 .setCornerRadius(50)
                 .setTitle(getString(R.string.Instructions))
                 .setTextColor(Color.BLUE)
-                .setMessage(getString(R.string.After_saving_a_word) + System.getProperty("line.separator") + getString(R.string.Finger_tap_words_to_memorize) + System.getProperty("line.separator") + getString(R.string.Long_press_words_to_memorize) + System.getProperty("line.separator") + getString(R.string.Swipe)+ System.getProperty("line.separator") + getResources().getString(R.string.Your_vocabulary_list_will_be_stored_online))
+                .setMessage(getString(R.string.After_saving_a_word) + System.getProperty("line.separator") + getString(R.string.Finger_tap) + System.getProperty("line.separator") + getString(R.string.Long_press_words_to_memorize) + System.getProperty("line.separator") + getString(R.string.Swipe)+ System.getProperty("line.separator") + getResources().getString(R.string.Your_vocabulary_list_will_be_stored_online))
                 .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
 
 
                 .addButton(getString(R.string.Got_it)
-                        , Color.WHITE, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (wordsToMemorizeInstructionsAlertDialog, which) -> {
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (wordsToMemorizeInstructionsAlertDialog, which) -> {
 
                             wordsToMemorizeInstructionsAlertDialog.dismiss();
                         });

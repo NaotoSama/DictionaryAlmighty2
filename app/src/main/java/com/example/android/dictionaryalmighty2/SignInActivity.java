@@ -224,7 +224,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 //AlertDialog的取消鈕，取消登出
                 .addButton(getResources().getString(R.string.Cancel)
-                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         dialog.dismiss();
                 });
@@ -271,7 +271,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的確定鈕
                         .addButton(getString(R.string.Confirm)
-                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateDisplayNameDialog, whichLayer2) -> {
+                                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateDisplayNameDialog, whichLayer2) -> {
 
                                 String userInputDisplayName = userInputView.getText().toString();
 
@@ -322,7 +322,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的取消鈕
                         .addButton(getString(R.string.Cancel)
-                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateDisplayNameDialog, whichLayer2) -> {
+                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateDisplayNameDialog, whichLayer2) -> {
 
                                     updateDisplayNameDialog.dismiss();
                         });
@@ -337,7 +337,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 //第一層AlertDialog的確定鈕，更改密碼
                 .addButton(getResources().getString(R.string.Change_password)
-                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
+                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
 
                         //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
@@ -353,7 +353,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的確定鈕
                         .addButton(getString(R.string.Confirm)
-                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updatePasswordDialog, whichLayer2) -> {
+                                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updatePasswordDialog, whichLayer2) -> {
 
                                 String userInputPassword = userInputView.getText().toString();
 
@@ -398,7 +398,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
                         //第二層AlertDialog的取消鈕
-                        .addButton(getString(R.string.Cancel), Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updatePasswordDialog, whichLayer2) -> {
+                        .addButton(getString(R.string.Cancel), Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updatePasswordDialog, whichLayer2) -> {
 
                             updatePasswordDialog.dismiss();
                         });
@@ -429,7 +429,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的確定鈕
                         .addButton(getString(R.string.Confirm)
-                                , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateEmailDialog, whichLayer2) -> {
+                                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateEmailDialog, whichLayer2) -> {
 
                                 String userInputEmail = userInputView.getText().toString();
 
@@ -475,7 +475,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         //第二層AlertDialog的取消鈕
                         .addButton(getString(R.string.Cancel)
-                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateEmailDialog, whichLayer2) -> {
+                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateEmailDialog, whichLayer2) -> {
 
                                     updateEmailDialog.dismiss();
                         });
@@ -490,7 +490,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 //第一層AlertDialog的取消鈕
                         .addButton(getString(R.string.Cancel)
-                                , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
+                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (updateUserAccountAlertDialog, whichLayer1) -> {
                                     updateUserAccountAlertDialog.dismiss();
                                 });
 
@@ -520,7 +520,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 //AlertDialog的確定鈕，刪除帳號
                 .addButton(getResources().getString(R.string.Confirm)
-                        , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         //先清除雲端用戶Firebase UID
                         mChildReferenceForInputHistory.child(username).removeValue();
@@ -597,7 +597,7 @@ public class SignInActivity extends AppCompatActivity {
 
                 //AlertDialog的取消鈕
                 .addButton(getResources().getString(R.string.Cancel)
-                        , Color.CYAN, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         dialog.dismiss();
                 });

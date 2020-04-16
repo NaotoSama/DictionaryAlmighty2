@@ -150,7 +150,7 @@
     <string name="Restore_to_default_background">恢復預設背景圖</string>
     <string name="Reset_to_default_backgorund_image_message">已恢復成預設背景</string>
     <string name="Search_records_cleared">搜尋紀錄已清除完畢</string>
-    <string name="Finger_tap_user_input_history">點按 = 帶入單字到首頁或記憶單字</string>
+    <string name="Finger_tap">點按 = 查單字或記憶單字</string>
     <string name="Has_benn_deleted">已刪除</string>
     <string name="Cambridge_JP_EN">劍橋日英字典</string>
     <string name="Cambridge_EN_JP">劍橋英日字典</string>
@@ -381,7 +381,6 @@
     <string name="Swipe">滑動 = 刪除單字</string>
     <string name="Got_it">了解了!</string>
     <string name="After_saving_a_word">您儲存的單字會出現在下方單字庫，您可做以下動作：</string>
-    <string name="Finger_tap_words_to_memorize">"點按 = 帶入單字到主頁 "</string>
     <string name="Quick_search_example_explanation">快搜模式：您可選擇一部快搜字典，例如若選擇劍橋字典，以後只要點擊快搜按鈕就會自動查劍橋字典。</string>
     <string name="Combo_search_example_explanation">三連搜：您可選擇三部預設字典，例如若選劍橋字典、例句字典和發音字典，點擊三連搜按鈕會同時查這三部字典。</string>
     <string name="Must_get_Giphy_app">您必須先安裝第三方的「Giphy」App才能使用此功能，請按上方的安裝鈕</string>
@@ -412,7 +411,7 @@
     <string name="Kanji_recognizer">漢字手寫字典</string>
     <string name="Memorize_word_shortcut">記憶單字(捷徑)</string>
     <string name="Word_input_to_memorize">請輸入您想記憶的字</string>
-    <string name="Long_press_words_to_memorize">長按 = 快搜、三連搜模式或記憶單字</string>
+    <string name="Long_press_words_to_memorize">長按 = 分享單字</string>
     <string name="Dict_dot_cn">海詞英漢字典</string>
     <string name="Etymonline">語源字典</string>
     <string name="Japan_dict">JapanDict英日日英字典</string>
@@ -422,5 +421,6 @@
     <string name="Your_vocabulary_list_will_be_stored_online">您的單字本將儲存在您專屬雲端帳號以避免未來遺失。</string>
     <string name="Appwidget_text">快速查字</string>
     <string name="Put_in_the_words_you_want_to_search_or_memorize">請輸入您想查詢或記憶的字</string>
+    <string name="Add_widget">新增小工具</string>
 </resources>
 
