@@ -411,7 +411,7 @@
     <string name="Kanji_recognizer">漢字手寫字典</string>
     <string name="Memorize_word_shortcut">記憶單字(捷徑)</string>
     <string name="Word_input_to_memorize">請輸入您想記憶的字</string>
-    <string name="Long_press_words_to_memorize">長按 = 分享單字</string>
+    <string name="Long_press_words_to_memorize">長按 = 對所選的單字綁定一個字典</string>
     <string name="Dict_dot_cn">海詞英漢字典</string>
     <string name="Etymonline">語源字典</string>
     <string name="Japan_dict">JapanDict英日日英字典</string>
@@ -422,5 +422,16 @@
     <string name="Appwidget_text">快速查字</string>
     <string name="Put_in_the_words_you_want_to_search_or_memorize">請輸入您想查詢或記憶的字</string>
     <string name="Add_widget">新增小工具</string>
+    <string name="Word_now_bound_with">已綁定：</string>
+    <string name="Use_bound_dictionary_to_search">使用綁定的字典查此單字</string>
+    <string name="Please_bind_a_dictionary_first">請先設定要與此單字綁定的字典</string>
+    <string name="Bind_this_word_with_a_dictionary">設定與此單字綁定的字典</string>
+    <string name="Choose_a_dictionary">請選擇一部字典</string>
+    <string name="Set_the_first_dictionary">請設定第一個預設字典</string>
+    <string name="Save_the_first_dictionary">儲存第一個預設字典</string>
+    <string name="Set_the_second_dictionary">請設定第二個預設字典</string>
+    <string name="Save_the_second_dictionary">儲存第二個預設字典</string>
+    <string name="Set_the_third_dictionary">請設定第三個預設字典</string>
+    <string name="Save_the_third_dictionary">儲存第三個預設字典</string>
 </resources>
 

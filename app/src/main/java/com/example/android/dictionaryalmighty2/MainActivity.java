@@ -136,8 +136,8 @@ public class MainActivity extends AppCompatActivity {
     static String defaultComboSearchCodeFirstDictionary; //用以設定第一個預設快搜字典
     static String defaultComboSearchCodeSecondDictionary; //用以設定第二個預設快搜字典
     static String defaultComboSearchCodeThirdDictionary; //用以設定第三個預設快搜字典
-    String[] defaultDictionaryListOriginal; //專業版自訂預設字典的名單
-    String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
+    static String[] defaultDictionaryListOriginal; //專業版自訂預設字典的名單
+    static String[] defaultDictionaryListSimplified; //簡易版自訂預設字典的名單
     String[] quickSearchComboSearchOrGoogleTranslateList; //讓用戶選擇快搜模式、三連搜模式或估狗翻譯
     public static final String IMAGE_UNSPECIFIED = "image/*";
     String FriebaseUrl; //接收Firebase傳來的URL
@@ -161,14 +161,14 @@ public class MainActivity extends AppCompatActivity {
     Spinner SentenceSearchSpinner;
     Spinner MiscellaneousSpinner;
 
-    FloatingActionButton floatingActionButton;
+    static FloatingActionButton floatingActionButton;
     ActionBar actionBar;
     LayoutParams layoutparams; //用來客製化修改ActionBar
 
     static WebView webViewBrowser;    //網頁框
 
-    Switch browserSwitch;      //網頁框的開關
-    Switch proOrSimplifiedLayoutSwitch; //專業版或簡易版開關
+    static Switch browserSwitch;      //網頁框的開關
+    static Switch proOrSimplifiedLayoutSwitch; //專業版或簡易版開關
 
     ProgressBar progressBar;   //網頁載入的進度條
 
@@ -227,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
     public static DatabaseReference mRootReference = FirebaseDatabase.getInstance().getReference();
     public static DatabaseReference mChildReferenceForInputHistory = mRootReference.child("Users' Input History");
     public static DatabaseReference mChildReferenceForVocabularyList = mRootReference.child("Users' Vocabulary List");
+    public static DatabaseReference mChildReferenceForBoundDictionaryUrl = mRootReference.child("Bound Dictionary Url");
     public static DatabaseReference mChildReferenceForChatMessages = mRootReference.child("Chat").child("Chat Messages");
 
     public static StorageReference mChatPhotoStorageReference = FirebaseStorage.getInstance().getReference().child("chat_photos");
@@ -3916,14 +3917,14 @@ public class MainActivity extends AppCompatActivity {
                     .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                     .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                     .setCornerRadius(50)
-                    .setTitle("請設定第一個預設字典")
+                    .setTitle(getResources().getString(R.string.Set_the_first_dictionary))
                     .setTextColor(Color.BLUE)
                     .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
                     setDefaultComboSearchCodeFirstDictionaryOriginal();   //設置專業版三連搜預設字典的代碼
 
                     //第一個預設字典的確定鈕
-                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton("儲存第一個預設字典"
+                    defaultComboSearchAlertDialogFirstDictionaryBuilder.addButton(getResources().getString(R.string.Save_the_first_dictionary)
                             , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogFirstDictionary, whichLayer2) -> {
 
                             //把選取的字典代碼存到sharedPreferences
@@ -3940,7 +3941,7 @@ public class MainActivity extends AppCompatActivity {
                                 .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                                 .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                                 .setCornerRadius(50)
-                                .setTitle("請設定第二個預設字典")
+                                .setTitle(getResources().getString(R.string.Set_the_second_dictionary))
                                 .setTextColor(Color.BLUE)
                                 .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
@@ -3948,7 +3949,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 //第二個預設字典的確定鈕
-                                defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton("儲存第二個預設字典"
+                                defaultComboSearchAlertDialogSecondDictionaryBuilder.addButton(getResources().getString(R.string.Save_the_second_dictionary)
                                         , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogSecondDictionary, whichLayer3) -> {
 
                                         //把選取的字典代碼存到sharedPreferences
@@ -3965,7 +3966,7 @@ public class MainActivity extends AppCompatActivity {
                                             .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                                             .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                                             .setCornerRadius(50)
-                                            .setTitle("請設定第三個預設字典")
+                                            .setTitle(getResources().getString(R.string.Set_the_third_dictionary))
                                             .setTextColor(Color.BLUE)
                                             .setCancelable(false); //按到旁邊的空白處AlertDialog也不會消失
 
@@ -3973,7 +3974,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                                             //第三個預設字典的確定鈕
-                                            defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton("儲存第三個預設字典"
+                                            defaultComboSearchAlertDialogThirdDictionaryBuilder.addButton(getResources().getString(R.string.Save_the_third_dictionary)
                                                     , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (defaultComboSearchAlertDialogThirdDictionary, whichLayer4) -> {
 
                                                     //把選取的字典代碼存到sharedPreferences
@@ -4675,36 +4676,33 @@ public class MainActivity extends AppCompatActivity {
                         defaultSingleSearchCode= "Fast Dict";
                         break;
                     case 4:
-                        defaultSingleSearchCode= "Dict CN";
-                        break;
-                    case 5:
                         defaultSingleSearchCode= "Google Dictionary";
                         break;
-                    case 6:
+                    case 5:
                         defaultSingleSearchCode= "VoiceTube";
                         break;
-                    case 7:
+                    case 6:
                         defaultSingleSearchCode= "Cambridge EN-CH";
                         break;
-                    case 8:
+                    case 7:
                         defaultSingleSearchCode= "Weblio JP";
                         break;
-                    case 9:
+                    case 8:
                         defaultSingleSearchCode= "Weblio CN";
                         break;
-                    case 10:
+                    case 9:
                         defaultSingleSearchCode= "DA JP-TW Dictionary";
                         break;
-                    case 11:
+                    case 10:
                         defaultSingleSearchCode= "DA TW-JP Dictionary";
                         break;
-                    case 12:
+                    case 11:
                         defaultSingleSearchCode= "Google translate to CHTW";
                         break;
-                    case 13:
+                    case 12:
                         defaultSingleSearchCode= "Google translate to CHCN";
                         break;
-                    case 14:
+                    case 13:
                         defaultSingleSearchCode= "Google Image";
                         break;
                 }
@@ -5858,7 +5856,7 @@ public class MainActivity extends AppCompatActivity {
                         webViewBrowser.loadUrl(fastDictUrl);
                         break;
                     case "Dict CN":
-                        String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;;
+                        String DictDotCnUrl= "http://dict.cn/big5/"+searchKeyword;
                         webViewBrowser.loadUrl(DictDotCnUrl);
                         break;
                     case "Google Dictionary":
@@ -5962,12 +5960,12 @@ public class MainActivity extends AppCompatActivity {
                         webViewBrowser.loadUrl(TechDicoUrl);
                         break;
                     case "BioMedical Dictionary":
-                        String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
-                        webViewBrowser.loadUrl(BioMedicalDictionaryUrl);
+                        String bioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
+                        webViewBrowser.loadUrl(bioMedicalDictionaryUrl);
                         break;
                     case "IsPlural Dictionary":
-                        String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
-                        webViewBrowser.loadUrl(IsPluralDictionaryUrl);
+                        String isPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
+                        webViewBrowser.loadUrl(isPluralDictionaryUrl);
                         break;
                     case "LingoHelpPrepositions":
                         String lingoHelpPrepositionsUrl= "https://lingohelp.me/q/?w="+searchKeyword;
@@ -6097,42 +6095,42 @@ public class MainActivity extends AppCompatActivity {
                         String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
                         webViewBrowser.loadUrl(JapanDictKanjiDictionaryUrl);
                         break;
-                                                                                                                    //                    case "Word Plus Chinese":
-                                                                                                                    //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusChinese);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus English 1":
-                                                                                                                    //                        String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusENglish1);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus English 2":
-                                                                                                                    //                        String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusENglish2);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus Translation":
-                                                                                                                    //                        String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusTranslation);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus Japanese 1":
-                                                                                                                    //                        String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusJapanese1);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus Japanese 2":
-                                                                                                                    //                        String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusJapanese2);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus Japanese 3":
-                                                                                                                    //                        String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusJapanese3);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus Meaning 1":
-                                                                                                                    //                        String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusMeaning1);
-                                                                                                                    //                        break;
-                                                                                                                    //                    case "Word Plus Meaning 2":
-                                                                                                                    //                        String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
-                                                                                                                    //                        webViewBrowser.loadUrl(googlePlusMeaning2);
-                                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Chinese":
+                                                                                                    //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusChinese);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus English 1":
+                                                                                                    //                        String googlePlusENglish1= "http://www.google.com/search?q="+searchKeyword+"+英文";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusENglish1);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus English 2":
+                                                                                                    //                        String googlePlusENglish2= "http://www.google.com/search?q="+searchKeyword+"+英語";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusENglish2);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Translation":
+                                                                                                    //                        String googlePlusTranslation= "http://www.google.com/search?q="+searchKeyword+"+翻譯";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusTranslation);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Japanese 1":
+                                                                                                    //                        String googlePlusJapanese1= "http://www.google.com/search?q="+searchKeyword+"+日文";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusJapanese1);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Japanese 2":
+                                                                                                    //                        String googlePlusJapanese2= "http://www.google.com/search?q="+searchKeyword+"+日語";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusJapanese2);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Japanese 3":
+                                                                                                    //                        String googlePlusJapanese3= "http://www.google.com/search?q="+searchKeyword+"+日本語";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusJapanese3);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Meaning 1":
+                                                                                                    //                        String googlePlusMeaning1= "http://www.google.com/search?q="+searchKeyword+"+意思";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusMeaning1);
+                                                                                                    //                        break;
+                                                                                                    //                    case "Word Plus Meaning 2":
+                                                                                                    //                        String googlePlusMeaning2 = "http://www.google.com/search?q="+searchKeyword+"+meaning";
+                                                                                                    //                        webViewBrowser.loadUrl(googlePlusMeaning2);
+                                                                                                    //                        break;
                     case "Google translate to CHTW":
                         String GoogleTranslateToCHTWUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
                         webViewBrowser.loadUrl(GoogleTranslateToCHTWUrl);
@@ -6188,12 +6186,12 @@ public class MainActivity extends AppCompatActivity {
                         webViewBrowser.loadUrl(jukuuUrlCHJP);
                         break;
                     case "Linguee CH-EN":
-                        String LingueeUrlCHEN= "https://cn.linguee.com/中文-英语/search?source=auto&query="+searchKeyword;
-                        webViewBrowser.loadUrl(LingueeUrlCHEN);
+                        String lingueeUrlCHEN= "https://cn.linguee.com/中文-英语/search?source=auto&query="+searchKeyword;
+                        webViewBrowser.loadUrl(lingueeUrlCHEN);
                         break;
                     case "Linguee JP-EN":
-                        String LingueeUrlJPEN= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+searchKeyword;
-                        webViewBrowser.loadUrl(LingueeUrlJPEN);
+                        String lingueeUrlJPEN= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+searchKeyword;
+                        webViewBrowser.loadUrl(lingueeUrlJPEN);
                         break;
                     case "Wikipedia TW":
                         String wikipediaTWUrl= "https://zh.wikipedia.org/wiki/"+searchKeyword;

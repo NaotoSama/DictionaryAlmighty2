@@ -679,7 +679,7 @@
     <string name="Kanji_recognizer">Kanji Recognizer</string>
     <string name="Memorize_word_shortcut">Memorize Word (Shortcut)</string>
     <string name="Word_input_to_memorize">Please type the word(s) you want to memorize</string>
-    <string name="Long_press_words_to_memorize">Long press = Share word(s)</string>
+    <string name="Long_press_words_to_memorize">Long press = Bind a dictionary to a selected word</string>
     <string name="Dict_dot_cn">Dict.cn</string>
     <string name="Etymonline">Etymology Dictionary</string>
     <string name="Japan_dict">JapanDict JP⇄EN Dictionary</string>
@@ -690,6 +690,17 @@
     <string name="Appwidget_text">Quick Word</string>
     <string name="Add_widget">Add widget</string>
     <string name="Put_in_the_words_you_want_to_search_or_memorize">Put in the word(s) you want to search or memorize here</string>
+    <string name="Word_now_bound_with">Word now bound with:</string>
+    <string name="Use_bound_dictionary_to_search">Search word with bound dictionary</string>
+    <string name="Please_bind_a_dictionary_first">Please bind a dictionary before performing this action</string>
+    <string name="Bind_this_word_with_a_dictionary">Bind this word with a dictionary</string>
+    <string name="Choose_a_dictionary">Choose a dictionary</string>
+    <string name="Set_the_first_dictionary">Set the first dictionary</string>
+    <string name="Save_the_first_dictionary">Save the first dictionary</string>
+    <string name="Set_the_second_dictionary">Set the second dictionary</string>
+    <string name="Save_the_second_dictionary">Save the second dictionary</string>
+    <string name="Set_the_third_dictionary">Set the third dictionary</string>
+    <string name="Save_the_third_dictionary">Save the third dictionary</string>
 
 </resources>
 
