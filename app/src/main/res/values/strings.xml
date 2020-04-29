@@ -6,6 +6,8 @@
         <item>@string/Set_default_dictionary</item>
         <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
+        <item>@string/Go_to_dictionary_almighty_homepage</item>
+        <item>@string/Sponsor_the_developer</item>
         <!--        <item>@string/Online_chat_room</item>-->
         <!--        <item>@string/Restore_to_default_background</item>-->
         <!--        <item>@string/Clear_search_input</item>-->
@@ -21,6 +23,8 @@
         <item>@string/Set_default_dictionary</item>
         <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
+        <item>@string/Go_to_dictionary_almighty_homepage</item>
+        <item>@string/Sponsor_the_developer</item>
         <!--        <item>@string/Online_chat_room</item>-->
         <!--        <item>@string/Restore_to_default_background</item>-->
         <!--        <item>@string/Register_login_rename_username</item> (已移轉到Action bar menu，目前用不到) -->
@@ -113,6 +117,7 @@
         <item>@string/Power_thesaurus_antonym</item>
         <item>@string/Word_Hippo</item>
         <item>@string/Onelook</item>
+        <item>@string/Ozdic_collocation_dictionary</item>
 
         <item>@string/Weblio_JP</item>
         <item>@string/Weblio_CN</item>
@@ -160,6 +165,7 @@
         <item>@string/Google_Image</item>
 
         <item>@string/Ludwig</item>
+        <item>@string/Search_sentences_dot_com</item>
         <item>@string/Your_Dictionary_Example_Sentences</item>
         <item>@string/YouGlish</item>
         <item>@string/Word_Cool_EN_CH</item>
@@ -632,7 +638,7 @@
     <string name="Wordnik">Wordnik</string>
     <string name="Fine_dictionary">Fine Dictionary</string>
     <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
-    <string name="Technical_difficulty_in_rendering_web_links">Due to technical difficulty, if the web page fails to render, choose a browser to load the page.</string>
+    <string name="Technical_difficulty_in_rendering_web_links">Due to technical difficulty, if the web page fails to render or you can\'t find the word definition, choose a browser to load the page.</string>
     <string name="Clear_user_search_history_confirmation_message">If your\'e a registered user, tapping \"Confirm\" will clear your search history on local phone drive and cloud drive. If not, search history on local phone drive will be cleared. Tap \"Cancel\" to back out.</string>
     <string name="Clear_user_vocabulary_list_confirmation_message">If your\'e a registered user, tapping \"Confirm\" will clear your vocablary list on local phone drive and cloud drive. If not, vocablary list on local phone drive will be cleared. Tap \"Cancel\" to back out.</string>
     <string name="Memorize_this_word_explanation">Memorize this word: Use your phone calendar to schedule notifications to remind of reviewing the word.</string>
@@ -701,6 +707,17 @@
     <string name="Save_the_second_dictionary">Save the second dictionary</string>
     <string name="Set_the_third_dictionary">Set the third dictionary</string>
     <string name="Save_the_third_dictionary">Save the third dictionary</string>
+    <string name="Bind_dictionary_explanation">The longer you use dictionaries, you\'ll find certain words are only included in certain dictionaries. Like in most cases you\'ll have to resort to slang dictionaries to look up idioms and slangs. That\'s where binding a dictionary with your selected word kicks in and will save you time without going over all dictionaries again.</string>
+    <string name="Ozdic_collocation_dictionary">Ozdic Collocation Dictionary</string>
+    <string name="Search_sentences_dot_com">Search Sentences</string>
+    <string name="Go_to_dictionary_almighty_homepage">Dictionary Almighty Homepage</string>
+    <string name="Sponsor_the_developer">Sponsor the developer</string>
+    <string name="You_can_tap_return_to_the_top_page">Hint: You can tap the back key to return to the top page</string>
+    <string name="User_removal_failed">User removal failed due to expired verification token. Please manually log out and log in again and retry immediately.</string>
+    <string name="Sponsor_developer_message">If you like this app and want to show your support, you are welcome to sponsor in the following ways</string>
+    <string name="EC_Pay">EC Pay sponsor</string>
+    <string name="Buy_me_a_coffee">Buy me a coffee (Via Paypal)</string>
+    <string name="LikeCoin">LikeCoin sponsor</string>
 
 </resources>
 

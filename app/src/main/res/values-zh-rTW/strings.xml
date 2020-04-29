@@ -20,15 +20,15 @@
     <string name="Sanseido">三省堂日日字典</string>
     <string name="Eijirou">英辞郎</string>
     <string name="How_do_you_say_this_in_English">英語でなんて言うの？</string>
-    <string name="Word_Plus_Chinese">關鍵字 + 中文</string>
-    <string name="Word_Plus_English1">關鍵字 + 英文</string>
-    <string name="Word_Plus_English2">關鍵字 + 英語</string>
-    <string name="Word_Plus_Translation">關鍵字 + 翻譯</string>
-    <string name="Word_Plus_Japanese1">關鍵字 + 日文</string>
-    <string name="Word_Plus_Japanese2">關鍵字 + 日語</string>
-    <string name="Word_Plus_Japanese3">關鍵字 + 日本語</string>
-    <string name="Word_Plus_Meaning1">關鍵字 + 意思</string>
-    <string name="Word_Plus_Meaning2">關鍵字 + meaning</string>
+    <string name="Word_Plus_Chinese">中文翻譯</string>
+    <string name="Word_Plus_English1">英文翻譯</string>
+    <string name="Word_Plus_English2">(日文單字的)英語翻譯</string>
+    <string name="Word_Plus_Translation">(句子的) 翻譯</string>
+    <string name="Word_Plus_Japanese1">日文翻譯</string>
+    <string name="Word_Plus_Japanese2">日語翻譯</string>
+    <string name="Word_Plus_Japanese3">日本語翻譯</string>
+    <string name="Word_Plus_Meaning1">問單字的中文意思</string>
+    <string name="Word_Plus_Meaning2">問單字的英文意思</string>
     <string name="Ludwig">Ludwig例句搜尋</string>
     <string name="Your_Dictionary_Example_Sentences">Your Dictionary例句搜尋</string>
     <string name="Word_Cool_EN_CH">句酷 中英英中</string>
@@ -44,13 +44,12 @@
     <string name="Word_Input">在此輸入欲查詢單字</string>
     <string name="Select_EN_Dictionary_Provider">查英文字典</string>
     <string name="Select_JP_Dictionary_Provider">查日文字典</string>
-    <string name="Select_Google_Word_Searcher">問Google</string>
+    <string name="Select_Google_Word_Searcher">問Google大神</string>
     <string name="Select_Sentence_Searcher">查例句</string>
     <string name="Miscellaneous">雜項</string>
     <string name="Click_To_Scroll">點此下拉選單</string>
     <string name="Search">搜尋</string>
     <string name="Put_in_your_search_keyword_here">輸入欲搜尋的單字</string>
-    <string name="app_name">字典一指通</string>
     <string name="Tangorin_Word">單語林--單字</string>
     <string name="Kotoba_Bank">言葉バンク</string>
     <string name="Onelook">Onelook英文關聯詞字典</string>
@@ -158,8 +157,8 @@
     <string name="Pro_version_is_on">正使用專業版</string>
     <string name="You_are_using_pro_version">您正使用專業版</string>
     <string name="You_are_using_simplified_version">您正使用簡易版</string>
-    <string name="Dictionary_almighty_pro">字典一指通 (專業版)</string>
-    <string name="Dictionary_almighty_simplified">字典一指通 (簡易版)</string>
+    <string name="Dictionary_almighty_pro">百典快搜 (專業版)</string>
+    <string name="Dictionary_almighty_simplified">百典快搜 (簡易版)</string>
     <string name="Your_search_history">您的搜尋紀錄</string>
     <string name="Set_default_dictionary">設置預設字典</string>
     <string name="Please_set_a_default_dictionary">請先設置一個預設字典(點選快搜模式)</string>
@@ -364,7 +363,7 @@
     <string name="Wordnik">Wordnik英英字典</string>
     <string name="Fine_dictionary">Fine Dictionary英英字典</string>
     <string name="Difference_between_dot_net">DifferenceBetween.Net</string>
-    <string name="Technical_difficulty_in_rendering_web_links">因技術限制，若畫面一直空白，請點選一個瀏覽器開啟頁面。</string>
+    <string name="Technical_difficulty_in_rendering_web_links">因技術限制，若畫面一直空白或查不到字，請點選一個瀏覽器開啟頁面。</string>
     <string name="Clear_user_search_history_confirmation_message">若您已註冊會員，點擊確認鈕將會清除您在手機端與雲端上儲存的搜尋紀錄。若未註冊會員，手機端的搜尋紀錄將會被清除。要返回前一頁，點擊取消鈕。</string>
     <string name="Clear_user_vocabulary_list_confirmation_message">若您已註冊會員，點擊確認鈕將會清除您在手機端與雲端上儲存的單字本。若未註冊會員，手機端的單字本將會被清除。要返回前一頁，點擊取消鈕。</string>
     <string name="Memorize_this_word_explanation">記憶單字：透過您手機的日曆，預定並發送通知提醒複習單字。</string>
@@ -405,7 +404,7 @@
     <string name="Word_reference_en_to_jp">WordReference英日字典</string>
     <string name="Word_reference_jp_to_en">WordReference日英字典</string>
     <string name="Forgetting_curve_explanation">我們的記憶會隨時間不斷遺忘，若不複習，20分鐘後忘掉40%，1天後忘掉70%，一周後幾乎快忘光，所以要不斷複習和回憶之前記過的內容。記憶經過遺忘後又回想起來，更能獲得強化。</string>
-    <string name="This_app_and_forgetting_curve">字典一指通在即將遺忘單字前發送複習通知，讓大腦牢牢抓住學過的字。有了貼心提醒，不怕學了又弄丟，只怕你懶得自主複習！</string>
+    <string name="This_app_and_forgetting_curve">百典快搜在即將遺忘單字前發送複習通知，讓大腦牢牢抓住學過的字。有了貼心提醒，不怕學了又弄丟，只怕你懶得自主複習！</string>
     <string name="Romaji_desu_enjp_jpen_dictionary">Romaji Desu日英英日字典</string>
     <string name="Romaji_desu_kanji_dictionary">Romaji Desu漢字字典</string>
     <string name="Kanji_recognizer">漢字手寫字典</string>
@@ -433,5 +432,17 @@
     <string name="Save_the_second_dictionary">儲存第二個預設字典</string>
     <string name="Set_the_third_dictionary">請設定第三個預設字典</string>
     <string name="Save_the_third_dictionary">儲存第三個預設字典</string>
+    <string name="Bind_dictionary_explanation">字典用久了你會發現，只有某些字典才有收錄特定的單字或片語，尤其俚語和成語更只有俚語字典才會收錄，用久了會知道哪個字典找得到哪個字。這時可把你點選的字與你指定的字典綁定，以後查這個字就更快更省力。</string>
+    <string name="Ozdic_collocation_dictionary">Ozdic搭配詞字典</string>
+    <string name="Search_sentences_dot_com">Search Sentences例句搜尋</string>
+    <string name="app_name">百典快搜</string>
+    <string name="Go_to_dictionary_almighty_homepage">前往百典快搜官網</string>
+    <string name="Sponsor_the_developer">贊助開發者</string>
+    <string name="You_can_tap_return_to_the_top_page">貼心提醒：您可按手機的返回鍵回到首頁</string>
+    <string name="User_removal_failed">用戶刪除失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試</string>
+    <string name="Sponsor_developer_message">若您喜歡開發者製作的軟體並想表達鼓勵與支持，可透過以下方式鼓勵和支持開發者</string>
+    <string name="EC_Pay">綠界贊助平台</string>
+    <string name="Buy_me_a_coffee">買杯咖啡贊助(Paypal)</string>
+    <string name="LikeCoin">化讚為賞(LikeCoin)贊助平台</string>
 </resources>
 

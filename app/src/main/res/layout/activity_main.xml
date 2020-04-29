@@ -57,7 +57,7 @@
         android:layout_height="70dp"
         android:hint="@string/Word_Input"
         android:importantForAutofill="no"
-        android:inputType="textMultiLine"
+        android:inputType="textAutoCorrect|textMultiLine|textAutoComplete"
         android:lines="4"
         android:minLines="1"
         android:textAlignment="center"

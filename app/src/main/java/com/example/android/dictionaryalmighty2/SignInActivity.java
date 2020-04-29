@@ -133,6 +133,7 @@ public class SignInActivity extends AppCompatActivity {
                             .duration(1000)
                             .repeat(0)
                             .playOn(findViewById(R.id.screen_name_textView));
+
                 }
 
                 else {
@@ -166,7 +167,6 @@ public class SignInActivity extends AppCompatActivity {
                                     .build(),
                             RC_SIGN_IN);
                 }
-
             }
         };
 
@@ -290,7 +290,7 @@ public class SignInActivity extends AppCompatActivity {
                                                         if (task.isSuccessful()) {
                                                             Log.d(TAG, "顯示暱稱更新成功");
 
-                                                            //把顯示暱稱改成用樹輸入的新暱稱並儲存起來
+                                                            //把顯示暱稱改成用戶輸入的新暱稱並儲存起來
                                                             mScreenNameTextView.setText(getResources().getString(R.string.User) + userInputDisplayName);
                                                             userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
                                                             userScreenNameSharedPreferences.edit().putString("userScreenName", userInputDisplayName).apply();
@@ -586,7 +586,7 @@ public class SignInActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(getApplicationContext(), "用戶刪除失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), R.string.User_removal_failed, Toast.LENGTH_LONG).show();
                                         }
                                     });
                         }

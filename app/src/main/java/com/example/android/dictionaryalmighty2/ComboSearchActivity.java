@@ -348,7 +348,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                         comboSearchWebViewBrowser1.loadUrl(yahooDictionaryUrl);
                         break;
                     case "National Academy for Educational Research":
-                        String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                        String naerUrl= "http://terms.naer.edu.tw/m/search/?q="+searchKeyword+"&field=text&op=AND&page=";
                         comboSearchWebViewBrowser1.loadUrl(naerUrl);
                         break;
                     case "Dict Site":
@@ -490,6 +490,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "Onelook":
                         String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(onelookUrl);
+                        break;
+                    case "ozdic collocation":
+                        String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(ozdicCollocationUrl);
                         break;
                     case "Weblio JP":
                         String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -669,6 +673,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
                         Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
                         break;
+                    case "Search Sentences":
+                        String searchSentencesUrl= "https://searchsentences.com/words/"+searchKeyword+"-in-a-sentence";
+                        comboSearchWebViewBrowser1.loadUrl(searchSentencesUrl);
+                        break;
                     case "Your Dictionary Example Sentences":
                         String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(yourDictionarySentenceUrl);
@@ -756,7 +764,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser2.loadUrl(yahooDictionaryUrl);
                 break;
             case "National Academy for Educational Research":
-                String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                String naerUrl= "http://terms.naer.edu.tw/m/search/?q="+searchKeyword+"&field=text&op=AND&page=";
                 comboSearchWebViewBrowser2.loadUrl(naerUrl);
                 break;
             case "Dict Site":
@@ -898,6 +906,10 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Onelook":
                 String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(onelookUrl);
+                break;
+            case "ozdic collocation":
+                String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(ozdicCollocationUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -1077,6 +1089,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
                 Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
                 break;
+            case "Search Sentences":
+                String searchSentencesUrl= "https://searchsentences.com/words/"+searchKeyword+"-in-a-sentence";
+                comboSearchWebViewBrowser2.loadUrl(searchSentencesUrl);
+                break;
             case "Your Dictionary Example Sentences":
                 String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(yourDictionarySentenceUrl);
@@ -1164,7 +1180,7 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser3.loadUrl(yahooDictionaryUrl);
                 break;
             case "National Academy for Educational Research":
-                String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                String naerUrl= "http://terms.naer.edu.tw/m/search/?q="+searchKeyword+"&field=text&op=AND&page=";
                 comboSearchWebViewBrowser3.loadUrl(naerUrl);
                 break;
             case "Dict Site":
@@ -1306,6 +1322,10 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Onelook":
                 String onelookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(onelookUrl);
+                break;
+            case "ozdic collocation":
+                String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(ozdicCollocationUrl);
                 break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -1484,6 +1504,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 comboSearchWebViewBrowser3.loadUrl(ludwigUrl);
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
                 Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
+                break;
+            case "Search Sentences":
+                String searchSentencesUrl= "https://searchsentences.com/words/"+searchKeyword+"-in-a-sentence";
+                comboSearchWebViewBrowser3.loadUrl(searchSentencesUrl);
                 break;
             case "Your Dictionary Example Sentences":
                 String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;

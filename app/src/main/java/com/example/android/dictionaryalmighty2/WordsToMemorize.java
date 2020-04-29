@@ -284,7 +284,7 @@ public class WordsToMemorize extends AppCompatActivity {
                         .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                         .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                         .setCornerRadius(50)
-                        .setTitle(getResources().getString(R.string.Do_you_want_to))
+                        .setTitle(getResources().getString(R.string.Bind_dictionary_explanation) + System.getProperty("line.separator") + System.getProperty("line.separator") + getResources().getString(R.string.Do_you_want_to))
                         .setTextColor(Color.BLUE)
                         .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
                         .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
@@ -1206,6 +1206,7 @@ public class WordsToMemorize extends AppCompatActivity {
                                                                         setPreDefinedNotificationTimings7Days();
                                                                         setPreDefinedNotificationTimings1Month();
                                                                         choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                        Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
                                                                         break;
                                                                     case 2:
                                                                         setPreDefinedNotificationTimings1Hour();

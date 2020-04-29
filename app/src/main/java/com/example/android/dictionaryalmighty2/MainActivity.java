@@ -67,6 +67,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.remoteconfig.BuildConfig;
@@ -92,10 +93,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import constant.UiType;
+import listener.Md5CheckResultListener;
+import listener.UpdateDownloadListener;
+import model.UiConfig;
+import model.UpdateConfig;
 import pl.droidsonroids.gif.GifImageView;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+import update.UpdateAppUtils;
 
 import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
 
@@ -765,6 +772,7 @@ public class MainActivity extends AppCompatActivity {
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Power_thesaurus_antonym, R.mipmap.power_thesaurus));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Hippo, R.mipmap.word_hippo));
         mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Onelook, R.mipmap.onelook));
+        mEnglishDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Ozdic_collocation_dictionary, R.mipmap.ozdic_collocation_dictionary));
 
 
 
@@ -852,6 +860,7 @@ public class MainActivity extends AppCompatActivity {
         mSentenceSearchSpinnerItemListOriginal = new ArrayList<>();
         mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Select_one_of_the_following, R.mipmap.hand_pointing_down));
         mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Ludwig, R.mipmap.ludwig));
+        mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Search_sentences_dot_com, R.mipmap.search_sentences_dot_com));
         mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Your_Dictionary_Example_Sentences, R.mipmap.your_dictionary));
         mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.YouGlish, R.mipmap.youglish));
         mSentenceSearchSpinnerItemListOriginal.add(new DictionaryItem(R.string.Word_Cool_EN_CH, R.mipmap.jukuu));
@@ -1625,6 +1634,14 @@ public class MainActivity extends AppCompatActivity {
                     showTutorSequence();
 
                 } else if (position == 5) {
+                    //調用瀏覽器瀏覽百典通官網
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dictionaryalmighty.weebly.com/")));
+
+                } else if (position == 6) {
+                    //顯示贊助選項
+                    sponsorTheDeveloper();
+
+                } else if (position == 7) {
                     //進入聊天室
                     Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                     startActivity(goToChatRoomIntent);
@@ -1743,6 +1760,14 @@ public class MainActivity extends AppCompatActivity {
                     showTutorSequence();
 
                 } else if (position == 5) {
+                    //調用瀏覽器瀏覽百典通官網
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dictionaryalmighty.weebly.com/")));
+
+                } else if (position == 6) {
+                    //顯示贊助選項
+                    sponsorTheDeveloper();
+
+                } else if (position == 7) {
                     //進入聊天室
                     Intent goToChatRoomIntent = new Intent(MainActivity.this, ChatRoomActivity.class);
                     startActivity(goToChatRoomIntent);
@@ -2407,7 +2432,7 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 2) {
-                    String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                    String naerUrl= "http://terms.naer.edu.tw/m/search/?q="+searchKeyword+"&field=text&op=AND&page=";
                     webViewBrowser.loadUrl(naerUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
@@ -2628,6 +2653,12 @@ public class MainActivity extends AppCompatActivity {
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
+                }else if (position == 39) {
+                    String ozDicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
+                    webViewBrowser.loadUrl(ozDicCollocationUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
                 }
 
                 EnDictionarySpinner.setAdapter(mEnglishDictionarySpinnerAdapter);
@@ -2675,7 +2706,7 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 2) {
-                    String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                    String naerUrl= "http://terms.naer.edu.tw/m/search/?q="+searchKeyword+"&field=text&op=AND&page=";
                     webViewBrowser.loadUrl(naerUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
@@ -3318,42 +3349,48 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
 
                 }else if (position == 2) {
+                    String searchSentenceUrl= "https://searchsentences.com/words/"+searchKeyword+"-in-a-sentence";
+                    webViewBrowser.loadUrl(searchSentenceUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 3) {
                     String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
                     webViewBrowser.loadUrl(yourDictionarySentenceUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 3) {
+                }else if (position == 4) {
                     String youglishUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
                     webViewBrowser.loadUrl(youglishUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 4){
+                }else if (position == 5){
                     String jukuuUrlCHEN= "http://www.jukuu.com/search.php?q="+searchKeyword;
                     webViewBrowser.loadUrl(jukuuUrlCHEN);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 5) {
+                }else if (position == 6) {
                     String jukuuUrlJPEN= "http://www.jukuu.com/jsearch.php?q="+searchKeyword;
                     webViewBrowser.loadUrl(jukuuUrlJPEN);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 6) {
+                }else if (position == 7) {
                     String jukuuUrlCHJP= "http://www.jukuu.com/jcsearch.php?q="+searchKeyword;
                     webViewBrowser.loadUrl(jukuuUrlCHJP);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 7) {
+                }else if (position == 8) {
                     String LingueeUrlCHEN= "https://cn.linguee.com/中文-英语/search?source=auto&query="+searchKeyword;
                     webViewBrowser.loadUrl(LingueeUrlCHEN);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 8) {
+                }else if (position == 9) {
                     String LingueeUrlJPEN= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+searchKeyword;
                     webViewBrowser.loadUrl(LingueeUrlJPEN);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
@@ -3672,6 +3709,55 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(customActionBarTextview);
 
+    }
+
+
+
+    //==============================================================================================
+    // 讓用戶選擇用何種方式贊助開發者的Helper method
+    //==============================================================================================
+    public void sponsorTheDeveloper() {
+        CFAlertDialog.Builder sponsorDeveloperAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(getResources().getString(R.string.Sponsor_developer_message))
+                .setTextColor(Color.BLUE)
+                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+
+                //AlertDialog的確定鈕，帶往綠界支付頁面
+                .addButton(getResources().getString(R.string.EC_Pay)
+                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://p.ecpay.com.tw/1CCB3")));
+                            dialog.dismiss();
+                        })
+
+                //AlertDialog的中立鈕，帶往Paypal支付頁面
+                .addButton(getResources().getString(R.string.Buy_me_a_coffee)
+                        , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.buymeacoffee.com/almightydict")));
+                            dialog.dismiss();
+                        })
+
+                //AlertDialog的中立鈕，帶往LikeCoin支付頁面
+                .addButton(getResources().getString(R.string.LikeCoin)
+                        , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://like.co/naotosama")));
+                            dialog.dismiss();
+                        })
+
+                //AlertDialog的取消鈕
+                .addButton(getResources().getString(R.string.Cancel)
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                            dialog.dismiss();
+                        });
+
+        //把AlertDialog顯示出來
+        sponsorDeveloperAlertDialogBuilder.create().show();
     }
 
 
@@ -4467,84 +4553,87 @@ public class MainActivity extends AppCompatActivity {
                         defaultSingleSearchCode= "Onelook";
                         break;
                     case 37:
-                        defaultSingleSearchCode= "Weblio JP";
+                        defaultSingleSearchCode= "ozdic collocation";
                         break;
                     case 38:
-                        defaultSingleSearchCode= "Weblio CN";
+                        defaultSingleSearchCode= "Weblio JP";
                         break;
                     case 39:
-                        defaultSingleSearchCode= "Weblio EN";
+                        defaultSingleSearchCode= "Weblio CN";
                         break;
                     case 40:
-                        defaultSingleSearchCode= "Weblio Synonym";
+                        defaultSingleSearchCode= "Weblio EN";
                         break;
                     case 41:
-                        defaultSingleSearchCode= "Tangorin Word";
+                        defaultSingleSearchCode= "Weblio Synonym";
                         break;
                     case 42:
-                        defaultSingleSearchCode= "Tangorin Kanji";
+                        defaultSingleSearchCode= "Tangorin Word";
                         break;
                     case 43:
-                        defaultSingleSearchCode= "Tangorin Names";
+                        defaultSingleSearchCode= "Tangorin Kanji";
                         break;
                     case 44:
-                        defaultSingleSearchCode= "Tangorin Sentence";
+                        defaultSingleSearchCode= "Tangorin Names";
                         break;
                     case 45:
-                        defaultSingleSearchCode= "DA JP-TW Dictionary";
+                        defaultSingleSearchCode= "Tangorin Sentence";
                         break;
                     case 46:
-                        defaultSingleSearchCode= "DA TW-JP Dictionary";
+                        defaultSingleSearchCode= "DA JP-TW Dictionary";
                         break;
                     case 47:
-                        defaultSingleSearchCode= "Goo";
+                        defaultSingleSearchCode= "DA TW-JP Dictionary";
                         break;
                     case 48:
-                        defaultSingleSearchCode= "Sanseido";
+                        defaultSingleSearchCode= "Goo";
                         break;
                     case 49:
-                        defaultSingleSearchCode= "Kotoba Bank";
+                        defaultSingleSearchCode= "Sanseido";
                         break;
                     case 50:
-                        defaultSingleSearchCode= "J Logos";
+                        defaultSingleSearchCode= "Kotoba Bank";
                         break;
                     case 51:
-                        defaultSingleSearchCode= "Eijirou";
+                        defaultSingleSearchCode= "J Logos";
                         break;
                     case 52:
-                        defaultSingleSearchCode= "How do you say this in English";
+                        defaultSingleSearchCode= "Eijirou";
                         break;
                     case 53:
-                        defaultSingleSearchCode= "Jisho";
+                        defaultSingleSearchCode= "How do you say this in English";
                         break;
                     case 54:
-                        defaultSingleSearchCode= "Cambridge JP-EN";
+                        defaultSingleSearchCode= "Jisho";
                         break;
                     case 55:
-                        defaultSingleSearchCode= "Cambridge EN-JP";
+                        defaultSingleSearchCode= "Cambridge JP-EN";
                         break;
                     case 56:
-                        defaultSingleSearchCode= "WWW JDIC JP-EN";
+                        defaultSingleSearchCode= "Cambridge EN-JP";
                         break;
                     case 57:
-                        defaultSingleSearchCode= "WWW JDIC EN-JP";
+                        defaultSingleSearchCode= "WWW JDIC JP-EN";
                         break;
                     case 58:
-                        defaultSingleSearchCode= "WordReference EN-JP";
+                        defaultSingleSearchCode= "WWW JDIC EN-JP";
                         break;
                     case 59:
-                        defaultSingleSearchCode= "WordReference JP-EN";
+                        defaultSingleSearchCode= "WordReference EN-JP";
                         break;
                     case 60:
-                        defaultSingleSearchCode= "RomajiDesu JP-EN EN-JP";
+                        defaultSingleSearchCode= "WordReference JP-EN";
                         break;
                     case 61:
-                        defaultSingleSearchCode= "RomajiDesu Kanji";
+                        defaultSingleSearchCode= "RomajiDesu JP-EN EN-JP";
                         break;
                     case 62:
-                        defaultSingleSearchCode= "JapanDict";
+                        defaultSingleSearchCode= "RomajiDesu Kanji";
                         break;
                     case 63:
+                        defaultSingleSearchCode= "JapanDict";
+                        break;
+                    case 64:
                         defaultSingleSearchCode= "JapanDict Kanji";
                         break;
                                                                                     //                    case 51:
@@ -4574,79 +4663,82 @@ public class MainActivity extends AppCompatActivity {
                                                                                     //                    case 59:
                                                                                     //                        defaultSingleSearchCode= "Word Plus Meaning 2";
                                                                                     //                        break;
-                    case 64:
+                    case 65:
                         defaultSingleSearchCode= "Google translate to CHTW";
                         break;
-                    case 65:
+                    case 66:
                         defaultSingleSearchCode= "Google translate to CHCN";
                         break;
-                    case 66:
+                    case 67:
                         defaultSingleSearchCode= "Google translate to EN";
                         break;
-                    case 67:
+                    case 68:
                         defaultSingleSearchCode= "Google translate to JP";
                         break;
-                    case 68:
+                    case 69:
                         defaultSingleSearchCode= "Google translate to KR";
                         break;
-                    case 69:
+                    case 70:
                         defaultSingleSearchCode= "Google translate to SP";
                         break;
-                    case 70:
+                    case 71:
                         defaultSingleSearchCode= "Google Image";
                         break;
-                    case 71:
+                    case 72:
                         defaultSingleSearchCode= "Ludwig";
                         break;
-                    case 72:
-                        defaultSingleSearchCode= "Your Dictionary Example Sentences";
-                        break;
                     case 73:
-                        defaultSingleSearchCode= "YouGlish";
+                        defaultSingleSearchCode= "Search Sentences";
                         break;
                     case 74:
-                        defaultSingleSearchCode= "Word Cool EN-CH";
+                        defaultSingleSearchCode= "Your Dictionary Example Sentences";
                         break;
                     case 75:
-                        defaultSingleSearchCode= "Word Cool EN-JP";
+                        defaultSingleSearchCode= "YouGlish";
                         break;
                     case 76:
-                        defaultSingleSearchCode= "Word Cool JP-CH";
+                        defaultSingleSearchCode= "Word Cool EN-CH";
                         break;
                     case 77:
-                        defaultSingleSearchCode= "Linguee CH-EN";
+                        defaultSingleSearchCode= "Word Cool EN-JP";
                         break;
                     case 78:
-                        defaultSingleSearchCode= "Linguee JP-EN";
+                        defaultSingleSearchCode= "Word Cool JP-CH";
                         break;
                     case 79:
-                        defaultSingleSearchCode= "Wikipedia TW";
+                        defaultSingleSearchCode= "Linguee CH-EN";
                         break;
                     case 80:
-                        defaultSingleSearchCode= "Wikipedia EN";
+                        defaultSingleSearchCode= "Linguee JP-EN";
                         break;
                     case 81:
-                        defaultSingleSearchCode= "English Encyclopedia";
+                        defaultSingleSearchCode= "Wikipedia TW";
                         break;
                     case 82:
-                        defaultSingleSearchCode= "Forvo";
+                        defaultSingleSearchCode= "Wikipedia EN";
                         break;
                     case 83:
-                        defaultSingleSearchCode= "Difference Between";
+                        defaultSingleSearchCode= "English Encyclopedia";
                         break;
                     case 84:
-                        defaultSingleSearchCode= "Net Speak";
+                        defaultSingleSearchCode= "Forvo";
                         break;
                     case 85:
-                        defaultSingleSearchCode= "Just the Word";
+                        defaultSingleSearchCode= "Difference Between";
                         break;
                     case 86:
-                        defaultSingleSearchCode= "Yomikata";
+                        defaultSingleSearchCode= "Net Speak";
                         break;
                     case 87:
-                        defaultSingleSearchCode= "Chigai";
+                        defaultSingleSearchCode= "Just the Word";
                         break;
                     case 88:
+                        defaultSingleSearchCode= "Yomikata";
+                        break;
+                    case 89:
+                        defaultSingleSearchCode= "Chigai";
+                        break;
+                    case 90:
                         defaultSingleSearchCode= "OJAD";
                         break;
                 }
@@ -4835,84 +4927,87 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeFirstDictionary= "Onelook";
                         break;
                     case 37:
-                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
+                        defaultComboSearchCodeFirstDictionary= "ozdic collocation";
                         break;
                     case 38:
-                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
+                        defaultComboSearchCodeFirstDictionary= "Weblio JP";
                         break;
                     case 39:
-                        defaultComboSearchCodeFirstDictionary= "Weblio EN";
+                        defaultComboSearchCodeFirstDictionary= "Weblio CN";
                         break;
                     case 40:
-                        defaultComboSearchCodeFirstDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeFirstDictionary= "Weblio EN";
                         break;
                     case 41:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Word";
+                        defaultComboSearchCodeFirstDictionary= "Weblio Synonym";
                         break;
                     case 42:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Word";
                         break;
                     case 43:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Names";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Kanji";
                         break;
                     case 44:
-                        defaultComboSearchCodeFirstDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Names";
                         break;
                     case 45:
-                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "Tangorin Sentence";
                         break;
                     case 46:
-                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeFirstDictionary= "DA JP-TW Dictionary";
                         break;
                     case 47:
-                        defaultComboSearchCodeFirstDictionary= "Goo";
+                        defaultComboSearchCodeFirstDictionary= "DA TW-JP Dictionary";
                         break;
                     case 48:
-                        defaultComboSearchCodeFirstDictionary= "Sanseido";
+                        defaultComboSearchCodeFirstDictionary= "Goo";
                         break;
                     case 49:
-                        defaultComboSearchCodeFirstDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeFirstDictionary= "Sanseido";
                         break;
                     case 50:
-                        defaultComboSearchCodeFirstDictionary= "J Logos";
+                        defaultComboSearchCodeFirstDictionary= "Kotoba Bank";
                         break;
                     case 51:
-                        defaultComboSearchCodeFirstDictionary= "Eijirou";
+                        defaultComboSearchCodeFirstDictionary= "J Logos";
                         break;
                     case 52:
-                        defaultComboSearchCodeFirstDictionary= "How do you say this in English";
+                        defaultComboSearchCodeFirstDictionary= "Eijirou";
                         break;
                     case 53:
-                        defaultComboSearchCodeFirstDictionary= "Jisho";
+                        defaultComboSearchCodeFirstDictionary= "How do you say this in English";
                         break;
                     case 54:
-                        defaultComboSearchCodeFirstDictionary= "Cambridge JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "Jisho";
                         break;
                     case 55:
-                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "Cambridge JP-EN";
                         break;
                     case 56:
-                        defaultComboSearchCodeFirstDictionary= "WWW JDIC JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "Cambridge EN-JP";
                         break;
                     case 57:
-                        defaultComboSearchCodeFirstDictionary= "WWW JDIC EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "WWW JDIC JP-EN";
                         break;
                     case 58:
-                        defaultComboSearchCodeFirstDictionary= "WordReference EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "WWW JDIC EN-JP";
                         break;
                     case 59:
-                        defaultComboSearchCodeFirstDictionary= "WordReference JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "WordReference EN-JP";
                         break;
                     case 60:
-                        defaultComboSearchCodeFirstDictionary= "RomajiDesu JP-EN EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "WordReference JP-EN";
                         break;
                     case 61:
-                        defaultComboSearchCodeFirstDictionary= "RomajiDesu Kanji";
+                        defaultComboSearchCodeFirstDictionary= "RomajiDesu JP-EN EN-JP";
                         break;
                     case 62:
-                        defaultComboSearchCodeFirstDictionary= "JapanDict";
+                        defaultComboSearchCodeFirstDictionary= "RomajiDesu Kanji";
                         break;
                     case 63:
+                        defaultComboSearchCodeFirstDictionary= "JapanDict";
+                        break;
+                    case 64:
                         defaultComboSearchCodeFirstDictionary= "JapanDict Kanji";
                         break;
                                                                                                 //                    case 51:
@@ -4942,79 +5037,82 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeFirstDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 64:
+                    case 65:
                         defaultComboSearchCodeFirstDictionary= "Google translate to CHTW";
                         break;
-                    case 65:
+                    case 66:
                         defaultComboSearchCodeFirstDictionary= "Google translate to CHCN";
                         break;
-                    case 66:
+                    case 67:
                         defaultComboSearchCodeFirstDictionary= "Google translate to EN";
                         break;
-                    case 67:
+                    case 68:
                         defaultComboSearchCodeFirstDictionary= "Google translate to JP";
                         break;
-                    case 68:
+                    case 69:
                         defaultComboSearchCodeFirstDictionary= "Google translate to KR";
                         break;
-                    case 69:
+                    case 70:
                         defaultComboSearchCodeFirstDictionary= "Google translate to SP";
                         break;
-                    case 70:
+                    case 71:
                         defaultComboSearchCodeFirstDictionary= "Google Image";
                         break;
-                    case 71:
+                    case 72:
                         defaultComboSearchCodeFirstDictionary= "Ludwig";
                         break;
-                    case 72:
-                        defaultComboSearchCodeFirstDictionary= "Your Dictionary Example Sentences";
-                        break;
                     case 73:
-                        defaultComboSearchCodeFirstDictionary= "YouGlish";
+                        defaultComboSearchCodeFirstDictionary= "Search Sentences";
                         break;
                     case 74:
-                        defaultComboSearchCodeFirstDictionary= "Word Cool EN-CH";
+                        defaultComboSearchCodeFirstDictionary= "Your Dictionary Example Sentences";
                         break;
                     case 75:
-                        defaultComboSearchCodeFirstDictionary= "Word Cool EN-JP";
+                        defaultComboSearchCodeFirstDictionary= "YouGlish";
                         break;
                     case 76:
-                        defaultComboSearchCodeFirstDictionary= "Word Cool JP-CH";
+                        defaultComboSearchCodeFirstDictionary= "Word Cool EN-CH";
                         break;
                     case 77:
-                        defaultComboSearchCodeFirstDictionary= "Linguee CH-EN";
+                        defaultComboSearchCodeFirstDictionary= "Word Cool EN-JP";
                         break;
                     case 78:
-                        defaultComboSearchCodeFirstDictionary= "Linguee JP-EN";
+                        defaultComboSearchCodeFirstDictionary= "Word Cool JP-CH";
                         break;
                     case 79:
-                        defaultComboSearchCodeFirstDictionary= "Wikipedia TW";
+                        defaultComboSearchCodeFirstDictionary= "Linguee CH-EN";
                         break;
                     case 80:
-                        defaultComboSearchCodeFirstDictionary= "Wikipedia EN";
+                        defaultComboSearchCodeFirstDictionary= "Linguee JP-EN";
                         break;
                     case 81:
-                        defaultComboSearchCodeFirstDictionary= "English Encyclopedia";
+                        defaultComboSearchCodeFirstDictionary= "Wikipedia TW";
                         break;
                     case 82:
-                        defaultComboSearchCodeFirstDictionary= "Forvo";
+                        defaultComboSearchCodeFirstDictionary= "Wikipedia EN";
                         break;
                     case 83:
-                        defaultComboSearchCodeFirstDictionary= "Difference Between";
+                        defaultComboSearchCodeFirstDictionary= "English Encyclopedia";
                         break;
                     case 84:
-                        defaultComboSearchCodeFirstDictionary= "Net Speak";
+                        defaultComboSearchCodeFirstDictionary= "Forvo";
                         break;
                     case 85:
-                        defaultComboSearchCodeFirstDictionary= "Just the Word";
+                        defaultComboSearchCodeFirstDictionary= "Difference Between";
                         break;
                     case 86:
-                        defaultComboSearchCodeFirstDictionary= "Yomikata";
+                        defaultComboSearchCodeFirstDictionary= "Net Speak";
                         break;
                     case 87:
-                        defaultComboSearchCodeFirstDictionary= "Chigai";
+                        defaultComboSearchCodeFirstDictionary= "Just the Word";
                         break;
                     case 88:
+                        defaultComboSearchCodeFirstDictionary= "Yomikata";
+                        break;
+                    case 89:
+                        defaultComboSearchCodeFirstDictionary= "Chigai";
+                        break;
+                    case 90:
                         defaultComboSearchCodeFirstDictionary= "OJAD";
                         break;
                 }
@@ -5202,85 +5300,87 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeSecondDictionary= "Onelook";
                         break;
                     case 37:
-                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
+                        defaultComboSearchCodeSecondDictionary= "ozdic collocation";
                         break;
                     case 38:
-                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
+                        defaultComboSearchCodeSecondDictionary= "Weblio JP";
                         break;
                     case 39:
-                        defaultComboSearchCodeSecondDictionary= "Weblio EN";
+                        defaultComboSearchCodeSecondDictionary= "Weblio CN";
                         break;
                     case 40:
-                        defaultComboSearchCodeSecondDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeSecondDictionary= "Weblio EN";
                         break;
                     case 41:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Word";
+                        defaultComboSearchCodeSecondDictionary= "Weblio Synonym";
                         break;
                     case 42:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Word";
                         break;
                     case 43:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Names";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Kanji";
                         break;
                     case 44:
-                        defaultComboSearchCodeSecondDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Names";
                         break;
                     case 45:
-                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "Tangorin Sentence";
                         break;
                     case 46:
-                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeSecondDictionary= "DA JP-TW Dictionary";
                         break;
                     case 47:
-                        defaultComboSearchCodeSecondDictionary= "Goo";
+                        defaultComboSearchCodeSecondDictionary= "DA TW-JP Dictionary";
                         break;
                     case 48:
-                        defaultComboSearchCodeSecondDictionary= "Sanseido";
+                        defaultComboSearchCodeSecondDictionary= "Goo";
                         break;
                     case 49:
-                        defaultComboSearchCodeSecondDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeSecondDictionary= "Sanseido";
                         break;
                     case 50:
-                        defaultComboSearchCodeSecondDictionary= "J Logos";
+                        defaultComboSearchCodeSecondDictionary= "Kotoba Bank";
                         break;
                     case 51:
-                        defaultComboSearchCodeSecondDictionary= "Eijirou";
+                        defaultComboSearchCodeSecondDictionary= "J Logos";
                         break;
                     case 52:
-                        defaultComboSearchCodeSecondDictionary= "How do you say this in English";
+                        defaultComboSearchCodeSecondDictionary= "Eijirou";
                         break;
                     case 53:
-                        defaultComboSearchCodeSecondDictionary= "Jisho";
+                        defaultComboSearchCodeSecondDictionary= "How do you say this in English";
                         break;
                     case 54:
-                        defaultComboSearchCodeSecondDictionary= "Cambridge JP-EN";
+                        defaultComboSearchCodeSecondDictionary= "Jisho";
                         break;
                     case 55:
-                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-JP";
+                        defaultComboSearchCodeSecondDictionary= "Cambridge JP-EN";
                         break;
                     case 56:
-                        defaultComboSearchCodeSecondDictionary= "WWW JDIC JP-EN";
+                        defaultComboSearchCodeSecondDictionary= "Cambridge EN-JP";
                         break;
                     case 57:
+                        defaultComboSearchCodeSecondDictionary= "WWW JDIC JP-EN";
+                        break;
+                    case 58:
                         defaultComboSearchCodeSecondDictionary= "WWW JDIC EN-JP";
                         break;
-
-                    case 58:
+                    case 59:
                         defaultComboSearchCodeSecondDictionary= "WordReference EN-JP";
                         break;
-                    case 59:
+                    case 60:
                         defaultComboSearchCodeSecondDictionary= "WordReference JP-EN";
                         break;
-                    case 60:
+                    case 61:
                         defaultComboSearchCodeSecondDictionary= "RomajiDesu JP-EN EN-JP";
                         break;
-                    case 61:
+                    case 62:
                         defaultComboSearchCodeSecondDictionary= "RomajiDesu Kanji";
                         break;
-                    case 62:
+                    case 63:
                         defaultComboSearchCodeSecondDictionary= "JapanDict";
                         break;
-                    case 63:
+                    case 64:
                         defaultComboSearchCodeSecondDictionary= "JapanDict Kanji";
                         break;
                                                                                                 //                    case 51:
@@ -5310,79 +5410,82 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeSecondDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 64:
+                    case 65:
                         defaultComboSearchCodeSecondDictionary= "Google translate to CHTW";
                         break;
-                    case 65:
+                    case 66:
                         defaultComboSearchCodeSecondDictionary= "Google translate to CHCN";
                         break;
-                    case 66:
+                    case 67:
                         defaultComboSearchCodeSecondDictionary= "Google translate to EN";
                         break;
-                    case 67:
+                    case 68:
                         defaultComboSearchCodeSecondDictionary= "Google translate to JP";
                         break;
-                    case 68:
+                    case 69:
                         defaultComboSearchCodeSecondDictionary= "Google translate to KR";
                         break;
-                    case 69:
+                    case 70:
                         defaultComboSearchCodeSecondDictionary= "Google translate to SP";
                         break;
-                    case 70:
+                    case 71:
                         defaultComboSearchCodeSecondDictionary= "Google Image";
                         break;
-                    case 71:
+                    case 72:
                         defaultComboSearchCodeSecondDictionary= "Ludwig";
                         break;
-                    case 72:
-                        defaultComboSearchCodeSecondDictionary= "Your Dictionary Example Sentences";
-                        break;
                     case 73:
-                        defaultComboSearchCodeSecondDictionary= "YouGlish";
+                        defaultComboSearchCodeSecondDictionary= "Search Sentences";
                         break;
                     case 74:
-                        defaultComboSearchCodeSecondDictionary= "Word Cool EN-CH";
+                        defaultComboSearchCodeSecondDictionary= "Your Dictionary Example Sentences";
                         break;
                     case 75:
-                        defaultComboSearchCodeSecondDictionary= "Word Cool EN-JP";
+                        defaultComboSearchCodeSecondDictionary= "YouGlish";
                         break;
                     case 76:
-                        defaultComboSearchCodeSecondDictionary= "Word Cool JP-CH";
+                        defaultComboSearchCodeSecondDictionary= "Word Cool EN-CH";
                         break;
                     case 77:
-                        defaultComboSearchCodeSecondDictionary= "Linguee CH-EN";
+                        defaultComboSearchCodeSecondDictionary= "Word Cool EN-JP";
                         break;
                     case 78:
-                        defaultComboSearchCodeSecondDictionary= "Linguee JP-EN";
+                        defaultComboSearchCodeSecondDictionary= "Word Cool JP-CH";
                         break;
                     case 79:
-                        defaultComboSearchCodeSecondDictionary= "Wikipedia TW";
+                        defaultComboSearchCodeSecondDictionary= "Linguee CH-EN";
                         break;
                     case 80:
-                        defaultComboSearchCodeSecondDictionary= "Wikipedia EN";
+                        defaultComboSearchCodeSecondDictionary= "Linguee JP-EN";
                         break;
                     case 81:
-                        defaultComboSearchCodeSecondDictionary= "English Encyclopedia";
+                        defaultComboSearchCodeSecondDictionary= "Wikipedia TW";
                         break;
                     case 82:
-                        defaultComboSearchCodeSecondDictionary= "Forvo";
+                        defaultComboSearchCodeSecondDictionary= "Wikipedia EN";
                         break;
                     case 83:
-                        defaultComboSearchCodeSecondDictionary= "Difference Between";
+                        defaultComboSearchCodeSecondDictionary= "English Encyclopedia";
                         break;
                     case 84:
-                        defaultComboSearchCodeSecondDictionary= "Net Speak";
+                        defaultComboSearchCodeSecondDictionary= "Forvo";
                         break;
                     case 85:
-                        defaultComboSearchCodeSecondDictionary= "Just the Word";
+                        defaultComboSearchCodeSecondDictionary= "Difference Between";
                         break;
                     case 86:
-                        defaultComboSearchCodeSecondDictionary= "Yomikata";
+                        defaultComboSearchCodeSecondDictionary= "Net Speak";
                         break;
                     case 87:
-                        defaultComboSearchCodeSecondDictionary= "Chigai";
+                        defaultComboSearchCodeSecondDictionary= "Just the Word";
                         break;
                     case 88:
+                        defaultComboSearchCodeSecondDictionary= "Yomikata";
+                        break;
+                    case 89:
+                        defaultComboSearchCodeSecondDictionary= "Chigai";
+                        break;
+                    case 90:
                         defaultComboSearchCodeSecondDictionary= "OJAD";
                         break;
                 }
@@ -5570,84 +5673,87 @@ public class MainActivity extends AppCompatActivity {
                         defaultComboSearchCodeThirdDictionary= "Onelook";
                         break;
                     case 37:
-                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
+                        defaultComboSearchCodeThirdDictionary= "ozdic collocation";
                         break;
                     case 38:
-                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
+                        defaultComboSearchCodeThirdDictionary= "Weblio JP";
                         break;
                     case 39:
-                        defaultComboSearchCodeThirdDictionary= "Weblio EN";
+                        defaultComboSearchCodeThirdDictionary= "Weblio CN";
                         break;
                     case 40:
-                        defaultComboSearchCodeThirdDictionary= "Weblio Synonym";
+                        defaultComboSearchCodeThirdDictionary= "Weblio EN";
                         break;
                     case 41:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Word";
+                        defaultComboSearchCodeThirdDictionary= "Weblio Synonym";
                         break;
                     case 42:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Kanji";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Word";
                         break;
                     case 43:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Names";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Kanji";
                         break;
                     case 44:
-                        defaultComboSearchCodeThirdDictionary= "Tangorin Sentence";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Names";
                         break;
                     case 45:
-                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "Tangorin Sentence";
                         break;
                     case 46:
-                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
+                        defaultComboSearchCodeThirdDictionary= "DA JP-TW Dictionary";
                         break;
                     case 47:
-                        defaultComboSearchCodeThirdDictionary= "Goo";
+                        defaultComboSearchCodeThirdDictionary= "DA TW-JP Dictionary";
                         break;
                     case 48:
-                        defaultComboSearchCodeThirdDictionary= "Sanseido";
+                        defaultComboSearchCodeThirdDictionary= "Goo";
                         break;
                     case 49:
-                        defaultComboSearchCodeThirdDictionary= "Kotoba Bank";
+                        defaultComboSearchCodeThirdDictionary= "Sanseido";
                         break;
                     case 50:
-                        defaultComboSearchCodeThirdDictionary= "J Logos";
+                        defaultComboSearchCodeThirdDictionary= "Kotoba Bank";
                         break;
                     case 51:
-                        defaultComboSearchCodeThirdDictionary= "Eijirou";
+                        defaultComboSearchCodeThirdDictionary= "J Logos";
                         break;
                     case 52:
-                        defaultComboSearchCodeThirdDictionary= "How do you say this in English";
+                        defaultComboSearchCodeThirdDictionary= "Eijirou";
                         break;
                     case 53:
-                        defaultComboSearchCodeThirdDictionary= "Jisho";
+                        defaultComboSearchCodeThirdDictionary= "How do you say this in English";
                         break;
                     case 54:
-                        defaultComboSearchCodeThirdDictionary= "Cambridge JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "Jisho";
                         break;
                     case 55:
-                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "Cambridge JP-EN";
                         break;
                     case 56:
-                        defaultComboSearchCodeThirdDictionary= "WWW JDIC JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "Cambridge EN-JP";
                         break;
                     case 57:
-                        defaultComboSearchCodeThirdDictionary= "WWW JDIC EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "WWW JDIC JP-EN";
                         break;
                     case 58:
-                        defaultComboSearchCodeThirdDictionary= "WordReference EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "WWW JDIC EN-JP";
                         break;
                     case 59:
-                        defaultComboSearchCodeThirdDictionary= "WordReference JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "WordReference EN-JP";
                         break;
                     case 60:
-                        defaultComboSearchCodeThirdDictionary= "RomajiDesu JP-EN EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "WordReference JP-EN";
                         break;
                     case 61:
-                        defaultComboSearchCodeThirdDictionary= "RomajiDesu Kanji";
+                        defaultComboSearchCodeThirdDictionary= "RomajiDesu JP-EN EN-JP";
                         break;
                     case 62:
-                        defaultComboSearchCodeThirdDictionary= "JapanDict";
+                        defaultComboSearchCodeThirdDictionary= "RomajiDesu Kanji";
                         break;
                     case 63:
+                        defaultComboSearchCodeThirdDictionary= "JapanDict";
+                        break;
+                    case 64:
                         defaultComboSearchCodeThirdDictionary= "JapanDict Kanji";
                         break;
                                                                                                 //                    case 51:
@@ -5677,79 +5783,82 @@ public class MainActivity extends AppCompatActivity {
                                                                                                 //                    case 59:
                                                                                                 //                        defaultComboSearchCodeThirdDictionary= "Word Plus Meaning 2";
                                                                                                 //                        break;
-                    case 64:
+                    case 65:
                         defaultComboSearchCodeThirdDictionary= "Google translate to CHTW";
                         break;
-                    case 65:
+                    case 66:
                         defaultComboSearchCodeThirdDictionary= "Google translate to CHCN";
                         break;
-                    case 66:
+                    case 67:
                         defaultComboSearchCodeThirdDictionary= "Google translate to EN";
                         break;
-                    case 67:
+                    case 68:
                         defaultComboSearchCodeThirdDictionary= "Google translate to JP";
                         break;
-                    case 68:
+                    case 69:
                         defaultComboSearchCodeThirdDictionary= "Google translate to KR";
                         break;
-                    case 69:
+                    case 70:
                         defaultComboSearchCodeThirdDictionary= "Google translate to SP";
                         break;
-                    case 70:
+                    case 71:
                         defaultComboSearchCodeThirdDictionary= "Google Image";
                         break;
-                    case 71:
+                    case 72:
                         defaultComboSearchCodeThirdDictionary= "Ludwig";
                         break;
-                    case 72:
-                        defaultComboSearchCodeThirdDictionary= "Your Dictionary Example Sentences";
-                        break;
                     case 73:
-                        defaultComboSearchCodeThirdDictionary= "YouGlish";
+                        defaultComboSearchCodeThirdDictionary= "Search Sentences";
                         break;
                     case 74:
-                        defaultComboSearchCodeThirdDictionary= "Word Cool EN-CH";
+                        defaultComboSearchCodeThirdDictionary= "Your Dictionary Example Sentences";
                         break;
                     case 75:
-                        defaultComboSearchCodeThirdDictionary= "Word Cool EN-JP";
+                        defaultComboSearchCodeThirdDictionary= "YouGlish";
                         break;
                     case 76:
-                        defaultComboSearchCodeThirdDictionary= "Word Cool JP-CH";
+                        defaultComboSearchCodeThirdDictionary= "Word Cool EN-CH";
                         break;
                     case 77:
-                        defaultComboSearchCodeThirdDictionary= "Linguee CH-EN";
+                        defaultComboSearchCodeThirdDictionary= "Word Cool EN-JP";
                         break;
                     case 78:
-                        defaultComboSearchCodeThirdDictionary= "Linguee JP-EN";
+                        defaultComboSearchCodeThirdDictionary= "Word Cool JP-CH";
                         break;
                     case 79:
-                        defaultComboSearchCodeThirdDictionary= "Wikipedia TW";
+                        defaultComboSearchCodeThirdDictionary= "Linguee CH-EN";
                         break;
                     case 80:
-                        defaultComboSearchCodeThirdDictionary= "Wikipedia EN";
+                        defaultComboSearchCodeThirdDictionary= "Linguee JP-EN";
                         break;
                     case 81:
-                        defaultComboSearchCodeThirdDictionary= "English Encyclopedia";
+                        defaultComboSearchCodeThirdDictionary= "Wikipedia TW";
                         break;
                     case 82:
-                        defaultComboSearchCodeThirdDictionary= "Forvo";
+                        defaultComboSearchCodeThirdDictionary= "Wikipedia EN";
                         break;
                     case 83:
-                        defaultComboSearchCodeThirdDictionary= "Difference Between";
+                        defaultComboSearchCodeThirdDictionary= "English Encyclopedia";
                         break;
                     case 84:
-                        defaultComboSearchCodeThirdDictionary= "Net Speak";
+                        defaultComboSearchCodeThirdDictionary= "Forvo";
                         break;
                     case 85:
-                        defaultComboSearchCodeThirdDictionary= "Just the Word";
+                        defaultComboSearchCodeThirdDictionary= "Difference Between";
                         break;
                     case 86:
-                        defaultComboSearchCodeThirdDictionary= "Yomikata";
+                        defaultComboSearchCodeThirdDictionary= "Net Speak";
                         break;
                     case 87:
-                        defaultComboSearchCodeThirdDictionary= "Chigai";
+                        defaultComboSearchCodeThirdDictionary= "Just the Word";
                         break;
                     case 88:
+                        defaultComboSearchCodeThirdDictionary= "Yomikata";
+                        break;
+                    case 89:
+                        defaultComboSearchCodeThirdDictionary= "Chigai";
+                        break;
+                    case 90:
                         defaultComboSearchCodeThirdDictionary= "OJAD";
                         break;
                 }
@@ -5844,7 +5953,7 @@ public class MainActivity extends AppCompatActivity {
                         webViewBrowser.loadUrl(yahooDictionaryUrl);
                         break;
                     case "National Academy for Educational Research":
-                        String naerUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                        String naerUrl= "http://terms.naer.edu.tw/m/search/?q="+searchKeyword+"&field=text&op=AND&page=";
                         webViewBrowser.loadUrl(naerUrl);
                         break;
                     case "Dict Site":
@@ -5986,6 +6095,10 @@ public class MainActivity extends AppCompatActivity {
                     case "Onelook":
                         String oneLookUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
                         webViewBrowser.loadUrl(oneLookUrl);
+                        break;
+                    case "ozdic collocation":
+                        String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
+                        webViewBrowser.loadUrl(ozdicCollocationUrl);
                         break;
                     case "Weblio JP":
                         String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
@@ -6164,6 +6277,10 @@ public class MainActivity extends AppCompatActivity {
                         webViewBrowser.loadUrl(ludwigUrl);
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://ludwig.guru/s/"+searchKeyword))); //Fail-safe for when the Ludwig fails to render in the webView.
                         Toast.makeText(getApplicationContext(),R.string.Technical_difficulty_in_rendering_web_links,Toast.LENGTH_LONG).show();
+                        break;
+                    case "Search Sentences":
+                        String searchSentencesUrl= "https://searchsentences.com/words/"+searchKeyword+"-in-a-sentence";
+                        webViewBrowser.loadUrl(searchSentencesUrl);
                         break;
                     case "Your Dictionary Example Sentences":
                         String yourDictionarySentenceUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
@@ -6403,6 +6520,7 @@ public class MainActivity extends AppCompatActivity {
                                                             setPreDefinedNotificationTimings7Days();
                                                             setPreDefinedNotificationTimings1Month();
                                                             choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
                                                             break;
                                                         case 2:
                                                             setPreDefinedNotificationTimings1Hour();
@@ -7066,7 +7184,8 @@ public class MainActivity extends AppCompatActivity {
                             if (FriebaseUrl != null && !FriebaseUrl.startsWith("https://") && !FriebaseUrl.startsWith("http://")) {
                                 FriebaseUrl = "http://" + FriebaseUrl;
                             }
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FriebaseUrl)));
+                            //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FriebaseUrl))); //調用瀏覽器瀏覽FriebaseUrl
+                            updateAPK(); //跳出App更新介面
                         }
 
 
@@ -7249,6 +7368,55 @@ public class MainActivity extends AppCompatActivity {
 
         // Update the shared preferences with the current version code
         savedAppVersionCodeSharedPreferences.edit().putInt(PREF_VERSION_CODE_KEY, currentAppVersionCode).apply();
+    }
+
+
+
+    //==============================================================================================
+    // App更新的Helper Method
+    //==============================================================================================
+    public void updateAPK() {
+
+        UpdateAppUtils.init(this);
+
+        UpdateConfig updateConfig = new UpdateConfig();
+        updateConfig.setCheckWifi(true);
+        updateConfig.setNeedCheckMd5(true);
+        updateConfig.setNotifyImgRes(R.drawable.ic_launcher_foreground);
+
+        UiConfig uiConfig = new UiConfig();
+        uiConfig.setUiType(UiType.PLENTIFUL);
+        uiConfig.setCancelBtnText("暫不更新");
+
+        UpdateAppUtils
+                .getInstance()
+                .apkUrl(FriebaseUrl)
+                .updateTitle("百典通已推出新版本，請立即更新")
+                .updateContent("")
+                .uiConfig(uiConfig)
+                .updateConfig(updateConfig)
+                .setMd5CheckResultListener(new Md5CheckResultListener() {
+                    @Override
+                    public void onResult(boolean result) {
+                    }
+                })
+                .setUpdateDownloadListener(new UpdateDownloadListener() {
+                    @Override
+                    public void onStart() {
+                    }
+                    @Override
+                    public void onDownload(int progress) {
+                    }
+                    @Override
+                    public void onFinish() {
+                    }
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                    }
+                })
+                .update();
+
+
     }
 
 
