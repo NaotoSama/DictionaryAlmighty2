@@ -126,7 +126,7 @@ public class UserInputHistory extends AppCompatActivity {
                         userInputArraylist.addAll(userInputHistoryArraylistHashSet);
 
                         //Alphabetic sorting
-                        Collections.sort(userInputArraylist);
+                        Collections.sort(userInputArraylist, String.CASE_INSENSITIVE_ORDER);
 
                         userInputArrayAdapter.notifyDataSetChanged();
                     }
@@ -573,7 +573,7 @@ public class UserInputHistory extends AppCompatActivity {
                                                                                                     //myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
                                                                                                     //
                                                                                                     ////Alphabetic sorting
-                                                                                                    //Collections.sort(myVocabularyArrayList);
+                                                                                                    //Collections.sort(myVocabularyArrayList, String.CASE_INSENSITIVE_ORDER);
                                                                                                     //
                                                                                                     //saveMyVocabularyArrayListToSharedPreferences();
 

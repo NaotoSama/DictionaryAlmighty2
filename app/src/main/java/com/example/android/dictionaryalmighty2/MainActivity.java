@@ -301,6 +301,8 @@ public class MainActivity extends AppCompatActivity {
         selectSentenceSearcherView = findViewById(R.id.Select_Sentence_Searcher_View);
         miscellaneousView = findViewById(R.id.Miscellaneous_View);
 
+
+
         Bundle bundle = getIntent().getExtras();
         if(bundle !=null){
             widgetCallQuickSearchCode = Objects.requireNonNull(bundle).getString("widgetCallQuickSearchCode");
@@ -3806,7 +3808,7 @@ public class MainActivity extends AppCompatActivity {
             userInputArraylist.addAll(userInputArraylistHashSet);
 
             //Alphabetic sorting
-            Collections.sort(userInputArraylist);
+            Collections.sort(userInputArraylist, String.CASE_INSENSITIVE_ORDER);
         }
     }
 
@@ -3880,7 +3882,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                                     //myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
                                                                                                     //
                                                                                                     ////Alphabetic sorting
-                                                                                                    //Collections.sort(myVocabularyArrayList);
+                                                                                                    //Collections.sort(myVocabularyArrayList, String.CASE_INSENSITIVE_ORDER);
     }
 
 

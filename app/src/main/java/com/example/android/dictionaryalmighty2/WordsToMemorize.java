@@ -136,7 +136,7 @@ public class WordsToMemorize extends AppCompatActivity {
                         myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
 
                         //Alphabetic sorting
-                        Collections.sort(myVocabularyArrayList);
+                        Collections.sort(myVocabularyArrayList, String.CASE_INSENSITIVE_ORDER);
 
                         myVocabularyArrayAdapter.notifyDataSetChanged();
                     }
