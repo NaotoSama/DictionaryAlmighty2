@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/combo_search_button"
         android:layout_width="37dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:contentDescription="@string/Combo_search"
         android:text="🔎🔎🔎"
         android:textSize="10.5sp"
@@ -23,7 +23,7 @@
     <Button
         android:id="@+id/default_search_button"
         android:layout_width="37dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/Quick_search"
         android:text="🔎"
@@ -54,7 +54,7 @@
     <EditText
         android:id="@+id/Word_Input_View"
         android:layout_width="0dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:hint="@string/Word_Input"
         android:importantForAutofill="no"
         android:inputType="textAutoCorrect|textMultiLine|textAutoComplete"
@@ -71,8 +71,8 @@
 
     <ImageView
         android:id="@+id/btnSpeak"
-        android:layout_width="54dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="16dp"
@@ -84,8 +84,8 @@
 
     <ImageView
         android:id="@+id/ocr_imageView"
-        android:layout_width="57dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnSpeak"
         app:layout_constraintEnd_toStartOf="@+id/Other_functions_image"
         app:layout_constraintStart_toEndOf="@+id/btnSpeak"
@@ -94,8 +94,8 @@
 
     <ImageView
         android:id="@+id/Other_functions_image"
-        android:layout_width="56dp"
-        android:layout_height="48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         app:layout_constraintBottom_toBottomOf="@+id/ocr_imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ocr_imageView"
@@ -111,7 +111,6 @@
         app:layout_constraintTop_toBottomOf="@+id/btnSpeak"
         style="@style/spinner_press_state_style"/> <!--套用Spinner有無被點擊時對應的兩種自定義顏色，以下同-->
 
-
     <Spinner
         android:id="@+id/Other_functions_spinner"
         android:layout_width="0dp"
@@ -121,7 +120,6 @@
         app:layout_constraintStart_toStartOf="@+id/Other_functions_image"
         app:layout_constraintTop_toBottomOf="@+id/Other_functions_image"
         style="@style/spinner_press_state_style"/>
-
 
     <TextView
         android:id="@+id/Select_EN_Dictionary_Provider_View"
@@ -183,54 +181,54 @@
 
     <Spinner
         android:id="@+id/EN_dictionary_providers_spinner"
-        style="@style/spinner_press_state_style"
+
         android:layout_width="170dp"
         android:layout_height="26dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_EN_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View" />
-
+        app:layout_constraintTop_toTopOf="@+id/Select_EN_Dictionary_Provider_View"
+        style="@style/spinner_press_state_style"/>
 
     <Spinner
         android:id="@+id/JP_dictionary_providers_spinner"
-        style="@style/spinner_press_state_style"
+
         android:layout_width="170dp"
         android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_JP_Dictionary_Provider_View"
         app:layout_constraintEnd_toEndOf="@+id/EN_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View" />
-
+        app:layout_constraintTop_toTopOf="@+id/Select_JP_Dictionary_Provider_View"
+        style="@style/spinner_press_state_style"/>
 
     <Spinner
         android:id="@+id/Sentence_searcher_spinner"
-        style="@style/spinner_press_state_style"
+
         android:layout_width="170dp"
         android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_Sentence_Searcher_View"
         app:layout_constraintEnd_toEndOf="@+id/Google_word_searcher_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View" />
-
+        app:layout_constraintTop_toTopOf="@+id/Select_Sentence_Searcher_View"
+        style="@style/spinner_press_state_style"/>
 
     <Spinner
         android:id="@+id/Google_word_searcher_spinner"
-        style="@style/spinner_press_state_style"
+
         android:layout_width="170dp"
         android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Select_Google_Word_Searcher_View"
         app:layout_constraintEnd_toEndOf="@+id/JP_dictionary_providers_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View" />
-
+        app:layout_constraintTop_toTopOf="@+id/Select_Google_Word_Searcher_View"
+        style="@style/spinner_press_state_style"/>
 
     <Spinner
         android:id="@+id/Miscellaneous_searcher_spinner"
-        style="@style/spinner_press_state_style"
+
         android:layout_width="170dp"
         android:layout_height="26dp"
         app:layout_constraintBottom_toBottomOf="@+id/Miscellaneous_View"
         app:layout_constraintEnd_toEndOf="@+id/Sentence_searcher_spinner"
-        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View" />
-
+        app:layout_constraintTop_toTopOf="@+id/Miscellaneous_View"
+        style="@style/spinner_press_state_style"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -273,13 +271,14 @@
 
     <Spinner
         android:id="@+id/OCR_mode_spinner"
-        style="@style/spinner_press_state_style"
+
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/ocr_imageView"
         app:layout_constraintStart_toStartOf="@+id/ocr_imageView"
-        app:layout_constraintTop_toBottomOf="@+id/ocr_imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/ocr_imageView"
+        style="@style/spinner_press_state_style"/>
 
     <Switch
         android:id="@+id/browser_switch"
@@ -308,8 +307,8 @@
 
     <ImageView
         android:id="@+id/browser_navigate_back_imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/browser_switch"
         app:layout_constraintStart_toEndOf="@+id/pro_or_simplified_layout_switch"
@@ -318,8 +317,8 @@
 
     <ImageView
         android:id="@+id/browser_navigate_forward_imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/browser_navigate_back_imageView"
         app:layout_constraintStart_toEndOf="@+id/browser_navigate_back_imageView"
@@ -329,7 +328,7 @@
     <Button
         android:id="@+id/delete_user_input_button"
         android:layout_width="37dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:contentDescription="@string/Clear_wordInput_view"
         android:text="X"
@@ -342,7 +341,7 @@
     <Button
         android:id="@+id/user_input_history_button"
         android:layout_width="37dp"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:contentDescription="@string/Your_search_history"
         android:text="▲"
         app:layout_constraintBottom_toTopOf="@+id/Select_EN_Dictionary_Provider_View"

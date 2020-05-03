@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+
+    <!--定義Spinner有無被點擊時對應的兩種顏色-->
+    <item android:state_pressed="true"
+        android:drawable="@drawable/spinner_pressed" /><!--按下時效果-->
+    <item android:state_pressed="false"
+        android:drawable="@drawable/spinner_unpressed" /><!--默認效果-->
+</selector>

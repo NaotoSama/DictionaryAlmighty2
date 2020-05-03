@@ -64,9 +64,9 @@
             android:value="@integer/google_play_services_version" />
 
 
-        <meta-data
-            android:name="com.google.android.gms.vision.DEPENDENCIES"
-            android:value="ocr" />
+                                                                                                    <!--<meta-data-->
+                                                                                                    <!--    android:name="com.google.android.gms.vision.DEPENDENCIES"-->
+                                                                                                    <!--    android:value="ocr" />-->
 
 
         <activity
@@ -167,25 +167,25 @@
         </activity>
 
 
-        <activity
-            android:name=".ChatRoomActivity"
-            android:noHistory="false"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
+                                                                                                    <!--<activity-->
+                                                                                                    <!--    android:name=".ChatRoomActivity"-->
+                                                                                                    <!--    android:noHistory="false"-->
+                                                                                                    <!--    android:screenOrientation="portrait">-->
+                                                                                                    <!--    <intent-filter>-->
+                                                                                                    <!--        <action android:name="android.intent.action.MAIN" />-->
+                                                                                                    <!--        <action android:name="android.intent.action.VIEW" />-->
+                                                                                                    <!--    </intent-filter>-->
+                                                                                                    <!--</activity>-->
 
 
-        <activity
-            android:name=".MessageAdapter"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
+                                                                                                    <!--<activity-->
+                                                                                                    <!--    android:name=".MessageAdapter"-->
+                                                                                                    <!--    android:noHistory="true">-->
+                                                                                                    <!--    <intent-filter>-->
+                                                                                                    <!--        <action android:name="android.intent.action.MAIN" />-->
+                                                                                                    <!--        <action android:name="android.intent.action.VIEW" />-->
+                                                                                                    <!--    </intent-filter>-->
+                                                                                                    <!--</activity>-->
 
 
     </application>

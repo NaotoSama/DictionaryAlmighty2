@@ -301,7 +301,7 @@
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">Exit</string>
     <string name="Other_functions">Other Functions</string>
-    <string name="External_storage_permission">You must allow permission write external storage to change the app\'s background</string>
+    <string name="External_storage_permission">Permission allowed. Please manually open this app again.</string>
     <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
     <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
     <string name="Speech_input">Speech input</string>
@@ -718,6 +718,7 @@
     <string name="EC_Pay">EC Pay sponsor</string>
     <string name="Buy_me_a_coffee">Buy me a coffee (Via Paypal)</string>
     <string name="LikeCoin">LikeCoin sponsor</string>
+    <string name="Restricted_use_on_android_9_pie">This function is restricted to Android 9 (Pie) devices due to technical limitation. Your device is not compatible.</string>
 
 </resources>
 

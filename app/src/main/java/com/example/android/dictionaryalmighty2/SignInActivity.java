@@ -19,6 +19,7 @@ import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.auth.api.credentials.Credentials;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -193,6 +194,7 @@ public class SignInActivity extends AppCompatActivity {
                         , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         // Firebase sign out
+                        Credentials.getClient(SignInActivity.this).disableAutoSignIn(); //先停用SmartLock的自動登入功能以免無法登出
                         mFirebaseAuth.signOut();
 
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.You_are_not_signed_in) + " " + getResources().getString(R.string.You_are_using_local_storage) + " " + getResources().getString(R.string.Relaunching_app), Toast.LENGTH_LONG).show();
@@ -259,12 +261,14 @@ public class SignInActivity extends AppCompatActivity {
 
                         //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
-                        userInputView.setLines(2);
-                        userInputView.setHint(getString(R.string.Type_your_new_screen_name));
+                                                                                                    //userInputView.setLines(2);
+                                                                                                    //userInputView.setHint(getString(R.string.Type_your_new_screen_name));
                         CFAlertDialog.Builder updateDisplayNameDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
                         .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                         .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                         .setCornerRadius(50)
+                        .setTitle(getResources().getString(R.string.Type_your_new_screen_name))
+                        .setTextColor(Color.BLUE)
                         .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
                         .setHeaderView(userInputView)
 
@@ -341,12 +345,14 @@ public class SignInActivity extends AppCompatActivity {
 
                         //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
-                        userInputView.setLines(4);
-                        userInputView.setHint(getString(R.string.Type_your_new_password) + getString(R.string.Please_log_in_and_out_again));
+                                                                                                    //userInputView.setLines(4);
+                                                                                                    //userInputView.setHint(getString(R.string.Type_your_new_password) + getString(R.string.Please_log_in_and_out_again));
                         CFAlertDialog.Builder updatePasswordDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
                         .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                         .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                         .setCornerRadius(50)
+                        .setTitle(getResources().getString(R.string.Type_your_new_password) + getResources().getString(R.string.Please_log_in_and_out_again))
+                        .setTextColor(Color.BLUE)
                         .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
                         .setHeaderView(userInputView)
 
@@ -417,12 +423,14 @@ public class SignInActivity extends AppCompatActivity {
 
                         //這邊設置第二層AlertDialog
                         final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
-                        userInputView.setLines(4);
-                        userInputView.setHint(getString(R.string.Type_your_new_email) + getString(R.string.Please_log_in_and_out_again));
+                                                                                                    //userInputView.setLines(4);
+                                                                                                    //userInputView.setHint(getString(R.string.Type_your_new_email) + getString(R.string.Please_log_in_and_out_again));
                         CFAlertDialog.Builder updateEmailDialogBuilder = new CFAlertDialog.Builder(SignInActivity.this)
                         .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                         .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                         .setCornerRadius(50)
+                        .setTitle(getResources().getString(R.string.Type_your_new_email) + getResources().getString(R.string.Please_log_in_and_out_again))
+                        .setTextColor(Color.BLUE)
                         .setCancelable(false) //按到旁邊的空白處AlertDialog不會消失
                         .setHeaderView(userInputView)
 

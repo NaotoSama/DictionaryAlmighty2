@@ -69,7 +69,6 @@
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">退出程式</string>
     <string name="Other_functions">⬇ 其他功能 ⬇</string>
-    <string name="External_storage_permission">必須允許存取照片的權限才可更換背景圖</string>
     <string name="DA_JP_TW_Dictionary">DA日中字典</string>
     <string name="DA_TW_JP_Dictionary">DA中日字典</string>
     <string name="Speech_input">⬇ 語音輸入 ⬇</string>
@@ -311,7 +310,7 @@
     <string name="Via_google_account">透過Google帳戶</string>
     <string name="Via_email_and_password">透過電子信箱和密碼登入或註冊</string>
     <string name="Input_email">輸入電子信箱位址</string>
-    <string name="Input_password">輸入密碼</string>
+    <string name="Input_password">請在上方直線欄位中輸入密碼</string>
     <string name="Login_problem">登入問題</string>
     <string name="Account_not_found">無此帳號，是否要以此帳號與密碼註冊?</string>
     <string name="Register">註冊</string>
@@ -348,15 +347,15 @@
     <string name="Do_you_really_want_to_log_out">確定要登出？</string>
     <string name="Change_user_screen_name">更改用戶暱稱</string>
     <string name="Change_user_info">更改用戶資訊</string>
-    <string name="Type_your_new_screen_name">輸入新暱稱</string>
+    <string name="Type_your_new_screen_name">請在上方直線欄位中輸入新暱稱</string>
     <string name="Your_screen_name_is_changed_successfully">用戶暱稱更新成功，將重新啟動App</string>
     <string name="Change_password">更改用戶密碼</string>
-    <string name="Type_your_new_password">輸入新密碼</string>
+    <string name="Type_your_new_password">請在上方直線欄位中輸入新密碼</string>
     <string name="Please_log_in_and_out_again">。(因認證安全機制，請「務必」先手動登出並登入後再立刻做此操作，否則會操作失敗！)</string>
     <string name="Your_passwod_is_changed_successfully">用戶密碼更新成功，將重新啟動App</string>
     <string name="User_password_change_failed">密碼更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
     <string name="Change_email">更改用戶信箱</string>
-    <string name="Type_your_new_email">輸入新信箱</string>
+    <string name="Type_your_new_email">請在上方直線欄位中輸入新信箱</string>
     <string name="Your_email_is_changed_successfully">用戶信箱更新成功，將重新啟動App</string>
     <string name="User_email_change_failed">信箱更新失敗，用戶憑證過期，請手動登出並重新登入後，再立刻重試。</string>
     <string name="Fast_dict">速譯通英漢字典</string>
@@ -444,5 +443,7 @@
     <string name="EC_Pay">綠界贊助平台</string>
     <string name="Buy_me_a_coffee">買杯咖啡贊助(Paypal)</string>
     <string name="LikeCoin">化讚為賞(LikeCoin)贊助平台</string>
+    <string name="External_storage_permission">已完成權限授予，請您再手動打開本軟體</string>
+    <string name="Restricted_use_on_android_9_pie">因技術限制，此功能僅限定安卓9以上的手機，您的手機不支援</string>
 </resources>
 

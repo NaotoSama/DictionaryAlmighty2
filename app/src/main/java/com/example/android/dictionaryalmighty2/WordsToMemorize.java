@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.CalendarContract;
@@ -1150,6 +1151,7 @@ public class WordsToMemorize extends AppCompatActivity {
                     webViewBrowser.loadUrl(intentAutoTranslationURL);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    floatingActionButton.setVisibility(View.VISIBLE);
                     chooseQuickSearchOrComboSearchAlertDialog.dismiss();
                     finish();
         })
@@ -1158,129 +1160,137 @@ public class WordsToMemorize extends AppCompatActivity {
         .addButton(getString(R.string.Memorize_this_word)
                         , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, whichLayer1) -> {
 
-                            //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
-                            final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder  = new CFAlertDialog.Builder(WordsToMemorize.this)
-                                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
-                                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
-                                    .setCornerRadius(50)
-                                    .setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings))
-                                    .setMessage(getString(R.string.Predefined_timing_explanation) + System.getProperty("line.separator") + getString(R.string.User_configured_timing_explanation))
-                                    .setTextColor(Color.BLUE)
-                                    .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                    //先確認用戶手機系統是否為Android 9以上，否則不給用(因為會閃退)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
+                        //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
+                        final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder = new CFAlertDialog.Builder(WordsToMemorize.this)
+                                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                .setCornerRadius(50)
+                                .setTitle(getString(R.string.Choose_customized_or_predefined_notification_timings))
+                                .setMessage(getString(R.string.Predefined_timing_explanation) + System.getProperty("line.separator") + getString(R.string.User_configured_timing_explanation))
+                                .setTextColor(Color.BLUE)
+                                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
 
-                                    //第二層AlertDialog的確定鈕，預設的通知時機。
-                                    .addButton(getString(R.string.Use_predefined_timing)
-                                            , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+                                //第二層AlertDialog的確定鈕，預設的通知時機。
+                                .addButton(getString(R.string.Use_predefined_timing)
+                                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
-                                                presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
+                                            presetNotificationTimingsList = getResources().getStringArray(R.array.preset_notification_timings);
 
-                                                //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
-                                                CFAlertDialog.Builder choosePresetNotificationTimingsAlertDialogBuilder = new CFAlertDialog.Builder(WordsToMemorize.this)
-                                                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
-                                                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
-                                                        .setCornerRadius(50)
-                                                        .setTitle(getString(R.string.Choose_one_preset_timing))
-                                                        .setTextColor(Color.BLUE)
-                                                        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                                            //這邊設置第三層AlertDialog讓用戶選擇各種預設通知的時機點
+                                            CFAlertDialog.Builder choosePresetNotificationTimingsAlertDialogBuilder = new CFAlertDialog.Builder(WordsToMemorize.this)
+                                                    .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                                    .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                                    .setCornerRadius(50)
+                                                    .setTitle(getString(R.string.Choose_one_preset_timing))
+                                                    .setTextColor(Color.BLUE)
+                                                    .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
-                                                        .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
-                                                                switch (position) {
-                                                                    case 0:
-                                                                        setPreDefinedNotificationTimings1Hour();
-                                                                        setPreDefinedNotificationTimings9Hours();
-                                                                        setPreDefinedNotificationTimings1Day();
-                                                                        setPreDefinedNotificationTimings2Days();
-                                                                        setPreDefinedNotificationTimings7Days();
-                                                                        setPreDefinedNotificationTimings1Month();
-                                                                        setPreDefinedNotificationTimingsHalfYear();
-                                                                        setPreDefinedNotificationTimingsOneYear();
-                                                                        //點擊子項目後讓第三層的AlertDialog消失
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_8_preset_timings,Toast.LENGTH_LONG).show();
-                                                                        break;
-                                                                    case 1:
-                                                                        setPreDefinedNotificationTimings1Day();
-                                                                        setPreDefinedNotificationTimings7Days();
-                                                                        setPreDefinedNotificationTimings1Month();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        Toast.makeText(getApplicationContext(),R.string.Will_send_the_notifications_on_3_preset_timings,Toast.LENGTH_LONG).show();
-                                                                        break;
-                                                                    case 2:
-                                                                        setPreDefinedNotificationTimings1Hour();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 3:
-                                                                        setPreDefinedNotificationTimings9Hours();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 4:
-                                                                        setPreDefinedNotificationTimings1Day();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 5:
-                                                                        setPreDefinedNotificationTimings2Days();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 6:
-                                                                        setPreDefinedNotificationTimings7Days();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 7:
-                                                                        setPreDefinedNotificationTimings1Month();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 8:
-                                                                        setPreDefinedNotificationTimingsHalfYear();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                    case 9:
-                                                                        setPreDefinedNotificationTimingsOneYear();
-                                                                        choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                        break;
-                                                                }
-                                                            }
-                                                        })
-
-                                                        //第三層AlertDialog的取消鈕
-                                                        .addButton(getString(R.string.Cancel)
-                                                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) ->{
-
+                                                    .setSingleChoiceItems(presetNotificationTimingsList, -1, new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
+                                                            switch (position) {
+                                                                case 0:
+                                                                    setPreDefinedNotificationTimings1Hour();
+                                                                    setPreDefinedNotificationTimings9Hours();
+                                                                    setPreDefinedNotificationTimings1Day();
+                                                                    setPreDefinedNotificationTimings2Days();
+                                                                    setPreDefinedNotificationTimings7Days();
+                                                                    setPreDefinedNotificationTimings1Month();
+                                                                    setPreDefinedNotificationTimingsHalfYear();
+                                                                    setPreDefinedNotificationTimingsOneYear();
+                                                                    //點擊子項目後讓第三層的AlertDialog消失
                                                                     choosePresetNotificationTimingsAlertDialog.dismiss();
-                                                                });
+                                                                    Toast.makeText(getApplicationContext(), R.string.Will_send_the_notifications_on_8_preset_timings, Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case 1:
+                                                                    setPreDefinedNotificationTimings1Day();
+                                                                    setPreDefinedNotificationTimings7Days();
+                                                                    setPreDefinedNotificationTimings1Month();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    Toast.makeText(getApplicationContext(), R.string.Will_send_the_notifications_on_3_preset_timings, Toast.LENGTH_LONG).show();
+                                                                    break;
+                                                                case 2:
+                                                                    setPreDefinedNotificationTimings1Hour();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 3:
+                                                                    setPreDefinedNotificationTimings9Hours();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 4:
+                                                                    setPreDefinedNotificationTimings1Day();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 5:
+                                                                    setPreDefinedNotificationTimings2Days();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 6:
+                                                                    setPreDefinedNotificationTimings7Days();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 7:
+                                                                    setPreDefinedNotificationTimings1Month();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 8:
+                                                                    setPreDefinedNotificationTimingsHalfYear();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                                case 9:
+                                                                    setPreDefinedNotificationTimingsOneYear();
+                                                                    choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                                    break;
+                                                            }
+                                                        }
+                                                    })
 
-                                                //把第三層的AlertDialog顯示出來
-                                                choosePresetNotificationTimingsAlertDialogBuilder.show();
-                                                //同時讓第二層的AlertDialog消失
-                                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
-                                            })
+                                                    //第三層AlertDialog的取消鈕
+                                                    .addButton(getString(R.string.Cancel)
+                                                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (choosePresetNotificationTimingsAlertDialog, whichLayer3) -> {
+
+                                                                choosePresetNotificationTimingsAlertDialog.dismiss();
+                                                            });
+
+                                            //把第三層的AlertDialog顯示出來
+                                            choosePresetNotificationTimingsAlertDialogBuilder.show();
+                                            //同時讓第二層的AlertDialog消失
+                                            chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                                        })
 
 
-                                    //第二層AlertDialog的中立鈕，自定義通知時機
-                                    .addButton(getString(R.string.Customize_timing)
-                                            , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
+                                //第二層AlertDialog的中立鈕，自定義通知時機
+                                .addButton(getString(R.string.Customize_timing)
+                                        , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
 
-                                                setCustomizedNotificationTiming();
+                                            setCustomizedNotificationTiming();
 
-                                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
-                                            })
-
-
-                                    //第二層AlertDialog的取消鈕
-                                    .addButton(getString(R.string.Cancel)
-                                            , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) ->{
-
-                                                chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
-                                            });
+                                            chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                                        })
 
 
-                            chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.setHeaderView(R.layout.custom_alert_dialog_clock);
-                            //把第二層的AlertDialog顯示出來
-                            chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
-                            //同時讓第一層的AlertDialog消失
-                            chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+                                //第二層AlertDialog的取消鈕
+                                .addButton(getString(R.string.Cancel)
+                                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseCustomizedOrPredefinedNotificationAlertDialog, whichLayer2) -> {
+
+                                            chooseCustomizedOrPredefinedNotificationAlertDialog.dismiss();
+                                        });
+
+
+                        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.setHeaderView(R.layout.custom_alert_dialog_clock);
+                        //把第二層的AlertDialog顯示出來
+                        chooseCustomizedOrPredefinedNotificationAlertDialogBuilder.show();
+                        //同時讓第一層的AlertDialog消失
+                        chooseQuickSearchOrComboSearchAlertDialog.dismiss();
+
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),getString(R.string.Restricted_use_on_android_9_pie),Toast.LENGTH_LONG).show();
+                    }
 
         })
 
