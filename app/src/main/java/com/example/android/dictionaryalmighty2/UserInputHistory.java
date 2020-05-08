@@ -12,7 +12,6 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.CalendarContract;
@@ -368,8 +367,8 @@ public class UserInputHistory extends AppCompatActivity {
                         .addButton(getString(R.string.Memorize_this_word)
                                 , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) -> {
 
-                        //先確認用戶手機系統是否為Android 9以上，否則不給用(因為會閃退)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                                                                                                    ////先確認用戶手機系統是否為Android 9以上，否則不給用(因為會閃退)
+                                                                                                    //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 
                                 //這邊設置第二層AlertDialog讓用戶選擇自定義或預設的通知時機
                                 final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder = new CFAlertDialog.Builder(UserInputHistory.this)
@@ -501,10 +500,10 @@ public class UserInputHistory extends AppCompatActivity {
                                 //同時讓第一層的AlertDialog消失
                                 passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
 
-                            }
-                            else {
-                                Toast.makeText(getApplicationContext(),getString(R.string.Restricted_use_on_android_9_pie),Toast.LENGTH_LONG).show();
-                            }
+                                                                                                    //}
+                                                                                                    //else {
+                                                                                                    //Toast.makeText(getApplicationContext(),getString(R.string.Restricted_use_on_android_9_pie),Toast.LENGTH_LONG).show();
+                                                                                                    //}
 
 
                         })

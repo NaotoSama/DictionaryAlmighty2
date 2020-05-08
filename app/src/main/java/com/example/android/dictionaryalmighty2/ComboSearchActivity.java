@@ -495,6 +495,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(ozdicCollocationUrl);
                         break;
+                    case "Stack Exchange English Learners":
+                        String StackExchangeEnglishLearnersUrl= "https://ell.stackexchange.com/search?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(StackExchangeEnglishLearnersUrl);
+                        break;
+                    case "Stack Exchange English Language and Usage":
+                        String StackExchangeEnglishLanguageAndUsageUrl= "https://english.stackexchange.com/search?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(StackExchangeEnglishLanguageAndUsageUrl);
+                        break;
                     case "Weblio JP":
                         String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(weblioJPUrl);
@@ -602,6 +610,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "JapanDict Kanji":
                         String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(JapanDictKanjiDictionaryUrl);
+                        break;
+                    case "Japanese Name Dictionary":
+                        String JapaneseNameDictionaryUrl= "https://kanji.reader.bz/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(JapaneseNameDictionaryUrl);
+                        break;
+                    case "Stack Exchange Japanese Language":
+                        String StackExchangeJapaneseLanguageUrl= "https://japanese.stackexchange.com/search?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(StackExchangeJapaneseLanguageUrl);
                         break;
                                                                                                                 //                    case "Word Plus Chinese":
                                                                                                                 //                        String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -911,6 +927,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(ozdicCollocationUrl);
                 break;
+            case "Stack Exchange English Learners":
+                String StackExchangeEnglishLearnersUrl= "https://ell.stackexchange.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(StackExchangeEnglishLearnersUrl);
+                break;
+            case "Stack Exchange English Language and Usage":
+                String StackExchangeEnglishLanguageAndUsageUrl= "https://english.stackexchange.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(StackExchangeEnglishLanguageAndUsageUrl);
+                break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(weblioJPUrl);
@@ -1018,6 +1042,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "JapanDict Kanji":
                 String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(JapanDictKanjiDictionaryUrl);
+                break;
+            case "Japanese Name Dictionary":
+                String JapaneseNameDictionaryUrl= "https://kanji.reader.bz/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(JapaneseNameDictionaryUrl);
+                break;
+            case "Stack Exchange Japanese Language":
+                String StackExchangeJapaneseLanguageUrl= "https://japanese.stackexchange.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(StackExchangeJapaneseLanguageUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";
@@ -1327,6 +1359,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String ozdicCollocationUrl= "http://www.ozdic.com/collocation-dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(ozdicCollocationUrl);
                 break;
+            case "Stack Exchange English Learners":
+                String StackExchangeEnglishLearnersUrl= "https://ell.stackexchange.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(StackExchangeEnglishLearnersUrl);
+                break;
+            case "Stack Exchange English Language and Usage":
+                String StackExchangeEnglishLanguageAndUsageUrl= "https://english.stackexchange.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(StackExchangeEnglishLanguageAndUsageUrl);
+                break;
             case "Weblio JP":
                 String weblioJPUrl= "https://www.weblio.jp/content/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(weblioJPUrl);
@@ -1434,6 +1474,14 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "JapanDict Kanji":
                 String JapanDictKanjiDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(JapanDictKanjiDictionaryUrl);
+                break;
+            case "Japanese Name Dictionary":
+                String JapaneseNameDictionaryUrl= "https://kanji.reader.bz/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(JapaneseNameDictionaryUrl);
+                break;
+            case "Stack Exchange Japanese Language":
+                String StackExchangeJapaneseLanguageUrl= "https://japanese.stackexchange.com/search?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(StackExchangeJapaneseLanguageUrl);
                 break;
                                                                                                         //            case "Word Plus Chinese":
                                                                                                         //                String googlePlusChinese= "http://www.google.com/search?q="+searchKeyword+"+中文";

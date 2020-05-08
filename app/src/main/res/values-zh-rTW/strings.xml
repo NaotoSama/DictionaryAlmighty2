@@ -445,5 +445,9 @@
     <string name="LikeCoin">化讚為賞(LikeCoin)贊助平台</string>
     <string name="External_storage_permission">已完成權限授予，請您再手動打開本軟體</string>
     <string name="Restricted_use_on_android_9_pie">因技術限制，此功能僅限定安卓9以上的手機，您的手機不支援</string>
+    <string name="Japanese_name_dictionary">人名漢字辭典</string>
+    <string name="Stack_exchange_English_learners">Stack Exchange English Learners論壇</string>
+    <string name="Stack_exchange_English_language_usage">Stack Exchange English Language and Usage論壇</string>
+    <string name="Stack_exchange_Japanese_language">Stack Exchange Japanese Language論壇</string>
 </resources>
 

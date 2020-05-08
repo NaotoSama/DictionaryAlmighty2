@@ -118,6 +118,8 @@
         <item>@string/Word_Hippo</item>
         <item>@string/Onelook</item>
         <item>@string/Ozdic_collocation_dictionary</item>
+        <item>@string/Stack_exchange_English_learners</item>
+        <item>@string/Stack_exchange_English_language_usage</item>
 
         <item>@string/Weblio_JP</item>
         <item>@string/Weblio_CN</item>
@@ -146,6 +148,8 @@
         <item>@string/Romaji_desu_kanji_dictionary</item>
         <item>@string/Japan_dict</item>
         <item>@string/Japan_dict_kanji_dictionary</item>
+        <item>@string/Japanese_name_dictionary</item>
+        <item>@string/Stack_exchange_Japanese_language</item>
 
         <!--        <item>@string/Word_Plus_Chinese</item>-->
         <!--        <item>@string/Word_Plus_English1</item>-->
@@ -719,6 +723,10 @@
     <string name="Buy_me_a_coffee">Buy me a coffee (Via Paypal)</string>
     <string name="LikeCoin">LikeCoin sponsor</string>
     <string name="Restricted_use_on_android_9_pie">This function is restricted to Android 9 (Pie) devices due to technical limitation. Your device is not compatible.</string>
+    <string name="Japanese_name_dictionary">Japanese name dictionary</string>
+    <string name="Stack_exchange_English_learners">Stack Exchange English Learners</string>
+    <string name="Stack_exchange_English_language_usage">Stack Exchange English Language and Usage</string>
+    <string name="Stack_exchange_Japanese_language">Stack Exchange Japanese Language</string>
 
 </resources>
 
