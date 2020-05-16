@@ -7,6 +7,8 @@
         <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
         <item>@string/Go_to_dictionary_almighty_homepage</item>
+        <item>@string/Go_to_dictionary_almighty_blog</item>
+        <item>@string/Go_to_dictionary_almighty_facebook</item>
         <item>@string/Sponsor_the_developer</item>
         <!--        <item>@string/Online_chat_room</item>-->
         <!--        <item>@string/Restore_to_default_background</item>-->
@@ -24,6 +26,8 @@
         <item>@string/Memorize_word_shortcut</item>
         <item>@string/Show_tutorial</item>
         <item>@string/Go_to_dictionary_almighty_homepage</item>
+        <item>@string/Go_to_dictionary_almighty_blog</item>
+        <item>@string/Go_to_dictionary_almighty_facebook</item>
         <item>@string/Sponsor_the_developer</item>
         <!--        <item>@string/Online_chat_room</item>-->
         <!--        <item>@string/Restore_to_default_background</item>-->
@@ -727,6 +731,8 @@
     <string name="Stack_exchange_English_learners">Stack Exchange English Learners</string>
     <string name="Stack_exchange_English_language_usage">Stack Exchange English Language and Usage</string>
     <string name="Stack_exchange_Japanese_language">Stack Exchange Japanese Language</string>
+    <string name="Go_to_dictionary_almighty_blog">Go to dictionary almighty blog</string>
+    <string name="Go_to_dictionary_almighty_facebook">Go to Dictionary Almighty Facebook Page</string>
 
 </resources>
 

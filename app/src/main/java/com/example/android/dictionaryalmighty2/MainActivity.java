@@ -11,6 +11,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -1638,10 +1639,18 @@ public class MainActivity extends AppCompatActivity {
                     showTutorSequence();
 
                 } else if (position == 5) {
-                    //調用瀏覽器瀏覽百典通官網
+                    //調用瀏覽器瀏覽百典快搜官網
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dictionaryalmighty.weebly.com/")));
 
                 } else if (position == 6) {
+                    //調用瀏覽器瀏覽百典快搜網誌
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dictionaryalmighty.weebly.com/blog")));
+
+                } else if (position == 7) {
+                    //調用瀏覽器瀏覽百典快搜FB
+                    openFacebook();
+
+                } else if (position == 8) {
                     //顯示贊助選項
                     sponsorTheDeveloper();
 
@@ -1769,6 +1778,14 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dictionaryalmighty.weebly.com/")));
 
                 } else if (position == 6) {
+                    //調用瀏覽器瀏覽百典快搜網誌
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://dictionaryalmighty.weebly.com/blog")));
+
+                } else if (position == 7) {
+                    //調用瀏覽器瀏覽百典快搜FB
+                    openFacebook();
+
+                } else if (position == 8) {
                     //顯示贊助選項
                     sponsorTheDeveloper();
 
@@ -7723,6 +7740,28 @@ public class MainActivity extends AppCompatActivity {
                         });
 
         setBackgroundImageAlertDialogBuilder.show();
+    }
+
+
+
+    //==============================================================================================
+    // 跳轉到百典快搜粉絲團的Helper Method
+    //==============================================================================================
+    public void openFacebook() {
+
+        final String urlFb = "fb://page/"+"108529437526816";
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(urlFb));
+
+        // If a Facebook app is installed, use it. Otherwise, launch a browser
+        final PackageManager packageManager = getPackageManager();
+        List<ResolveInfo> list =
+                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        if (list.size() == 0) {
+            final String urlBrowser = "https://www.facebook.com/dictionaryalmighty/";
+            intent.setData(Uri.parse(urlBrowser));
+        }
+        startActivity(intent);
     }
 
 
