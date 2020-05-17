@@ -187,7 +187,7 @@
     <string name="Go_to_words_to_memorize_page">前往「我的單字本」</string>
     <string name="Do_you_want_to">您想要：</string>
     <string name="Clear_my_vocabulary_list_button">清空我的記憶庫列表</string>
-    <string name="Memorize_this_word">記憶單字</string>
+    <string name="Memorize_this_word">記憶單字 (測試中)</string>
     <string name="Choose_customized_or_predefined_notification_timings">選擇回憶單字的時機點</string>
     <string name="Send_to_WordInputView">查此單字</string>
     <string name="List_cleared">表單已清空</string>
@@ -407,7 +407,7 @@
     <string name="Romaji_desu_enjp_jpen_dictionary">Romaji Desu日英英日字典</string>
     <string name="Romaji_desu_kanji_dictionary">Romaji Desu漢字字典</string>
     <string name="Kanji_recognizer">漢字手寫字典</string>
-    <string name="Memorize_word_shortcut">記憶單字(捷徑)</string>
+    <string name="Memorize_word_shortcut">記憶單字(捷徑) (測試中)</string>
     <string name="Word_input_to_memorize">請輸入您想記憶的字</string>
     <string name="Long_press_words_to_memorize">長按 = 對所選的單字綁定一個字典</string>
     <string name="Dict_dot_cn">海詞英漢字典</string>
@@ -443,7 +443,6 @@
     <string name="EC_Pay">綠界贊助平台</string>
     <string name="Buy_me_a_coffee">買杯咖啡贊助(Paypal)</string>
     <string name="LikeCoin">化讚為賞(LikeCoin)贊助平台</string>
-    <string name="External_storage_permission">已完成權限授予，請您再手動打開本軟體</string>
     <string name="Restricted_use_on_android_9_pie">因技術限制，此功能僅限定安卓9以上的手機，您的手機不支援</string>
     <string name="Japanese_name_dictionary">人名漢字辭典</string>
     <string name="Stack_exchange_English_learners">Stack Exchange English Learners論壇</string>
@@ -451,5 +450,10 @@
     <string name="Stack_exchange_Japanese_language">Stack Exchange Japanese Language論壇</string>
     <string name="Go_to_dictionary_almighty_blog">前往英日文學習網誌</string>
     <string name="Go_to_dictionary_almighty_facebook">前往百典快搜臉書粉絲團</string>
+    <string name="Update_later">暫不更新</string>
+    <string name="Update_failed">下載出錯，請檢查網路或重試</string>
+    <string name="Downloading">下載中</string>
+    <string name="Update_released">百典通已推出新版本，請立即更新</string>
+    <string name="External_storage_permission">已授予權限，將重啟軟體</string>
 </resources>
 

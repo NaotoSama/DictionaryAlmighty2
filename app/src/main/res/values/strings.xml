@@ -309,7 +309,7 @@
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">Exit</string>
     <string name="Other_functions">Other Functions</string>
-    <string name="External_storage_permission">Permission allowed. Please manually open this app again.</string>
+    <string name="External_storage_permission">Permission allowed. Relaunching.</string>
     <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
     <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
     <string name="Speech_input">Speech input</string>
@@ -733,6 +733,10 @@
     <string name="Stack_exchange_Japanese_language">Stack Exchange Japanese Language</string>
     <string name="Go_to_dictionary_almighty_blog">Go to dictionary almighty blog</string>
     <string name="Go_to_dictionary_almighty_facebook">Go to Dictionary Almighty Facebook Page</string>
+    <string name="Update_later">Update later</string>
+    <string name="Update_failed">Update failed. Check your connection or retry.</string>
+    <string name="Downloading">Downloading</string>
+    <string name="Update_released">New update released. Download and install the update.</string>
 
 </resources>
 

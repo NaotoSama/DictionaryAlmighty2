@@ -74,6 +74,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.remoteconfig.BuildConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 import com.sachinvarma.easypermission.EasyPermissionInit;
 import com.sachinvarma.easypermission.EasyPermissionList;
 import com.yalantis.ucrop.UCrop;
@@ -147,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                                     //String[] quickSearchComboSearchOrGoogleTranslateList; //讓用戶選擇快搜模式、三連搜模式或估狗翻譯
                                                                                                     //public static final String IMAGE_UNSPECIFIED = "image/*";
     String FriebaseUrl; //接收Firebase傳來的URL
+    String FirebaseContent; //接收Firebase傳來的Content
     private static final String SHOWCASE_ID = "Sequence Showcase";
     String widgetCallQuickSearchCode;
 
@@ -1154,7 +1156,15 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d(LOG_TAG, "Write Permission Failed");
                 Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_LONG).show();
-                finish();
+                //延遲3.5秒重啟App
+                Runnable r = new Runnable() {
+                    @Override
+                    public void run() {
+                        relaunchApp();
+                    }
+                };
+                Handler h =new Handler();
+                h.postDelayed(r, 3500);
             }
         }
     }
@@ -1305,14 +1315,14 @@ public class MainActivity extends AppCompatActivity {
 //==============================================================================================
 
 
-                                                                //==========================================================================================
-                                                                // 重啟App的helper methods (目前用不到)
-                                                                //==========================================================================================
-                                                            //    public void relaunchApp() {
-                                                            //        Intent relaunchAppIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                                            //        ProcessPhoenix.triggerRebirth(getApplicationContext(), relaunchAppIntent);
-                                                            //        Runtime.getRuntime().exit(0);
-                                                            //    }
+    //==========================================================================================
+    // 重啟App的helper methods (目前用不到)
+    //==========================================================================================
+    public void relaunchApp() {
+        Intent relaunchAppIntent = new Intent(getApplicationContext(), MainActivity.class);
+        ProcessPhoenix.triggerRebirth(getApplicationContext(), relaunchAppIntent);
+        Runtime.getRuntime().exit(0);
+    }
 
 
                                                                 //==========================================================================================
@@ -6780,6 +6790,7 @@ public class MainActivity extends AppCompatActivity {
                 , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseActionAlertDialog, whichLayer1) ->{
 
                     chooseActionAlertDialog.dismiss();
+                    relaunchApp();
         });
 
         chooseActionAlertDialogBuilder.show();
@@ -7307,6 +7318,12 @@ public class MainActivity extends AppCompatActivity {
                             if (FriebaseUrl != null && !FriebaseUrl.startsWith("https://") && !FriebaseUrl.startsWith("http://")) {
                                 FriebaseUrl = "http://" + FriebaseUrl;
                             }
+
+                            //打開透過Firebase傳送的app update content
+                            if (getIntent().getExtras() != null && getIntent().getExtras().getString("content", null) != null && !getIntent().getExtras().getString("content", null).equals("")) {
+                                FirebaseContent = getIntent().getExtras().getString("content");
+                            }
+
                             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FriebaseUrl))); //調用瀏覽器瀏覽FriebaseUrl
                             updateAPK(); //跳出App更新介面
                         }
@@ -7509,37 +7526,32 @@ public class MainActivity extends AppCompatActivity {
 
         UiConfig uiConfig = new UiConfig();
         uiConfig.setUiType(UiType.PLENTIFUL);
-        uiConfig.setCancelBtnText("暫不更新");
+        uiConfig.setCancelBtnText(getResources().getString(R.string.Update_later));
+        uiConfig.setDownloadFailText(getResources().getString(R.string.Update_failed));
+        uiConfig.setDownloadingBtnText(getResources().getString(R.string.Downloading));
 
         UpdateAppUtils
                 .getInstance()
                 .apkUrl(FriebaseUrl)
-                .updateTitle("百典通已推出新版本，請立即更新")
-                .updateContent("")
+                .updateTitle(getResources().getString(R.string.Update_released))
+                .updateContent(FirebaseContent)
                 .uiConfig(uiConfig)
                 .updateConfig(updateConfig)
                 .setMd5CheckResultListener(new Md5CheckResultListener() {
                     @Override
-                    public void onResult(boolean result) {
-                    }
+                    public void onResult(boolean result) { }
                 })
                 .setUpdateDownloadListener(new UpdateDownloadListener() {
                     @Override
-                    public void onStart() {
-                    }
+                    public void onStart() { }
                     @Override
-                    public void onDownload(int progress) {
-                    }
+                    public void onDownload(int progress) { }
                     @Override
-                    public void onFinish() {
-                    }
+                    public void onFinish() { }
                     @Override
-                    public void onError(@NotNull Throwable e) {
-                    }
+                    public void onError(@NotNull Throwable e) { }
                 })
                 .update();
-
-
     }
 
 

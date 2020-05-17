@@ -54,6 +54,7 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         String title = data.get("title");
         String message = data.get("message");
         String URL = data.get("URL");
+        String content = data.get("content");
         String deepLink = data.get("deepLink");
 
         NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -80,6 +81,7 @@ public class FireBaseMessagingService extends FirebaseMessagingService {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("deepLink",deepLink);
         intent.putExtra("URL",URL);
+        intent.putExtra("content",content); //版本更新的內容
 
         PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
