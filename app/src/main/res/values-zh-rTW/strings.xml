@@ -455,5 +455,9 @@
     <string name="Downloading">下載中</string>
     <string name="Update_released">百典通已推出新版本，請立即更新</string>
     <string name="External_storage_permission">已授予權限，將重啟軟體</string>
+    <string name="American_heritage_dictionary">美國傳統英語字典</string>
+    <string name="Buddhism_dictionary">佛教術語英漢漢英字典</string>
+    <string name="Word_sense">Word Sense英英字典</string>
+    <string name="Buddhism_dictionary_explanation">注意：此字典會要求您登入臨時帳戶，請在「使用者名稱」欄位內輸入guest後，直接按登入鈕即可使用，每24小時內限制最多查詢10個單字，是否確定查詢？</string>
 </resources>
 

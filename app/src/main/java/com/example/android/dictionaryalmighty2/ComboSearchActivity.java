@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static com.example.android.dictionaryalmighty2.MainActivity.defaultComboSearchCodeFirstDictionary;
@@ -69,6 +70,9 @@ public class ComboSearchActivity extends AppCompatActivity {
 
         WebSettings comboSearchWebSettings1 = comboSearchWebViewBrowser1.getSettings(); //WebSettings 是用來設定 WebView 屬性的類別
         comboSearchWebSettings1.setJavaScriptEnabled(true); //針對 WebSettings 去做設定，WebView 預設下是限制 JavaScript 的，若要啟用需要做此設定
+        comboSearchWebSettings1.setDomStorageEnabled(true); //enable dom storage
+        comboSearchWebSettings1.setJavaScriptCanOpenWindowsAutomatically(true); //enable javascript
+        comboSearchWebSettings1.setDatabaseEnabled(true); //enable database
         comboSearchWebSettings1.setSupportZoom(true); //內部網頁支援縮放
         comboSearchWebSettings1.setBuiltInZoomControls(true); //顯示縮放控制項
         comboSearchWebSettings1.setLoadWithOverviewMode(false);
@@ -81,6 +85,9 @@ public class ComboSearchActivity extends AppCompatActivity {
 
         WebSettings comboSearchWebSettings2 = comboSearchWebViewBrowser2.getSettings();
         comboSearchWebSettings2.setJavaScriptEnabled(true);
+        comboSearchWebSettings2.setDomStorageEnabled(true); //enable dom storage
+        comboSearchWebSettings2.setJavaScriptCanOpenWindowsAutomatically(true); //enable javascript
+        comboSearchWebSettings2.setDatabaseEnabled(true); //enable database
         comboSearchWebSettings2.setSupportZoom(true);
         comboSearchWebSettings2.setBuiltInZoomControls(true);
         comboSearchWebSettings2.setLoadWithOverviewMode(false);
@@ -93,6 +100,9 @@ public class ComboSearchActivity extends AppCompatActivity {
         comboSearchWebSettings3.setUserAgentString("Android");
         comboSearchWebSettings3.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         comboSearchWebSettings3.setJavaScriptEnabled(true);
+        comboSearchWebSettings3.setDomStorageEnabled(true); //enable dom storage
+        comboSearchWebSettings3.setJavaScriptCanOpenWindowsAutomatically(true); //enable javascript
+        comboSearchWebSettings3.setDatabaseEnabled(true); //enable database
         comboSearchWebSettings3.setSupportZoom(true);
         comboSearchWebSettings3.setBuiltInZoomControls(true);
         comboSearchWebSettings3.setLoadWithOverviewMode(true);
@@ -423,6 +433,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(longmanDictionaryUrl);
                         break;
+                    case "American Heritage Dictionary":
+                        String americanHeritageDictionaryUrl= "https://ahdictionary.com/word/search.html?q="+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(americanHeritageDictionaryUrl);
+                        break;
+                    case "Word Sense":
+                        String wordSenseDictionaryUrl= "https://www.wordsense.eu/"+searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(wordSenseDictionaryUrl);
+                        break;
                     case "WordWeb":
                         String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(wordWebUrl);
@@ -466,6 +484,45 @@ public class ComboSearchActivity extends AppCompatActivity {
                     case "BioMedical Dictionary":
                         String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
                         comboSearchWebViewBrowser1.loadUrl(BioMedicalDictionaryUrl);
+                        break;
+                    case "Buddhism Dictionary":
+                        //這邊設置AlertDialog提醒用戶24小時內只能查10字，輸入"guest"登入使用
+                        CFAlertDialog.Builder logInToUseBuddhismDictionaryAlertDialogBuilder = new CFAlertDialog.Builder(ComboSearchActivity.this)
+                                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                                .setCornerRadius(50)
+                                .setTitle(getResources().getString(R.string.Buddhism_dictionary_explanation))
+                                .setTextColor(Color.BLUE)
+                                .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                                .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
+
+                                //AlertDialog的確定鈕，查佛學字典
+                                .addButton(getResources().getString(R.string.Confirm)
+                                        , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://buddhism-dict.net/cgi-bin/xpr-ddb.pl?q="+searchKeyword))); //Fail-safe for when Buddhism Dictionary fails to render in the webView.
+                                                                                                    //String buddhismDictionaryDictionaryUrl= "http://buddhism-dict.net/cgi-bin/xpr-ddb.pl?q="+searchKeyword;
+                                                                                                    //comboSearchWebViewBrowser1.loadUrl(buddhismDictionaryDictionaryUrl);
+                                            dialog.dismiss();
+                                        })
+
+                                //AlertDialog的取消鈕
+                                .addButton(getResources().getString(R.string.Cancel)
+                                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                            dialog.dismiss();
+                                        })
+
+                                //AlertDialog的中立鈕，看教學
+                                .addButton(getString(R.string.Watch_tutorial)
+                                        , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (dialog, which) -> {
+
+                                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/M0k8TnEMHY0")));
+                                            dialog.dismiss();
+                                        });
+
+                        //把AlertDialog顯示出來
+                        logInToUseBuddhismDictionaryAlertDialogBuilder.create().show();
                         break;
                     case "IsPlural Dictionary":
                         String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
@@ -855,6 +912,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(longmanDictionaryUrl);
                 break;
+            case "American Heritage Dictionary":
+                String americanHeritageDictionaryUrl= "https://ahdictionary.com/word/search.html?q="+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(americanHeritageDictionaryUrl);
+                break;
+            case "Word Sense":
+                String wordSenseDictionaryUrl= "https://www.wordsense.eu/"+searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(wordSenseDictionaryUrl);
+                break;
             case "WordWeb":
                 String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(wordWebUrl);
@@ -898,6 +963,45 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "BioMedical Dictionary":
                 String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
                 comboSearchWebViewBrowser2.loadUrl(BioMedicalDictionaryUrl);
+                break;
+            case "Buddhism Dictionary":
+                //這邊設置AlertDialog提醒用戶24小時內只能查10字，輸入"guest"登入使用
+                CFAlertDialog.Builder logInToUseBuddhismDictionaryAlertDialogBuilder = new CFAlertDialog.Builder(ComboSearchActivity.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setTitle(getResources().getString(R.string.Buddhism_dictionary_explanation))
+                        .setTextColor(Color.BLUE)
+                        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                        .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
+
+                        //AlertDialog的確定鈕，查佛學字典
+                        .addButton(getResources().getString(R.string.Confirm)
+                                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://buddhism-dict.net/cgi-bin/xpr-ddb.pl?q="+searchKeyword))); //Fail-safe for when Buddhism Dictionary fails to render in the webView.
+                                                                                                    //String buddhismDictionaryDictionaryUrl= "http://buddhism-dict.net/cgi-bin/xpr-ddb.pl?q="+searchKeyword;
+                                                                                                    //comboSearchWebViewBrowser2.loadUrl(buddhismDictionaryDictionaryUrl);
+                                    dialog.dismiss();
+                                })
+
+                        //AlertDialog的取消鈕
+                        .addButton(getResources().getString(R.string.Cancel)
+                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                    dialog.dismiss();
+                                })
+
+                        //AlertDialog的中立鈕，看教學
+                        .addButton(getString(R.string.Watch_tutorial)
+                                , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (dialog, which) -> {
+
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/M0k8TnEMHY0")));
+                                    dialog.dismiss();
+                                });
+
+                //把AlertDialog顯示出來
+                logInToUseBuddhismDictionaryAlertDialogBuilder.create().show();
                 break;
             case "IsPlural Dictionary":
                 String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
@@ -1287,6 +1391,14 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String longmanDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(longmanDictionaryUrl);
                 break;
+            case "American Heritage Dictionary":
+                String americanHeritageDictionaryUrl= "https://ahdictionary.com/word/search.html?q="+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(americanHeritageDictionaryUrl);
+                break;
+            case "Word Sense":
+                String wordSenseDictionaryUrl= "https://www.wordsense.eu/"+searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(wordSenseDictionaryUrl);
+                break;
             case "WordWeb":
                 String wordWebUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(wordWebUrl);
@@ -1330,6 +1442,45 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "BioMedical Dictionary":
                 String BioMedicalDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
                 comboSearchWebViewBrowser3.loadUrl(BioMedicalDictionaryUrl);
+                break;
+            case "Buddhism Dictionary":
+                //這邊設置AlertDialog提醒用戶24小時內只能查10字，輸入"guest"登入使用
+                CFAlertDialog.Builder logInToUseBuddhismDictionaryAlertDialogBuilder = new CFAlertDialog.Builder(ComboSearchActivity.this)
+                        .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                        .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                        .setCornerRadius(50)
+                        .setTitle(getResources().getString(R.string.Buddhism_dictionary_explanation))
+                        .setTextColor(Color.BLUE)
+                        .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
+                        .setHeaderView(R.layout.custom_alert_diaglog_question_mark)
+
+                        //AlertDialog的確定鈕，查佛學字典
+                        .addButton(getResources().getString(R.string.Confirm)
+                                , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://buddhism-dict.net/cgi-bin/xpr-ddb.pl?q="+searchKeyword))); //Fail-safe for when Buddhism Dictionary fails to render in the webView.
+                                                                                                    //String buddhismDictionaryDictionaryUrl= "http://buddhism-dict.net/cgi-bin/xpr-ddb.pl?q="+searchKeyword;
+                                                                                                    //comboSearchWebViewBrowser3.loadUrl(buddhismDictionaryDictionaryUrl);
+                                    dialog.dismiss();
+                                })
+
+                        //AlertDialog的取消鈕
+                        .addButton(getResources().getString(R.string.Cancel)
+                                , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
+
+                                    dialog.dismiss();
+                                })
+
+                        //AlertDialog的中立鈕，看教學
+                        .addButton(getString(R.string.Watch_tutorial)
+                                , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (dialog, which) -> {
+
+                                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/M0k8TnEMHY0")));
+                                    dialog.dismiss();
+                                });
+
+                //把AlertDialog顯示出來
+                logInToUseBuddhismDictionaryAlertDialogBuilder.create().show();
                 break;
             case "IsPlural Dictionary":
                 String IsPluralDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;

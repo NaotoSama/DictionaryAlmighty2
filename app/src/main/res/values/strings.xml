@@ -104,6 +104,8 @@
         <item>@string/Fine_dictionary</item>
         <item>@string/Your_Dictionary</item>
         <item>@string/Longman_Dictionary</item>
+        <item>@string/American_heritage_dictionary</item>
+        <item>@string/Word_sense</item>
         <item>@string/WordWeb_dictionary</item>
         <item>@string/Wordnik</item>
         <item>@string/Wiki_Dictionary</item>
@@ -115,6 +117,7 @@
         <item>@string/Etymonline</item>
         <item>@string/TechDico</item>
         <item>@string/BioMedical_dictionary</item>
+        <item>@string/Buddhism_dictionary</item>
         <item>@string/Is_plural_dictionary</item>
         <item>@string/Lingo_help_prepositions</item>
         <item>@string/Power_thesaurus_synonym</item>
@@ -737,6 +740,10 @@
     <string name="Update_failed">Update failed. Check your connection or retry.</string>
     <string name="Downloading">Downloading</string>
     <string name="Update_released">New update released. Download and install the update.</string>
+    <string name="American_heritage_dictionary">American Heritage Dictionary</string>
+    <string name="Buddhism_dictionary">Buddhism Dictionary</string>
+    <string name="Word_sense">Word Sense</string>
+    <string name="Buddhism_dictionary_explanation">If you\'re prompted to log in, log in as \"guest\" without entering any password. You are allowed to look up 10 words per 24 hrs.</string>
 
 </resources>
 
