@@ -249,10 +249,10 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/progressBar"
         app:layout_constraintTop_toBottomOf="@+id/browser_switch"
-        tools:layout_editor_absoluteX="30dp">
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
 
     </WebView>
-
 
     <TextView
         android:id="@+id/search_result_textView"
@@ -348,6 +348,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/Word_Input_View"
         app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tutorial_video_popup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:text="@string/Click_here_to_watch_tutorial"
+        android:textColor="@color/orange"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/search_result_textView"
+        app:layout_constraintStart_toStartOf="@+id/search_result_textView"
+        app:layout_constraintTop_toTopOf="@+id/webview_browser" />
+
+    <TextView
+        android:id="@+id/tutorial_video_popup_closer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_red_dark"
+        android:text=" X "
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/tutorial_video_popup"
+        app:layout_constraintTop_toTopOf="@+id/webview_browser" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"

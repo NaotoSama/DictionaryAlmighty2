@@ -459,5 +459,8 @@
     <string name="Buddhism_dictionary">佛教術語英漢漢英字典</string>
     <string name="Word_sense">Word Sense英英字典</string>
     <string name="Buddhism_dictionary_explanation">注意：此字典會要求您登入臨時帳戶，請在「使用者名稱」欄位內輸入guest後，直接按登入鈕即可使用，每24小時內限制最多查詢10個單字，是否確定查詢？</string>
+    <string name="Translators_favorite">譯者專用專有名詞寶典</string>
+    <string name="Taiwan_laws_and_regulation_query_system">台灣法規中英翻譯</string>
+    <string name="Click_here_to_watch_tutorial">按這裡看此字典使用教學</string>
 </resources>
 

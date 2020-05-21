@@ -744,6 +744,9 @@
     <string name="Buddhism_dictionary">Buddhism Dictionary</string>
     <string name="Word_sense">Word Sense</string>
     <string name="Buddhism_dictionary_explanation">If you\'re prompted to log in, log in as \"guest\" without entering any password. You are allowed to look up 10 words per 24 hrs.</string>
+    <string name="Translators_favorite">Translators\' favorite</string>
+    <string name="Taiwan_laws_and_regulation_query_system">Taiwan Laws and Regulation Search</string>
+    <string name="Click_here_to_watch_tutorial">Click here to watch tutorial</string>
 
 </resources>
 

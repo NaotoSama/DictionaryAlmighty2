@@ -151,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
     String FirebaseContent; //接收Firebase傳來的Content
     private static final String SHOWCASE_ID = "Sequence Showcase";
     String widgetCallQuickSearchCode;
+    String tutorialVideoURL;
 
     CFAlertDialog.Builder defaultSearchAlertDialogBuilder; //專業版自訂單一預設字典名單的對話方塊
     CFAlertDialog.Builder defaultComboSearchAlertDialogFirstDictionaryBuilder; //專業版自訂第一個預設字典名單的對話方塊
@@ -184,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
     TextView selectSentenceSearcherView;
     TextView miscellaneousView;
     TextView customActionBarTextview;
+    TextView tutorialVideoPopup;
+    TextView tutorialVideoPopupCloser;
 
                                                                                                     //private static int RESULT_LOAD_IMAGE = 1;
     private static final int WRITE_PERMISSION = 0x01; //用來準備設置運行中的權限要求
@@ -296,6 +299,8 @@ public class MainActivity extends AppCompatActivity {
         defaultSearchButton = findViewById(R.id.default_search_button);
         comboSearchButton = findViewById(R.id.combo_search_button);
         floatingActionButton = findViewById(R.id.floating_action_button);
+        tutorialVideoPopup = findViewById(R.id.tutorial_video_popup);
+        tutorialVideoPopupCloser = findViewById(R.id.tutorial_video_popup_closer);
         searchResultWillBeDisplayedHere = findViewById(R.id.search_result_textView);
         browserNavigateBack = findViewById(R.id.browser_navigate_back_imageView);
         browserNavigateForward = findViewById(R.id.browser_navigate_forward_imageView);
@@ -580,6 +585,29 @@ public class MainActivity extends AppCompatActivity {
                 if (webViewBrowser.canGoForward()) {
                     webViewBrowser.goForward();
                 }
+            }
+        });
+
+
+        /**
+         * 設置彈跳出來的字典使用教學影片
+         */
+        tutorialVideoPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(tutorialVideoURL)));
+            }
+        });
+
+
+        /**
+         * 設置關閉字典使用教學影片的快顯
+         */
+        tutorialVideoPopupCloser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tutorialVideoPopup.setVisibility(View.GONE);
+                tutorialVideoPopupCloser.setVisibility(View.GONE);
             }
         });
 
@@ -898,6 +926,8 @@ public class MainActivity extends AppCompatActivity {
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Yomikata, R.mipmap.yomikatawa));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Chigai, R.mipmap.chigaiwa));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.OJAD, R.mipmap.ojad));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Translators_favorite, R.mipmap.translators_favorite));
+        mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Taiwan_laws_and_regulation_query_system, R.mipmap.taiwan_laws_and_regulation_query_system));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Learn_with_kak, R.mipmap.learn_with_kak));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.Home_of_english, R.mipmap.home_of_english));
         mMiscellaneousSpinnerItemListOriginal.add(new DictionaryItem(R.string.BBC_learning_english, R.mipmap.bbc_learning_english));
@@ -3059,15 +3089,23 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if (position == 28) {
                     String kanjiRecognizerUrl= "https://kanji.sljfaq.org/draw-canvas.html";
+                    tutorialVideoURL="https://youtu.be/cTKpwwMx6fk";
                     webViewBrowser.loadUrl(kanjiRecognizerUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 29) {
                     String JapaneseNameDictionaryUrl= "https://kanji.reader.bz/"+searchKeyword;
+                    tutorialVideoURL="https://youtu.be/Wyhb1qAZ08A";
                     webViewBrowser.loadUrl(JapaneseNameDictionaryUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 30) {
                     String StackExchangeJapaneseLanguageUrl= "https://japanese.stackexchange.com/search?q="+searchKeyword;
@@ -3586,9 +3624,13 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if (position == 6){
                     String differenceBetweenUrl= "http://www.differencebetween.net/search/"+searchKeyword+"?wptouch_switch=mobile";
+                    tutorialVideoURL="https://youtu.be/JjKjji-9nFo";
                     webViewBrowser.loadUrl(differenceBetweenUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 7) {
                     String netspeakUrl= "https://netspeak.org/#q="+searchKeyword+"&corpus=web-en";
@@ -3604,9 +3646,13 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if (position == 9) {
                     String kotonohaJapaneseCorpusUrl= "http://www.kotonoha.gr.jp/shonagon/search_form";
+                    tutorialVideoURL="https://youtu.be/3dmdzO0VddQ";
                     webViewBrowser.loadUrl(kotonohaJapaneseCorpusUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 10) {
                     String tatoebaUrl= "https://tatoeba.org/eng/sentences/search?query=%3D\"" + searchKeyword + "\"&from=und&to=none&user=&orphans=no&unapproved=no&has_audio=&tags=&list=&native=&trans_filter=limit&trans_to=und&trans_link=&trans_user=&trans_orphan=&trans_unapproved=&trans_has_audio=&sort=relevance&sort_reverse=";
@@ -3616,73 +3662,105 @@ public class MainActivity extends AppCompatActivity {
 
                 }else if (position == 11) {
                     String yomikatawaUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
+                    tutorialVideoURL="https://youtu.be/8BbkOBfKJAI";
                     webViewBrowser.loadUrl(yomikatawaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 12) {
                     String ChigaihaUrl= "https://cse.google.co.jp/cse?cx=partner-pub-1137871985589263%3A3025760782&ie=UTF-8&q="+searchKeyword;
+                    tutorialVideoURL="https://youtu.be/istFs6StSMY";
                     webViewBrowser.loadUrl(ChigaihaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 13) {
                     String suzukikunUrl= "http://www.gavo.t.u-tokyo.ac.jp/ojad/search/index/sortprefix:accent/narabi1:kata_asc/narabi2:accent_asc/narabi3:mola_asc/yure:visible/curve:invisible/details:invisible/limit:20/word:"+searchKeyword;
+                    tutorialVideoURL="https://youtu.be/8VkCuOw35Rs";
                     webViewBrowser.loadUrl(suzukikunUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 14) {
+                    String translatorsFavoriteUrl= "https://drive.google.com/drive/folders/11hpaG3ZBtLWP1yH-sLG3CBASsPTlZ81V?usp=sharing";
+                    tutorialVideoURL="https://youtu.be/GPC_nUBv_v8";
+                    webViewBrowser.loadUrl(translatorsFavoriteUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
+
+                }else if (position == 15) {
+                    String taiwanLawsAndRegulationSearchUrl= "https://law-out.mof.gov.tw/EngLawQuery.aspx?mode=lawname&KW2="+searchKeyword;
+                    tutorialVideoURL="https://youtu.be/WYOVmq2YNq4";
+                    webViewBrowser.loadUrl(taiwanLawsAndRegulationSearchUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+                    tutorialVideoPopup.setVisibility(View.VISIBLE);
+                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
+                    closeDictionaryTutorialVideoPopup();
+
+                }else if (position == 16) {
                     String learnWithKakUrl= "https://www.learnwithkak.com/?s="+searchKeyword;
                     webViewBrowser.loadUrl(learnWithKakUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 15) {
+                }else if (position == 17) {
                     String homeOfEnglishUrl= "https://cse.google.com.tw/cse?cx=partner-pub-2581231837251838:8766161994&ie=UTF-8&q=" +searchKeyword + "&ref=";
                     webViewBrowser.loadUrl(homeOfEnglishUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 16) {
+                }else if (position == 18) {
                     String bbcLearningEnglishUrl= "https://elt.rti.org.tw/?s=" +searchKeyword;
                     webViewBrowser.loadUrl(bbcLearningEnglishUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 17) {
+                }else if (position == 19) {
                     String voiceOfAmericaUrl= "https://www.voachinese.com/s?k=" + searchKeyword + "&tab=all&pi=1&r=any&pp=10";
                     webViewBrowser.loadUrl(voiceOfAmericaUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 18) {
+                }else if (position == 20) {
                     String teacherSammyUrl= "https://www.google.com.tw/search?client=chrome&ei=V1oXXpr3JofY0gTApKWICA&q=" + searchKeyword + "+site%3Ablogs.teachersammy.com&oq=" + searchKeyword + "+site%3Ablogs.teachersammy.com&gs_l=psy-ab.12...375586.375896..377504...0.0..0.46.162.4......0....1..gws-wiz.5Ti7HhS0HMM&ved=0ahUKEwja_o6y_fbmAhUHrJQKHUBSCYEQ4dUDCAo";
                     webViewBrowser.loadUrl(teacherSammyUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 19) {
+                }else if (position == 21) {
                     String michaelChuganiUrl= "https://www.google.com.tw/search?client=chrome&ei=QFwXXvmxNqGvmAXw86SYAg&q=" + searchKeyword + "+site%3Ahd.stheadline.com%2Fnews%2Fcolumns%2F126%2F&oq=" + searchKeyword + "+site%3Ahd.stheadline.com%2Fnews%2Fcolumns%2F126%2F&gs_l=psy-ab.3...581494.590145..590655...0.0..0.42.186.5......0....2j1..gws-wiz.iK_8eHTvAxM&ved=0ahUKEwj50bSb__bmAhWhF6YKHfA5CSMQ4dUDCAo&uact=5";
                     webViewBrowser.loadUrl(michaelChuganiUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 20) {
+                }else if (position == 22) {
                     String grammaristUrl= "https://www.google.com.tw/search?client=chrome&ei=K2EXXrXbJ4G0mAWxs6K4DQ&q=" + searchKeyword + "+site%3Agrammarist.com&oq=" + searchKeyword + "+site%3Agrammarist.com&gs_l=psy-ab.3...42452.42877..43383...0.0..0.40.192.5......0....2j1..gws-wiz.1BMyHFH7WrY&ved=0ahUKEwj1nNHzg_fmAhUBGqYKHbGZCNcQ4dUDCAo&uact=5";
                     webViewBrowser.loadUrl(grammaristUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 21) {
+                }else if (position == 23) {
                     String kennyEnglishUrl= "https://www.google.com.tw/search?client=chrome&hs=4qz&ei=jZ0YXvyACcOsmAX26bLYCA&q=" + searchKeyword + "++site%3Ablog.udn.com%2Feuoy789&oq=" + searchKeyword + "++site%3Ablog.udn.com%2Feuoy789&gs_l=psy-ab.3...9983.10536..10934...0.0..0.36.176.5......0....1..gws-wiz.tZEzxZ6ZaDc&ved=0ahUKEwi8-6vQsfnmAhVDFqYKHfa0DIsQ4dUDCAo&uact=5";
                     webViewBrowser.loadUrl(kennyEnglishUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
-                }else if (position == 22) {
-                    String kennyEnglishUrl= "https://www.learnenglishwithwill.com/?s="+searchKeyword;
-                    webViewBrowser.loadUrl(kennyEnglishUrl);
+                }else if (position == 24) {
+                    String willEnglishUrl= "https://www.learnenglishwithwill.com/?s="+searchKeyword;
+                    webViewBrowser.loadUrl(willEnglishUrl);
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
 
@@ -7741,6 +7819,24 @@ public class MainActivity extends AppCompatActivity {
         browserSwitch.setVisibility(View.GONE);
         browserNavigateBack.setVisibility(View.GONE);
         browserNavigateForward.setVisibility(View.GONE);
+    }
+
+
+
+    //==============================================================================================
+    // 字典使用教學影片快顯的Helper Method
+    //==============================================================================================
+    //延遲10秒關閉字典使用教學影片快顯
+    public void closeDictionaryTutorialVideoPopup() {
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            tutorialVideoPopup.setVisibility(View.GONE);
+            tutorialVideoPopupCloser.setVisibility(View.GONE);
+        }
+    };
+    Handler h =new Handler();
+    h.postDelayed(r, 10000);
     }
 
 
