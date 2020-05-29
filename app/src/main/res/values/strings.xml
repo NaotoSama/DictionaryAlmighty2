@@ -747,6 +747,10 @@
     <string name="Translators_favorite">Translators\' favorite</string>
     <string name="Taiwan_laws_and_regulation_query_system">Taiwan Laws and Regulation Search</string>
     <string name="Click_here_to_watch_tutorial">Click here to watch tutorial</string>
+    <string name="Choose_one_terminology_book">Choose one terminology book</string>
+    <string name="Military_terminology">Military Terminology</string>
+    <string name="Terminology_ebook_part_1_explanation">(1) Part 1 includes terminology in Accounting, Engery, Machinery.</string>
+    <string name="Terminology_ebook_part_2_explanation">Part 2 includes terminology in construction, salon, land/river, semiconductor, math, linguistsics, QA, medical, trade/shipping, telecom, patent, tax, tender, law, banking.</string>
 
 </resources>
 

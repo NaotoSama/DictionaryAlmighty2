@@ -167,7 +167,7 @@
         </activity>
 
 
-                                                                                                    <!--<activity-->
+        <!--<activity-->
                                                                                                     <!--    android:name=".ChatRoomActivity"-->
                                                                                                     <!--    android:noHistory="false"-->
                                                                                                     <!--    android:screenOrientation="portrait">-->

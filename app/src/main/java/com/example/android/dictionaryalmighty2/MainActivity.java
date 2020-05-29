@@ -3691,14 +3691,9 @@ public class MainActivity extends AppCompatActivity {
                     closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 14) {
-                    String translatorsFavoriteUrl= "https://drive.google.com/drive/folders/11hpaG3ZBtLWP1yH-sLG3CBASsPTlZ81V?usp=sharing";
-                    tutorialVideoURL="https://youtu.be/GPC_nUBv_v8";
-                    webViewBrowser.loadUrl(translatorsFavoriteUrl);
+                    openEbook(); //譯者寶典電子書
                     searchResultWillBeDisplayedHere.setVisibility(View.GONE);
                     webViewBrowser.setVisibility(View.VISIBLE);
-                    tutorialVideoPopup.setVisibility(View.VISIBLE);
-                    tutorialVideoPopupCloser.setVisibility(View.VISIBLE);
-                    closeDictionaryTutorialVideoPopup();
 
                 }else if (position == 15) {
                     String taiwanLawsAndRegulationSearchUrl= "https://law-out.mof.gov.tw/EngLawQuery.aspx?mode=lawname&KW2="+searchKeyword;
@@ -7992,6 +7987,63 @@ public class MainActivity extends AppCompatActivity {
                         });
 
         setBackgroundImageAlertDialogBuilder.show();
+    }
+
+
+
+    //==============================================================================================
+    // 打開電子書Helper Method
+    //==============================================================================================
+    public void openEbook() {
+        CFAlertDialog.Builder openEbookAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+                .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
+                .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
+                .setCornerRadius(50)
+                .setTitle(R.string.Choose_one_terminology_book)
+                .setTextColor(Color.BLUE)
+                .setMessage(getString(R.string.Terminology_ebook_part_1_explanation) + System.getProperty("line.separator") +
+                        getString(R.string.Terminology_ebook_part_2_explanation))
+                .setCancelable(false)  //按到旁邊的空白處AlertDialog不會消失
+
+                //打開part 1
+                .addButton("Part 1",
+                        Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
+
+                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/______");
+                            openEbookAlertDialog.dismiss();
+                        })
+
+                //打開part 2
+                .addButton("Part 2",
+                        Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
+
+                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/__________________________________________________");
+                            openEbookAlertDialog.dismiss();
+                        })
+
+                //打開軍事字典
+                .addButton(getString(R.string.Military_terminology)
+                        , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
+
+                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/22_____compressed");
+                            openEbookAlertDialog.dismiss(); //同時讓第一層AlertDialog消失
+                        })
+
+                //AlertDialog的取消鈕
+                .addButton(getString(R.string.Cancel)
+                        , Color.BLACK, Color.RED, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
+
+                            openEbookAlertDialog.dismiss();
+                        })
+
+                .addButton(getString(R.string.Watch_tutorial)
+                        , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (openEbookAlertDialog, whichLayer1) -> {
+
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/hiQAR55wAu8")));
+                            openEbookAlertDialog.dismiss();
+                        });
+
+        openEbookAlertDialogBuilder.show();
     }
 
 
