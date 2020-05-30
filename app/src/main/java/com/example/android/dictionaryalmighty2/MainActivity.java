@@ -8002,14 +8002,14 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(R.string.Choose_one_terminology_book)
                 .setTextColor(Color.BLUE)
                 .setMessage(getString(R.string.Terminology_ebook_part_1_explanation) + System.getProperty("line.separator") +
-                        getString(R.string.Terminology_ebook_part_2_explanation))
+                        getString(R.string.Terminology_ebook_part_2_explanation) + System.getProperty("line.separator") + getString(R.string.Terminology_ebook_part_3_explanation))
                 .setCancelable(false)  //按到旁邊的空白處AlertDialog不會消失
 
                 //打開part 1
                 .addButton("Part 1",
                         Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
 
-                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/______");
+                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/______/1?ff");
                             openEbookAlertDialog.dismiss();
                         })
 
@@ -8017,15 +8017,35 @@ public class MainActivity extends AppCompatActivity {
                 .addButton("Part 2",
                         Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
 
-                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/__________________________________________________");
+                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/__________________________________________________/1?ff");
                             openEbookAlertDialog.dismiss();
                         })
 
                 //打開軍事字典
-                .addButton(getString(R.string.Military_terminology)
+                .addButton("Part 3"
                         , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
 
-                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/22_____compressed");
+                            webViewBrowser.loadUrl("https://issuu.com/naotosama/docs/22_____compressed/1?ff");
+                            openEbookAlertDialog.dismiss(); //同時讓第一層AlertDialog消失
+                        })
+
+                //呼叫第三方學術字典app
+                .addButton(getString(R.string.Call_academic_dictionary_third_party_app)
+                        , Color.WHITE, Color.BLACK, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (openEbookAlertDialog, whichLayer1) -> {
+
+                            Intent callAcademicDictionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.cucugi.academicdict");
+                            if (callAcademicDictionaryAppIntent != null) {
+                                // If the TextScanner app is found, start the app.
+                                callAcademicDictionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(callAcademicDictionaryAppIntent);
+                            } else {
+                                // Bring user to the market or let them choose an app.
+                                callAcademicDictionaryAppIntent = new Intent(Intent.ACTION_VIEW);
+                                callAcademicDictionaryAppIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                callAcademicDictionaryAppIntent.setData(Uri.parse("market://details?id=" + "com.cucugi.academicdict"));
+                                startActivity(callAcademicDictionaryAppIntent);
+                                Toast.makeText(getApplicationContext(), getString(R.string.Must_get_GoogleTranslate_app), Toast.LENGTH_LONG).show();
+                            }
                             openEbookAlertDialog.dismiss(); //同時讓第一層AlertDialog消失
                         })
 
@@ -8039,7 +8059,7 @@ public class MainActivity extends AppCompatActivity {
                 .addButton(getString(R.string.Watch_tutorial)
                         , Color.BLACK, Color.LTGRAY, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.END, (openEbookAlertDialog, whichLayer1) -> {
 
-                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/hiQAR55wAu8")));
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/M-MzUbCnqtc")));
                             openEbookAlertDialog.dismiss();
                         });
 
