@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+
+import com.example.android.dictionaryalmighty2.R;
 
 /**
  * Implementation of App Widget functionality.

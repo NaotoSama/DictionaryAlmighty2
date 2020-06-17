@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 /**
  * 設置客製化Spinner選單各項目要用的constructor(圖+文字)

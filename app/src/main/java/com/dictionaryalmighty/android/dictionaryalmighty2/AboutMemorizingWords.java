@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.android.dictionaryalmighty2.R;
 
 public class AboutMemorizingWords extends AppCompatActivity {
 

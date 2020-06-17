@@ -8,12 +8,73 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:825392319740:android:7ed3e29041096e0140db79",
+        "android_client_info": {
+          "package_name": "com.dictionaryalmighty.android.dictionaryalmighty2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825392319740-g1db7vajcdo3ibp6rh010cllu8fgtf3o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dictionaryalmighty.android.dictionaryalmighty2",
+            "certificate_hash": "b3daf5143dd3525b7fd6b071cd8399d0bd53f600"
+          }
+        },
+        {
+          "client_id": "825392319740-id2qu6el31sii25kbm2oosmhjraipffd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dictionaryalmighty.android.dictionaryalmighty2",
+            "certificate_hash": "545ee5fa5fb80f1dd57f645fc1b5357eab8b0366"
+          }
+        },
+        {
+          "client_id": "825392319740-bot3k0npk4454ino1oiutjlkuo1ltn10.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dictionaryalmighty.android.dictionaryalmighty2",
+            "certificate_hash": "7fc44386a3e0156cefb442718be002c207590e29"
+          }
+        },
+        {
+          "client_id": "825392319740-cj25r9fqa2k3tv6i451jg3q8cq3p40ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwEF3bameUmOucaMwXHJp1TqGBtAyVPC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825392319740-cj25r9fqa2k3tv6i451jg3q8cq3p40ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:825392319740:android:35346be2cb75cd0140db79",
         "android_client_info": {
           "package_name": "com.example.android.dictionaryalmighty2"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "825392319740-cok2aggotlu5cuicrlef3e1lh3an2vud.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.dictionaryalmighty2",
+            "certificate_hash": "b3daf5143dd3525b7fd6b071cd8399d0bd53f600"
+          }
+        },
         {
           "client_id": "825392319740-5v5sasdsgnso030lpspt9tpd9cksebqt.apps.googleusercontent.com",
           "client_type": 1,

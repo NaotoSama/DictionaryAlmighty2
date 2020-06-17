@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.example.android.dictionaryalmighty2.R;
 
 import java.util.ArrayList;
 

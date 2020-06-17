@@ -157,6 +157,7 @@
         <item>@string/Japan_dict_kanji_dictionary</item>
         <item>@string/Japanese_name_dictionary</item>
         <item>@string/Stack_exchange_Japanese_language</item>
+        <item>@string/Metapedia</item>
 
         <!--        <item>@string/Word_Plus_Chinese</item>-->
         <!--        <item>@string/Word_Plus_English1</item>-->
@@ -752,6 +753,7 @@
     <string name="Terminology_ebook_part_2_explanation">Part 2 includes terminology in construction, salon, land/river, semiconductor, math, linguistsics, QA, medical, trade/shipping, telecom, patent, tax, tender, law, banking.</string>
     <string name="Call_academic_dictionary_third_party_app">Call Academic Dictionary (3rd party app)</string>
     <string name="Terminology_ebook_part_3_explanation">Part 3 includes terminology in military and land/water</string>
+    <string name="Metapedia">Metapedia</string>
 
 </resources>
 

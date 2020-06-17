@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -13,6 +13,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.example.android.dictionaryalmighty2.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 

@@ -28,7 +28,7 @@
         android:usesCleartextTraffic="true">
 
 
-        <receiver android:name=".DictionaryAlmightyWidget">
+        <receiver android:name="com.dictionaryalmighty.android.dictionaryalmighty2.DictionaryAlmightyWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -40,7 +40,7 @@
 
 
         <!-- 避免WebView加載網頁時出現ERR_CLEARTEXT_NOT_PERMITTED錯誤 -->
-        <service android:name=".FireBaseMessagingService">
+        <service android:name="com.dictionaryalmighty.android.dictionaryalmighty2.FireBaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -70,7 +70,7 @@
 
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.dictionaryalmighty.android.dictionaryalmighty2.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -107,7 +107,7 @@
 
 
         <activity
-            android:name=".UserInputHistory"
+            android:name="com.dictionaryalmighty.android.dictionaryalmighty2.UserInputHistory"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -118,7 +118,7 @@
 
 
         <activity
-            android:name=".WordsToMemorize"
+            android:name="com.dictionaryalmighty.android.dictionaryalmighty2.WordsToMemorize"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -135,7 +135,7 @@
 
 
         <activity
-            android:name=".ComboSearchActivity"
+            android:name="com.dictionaryalmighty.android.dictionaryalmighty2.ComboSearchActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"> <!-- 透過引用NoActionBar讓頭標消失 -->
@@ -147,7 +147,7 @@
 
 
         <activity
-            android:name=".AboutMemorizingWords"
+            android:name="com.dictionaryalmighty.android.dictionaryalmighty2.AboutMemorizingWords"
             android:noHistory="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -158,7 +158,7 @@
 
 
         <activity
-            android:name=".SignInActivity"
+            android:name="com.dictionaryalmighty.android.dictionaryalmighty2.SignInActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

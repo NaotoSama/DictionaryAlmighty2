@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -35,6 +35,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.crowdfire.cfalertdialog.CFAlertDialog;
+import com.example.android.dictionaryalmighty2.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -48,22 +49,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
 
-import static com.example.android.dictionaryalmighty2.MainActivity.browserSwitch;
-import static com.example.android.dictionaryalmighty2.MainActivity.comboSearchButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.defaultDictionaryListOriginal;
-import static com.example.android.dictionaryalmighty2.MainActivity.defaultDictionaryListSimplified;
-import static com.example.android.dictionaryalmighty2.MainActivity.defaultSearchButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.floatingActionButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForBoundDictionaryUrl;
-import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
-import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
-import static com.example.android.dictionaryalmighty2.MainActivity.proOrSimplifiedLayoutSwitch;
-import static com.example.android.dictionaryalmighty2.MainActivity.searchKeyword;
-import static com.example.android.dictionaryalmighty2.MainActivity.searchResultWillBeDisplayedHere;
-import static com.example.android.dictionaryalmighty2.MainActivity.username;
-import static com.example.android.dictionaryalmighty2.MainActivity.webViewBrowser;
-import static com.example.android.dictionaryalmighty2.MainActivity.wordInputView;
-import static com.example.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
+import static com.dictionaryalmighty.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
 
 public class WordsToMemorize extends AppCompatActivity {
 
@@ -114,11 +100,11 @@ public class WordsToMemorize extends AppCompatActivity {
 
 
         //Initialize the adapter
-        myVocabularyArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myVocabularyArrayList);
+        myVocabularyArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, MainActivity.myVocabularyArrayList);
         myVocabularyListview.setAdapter(myVocabularyArrayAdapter);
 
-        if (username!=null && !username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
-            mChildReferenceForVocabularyList.child(username).addValueEventListener(new ValueEventListener() {
+        if (MainActivity.username!=null && !MainActivity.username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
+            MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -127,16 +113,16 @@ public class WordsToMemorize extends AppCompatActivity {
                         String myVocabulary = postSnapshot.getValue(String.class);
 
                         //Add the data to the arraylist
-                        myVocabularyArrayList.add(myVocabulary);
+                        MainActivity.myVocabularyArrayList.add(myVocabulary);
 
                         //透過HashSet自動過濾掉userInputArraylist中重複的字
                         HashSet<String> myVocabularyArraylistHashSet = new HashSet<>();
-                        myVocabularyArraylistHashSet.addAll(myVocabularyArrayList);
-                        myVocabularyArrayList.clear();
-                        myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
+                        myVocabularyArraylistHashSet.addAll(MainActivity.myVocabularyArrayList);
+                        MainActivity.myVocabularyArrayList.clear();
+                        MainActivity.myVocabularyArrayList.addAll(myVocabularyArraylistHashSet);
 
                         //Alphabetic sorting
-                        Collections.sort(myVocabularyArrayList, String.CASE_INSENSITIVE_ORDER);
+                        Collections.sort(MainActivity.myVocabularyArrayList, String.CASE_INSENSITIVE_ORDER);
 
                         myVocabularyArrayAdapter.notifyDataSetChanged();
                     }
@@ -215,16 +201,16 @@ public class WordsToMemorize extends AppCompatActivity {
                         .addButton(getString(R.string.Confirm)
                                 , Color.WHITE, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
-                                    mChildReferenceForVocabularyList.child(username).removeValue(); //清除雲端用戶名稱的node
+                                    MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).removeValue(); //清除雲端用戶名稱的node
 
-                                    myVocabularyArrayList.clear(); //同時清除本地的list
+                                    MainActivity.myVocabularyArrayList.clear(); //同時清除本地的list
                                     myVocabularyArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences
                                     SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
-                                    editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
-                                    for (int i = 0; i < myVocabularyArrayList.size(); i++) {
-                                        editor.putString("myVocabularyArrayListItem_" + i, myVocabularyArrayList.get(i));
+                                    editor.putInt("myVocabularyArrayListValues", MainActivity.myVocabularyArrayList.size());
+                                    for (int i = 0; i < MainActivity.myVocabularyArrayList.size(); i++) {
+                                        editor.putString("myVocabularyArrayListItem_" + i, MainActivity.myVocabularyArrayList.get(i));
                                     }
                                     editor.apply();
 
@@ -258,7 +244,7 @@ public class WordsToMemorize extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 selectedMyVocabularyListviewItemValue=myVocabularyListview.getItemAtPosition(position).toString();
-                wordInputView.setText(selectedMyVocabularyListviewItemValue);
+                MainActivity.wordInputView.setText(selectedMyVocabularyListviewItemValue);
 
                 setChooseQuickSearchOrComboSearchAlertDialog();
 
@@ -293,13 +279,13 @@ public class WordsToMemorize extends AppCompatActivity {
                         .addButton(getResources().getString(R.string.Use_bound_dictionary_to_search)
                                 , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (bindDictionaryAlertDialog, whichLayer1) -> {
 
-                                    searchKeyword = myVocabularyListview.getItemAtPosition(position).toString();
+                                    MainActivity.searchKeyword = myVocabularyListview.getItemAtPosition(position).toString();
 
                                     //檢查資料庫中是否有重複的字
-                                    mChildReferenceForBoundDictionaryUrl.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.hasChild(searchKeyword)) {
+                                            if (snapshot.hasChild(MainActivity.searchKeyword)) {
                                                 retrieveBoundDictionary();
                                             }
                                             else {
@@ -321,10 +307,10 @@ public class WordsToMemorize extends AppCompatActivity {
                         .addButton(getResources().getString(R.string.Bind_this_word_with_a_dictionary)
                                 , Color.BLACK, Color.YELLOW, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (bindDictionaryAlertDialog, whichLayer1) -> {
 
-                                    if(proOrSimplifiedLayoutSwitch.isChecked()) {
+                                    if(MainActivity.proOrSimplifiedLayoutSwitch.isChecked()) {
 
                                         //載入專業版字典名單
-                                        defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);
+                                        MainActivity.defaultDictionaryListOriginal = getResources().getStringArray(R.array.default_dictionary_list_original);
 
                                         //這邊設置第二層AlertDialog讓用戶綁定字典或使用綁定的字典來查單字
                                         CFAlertDialog.Builder chooseOneDictionaryToBindDialogBuilder = new CFAlertDialog.Builder(WordsToMemorize.this)
@@ -335,367 +321,367 @@ public class WordsToMemorize extends AppCompatActivity {
                                                 .setTextColor(Color.BLUE)
                                                 .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
-                                                .setSingleChoiceItems(defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
+                                                .setSingleChoiceItems(MainActivity.defaultDictionaryListOriginal, -1, new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface chooseOneDictionaryToBindDialog, int dictionaryListPosition) {
 
-                                                        searchKeyword = myVocabularyListview.getItemAtPosition(position).toString();
+                                                        MainActivity.searchKeyword = myVocabularyListview.getItemAtPosition(position).toString();
 
                                                         switch (dictionaryListPosition) {
                                                             case 0:
-                                                                boundDictionaryUrl= "https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXGoL8vtcAQoAnHV9rolQ;_ylc=X1MDMTM1MTIwMDM4MQRfcgMyBGZyA3NmcARncHJpZAN0RjJnMS51MlNWU3NDZ1pfVC4zNUFBBG5fcnNsdAMwBG5fc3VnZwM0BG9yaWdpbgN0dy5kaWN0aW9uYXJ5LnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMEcXN0cmwDMwRxdWVyeQNHQVkEdF9zdG1wAzE1NjAwMTU0MTE-?p="+searchKeyword+"&fr2=sb-top-tw.dictionary.search&fr=sfp";
+                                                                boundDictionaryUrl= "https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXGoL8vtcAQoAnHV9rolQ;_ylc=X1MDMTM1MTIwMDM4MQRfcgMyBGZyA3NmcARncHJpZAN0RjJnMS51MlNWU3NDZ1pfVC4zNUFBBG5fcnNsdAMwBG5fc3VnZwM0BG9yaWdpbgN0dy5kaWN0aW9uYXJ5LnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMEcXN0cmwDMwRxdWVyeQNHQVkEdF9zdG1wAzE1NjAwMTU0MTE-?p="+ MainActivity.searchKeyword+"&fr2=sb-top-tw.dictionary.search&fr=sfp";
                                                                 dictionaryTitle = getString(R.string.Yahoo_Dictionary);
                                                                 break;
                                                             case 1:
-                                                                boundDictionaryUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                                                                boundDictionaryUrl= "http://terms.naer.edu.tw/search/?q="+ MainActivity.searchKeyword+"&field=ti&op=AND&group=&num=10";
                                                                 dictionaryTitle = getString(R.string.National_Academy_for_Educational_Research);
                                                                 break;
                                                             case 2:
-                                                                boundDictionaryUrl= "http://dict.site/"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "http://dict.site/"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.Dict_site);
                                                                 break;
                                                             case 3:
-                                                                boundDictionaryUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.fastdict.net/hongkong/word.html?word="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Fast_dict);
                                                                 break;
                                                             case 4:
-                                                                boundDictionaryUrl= "http://dict.cn/big5/"+searchKeyword;
+                                                                boundDictionaryUrl= "http://dict.cn/big5/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Dict_dot_cn);
                                                                 break;
                                                             case 5:
-                                                                boundDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_dictionary);
                                                                 break;
                                                             case 6:
-                                                                boundDictionaryUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://tw.voicetube.com/definition/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.VoiceTube);
                                                                 break;
                                                             case 7:
-                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Cambridge_EN_CH);
                                                                 break;
                                                             case 8:
-                                                                boundDictionaryUrl= "https://www.wordreference.com/enzh/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.wordreference.com/enzh/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_reference_en_to_ch);
                                                                 break;
                                                             case 9:
-                                                                boundDictionaryUrl= "https://www.wordreference.com/zhen/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.wordreference.com/zhen/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_reference_ch_to_en);
                                                                 break;
                                                             case 10:
-                                                                boundDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.merriam-webster.com/dictionary/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Merriam_Webster);
                                                                 break;
                                                             case 11:
-                                                                boundDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+searchKeyword+"_1";
+                                                                boundDictionaryUrl= "https://www.macmillandictionary.com/dictionary/british/"+ MainActivity.searchKeyword+"_1";
                                                                 dictionaryTitle = getString(R.string.Macmillan_dictionary);
                                                                 break;
                                                             case 12:
-                                                                boundDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.collinsdictionary.com/dictionary/english/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Collins);
                                                                 break;
                                                             case 13:
-                                                                boundDictionaryUrl= "https://en.oxforddictionaries.com/definition/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://en.oxforddictionaries.com/definition/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Oxford);
                                                                 break;
                                                             case 14:
-                                                                boundDictionaryUrl= "https://www.vocabulary.com/dictionary/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.vocabulary.com/dictionary/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Vocabulary);
                                                                 break;
                                                             case 15:
-                                                                boundDictionaryUrl= "https://www.dictionary.com/browse/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.dictionary.com/browse/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Dictionary);
                                                                 break;
                                                             case 16:
-                                                                boundDictionaryUrl= "https://www.thefreedictionary.com/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.thefreedictionary.com/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.The_Free_Dictionary);
                                                                 break;
                                                             case 17:
-                                                                boundDictionaryUrl= "http://www.finedictionary.com/"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "http://www.finedictionary.com/"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.Fine_dictionary);
                                                                 break;
                                                             case 18:
-                                                                boundDictionaryUrl= "https://www.yourdictionary.com/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.yourdictionary.com/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Your_Dictionary);
                                                                 break;
                                                             case 19:
-                                                                boundDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.ldoceonline.com/dictionary/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Longman_Dictionary);
                                                                 break;
                                                             case 20:
-                                                                boundDictionaryUrl= "https://www.wordwebonline.com/search.pl?w="+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.wordwebonline.com/search.pl?w="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.WordWeb_dictionary);
                                                                 break;
                                                             case 21:
-                                                                boundDictionaryUrl= "https://www.wordnik.com/words/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.wordnik.com/words/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Wordnik);
                                                                 break;
                                                             case 22:
-                                                                boundDictionaryUrl= "https://en.wiktionary.org/wiki/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://en.wiktionary.org/wiki/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Wiki_Dictionary);
                                                                 break;
                                                             case 23:
-                                                                boundDictionaryUrl= "http://www.businessdictionary.com/definition/"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "http://www.businessdictionary.com/definition/"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.Business_Dictionary);
                                                                 break;
                                                             case 24:
-                                                                boundDictionaryUrl= "http://www.yiym.com/?s="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.yiym.com/?s="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Slang);
                                                                 break;
                                                             case 25:
-                                                                boundDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+searchKeyword+"&sa=Search";
+                                                                boundDictionaryUrl= "http://onlineslangdictionary.com/search/?q="+ MainActivity.searchKeyword+"&sa=Search";
                                                                 dictionaryTitle = getString(R.string.The_online_slang_dictionary);
                                                                 break;
                                                             case 26:
-                                                                boundDictionaryUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.idioms4you.com/tipsearch/search.html?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Idioms_4_you);
                                                                 break;
                                                             case 27:
-                                                                boundDictionaryUrl= "https://greensdictofslang.com/search/basic?q="+searchKeyword;
+                                                                boundDictionaryUrl= "https://greensdictofslang.com/search/basic?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Greens_dictionary_of_slang);
                                                                 break;
                                                             case 28:
-                                                                boundDictionaryUrl= "https://www.etymonline.com/search?q="+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.etymonline.com/search?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Etymonline);
                                                                 break;
                                                             case 29:
-                                                                boundDictionaryUrl= "https://www.techdico.com/translation/english-chinese/"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "https://www.techdico.com/translation/english-chinese/"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.TechDico);
                                                                 break;
                                                             case 30:
-                                                                boundDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+searchKeyword+"&searchButton=查词典&matchtype=0";
+                                                                boundDictionaryUrl= "http://dict.bioon.com/search.asp?txtitle="+ MainActivity.searchKeyword+"&searchButton=查词典&matchtype=0";
                                                                 dictionaryTitle = getString(R.string.BioMedical_dictionary);
                                                                 break;
                                                             case 31:
-                                                                boundDictionaryUrl= "https://www.isplural.com/plural_singular/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.isplural.com/plural_singular/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Is_plural_dictionary);
                                                                 break;
                                                             case 32:
-                                                                boundDictionaryUrl= "https://lingohelp.me/q/?w="+searchKeyword;
+                                                                boundDictionaryUrl= "https://lingohelp.me/q/?w="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Lingo_help_prepositions);
                                                                 break;
                                                             case 33:
-                                                                boundDictionaryUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/synonyms";
+                                                                boundDictionaryUrl= "https://www.powerthesaurus.org/"+ MainActivity.searchKeyword+"/synonyms";
                                                                 dictionaryTitle = getString(R.string.Power_thesaurus_synonym);
                                                                 break;
                                                             case 34:
-                                                                boundDictionaryUrl= "https://www.powerthesaurus.org/"+searchKeyword+"/antonyms";
+                                                                boundDictionaryUrl= "https://www.powerthesaurus.org/"+ MainActivity.searchKeyword+"/antonyms";
                                                                 dictionaryTitle = getString(R.string.Power_thesaurus_antonym);
                                                                 break;
                                                             case 35:
-                                                                boundDictionaryUrl= "https://www.wordhippo.com/what-is/another-word-for/"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "https://www.wordhippo.com/what-is/another-word-for/"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.Word_Hippo);
                                                                 break;
                                                             case 36:
-                                                                boundDictionaryUrl= "https://www.onelook.com/thesaurus/?s="+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.onelook.com/thesaurus/?s="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Onelook);
                                                                 break;
                                                             case 37:
-                                                                boundDictionaryUrl= "https://www.weblio.jp/content/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.weblio.jp/content/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Weblio_JP);
                                                                 break;
                                                             case 38:
-                                                                boundDictionaryUrl= "https://cjjc.weblio.jp/content/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://cjjc.weblio.jp/content/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Weblio_CN);
                                                                 break;
                                                             case 39:
-                                                                boundDictionaryUrl= "https://ejje.weblio.jp/content/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://ejje.weblio.jp/content/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Weblio_EN);
                                                                 break;
                                                             case 40:
-                                                                boundDictionaryUrl= "https://thesaurus.weblio.jp/content/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://thesaurus.weblio.jp/content/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Weblio_Synonym);
                                                                 break;
                                                             case 41:
-                                                                boundDictionaryUrl= "https://tangorin.com/words?search="+searchKeyword;
+                                                                boundDictionaryUrl= "https://tangorin.com/words?search="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Tangorin_Word);
                                                                 break;
                                                             case 42:
-                                                                boundDictionaryUrl= "https://tangorin.com/kanji?search="+searchKeyword;
+                                                                boundDictionaryUrl= "https://tangorin.com/kanji?search="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Tangorin_Kanji);
                                                                 break;
                                                             case 43:
-                                                                boundDictionaryUrl= "https://tangorin.com/names?search="+searchKeyword;
+                                                                boundDictionaryUrl= "https://tangorin.com/names?search="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Tangorin_Names);
                                                                 break;
                                                             case 44:
-                                                                boundDictionaryUrl= "https://tangorin.com/sentences?search="+searchKeyword;
+                                                                boundDictionaryUrl= "https://tangorin.com/sentences?search="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Tangorin_Sentence);
                                                                 break;
                                                             case 45:
-                                                                boundDictionaryUrl= "http://dict.asia/jc/"+searchKeyword;
+                                                                boundDictionaryUrl= "http://dict.asia/jc/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.DA_JP_TW_Dictionary);
                                                                 break;
                                                             case 46:
-                                                                boundDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
+                                                                boundDictionaryUrl= "http://dict.asia/cj/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.DA_TW_JP_Dictionary);
                                                                 break;
                                                             case 47:
-                                                                boundDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+searchKeyword+"/m0u/";
+                                                                boundDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+ MainActivity.searchKeyword+"/m0u/";
                                                                 dictionaryTitle = getString(R.string.Goo);
                                                                 break;
                                                             case 48:
-                                                                boundDictionaryUrl= "http://www.sanseido.biz/sp/Search?target_words="+searchKeyword+"&search_type=0&start_index=0&selected_dic=";
+                                                                boundDictionaryUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
                                                                 dictionaryTitle = getString(R.string.Sanseido);
                                                                 break;
                                                             case 49:
-                                                                boundDictionaryUrl= "https://kotobank.jp/word/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://kotobank.jp/word/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Sanseido);
                                                                 break;
                                                             case 50:
-                                                                boundDictionaryUrl= "http://s.jlogos.com/list.html?keyword="+searchKeyword+"&opt_val=0";
+                                                                boundDictionaryUrl= "http://s.jlogos.com/list.html?keyword="+ MainActivity.searchKeyword+"&opt_val=0";
                                                                 dictionaryTitle = getString(R.string.J_Logos);
                                                                 break;
                                                             case 51:
-                                                                boundDictionaryUrl= "https://eow.alc.co.jp/sp/search.html?q="+searchKeyword;
+                                                                boundDictionaryUrl= "https://eow.alc.co.jp/sp/search.html?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Eijirou);
                                                                 break;
                                                             case 52:
-                                                                boundDictionaryUrl= "https://eikaiwa.dmm.com/uknow/search/?keyword="+searchKeyword;
+                                                                boundDictionaryUrl= "https://eikaiwa.dmm.com/uknow/search/?keyword="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.How_do_you_say_this_in_English);
                                                                 break;
                                                             case 53:
-                                                                boundDictionaryUrl= "https://jisho.org/search/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://jisho.org/search/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Jisho);
                                                                 break;
                                                             case 54:
-                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/japanese-english/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Cambridge_JP_EN);
                                                                 break;
                                                             case 55:
-                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-日語/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Cambridge_EN_JP);
                                                                 break;
                                                             case 56:
-                                                                boundDictionaryUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MUJ"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.WWWJDIC_jp_en);
                                                                 break;
                                                             case 57:
-                                                                boundDictionaryUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.edrdg.org/cgi-bin/wwwjdic/wwwjdic?1MDE"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.WWWJDIC_en_jp);
                                                                 break;
                                                             case 58:
-                                                                boundDictionaryUrl= "https://www.wordreference.com/enja/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.wordreference.com/enja/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_reference_en_to_jp);
                                                                 break;
                                                             case 59:
-                                                                boundDictionaryUrl= "https://www.wordreference.com/jaen/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.wordreference.com/jaen/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_reference_jp_to_en);
                                                                 break;
                                                             case 60:
-                                                                boundDictionaryUrl= "http://m.romajidesu.com/dictionary/meaning-of-"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "http://m.romajidesu.com/dictionary/meaning-of-"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.Romaji_desu_enjp_jpen_dictionary);
                                                                 break;
                                                             case 61:
-                                                                boundDictionaryUrl= "http://m.romajidesu.com/kanji/"+searchKeyword;
+                                                                boundDictionaryUrl= "http://m.romajidesu.com/kanji/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Romaji_desu_kanji_dictionary);
                                                                 break;
                                                             case 62:
-                                                                boundDictionaryUrl= "https://www.japandict.com/?s="+searchKeyword+"&lang=eng";
+                                                                boundDictionaryUrl= "https://www.japandict.com/?s="+ MainActivity.searchKeyword+"&lang=eng";
                                                                 dictionaryTitle = getString(R.string.Japan_dict);
                                                                 break;
                                                             case 63:
-                                                                boundDictionaryUrl= "https://www.japandict.com/kanji/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.japandict.com/kanji/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Japan_dict_kanji_dictionary);
                                                                 break;
                                                             case 64:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_CHTW);
                                                                 break;
                                                             case 65:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_CHCN);
                                                                 break;
                                                             case 66:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=en&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=en&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_EN);
                                                                 break;
                                                             case 67:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=ja&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=ja&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_JP);
                                                                 break;
                                                             case 68:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=ko&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=ko&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_KR);
                                                                 break;
                                                             case 69:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=es&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=es&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_SP);
                                                                 break;
                                                             case 70:
-                                                                boundDictionaryUrl= "http://images.google.com/search?tbm=isch&q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://images.google.com/search?tbm=isch&q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_Image);
                                                                 break;
                                                             case 71:
-                                                                boundDictionaryUrl= "https://ludwig.guru/s/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://ludwig.guru/s/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Ludwig);
                                                                 break;
                                                             case 72:
-                                                                boundDictionaryUrl= "https://sentence.yourdictionary.com/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://sentence.yourdictionary.com/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Your_Dictionary_Example_Sentences);
                                                                 break;
                                                             case 73:
-                                                                boundDictionaryUrl= "https://youglish.com/search/"+searchKeyword+"/all?";
+                                                                boundDictionaryUrl= "https://youglish.com/search/"+ MainActivity.searchKeyword+"/all?";
                                                                 dictionaryTitle = getString(R.string.YouGlish);
                                                                 break;
                                                             case 74:
-                                                                boundDictionaryUrl= "http://www.jukuu.com/search.php?q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.jukuu.com/search.php?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_Cool_EN_CH);
                                                                 break;
                                                             case 75:
-                                                                boundDictionaryUrl= "http://www.jukuu.com/jsearch.php?q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.jukuu.com/jsearch.php?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_Cool_EN_JP);
                                                                 break;
                                                             case 76:
-                                                                boundDictionaryUrl= "http://www.jukuu.com/jcsearch.php?q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.jukuu.com/jcsearch.php?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Word_Cool_JP_CH);
                                                                 break;
                                                             case 77:
-                                                                boundDictionaryUrl= "https://cn.linguee.com/中文-英语/search?source=auto&query="+searchKeyword;
+                                                                boundDictionaryUrl= "https://cn.linguee.com/中文-英语/search?source=auto&query="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Linguee_CH_EN);
                                                                 break;
                                                             case 78:
-                                                                boundDictionaryUrl= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.linguee.jp/日本語-英語/search?source=auto&query="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Linguee_JP_EN);
                                                                 break;
                                                             case 79:
-                                                                boundDictionaryUrl= "https://zh.wikipedia.org/wiki/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://zh.wikipedia.org/wiki/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Wikipedia_TW);
                                                                 break;
                                                             case 80:
-                                                                boundDictionaryUrl= "https://en.wikipedia.org/wiki/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://en.wikipedia.org/wiki/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Wikipedia_EN);
                                                                 break;
                                                             case 81:
-                                                                boundDictionaryUrl= "https://www.encyclo.co.uk/meaning-of-"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.encyclo.co.uk/meaning-of-"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.English_Encyclopedia);
                                                                 break;
                                                             case 82:
-                                                                boundDictionaryUrl= "https://forvo.com/search/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://forvo.com/search/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Forvo);
                                                                 break;
                                                             case 83:
-                                                                boundDictionaryUrl= "http://www.differencebetween.net/search/?cx=partner-pub-1911891147296207%3Aw80z4hjpu14&cof=FORID%3A9&ie=ISO-8859-1&q="+searchKeyword+"&sa=Search";
+                                                                boundDictionaryUrl= "http://www.differencebetween.net/search/?cx=partner-pub-1911891147296207%3Aw80z4hjpu14&cof=FORID%3A9&ie=ISO-8859-1&q="+ MainActivity.searchKeyword+"&sa=Search";
                                                                 dictionaryTitle = getString(R.string.Difference_between_dot_net);
                                                                 break;
                                                             case 84:
-                                                                boundDictionaryUrl= "https://netspeak.org/#q="+searchKeyword+"&corpus=web-en";
+                                                                boundDictionaryUrl= "https://netspeak.org/#q="+ MainActivity.searchKeyword+"&corpus=web-en";
                                                                 dictionaryTitle = getString(R.string.Net_Speak);
                                                                 break;
                                                             case 85:
-                                                                boundDictionaryUrl= "http://www.just-the-word.com/main.pl?word="+searchKeyword+"+&mode=combinations";
+                                                                boundDictionaryUrl= "http://www.just-the-word.com/main.pl?word="+ MainActivity.searchKeyword+"+&mode=combinations";
                                                                 dictionaryTitle = getString(R.string.Just_the_word);
                                                                 break;
                                                             case 86:
-                                                                boundDictionaryUrl= "https://yomikatawa.com/kanji/"+searchKeyword+"?search=1";
+                                                                boundDictionaryUrl= "https://yomikatawa.com/kanji/"+ MainActivity.searchKeyword+"?search=1";
                                                                 dictionaryTitle = getString(R.string.Yomikata);
                                                                 break;
                                                             case 87:
-                                                                boundDictionaryUrl= "https://cse.google.co.jp/cse?cx=partner-pub-1137871985589263%3A3025760782&ie=UTF-8&q="+searchKeyword;
+                                                                boundDictionaryUrl= "https://cse.google.co.jp/cse?cx=partner-pub-1137871985589263%3A3025760782&ie=UTF-8&q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Chigai);
                                                                 break;
                                                             case 88:
-                                                                boundDictionaryUrl= "http://www.gavo.t.u-tokyo.ac.jp/ojad/search/index/sortprefix:accent/narabi1:kata_asc/narabi2:accent_asc/narabi3:mola_asc/yure:visible/curve:invisible/details:invisible/limit:20/word:"+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.gavo.t.u-tokyo.ac.jp/ojad/search/index/sortprefix:accent/narabi1:kata_asc/narabi2:accent_asc/narabi3:mola_asc/yure:visible/curve:invisible/details:invisible/limit:20/word:"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.OJAD);
                                                                 break;
                                                         }
@@ -709,17 +695,17 @@ public class WordsToMemorize extends AppCompatActivity {
                                                         , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseOneDictionaryToBindDialog, whichLayer2) -> {
 
                                                             //檢查資料庫中是否已經有綁定過字典
-                                                            mChildReferenceForBoundDictionaryUrl.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.hasChild(searchKeyword)) {
-                                                                        snapshot.getRef().child(searchKeyword).setValue("");
+                                                                    if (snapshot.hasChild(MainActivity.searchKeyword)) {
+                                                                        snapshot.getRef().child(MainActivity.searchKeyword).setValue("");
 
                                                                         //延遲5秒重啟App
                                                                         Runnable r = new Runnable() {
                                                                             @Override
                                                                             public void run() {
-                                                                                mChildReferenceForBoundDictionaryUrl.child(username).child(searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
+                                                                                MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).child(MainActivity.searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
                                                                             }
                                                                         };
                                                                         Handler h =new Handler();
@@ -731,7 +717,7 @@ public class WordsToMemorize extends AppCompatActivity {
                                                                     }
 
                                                                     else {
-                                                                        mChildReferenceForBoundDictionaryUrl.child(username).child(searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
+                                                                        MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).child(MainActivity.searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
                                                                         Toast.makeText(WordsToMemorize.this,getString(R.string.Word_now_bound_with)+dictionaryTitle,Toast.LENGTH_LONG).show();
                                                                         chooseOneDictionaryToBindDialog.dismiss();
                                                                     }
@@ -756,7 +742,7 @@ public class WordsToMemorize extends AppCompatActivity {
 
                                     } else {
                                         //載入簡易版字典名單
-                                        defaultDictionaryListSimplified = getResources().getStringArray(R.array.default_dictionary_list_simplified);
+                                        MainActivity.defaultDictionaryListSimplified = getResources().getStringArray(R.array.default_dictionary_list_simplified);
 
                                         //這邊設置第二層AlertDialog讓用戶綁定字典或使用綁定的字典來查單字
                                         CFAlertDialog.Builder chooseOneDictionaryToBindDialogBuilder = new CFAlertDialog.Builder(WordsToMemorize.this)
@@ -767,67 +753,67 @@ public class WordsToMemorize extends AppCompatActivity {
                                                 .setTextColor(Color.BLUE)
                                                 .setCancelable(false) //按到旁邊的空白處AlertDialog也不會消失
 
-                                                .setSingleChoiceItems(defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
+                                                .setSingleChoiceItems(MainActivity.defaultDictionaryListSimplified, -1, new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface chooseOneDictionaryToBindDialog, int dictionaryListPosition) {
 
-                                                        searchKeyword = myVocabularyListview.getItemAtPosition(position).toString();
+                                                        MainActivity.searchKeyword = myVocabularyListview.getItemAtPosition(position).toString();
 
                                                         switch (dictionaryListPosition) {
                                                             case 0:
-                                                                boundDictionaryUrl= "https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXGoL8vtcAQoAnHV9rolQ;_ylc=X1MDMTM1MTIwMDM4MQRfcgMyBGZyA3NmcARncHJpZAN0RjJnMS51MlNWU3NDZ1pfVC4zNUFBBG5fcnNsdAMwBG5fc3VnZwM0BG9yaWdpbgN0dy5kaWN0aW9uYXJ5LnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMEcXN0cmwDMwRxdWVyeQNHQVkEdF9zdG1wAzE1NjAwMTU0MTE-?p="+searchKeyword+"&fr2=sb-top-tw.dictionary.search&fr=sfp";
+                                                                boundDictionaryUrl= "https://tw.dictionary.search.yahoo.com/search;_ylt=AwrtXGoL8vtcAQoAnHV9rolQ;_ylc=X1MDMTM1MTIwMDM4MQRfcgMyBGZyA3NmcARncHJpZAN0RjJnMS51MlNWU3NDZ1pfVC4zNUFBBG5fcnNsdAMwBG5fc3VnZwM0BG9yaWdpbgN0dy5kaWN0aW9uYXJ5LnNlYXJjaC55YWhvby5jb20EcG9zAzAEcHFzdHIDBHBxc3RybAMEcXN0cmwDMwRxdWVyeQNHQVkEdF9zdG1wAzE1NjAwMTU0MTE-?p="+ MainActivity.searchKeyword+"&fr2=sb-top-tw.dictionary.search&fr=sfp";
                                                                 dictionaryTitle = getString(R.string.Yahoo_Dictionary);
                                                                 break;
                                                             case 1:
-                                                                boundDictionaryUrl= "http://terms.naer.edu.tw/search/?q="+searchKeyword+"&field=ti&op=AND&group=&num=10";
+                                                                boundDictionaryUrl= "http://terms.naer.edu.tw/search/?q="+ MainActivity.searchKeyword+"&field=ti&op=AND&group=&num=10";
                                                                 dictionaryTitle = getString(R.string.National_Academy_for_Educational_Research);
                                                                 break;
                                                             case 2:
-                                                                boundDictionaryUrl= "http://dict.site/"+searchKeyword+".html";
+                                                                boundDictionaryUrl= "http://dict.site/"+ MainActivity.searchKeyword+".html";
                                                                 dictionaryTitle = getString(R.string.Dict_site);
                                                                 break;
                                                             case 3:
-                                                                boundDictionaryUrl= "http://www.fastdict.net/hongkong/word.html?word="+searchKeyword;
+                                                                boundDictionaryUrl= "http://www.fastdict.net/hongkong/word.html?word="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Fast_dict);
                                                                 break;
                                                             case 4:
-                                                                boundDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://gdictchinese.freecollocation.com/search/?q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_dictionary);
                                                                 break;
                                                             case 5:
-                                                                boundDictionaryUrl= "https://tw.voicetube.com/definition/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://tw.voicetube.com/definition/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.VoiceTube);
                                                                 break;
                                                             case 6:
-                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://dictionary.cambridge.org/zht/詞典/英語-漢語-繁體/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Cambridge_EN_CH);
                                                                 break;
                                                             case 7:
-                                                                boundDictionaryUrl= "https://www.weblio.jp/content/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://www.weblio.jp/content/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Weblio_JP);
                                                                 break;
                                                             case 8:
-                                                                boundDictionaryUrl= "https://cjjc.weblio.jp/content/"+searchKeyword;
+                                                                boundDictionaryUrl= "https://cjjc.weblio.jp/content/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Weblio_CN);
                                                                 break;
                                                             case 9:
-                                                                boundDictionaryUrl= "http://dict.asia/jc/"+searchKeyword;
+                                                                boundDictionaryUrl= "http://dict.asia/jc/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.DA_JP_TW_Dictionary);
                                                                 break;
                                                             case 10:
-                                                                boundDictionaryUrl= "http://dict.asia/cj/"+searchKeyword;
+                                                                boundDictionaryUrl= "http://dict.asia/cj/"+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.DA_TW_JP_Dictionary);
                                                                 break;
                                                             case 11:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_CHTW);
                                                                 break;
                                                             case 12:
-                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+searchKeyword;
+                                                                boundDictionaryUrl = "https://translate.google.com/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-CN&text="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_translate_to_CHCN);
                                                                 break;
                                                             case 13:
-                                                                boundDictionaryUrl= "http://images.google.com/search?tbm=isch&q="+searchKeyword;
+                                                                boundDictionaryUrl= "http://images.google.com/search?tbm=isch&q="+ MainActivity.searchKeyword;
                                                                 dictionaryTitle = getString(R.string.Google_Image);
                                                                 break;
                                                         }
@@ -841,17 +827,17 @@ public class WordsToMemorize extends AppCompatActivity {
                                                         , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.NEGATIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseOneDictionaryToBindDialog, whichLayer2) -> {
 
                                                             //檢查資料庫中是否已經有綁定過字典
-                                                            mChildReferenceForBoundDictionaryUrl.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).addListenerForSingleValueEvent(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                    if (snapshot.hasChild(searchKeyword)) {
-                                                                        snapshot.getRef().child(searchKeyword).setValue("");
+                                                                    if (snapshot.hasChild(MainActivity.searchKeyword)) {
+                                                                        snapshot.getRef().child(MainActivity.searchKeyword).setValue("");
 
                                                                         //延遲5秒重啟App
                                                                         Runnable r = new Runnable() {
                                                                             @Override
                                                                             public void run() {
-                                                                                mChildReferenceForBoundDictionaryUrl.child(username).child(searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
+                                                                                MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).child(MainActivity.searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
                                                                             }
                                                                         };
                                                                         Handler h =new Handler();
@@ -863,7 +849,7 @@ public class WordsToMemorize extends AppCompatActivity {
                                                                     }
 
                                                                     else {
-                                                                        mChildReferenceForBoundDictionaryUrl.child(username).child(searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
+                                                                        MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).child(MainActivity.searchKeyword).push().setValue(boundDictionaryUrl); //加入字典的查詢網址到資料庫
                                                                         Toast.makeText(WordsToMemorize.this,getString(R.string.Word_now_bound_with)+dictionaryTitle,Toast.LENGTH_LONG).show();
                                                                         chooseOneDictionaryToBindDialog.dismiss();
                                                                     }
@@ -925,10 +911,10 @@ public class WordsToMemorize extends AppCompatActivity {
 
                                     wordToDelete = listView.getItemAtPosition(position).toString();
 
-                                    if (username!=null && !username.equals("")) {
-                                        myVocabularyArrayList.remove(wordToDelete);  //同時從本地的list移除該字
+                                    if (MainActivity.username!=null && !MainActivity.username.equals("")) {
+                                        MainActivity.myVocabularyArrayList.remove(wordToDelete);  //同時從本地的list移除該字
                                         myVocabularyArrayAdapter.notifyDataSetChanged();
-                                        Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
+                                        Query query = MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
 
                                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -1045,7 +1031,7 @@ public class WordsToMemorize extends AppCompatActivity {
     //==============================================================================================
         public void retrieveBoundDictionary() {
         //去資料庫中調出綁定的字典
-        mChildReferenceForBoundDictionaryUrl.child(username).child(searchKeyword).addValueEventListener(new ValueEventListener() {
+        MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).child(MainActivity.searchKeyword).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -1057,12 +1043,12 @@ public class WordsToMemorize extends AppCompatActivity {
                     ArrayList<String> tempArraylist = new ArrayList<>();
                     tempArraylist.add(childValues);
 
-                    wordInputView.setText(searchKeyword);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-                    floatingActionButton.setVisibility(View.VISIBLE);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    browserSwitch.setChecked(true);
-                    webViewBrowser.loadUrl(tempArraylist.get(0));
+                    MainActivity.wordInputView.setText(MainActivity.searchKeyword);
+                    MainActivity.webViewBrowser.setVisibility(View.VISIBLE);
+                    MainActivity.floatingActionButton.setVisibility(View.VISIBLE);
+                    MainActivity.searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    MainActivity.browserSwitch.setChecked(true);
+                    MainActivity.webViewBrowser.loadUrl(tempArraylist.get(0));
                     finish();
                 }
 
@@ -1082,7 +1068,7 @@ public class WordsToMemorize extends AppCompatActivity {
     //==============================================================================================
     public void removeBoundDictionary() {
         //檢查資料庫中是否有重複的字
-        mChildReferenceForBoundDictionaryUrl.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
+        MainActivity.mChildReferenceForBoundDictionaryUrl.child(MainActivity.username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChild(wordToDelete)) {
@@ -1118,7 +1104,7 @@ public class WordsToMemorize extends AppCompatActivity {
         .addButton(getString(R.string.Send_to_WordInputView)
                 , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
-                    wordInputView.setText(selectedMyVocabularyListviewItemValue);
+                    MainActivity.wordInputView.setText(selectedMyVocabularyListviewItemValue);
                     chooseQuickSearchOrComboSearchAlertDialog.dismiss();
                     finish();
         })
@@ -1127,7 +1113,7 @@ public class WordsToMemorize extends AppCompatActivity {
         .addButton(getString(R.string.Quick_search)
                 , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
-                    defaultSearchButton.performClick();
+                    MainActivity.defaultSearchButton.performClick();
                     chooseQuickSearchOrComboSearchAlertDialog.dismiss();
                     finish();
         })
@@ -1136,7 +1122,7 @@ public class WordsToMemorize extends AppCompatActivity {
         .addButton(getString(R.string.Combo_search)
                         , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
-                    comboSearchButton.performClick();
+                    MainActivity.comboSearchButton.performClick();
                     chooseQuickSearchOrComboSearchAlertDialog.dismiss();
                     finish();
         })
@@ -1145,12 +1131,12 @@ public class WordsToMemorize extends AppCompatActivity {
         .addButton(getString(R.string.Google_translate)
                 , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (chooseQuickSearchOrComboSearchAlertDialog, which) -> {
 
-                    wordInputView.setText(selectedMyVocabularyListviewItemValue);
+                    MainActivity.wordInputView.setText(selectedMyVocabularyListviewItemValue);
                     String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + selectedMyVocabularyListviewItemValue;
-                    webViewBrowser.loadUrl(intentAutoTranslationURL);
-                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                    webViewBrowser.setVisibility(View.VISIBLE);
-                    floatingActionButton.setVisibility(View.VISIBLE);
+                    MainActivity.webViewBrowser.loadUrl(intentAutoTranslationURL);
+                    MainActivity.searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    MainActivity.webViewBrowser.setVisibility(View.VISIBLE);
+                    MainActivity.floatingActionButton.setVisibility(View.VISIBLE);
                     chooseQuickSearchOrComboSearchAlertDialog.dismiss();
                     finish();
         })

@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -38,6 +38,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.crowdfire.cfalertdialog.CFAlertDialog;
+import com.example.android.dictionaryalmighty2.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -50,20 +51,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
-
-import static com.example.android.dictionaryalmighty2.MainActivity.comboSearchButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.defaultSearchButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.floatingActionButton;
-import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
-import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
-import static com.example.android.dictionaryalmighty2.MainActivity.myVocabularyArrayList;
-import static com.example.android.dictionaryalmighty2.MainActivity.saveKeywordToMyVocabularyListView;
-import static com.example.android.dictionaryalmighty2.MainActivity.searchKeyword;
-import static com.example.android.dictionaryalmighty2.MainActivity.searchResultWillBeDisplayedHere;
-import static com.example.android.dictionaryalmighty2.MainActivity.userInputArraylist;
-import static com.example.android.dictionaryalmighty2.MainActivity.username;
-import static com.example.android.dictionaryalmighty2.MainActivity.webViewBrowser;
-import static com.example.android.dictionaryalmighty2.MainActivity.wordInputView;
 
 public class UserInputHistory extends AppCompatActivity {
 
@@ -105,11 +92,11 @@ public class UserInputHistory extends AppCompatActivity {
 
 
         //Initialize the adapter
-        userInputArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, userInputArraylist);
+        userInputArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, MainActivity.userInputArraylist);
         userInputListview.setAdapter(userInputArrayAdapter);
 
-        if (username!=null && !username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
-            mChildReferenceForInputHistory.child(username).addValueEventListener(new ValueEventListener() {
+        if (MainActivity.username!=null && !MainActivity.username.equals("")) {  //檢查有用戶有登入，才能跑以下程式碼
+            MainActivity.mChildReferenceForInputHistory.child(MainActivity.username).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (final DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
@@ -118,16 +105,16 @@ public class UserInputHistory extends AppCompatActivity {
                         String userSearchHistory = postSnapshot.getValue(String.class);
 
                         //Add the data to the arraylist
-                        userInputArraylist.add(userSearchHistory);
+                        MainActivity.userInputArraylist.add(userSearchHistory);
 
                         //透過HashSet自動過濾掉userInputArraylist中重複的字
                         HashSet<String> userInputHistoryArraylistHashSet = new HashSet<>();
-                        userInputHistoryArraylistHashSet.addAll(userInputArraylist);
-                        userInputArraylist.clear();
-                        userInputArraylist.addAll(userInputHistoryArraylistHashSet);
+                        userInputHistoryArraylistHashSet.addAll(MainActivity.userInputArraylist);
+                        MainActivity.userInputArraylist.clear();
+                        MainActivity.userInputArraylist.addAll(userInputHistoryArraylistHashSet);
 
                         //Alphabetic sorting
-                        Collections.sort(userInputArraylist, String.CASE_INSENSITIVE_ORDER);
+                        Collections.sort(MainActivity.userInputArraylist, String.CASE_INSENSITIVE_ORDER);
 
                         userInputArrayAdapter.notifyDataSetChanged();
                     }
@@ -179,7 +166,7 @@ public class UserInputHistory extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (username!=null && !username.equals("")) {
+                if (MainActivity.username!=null && !MainActivity.username.equals("")) {
                     Intent intent= new Intent(UserInputHistory.this, WordsToMemorize.class);
                     startActivity(intent);
 
@@ -261,16 +248,16 @@ public class UserInputHistory extends AppCompatActivity {
                         .addButton(getString(R.string.Confirm)
                                 , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (doYouReallyWantToClearListAlertDialog, which) -> {
 
-                                    mChildReferenceForInputHistory.child(username).removeValue(); //清除雲端用戶名稱的node
+                                    MainActivity.mChildReferenceForInputHistory.child(MainActivity.username).removeValue(); //清除雲端用戶名稱的node
 
-                                    userInputArraylist.clear(); //同時清除本地的list
+                                    MainActivity.userInputArraylist.clear(); //同時清除本地的list
                                     userInputArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences
                                     SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
-                                    editor.putInt("userInputArrayListValues", userInputArraylist.size());
-                                    for (int i = 0; i < userInputArraylist.size(); i++) {
-                                        editor.putString("userInputArrayListItem_" + i, userInputArraylist.get(i));
+                                    editor.putInt("userInputArrayListValues", MainActivity.userInputArraylist.size());
+                                    for (int i = 0; i < MainActivity.userInputArraylist.size(); i++) {
+                                        editor.putString("userInputArrayListItem_" + i, MainActivity.userInputArraylist.get(i));
                                     }
                                     editor.apply();
 
@@ -323,7 +310,7 @@ public class UserInputHistory extends AppCompatActivity {
                 .addButton(getString(R.string.Send_to_WordInputView)
                         , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) ->{
 
-                        wordInputView.setText(selectedListviewItemValue);
+                        MainActivity.wordInputView.setText(selectedListviewItemValue);
                         finish(); //結束此Activity並返回上一個Activity
 
                         passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
@@ -333,8 +320,8 @@ public class UserInputHistory extends AppCompatActivity {
                 .addButton(getString(R.string.Quick_search)
                         , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) ->{
 
-                            wordInputView.setText(selectedListviewItemValue);
-                            defaultSearchButton.performClick();
+                            MainActivity.wordInputView.setText(selectedListviewItemValue);
+                            MainActivity.defaultSearchButton.performClick();
                             passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
                             finish();
                 })
@@ -343,8 +330,8 @@ public class UserInputHistory extends AppCompatActivity {
                 .addButton(getString(R.string.Combo_search)
                         , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) ->{
 
-                            wordInputView.setText(selectedListviewItemValue);
-                            comboSearchButton.performClick();
+                            MainActivity.wordInputView.setText(selectedListviewItemValue);
+                            MainActivity.comboSearchButton.performClick();
                             passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
                             finish();
         })
@@ -353,12 +340,12 @@ public class UserInputHistory extends AppCompatActivity {
                 .addButton(getString(R.string.Google_translate)
                         , Color.BLACK, Color.MAGENTA, CFAlertDialog.CFAlertActionStyle.DEFAULT, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (passToWordInputViewOrFireCalendarEventAlertDialog, whichLayer1) ->{
 
-                            wordInputView.setText(selectedListviewItemValue);
+                            MainActivity.wordInputView.setText(selectedListviewItemValue);
                             String intentAutoTranslationURL = "https://translate.google.com.tw/?hl=zh-TW#view=home&op=translate&sl=auto&tl=zh-TW&text=" + selectedListviewItemValue;
-                            webViewBrowser.loadUrl(intentAutoTranslationURL);
-                            searchResultWillBeDisplayedHere.setVisibility(View.GONE);
-                            webViewBrowser.setVisibility(View.VISIBLE);
-                            floatingActionButton.setVisibility(View.VISIBLE);
+                            MainActivity.webViewBrowser.loadUrl(intentAutoTranslationURL);
+                            MainActivity.searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                            MainActivity.webViewBrowser.setVisibility(View.VISIBLE);
+                            MainActivity.floatingActionButton.setVisibility(View.VISIBLE);
                             passToWordInputViewOrFireCalendarEventAlertDialog.dismiss();
                             finish();
         })
@@ -402,8 +389,8 @@ public class UserInputHistory extends AppCompatActivity {
                                                                 @Override
                                                                 public void onClick(DialogInterface choosePresetNotificationTimingsAlertDialog, int position) {
 
-                                                                    searchKeyword = selectedListviewItemValue;
-                                                                    saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                                                                    MainActivity.searchKeyword = selectedListviewItemValue;
+                                                                    MainActivity.saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
                                                                     saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
 
                                                                     switch (position) {
@@ -534,13 +521,13 @@ public class UserInputHistory extends AppCompatActivity {
 
                 String selectedListviewItemValue=userInputListview.getItemAtPosition(position).toString();
 
-                if (username!=null && !username.equals("")) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
+                if (MainActivity.username!=null && !MainActivity.username.equals("")) {  //檢查有用戶名稱且雲端存儲的功能有打開，才能跑以下程式碼
 
                     //先送出文字
-                    mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
+                    MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
 
                     //檢查資料庫中是否有重複的字
-                    Query query = mChildReferenceForVocabularyList.child(username).orderByValue().equalTo(selectedListviewItemValue);
+                    Query query = MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).orderByValue().equalTo(selectedListviewItemValue);
 
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
@@ -562,7 +549,7 @@ public class UserInputHistory extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            mChildReferenceForVocabularyList.child(username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
+                            MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).push().setValue(selectedListviewItemValue); //加入單字到資料庫
 
                         }
                     };
@@ -619,8 +606,8 @@ public class UserInputHistory extends AppCompatActivity {
 
                                     String wordToDelete = listView.getItemAtPosition(position).toString();
 
-                                    if (username!=null && !username.equals("")) {
-                                        Query query = mChildReferenceForInputHistory.child(username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
+                                    if (MainActivity.username!=null && !MainActivity.username.equals("")) {
+                                        Query query = MainActivity.mChildReferenceForInputHistory.child(MainActivity.username).orderByValue().equalTo(wordToDelete); //在資料庫中尋找要刪除的字
 
                                         query.addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
@@ -638,15 +625,15 @@ public class UserInputHistory extends AppCompatActivity {
                                     }
 
 
-                                    userInputArraylist.remove(wordToDelete);  //同時本從地的list移除該字
+                                    MainActivity.userInputArraylist.remove(wordToDelete);  //同時本從地的list移除該字
                                     userInputArrayAdapter.notifyDataSetChanged();
 
                                     //將搜尋紀錄的列表存到SharedPreferences
                                     SharedPreferences.Editor editor = getSharedPreferences("userInputArrayListSharedPreferences", MODE_PRIVATE).edit();
-                                    editor.putInt("userInputArrayListValues", userInputArraylist.size());
-                                    for (int i = 0; i < userInputArraylist.size(); i++)
+                                    editor.putInt("userInputArrayListValues", MainActivity.userInputArraylist.size());
+                                    for (int i = 0; i < MainActivity.userInputArraylist.size(); i++)
                                     {
-                                        editor.putString("userInputArrayListItem_"+i, userInputArraylist.get(i));
+                                        editor.putString("userInputArrayListItem_"+i, MainActivity.userInputArraylist.get(i));
                                     }
                                     editor.apply();
 
@@ -845,10 +832,10 @@ public class UserInputHistory extends AppCompatActivity {
     //==============================================================================================
     public void saveMyVocabularyArrayListToSharedPreferences() {
         SharedPreferences.Editor editor = getSharedPreferences("myVocabularyArrayListSharedPreferences", MODE_PRIVATE).edit();
-        editor.putInt("myVocabularyArrayListValues", myVocabularyArrayList.size());
-        for (int i = 0; i < myVocabularyArrayList.size(); i++)
+        editor.putInt("myVocabularyArrayListValues", MainActivity.myVocabularyArrayList.size());
+        for (int i = 0; i < MainActivity.myVocabularyArrayList.size(); i++)
         {
-            editor.putString("myVocabularyArrayListValues"+i, myVocabularyArrayList.get(i));
+            editor.putString("myVocabularyArrayListValues"+i, MainActivity.myVocabularyArrayList.get(i));
         }
         editor.apply();
 
@@ -910,8 +897,8 @@ public class UserInputHistory extends AppCompatActivity {
                             Uri newReminder = cr.insert(CalendarContract.Reminders.CONTENT_URI, reminder);
 
 
-                            searchKeyword = selectedListviewItemValue;
-                            saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
+                            MainActivity.searchKeyword = selectedListviewItemValue;
+                            MainActivity.saveKeywordToMyVocabularyListView();            //Helper method。把用戶查的單字存到單字本頁面
                             saveMyVocabularyArrayListToSharedPreferences(); //Helper method。把用戶查的單字(整個列表)存到SharedPreferences
                         }
 

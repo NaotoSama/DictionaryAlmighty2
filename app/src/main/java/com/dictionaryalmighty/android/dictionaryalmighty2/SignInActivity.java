@@ -1,4 +1,4 @@
-package com.example.android.dictionaryalmighty2;
+package com.dictionaryalmighty.android.dictionaryalmighty2;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.crowdfire.cfalertdialog.CFAlertDialog;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.example.android.dictionaryalmighty2.R;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.auth.api.credentials.Credentials;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,13 +31,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.util.Arrays;
-
-import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForInputHistory;
-import static com.example.android.dictionaryalmighty2.MainActivity.mChildReferenceForVocabularyList;
-import static com.example.android.dictionaryalmighty2.MainActivity.userScreenName;
-import static com.example.android.dictionaryalmighty2.MainActivity.userScreenNameSharedPreferences;
-import static com.example.android.dictionaryalmighty2.MainActivity.username;
-import static com.example.android.dictionaryalmighty2.MainActivity.usernameSharedPreferences;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -98,15 +92,15 @@ public class SignInActivity extends AppCompatActivity {
 
 
                     //抓用戶Firebase UID和暱稱
-                    username = mDetailTextView.getText().toString();
-                    userScreenName = mScreenNameTextView.getText().toString();
+                    MainActivity.username = mDetailTextView.getText().toString();
+                    MainActivity.userScreenName = mScreenNameTextView.getText().toString();
 
                     //儲存用戶Firebase UID和暱稱
-                    usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
-                    usernameSharedPreferences.edit().putString("userName", username).apply();
+                    MainActivity.usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                    MainActivity.usernameSharedPreferences.edit().putString("userName", MainActivity.username).apply();
 
-                    userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
-                    userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
+                    MainActivity.userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
+                    MainActivity.userScreenNameSharedPreferences.edit().putString("userScreenName", MainActivity.userScreenName).apply();
 
 
                     //播放特效
@@ -141,15 +135,15 @@ public class SignInActivity extends AppCompatActivity {
                     // User is signed out
 
                     //清除本地用戶Firebase UID和暱稱
-                    username = null;
-                    userScreenName = null;
+                    MainActivity.username = null;
+                    MainActivity.userScreenName = null;
 
                     //儲存用戶Firebase UID和暱稱
-                    usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
-                    usernameSharedPreferences.edit().putString("userName", username).apply();
+                    MainActivity.usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                    MainActivity.usernameSharedPreferences.edit().putString("userName", MainActivity.username).apply();
 
-                    userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
-                    userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
+                    MainActivity.userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
+                    MainActivity.userScreenNameSharedPreferences.edit().putString("userScreenName", MainActivity.userScreenName).apply();
 
 
                     startActivityForResult(
@@ -204,15 +198,15 @@ public class SignInActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 //清除本地用戶Firebase UID和暱稱
-                                username = null;
-                                userScreenName = null;
+                                MainActivity.username = null;
+                                MainActivity.userScreenName = null;
 
                                 //儲存用戶Firebase UID和暱稱
-                                usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
-                                usernameSharedPreferences.edit().putString("userName", username).apply();
+                                MainActivity.usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                                MainActivity.usernameSharedPreferences.edit().putString("userName", MainActivity.username).apply();
 
-                                userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
-                                userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
+                                MainActivity.userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
+                                MainActivity.userScreenNameSharedPreferences.edit().putString("userScreenName", MainActivity.userScreenName).apply();
 
                                 onBackPressed();   //要加入這句把多餘的登入畫面退出，才不會卡在登入畫面
                                 relaunchApp();
@@ -296,8 +290,8 @@ public class SignInActivity extends AppCompatActivity {
 
                                                             //把顯示暱稱改成用戶輸入的新暱稱並儲存起來
                                                             mScreenNameTextView.setText(getResources().getString(R.string.User) + userInputDisplayName);
-                                                            userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
-                                                            userScreenNameSharedPreferences.edit().putString("userScreenName", userInputDisplayName).apply();
+                                                            MainActivity.userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
+                                                            MainActivity.userScreenNameSharedPreferences.edit().putString("userScreenName", userInputDisplayName).apply();
 
                                                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.Your_screen_name_is_changed_successfully), Toast.LENGTH_LONG).show();
 
@@ -531,8 +525,8 @@ public class SignInActivity extends AppCompatActivity {
                         , Color.BLACK, Color.GREEN, CFAlertDialog.CFAlertActionStyle.POSITIVE, CFAlertDialog.CFAlertActionAlignment.JUSTIFIED, (dialog, which) -> {
 
                         //先清除雲端用戶Firebase UID
-                        mChildReferenceForInputHistory.child(username).removeValue();
-                        mChildReferenceForVocabularyList.child(username).removeValue();
+                        MainActivity.mChildReferenceForInputHistory.child(MainActivity.username).removeValue();
+                        MainActivity.mChildReferenceForVocabularyList.child(MainActivity.username).removeValue();
 
                         // Get the current user
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -634,15 +628,15 @@ public class SignInActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         //抓用戶Firebase UID和暱稱
-                        username = mDetailTextView.getText().toString();
-                        userScreenName = mScreenNameTextView.getText().toString();
+                        MainActivity.username = mDetailTextView.getText().toString();
+                        MainActivity.userScreenName = mScreenNameTextView.getText().toString();
 
                         //儲存用戶Firebase UID和暱稱
-                        usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
-                        usernameSharedPreferences.edit().putString("userName", username).apply();
+                        MainActivity.usernameSharedPreferences = getSharedPreferences("usernameSharedPreferences", MODE_PRIVATE);
+                        MainActivity.usernameSharedPreferences.edit().putString("userName", MainActivity.username).apply();
 
-                        userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
-                        userScreenNameSharedPreferences.edit().putString("userScreenName", userScreenName).apply();
+                        MainActivity.userScreenNameSharedPreferences = getSharedPreferences("userScreenNameSharedPreferences", MODE_PRIVATE);
+                        MainActivity.userScreenNameSharedPreferences.edit().putString("userScreenName", MainActivity.userScreenName).apply();
 
                         relaunchApp();
                     }
