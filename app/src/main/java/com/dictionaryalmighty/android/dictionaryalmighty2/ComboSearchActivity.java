@@ -466,6 +466,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+ MainActivity.searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(greensDictionaryOfSlangUrl);
                         break;
+                    case "The Idioms":
+                        String theIdiomsUrl= "https://www.theidioms.com/?s="+MainActivity.searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(theIdiomsUrl);
+                        break;
                     case "Etymology Dictionary":
                         String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+ MainActivity.searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(etymologyDictionaryUrl);
@@ -949,6 +953,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(greensDictionaryOfSlangUrl);
                 break;
+            case "The Idioms":
+                String theIdiomsUrl= "https://www.theidioms.com/?s="+MainActivity.searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(theIdiomsUrl);
+                break;
             case "Etymology Dictionary":
                 String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(etymologyDictionaryUrl);
@@ -1431,6 +1439,10 @@ public class ComboSearchActivity extends AppCompatActivity {
             case "Greens dictionary of slang":
                 String greensDictionaryOfSlangUrl= "https://greensdictofslang.com/search/basic?q="+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(greensDictionaryOfSlangUrl);
+                break;
+            case "The Idioms":
+                String theIdiomsUrl= "https://www.theidioms.com/?s="+MainActivity.searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(theIdiomsUrl);
                 break;
             case "Etymology Dictionary":
                 String etymologyDictionaryUrl= "https://www.etymonline.com/search?q="+ MainActivity.searchKeyword;

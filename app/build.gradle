@@ -29,8 +29,8 @@ android {
 //        applicationId "com.example.android.dictionaryalmighty2"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 12
-        versionName "1.1.0"
+        versionCode 13
+        versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
     }
