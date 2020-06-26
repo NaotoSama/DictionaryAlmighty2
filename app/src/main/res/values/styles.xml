@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">#00584c</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowActionModeOverlay">true</item> <!-- 加上這行之後，用戶反白關鍵字時跳出客製化選單(含記憶單字的選項)才不會異常顯示 -->
     </style>
 
 

@@ -29,8 +29,8 @@ android {
 //        applicationId "com.example.android.dictionaryalmighty2"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 13
-        versionName "1.1.1"
+        versionCode 14
+        versionName "1.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
     }
@@ -78,9 +78,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.work:work-runtime:2.3.4'
 
-    implementation 'com.google.firebase:firebase-database:19.3.0'
+    implementation 'com.google.firebase:firebase-database:19.3.1'
     implementation 'com.firebaseui:firebase-ui-database:0.4.4'
-    implementation 'com.google.firebase:firebase-messaging:20.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.2.1'
     implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
     implementation 'com.google.firebase:firebase-config:19.1.4'

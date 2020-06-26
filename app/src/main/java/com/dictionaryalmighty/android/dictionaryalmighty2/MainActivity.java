@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.Base64;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -138,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
                                                                                                     //static String googleIdToken;
                                                                                                     //static String logInProviderCheckCode; //用來檢查用戶透過哪個方式登入帳戶
     String LOG_TAG;  //Log tag for the external storage permission request error message
+    private static final String TAG = "MainActivity";
     String speechAutoTranslationCode; //用於載入自動語音翻譯之網頁的代碼
     String changeBackgroundButtonIsPressed; //更換背景時附加的代碼，以免與語音辨識的程式碼衝突
     String defaultSingleSearchCode; //用以設定單一預設快搜字典
@@ -153,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String SHOWCASE_ID = "Sequence Showcase";
     String widgetCallQuickSearchCode;
     String tutorialVideoURL;
+    String wordToMemorize; //用戶反白要快速記憶的文字
 
     CFAlertDialog.Builder defaultSearchAlertDialogBuilder; //專業版自訂單一預設字典名單的對話方塊
     CFAlertDialog.Builder defaultComboSearchAlertDialogFirstDictionaryBuilder; //專業版自訂第一個預設字典名單的對話方塊
@@ -310,6 +313,9 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        /**
+         * 接收小工具捷徑的啟動呼叫
+         */
         Bundle bundle = getIntent().getExtras();
         if(bundle !=null){
             widgetCallQuickSearchCode = Objects.requireNonNull(bundle).getString("widgetCallQuickSearchCode");
@@ -364,6 +370,38 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 wordInputView.setText("");  //讓文字框內變成空白字元
+            }
+        });
+
+
+        /**
+         * 設定用戶反白關鍵字時跳出客製化選單(含記憶單字的選項)
+         */
+        wordInputView.setCustomSelectionActionModeCallback(new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.extra_process_text, menu);  //顯現客製化選單
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) { //點擊選單子項目時的動作
+                if (item.getItemId() == R.id.action_memorize_this_word) {
+                    wordToMemorize=wordInputView.getText().toString();
+                    chooseCustomizedOrPredefinedNotification();
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                Log.d(TAG, "onDestroyActionMode");
             }
         });
 
@@ -7074,7 +7112,13 @@ public class MainActivity extends AppCompatActivity {
             final EditText userInputView = new EditText(getApplicationContext()); //在對話框內創建文字輸入框
             userInputView.setLines(2);
             userInputView.setHint(getString(R.string.Word_input_to_memorize));
-            final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
+
+                //用戶若是透過搜尋框記憶單字的話，直接把單字帶入這裡的文字輸入框
+                if (!wordInputView.getText().toString().equals("")) {
+                    userInputView.setText(wordToMemorize);
+                }
+
+        final CFAlertDialog.Builder chooseCustomizedOrPredefinedNotificationAlertDialogBuilder = new CFAlertDialog.Builder(MainActivity.this)
                     .setDialogStyle(CFAlertDialog.CFAlertStyle.ALERT)
                     .setDialogBackgroundColor(Color.parseColor("#fafcd7"))
                     .setCornerRadius(50)
