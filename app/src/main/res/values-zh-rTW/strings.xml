@@ -454,7 +454,7 @@
     <string name="Update_failed">下載出錯，請檢查網路或重試</string>
     <string name="Downloading">下載中</string>
     <string name="Update_released">百典通已推出新版本，請立即更新</string>
-    <string name="External_storage_permission">已授予權限，將重啟軟體</string>
+    <string name="External_storage_permission">已成功授予權限。</string>
     <string name="American_heritage_dictionary">美國傳統英語字典</string>
     <string name="Buddhism_dictionary">佛教術語英漢漢英字典</string>
     <string name="Word_sense">Word Sense英英字典</string>

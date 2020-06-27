@@ -314,7 +314,7 @@
     <string name="YouGlish">YouGlish</string>
     <string name="Exit_app">Exit</string>
     <string name="Other_functions">Other Functions</string>
-    <string name="External_storage_permission">Permission allowed. Relaunching.</string>
+    <string name="External_storage_permission">Permission allowed.</string>
     <string name="DA_JP_TW_Dictionary">DA Japanese-Chinese Dictionary</string>
     <string name="DA_TW_JP_Dictionary">DA Chinese-Japanese Dicitonary</string>
     <string name="Speech_input">Speech input</string>

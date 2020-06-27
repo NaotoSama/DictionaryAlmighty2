@@ -70,7 +70,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
 import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.google.firebase.remoteconfig.BuildConfig;
@@ -95,16 +94,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-import constant.UiType;
-import listener.Md5CheckResultListener;
-import listener.UpdateDownloadListener;
-import model.UiConfig;
-import model.UpdateConfig;
 import pl.droidsonroids.gif.GifImageView;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
-import update.UpdateAppUtils;
 
 import static com.dictionaryalmighty.android.dictionaryalmighty2.UserInputHistory.presetNotificationTimingsList;
 
@@ -212,7 +205,8 @@ public class MainActivity extends AppCompatActivity {
                                                                                 //static SharedPreferences userInputLoginPasswordSharedPreferences;  //儲存用戶登入密碼的SharedPreferences
                                                                                 //static SharedPreferences googleIdTokenSharedPreferences;  //儲存用戶firebase UID的SharedPreferences
                                                                                 //static SharedPreferences logInProviderCheckCodeSharedPreferences;  //儲存用戶以哪種方式登入帳戶
-    SharedPreferences savedAppVersionCodeSharedPreferences; //For storing savedAppVersionCode，用來判斷用戶是否為首次安裝
+                                                                                //SharedPreferences savedAppVersionCodeSharedPreferences; //For storing savedAppVersionCode，用來判斷用戶是否為首次安裝
+    SharedPreferences firstRunSharedPreference = null; //檢查用戶是否為首次安裝
     SharedPreferences proOrSimplifiedSwitchCodePreferences; //儲存用戶使用專業版或簡易版的SharedPreferences
     SharedPreferences defaultDictionarySearchSharedPreferences;//儲存單一預設字典的SharedPreferences
     SharedPreferences defaultComboDictionarySearchSharedPreferences;//儲存三個預設字典的SharedPreferences
@@ -269,11 +263,17 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 檢查是否是首次安裝App，是的話就顯示教學模式
          */
+        firstRunSharedPreference = getSharedPreferences("com.dictionaryalmighty.android.dictionaryalmighty2", MODE_PRIVATE);
         //延遲5秒顯示教學模式(等元件都載入完)
         Runnable r = new Runnable() {
             @Override
             public void run() {
-                checkFirstRun(); //檢查用戶是否為首次安裝
+             //檢查用戶是否為首次安裝
+                if (firstRunSharedPreference.getBoolean("firstrun", true)) {
+                    // Do first run stuff here then set 'firstrun' as false
+                    showTutorSequence();
+                    firstRunSharedPreference.edit().putBoolean("firstrun", false).apply();
+                }
             }
         };
         Handler h =new Handler();
@@ -1233,15 +1233,15 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d(LOG_TAG, "Write Permission Failed");
                 Toast.makeText(this,getString(R.string.External_storage_permission), Toast.LENGTH_LONG).show();
-                //延遲3.5秒重啟App
-                Runnable r = new Runnable() {
-                    @Override
-                    public void run() {
-                        relaunchApp();
-                    }
-                };
-                Handler h =new Handler();
-                h.postDelayed(r, 3500);
+                                                                                                    ////延遲3.5秒重啟App
+                                                                                                    //Runnable r = new Runnable() {
+                                                                                                    //    @Override
+                                                                                                    //    public void run() {
+                                                                                                    //        relaunchApp();
+                                                                                                    //    }
+                                                                                                    //};
+                                                                                                    //Handler h =new Handler();
+                                                                                                    //h.postDelayed(r, 3500);
             }
         }
     }
@@ -7633,7 +7633,8 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             //startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(FriebaseUrl))); //調用瀏覽器瀏覽FriebaseUrl
-                            updateAPK(); //跳出App更新介面
+
+                                                                                                    //updateAPK(); //跳出App更新介面
                         }
 
 
@@ -7784,83 +7785,83 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    //==============================================================================================
-    // 檢查用戶是否是首次安裝App的Helper Method
-    //==============================================================================================
-    private void checkFirstRun() {
+                                                                                                    ////==============================================================================================
+                                                                                                    //// 檢查用戶是否是首次安裝App的Helper Method
+                                                                                                    ////==============================================================================================
+                                                                                                    //private void checkFirstRun() {
+                                                                                                    //
+                                                                                                    //    final String PREFS_NAME = "MyPrefsFile";
+                                                                                                    //    final String PREF_VERSION_CODE_KEY = "version_code";
+                                                                                                    //    final int DOESNT_EXIST = -1;
+                                                                                                    //
+                                                                                                    //    // Get current version code
+                                                                                                    //    int currentAppVersionCode = BuildConfig.VERSION_CODE;
+                                                                                                    //
+                                                                                                    //    // Get saved version code
+                                                                                                    //    savedAppVersionCodeSharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+                                                                                                    //    int savedAppVersionCode = savedAppVersionCodeSharedPreferences.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
+                                                                                                    //
+                                                                                                    //    // Check for first run or upgrade
+                                                                                                    //    if (currentAppVersionCode == savedAppVersionCode) {
+                                                                                                    //        // This is just a normal run
+                                                                                                    //        return;
+                                                                                                    //
+                                                                                                    //    } else if (savedAppVersionCode == DOESNT_EXIST) {
+                                                                                                    //        // This is a new install (or the user cleared the shared preferences)
+                                                                                                    //        showTutorSequence();
+                                                                                                    //
+                                                                                                    //    } else if (currentAppVersionCode > savedAppVersionCode) {
+                                                                                                    //        // This is an upgrade
+                                                                                                    //        return;
+                                                                                                    //    }
+                                                                                                    //
+                                                                                                    //    // Update the shared preferences with the current version code
+                                                                                                    //    savedAppVersionCodeSharedPreferences.edit().putInt(PREF_VERSION_CODE_KEY, currentAppVersionCode).apply();
+                                                                                                    //}
 
-        final String PREFS_NAME = "MyPrefsFile";
-        final String PREF_VERSION_CODE_KEY = "version_code";
-        final int DOESNT_EXIST = -1;
-
-        // Get current version code
-        int currentAppVersionCode = BuildConfig.VERSION_CODE;
-
-        // Get saved version code
-        savedAppVersionCodeSharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        int savedAppVersionCode = savedAppVersionCodeSharedPreferences.getInt(PREF_VERSION_CODE_KEY, DOESNT_EXIST);
-
-        // Check for first run or upgrade
-        if (currentAppVersionCode == savedAppVersionCode) {
-            // This is just a normal run
-            return;
-
-        } else if (savedAppVersionCode == DOESNT_EXIST) {
-            // This is a new install (or the user cleared the shared preferences)
-            showTutorSequence();
-
-        } else if (currentAppVersionCode > savedAppVersionCode) {
-            // This is an upgrade
-            return;
-        }
-
-        // Update the shared preferences with the current version code
-        savedAppVersionCodeSharedPreferences.edit().putInt(PREF_VERSION_CODE_KEY, currentAppVersionCode).apply();
-    }
 
 
-
-    //==============================================================================================
-    // App更新的Helper Method
-    //==============================================================================================
-    public void updateAPK() {
-
-        UpdateAppUtils.init(this);
-
-        UpdateConfig updateConfig = new UpdateConfig();
-        updateConfig.setCheckWifi(true);
-        updateConfig.setNeedCheckMd5(true);
-        updateConfig.setNotifyImgRes(R.drawable.ic_launcher_foreground);
-
-        UiConfig uiConfig = new UiConfig();
-        uiConfig.setUiType(UiType.PLENTIFUL);
-        uiConfig.setCancelBtnText(getResources().getString(R.string.Update_later));
-        uiConfig.setDownloadFailText(getResources().getString(R.string.Update_failed));
-        uiConfig.setDownloadingBtnText(getResources().getString(R.string.Downloading));
-
-        UpdateAppUtils
-                .getInstance()
-                .apkUrl(FriebaseUrl)
-                .updateTitle(getResources().getString(R.string.Update_released))
-                .updateContent(FirebaseContent)
-                .uiConfig(uiConfig)
-                .updateConfig(updateConfig)
-                .setMd5CheckResultListener(new Md5CheckResultListener() {
-                    @Override
-                    public void onResult(boolean result) { }
-                })
-                .setUpdateDownloadListener(new UpdateDownloadListener() {
-                    @Override
-                    public void onStart() { }
-                    @Override
-                    public void onDownload(int progress) { }
-                    @Override
-                    public void onFinish() { }
-                    @Override
-                    public void onError(@NotNull Throwable e) { }
-                })
-                .update();
-    }
+                                                                                                    ////==============================================================================================
+                                                                                                    //// App更新的Helper Method
+                                                                                                    ////==============================================================================================
+                                                                                                    //public void updateAPK() {
+                                                                                                    //
+                                                                                                    //    UpdateAppUtils.init(this);
+                                                                                                    //
+                                                                                                    //    UpdateConfig updateConfig = new UpdateConfig();
+                                                                                                    //    updateConfig.setCheckWifi(true);
+                                                                                                    //    updateConfig.setNeedCheckMd5(true);
+                                                                                                    //    updateConfig.setNotifyImgRes(R.drawable.ic_launcher_foreground);
+                                                                                                    //
+                                                                                                    //    UiConfig uiConfig = new UiConfig();
+                                                                                                    //    uiConfig.setUiType(UiType.PLENTIFUL);
+                                                                                                    //    uiConfig.setCancelBtnText(getResources().getString(R.string.Update_later));
+                                                                                                    //    uiConfig.setDownloadFailText(getResources().getString(R.string.Update_failed));
+                                                                                                    //    uiConfig.setDownloadingBtnText(getResources().getString(R.string.Downloading));
+                                                                                                    //
+                                                                                                    //    UpdateAppUtils
+                                                                                                    //            .getInstance()
+                                                                                                    //            .apkUrl(FriebaseUrl)
+                                                                                                    //            .updateTitle(getResources().getString(R.string.Update_released))
+                                                                                                    //            .updateContent(FirebaseContent)
+                                                                                                    //            .uiConfig(uiConfig)
+                                                                                                    //            .updateConfig(updateConfig)
+                                                                                                    //            .setMd5CheckResultListener(new Md5CheckResultListener() {
+                                                                                                    //                @Override
+                                                                                                    //                public void onResult(boolean result) { }
+                                                                                                    //            })
+                                                                                                    //            .setUpdateDownloadListener(new UpdateDownloadListener() {
+                                                                                                    //                @Override
+                                                                                                    //                public void onStart() { }
+                                                                                                    //                @Override
+                                                                                                    //                public void onDownload(int progress) { }
+                                                                                                    //                @Override
+                                                                                                    //                public void onFinish() { }
+                                                                                                    //                @Override
+                                                                                                    //                public void onError(@NotNull Throwable e) { }
+                                                                                                    //            })
+                                                                                                    //            .update();
+                                                                                                    //}
 
 
 
