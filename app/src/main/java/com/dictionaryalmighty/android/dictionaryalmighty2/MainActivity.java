@@ -900,6 +900,9 @@ public class MainActivity extends AppCompatActivity {
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Japanese_name_dictionary, R.mipmap.japanese_name_dictionary));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Stack_exchange_Japanese_language, R.mipmap.stack_exchange));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Metapedia, R.mipmap.metapedia));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Nassi_gogen_chou, R.mipmap.nassi_gogen_chou));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Traditional_modern_japanese_food_dictionary, R.mipmap.traditional_modern_japanese_food_dictionary));
+        mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Local_japanese_food_dictionary, R.mipmap.local_japanese_food_dictionary));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Yomiwa_app, R.mipmap.yomiwa));
         mJapaneseDictionarySpinnerItemListOriginal.add(new DictionaryItem(R.string.Call_Japanese_food_dictionary, R.mipmap.japanese_food_dictionary));
 
@@ -3167,6 +3170,24 @@ public class MainActivity extends AppCompatActivity {
                     webViewBrowser.setVisibility(View.VISIBLE);
 
                 }else if (position == 32) {
+                    String NassiGogenChouUrl= "https://www.google.com/search?client=chrome&hs=NoK&sxsrf=ALeKk03sogZzW0VUbPUSFAsToctiTO97CQ%3A1595672772937&ei=xAgcX7jbOIHSmAXW243gAg&q="+searchKeyword+"+site%3Amobility-8074.at.webry.info&oq="+searchKeyword+"+site%3Amobility-8074.at.webry.info&gs_lcp=CgZwc3ktYWIQA1CitAFYorQBYP63AWgAcAB4AIABOIgBapIBATKYAQCgAQKgAQGqAQdnd3Mtd2l6wAEB&sclient=psy-ab&ved=0ahUKEwi4zbummOjqAhUBKaYKHdZtAywQ4dUDCAs&uact=5";
+                    webViewBrowser.loadUrl(NassiGogenChouUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 33) {
+                    String TraditionalAndModernJapaneseFoodDictionaryUrl= "https://japan-word.com/?s="+searchKeyword;
+                    webViewBrowser.loadUrl(TraditionalAndModernJapaneseFoodDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 34) {
+                    String LocalJapaneseFoodDictionaryUrl= "http://g-foods.info/zukan/product/search.html?keyword="+searchKeyword;
+                    webViewBrowser.loadUrl(LocalJapaneseFoodDictionaryUrl);
+                    searchResultWillBeDisplayedHere.setVisibility(View.GONE);
+                    webViewBrowser.setVisibility(View.VISIBLE);
+
+                }else if (position == 35) {
                     //呼叫第三方「Yomiwa」app
                     Intent callYomiwaAppIntent = getPackageManager().getLaunchIntentForPackage("com.yomiwa.yomiwa");
                     if (callYomiwaAppIntent != null) {
@@ -3209,7 +3230,7 @@ public class MainActivity extends AppCompatActivity {
                         h.postDelayed(r, 100);
 
                     }
-                } else if (position == 33) {
+                } else if (position == 36) {
                     //呼叫第三方「日本食物字典」app
                     Intent callJapaneseFoodDcitionaryAppIntent = getPackageManager().getLaunchIntentForPackage("com.st.japanfooddictionaryfree");
                     if (callJapaneseFoodDcitionaryAppIntent != null) {

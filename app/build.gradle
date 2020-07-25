@@ -29,8 +29,8 @@ android {
 //        applicationId "com.example.android.dictionaryalmighty2"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 15
-        versionName "1.1.3"
+        versionCode 16
+        versionName "1.1.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
     }
@@ -72,20 +72,20 @@ dependencies {
     implementation 'com.teprinciple:updateapputils:2.3.0'
 
     implementation 'com.google.android.gms:play-services-vision:20.1.0'
-    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
-    implementation 'androidx.work:work-runtime:2.3.4'
+    implementation 'androidx.work:work-runtime:2.4.0'
 
     implementation 'com.google.firebase:firebase-database:19.3.1'
     implementation 'com.firebaseui:firebase-ui-database:0.4.4'
-    implementation 'com.google.firebase:firebase-messaging:20.2.1'
+    implementation 'com.google.firebase:firebase-messaging:20.2.3'
     implementation 'com.google.firebase:firebase-dynamic-links:19.1.0'
     implementation 'com.google.firebase:firebase-storage:19.1.1'
-    implementation 'com.google.firebase:firebase-config:19.1.4'
-    implementation 'com.google.firebase:firebase-analytics:17.4.3'
-    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.firebase:firebase-config:19.2.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.4'
+    implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
 
     implementation 'com.facebook.android:facebook-android-sdk:6.0.0'
