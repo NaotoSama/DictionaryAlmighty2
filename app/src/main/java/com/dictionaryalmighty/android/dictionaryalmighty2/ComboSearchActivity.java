@@ -450,6 +450,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+ MainActivity.searchKeyword+".html";
                         comboSearchWebViewBrowser1.loadUrl(businessDictionaryUrl);
                         break;
+                    case "Idioms and Slang":
+                        String idiomsAndSlangDictionaryUrl= "https://www.idiomsandslang.com/?s="+ MainActivity.searchKeyword;
+                        comboSearchWebViewBrowser1.loadUrl(idiomsAndSlangDictionaryUrl);
+                        break;
                     case "Slang":
                         String slangDictionary= "http://www.yiym.com/?s="+ MainActivity.searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(slangDictionary);
@@ -601,10 +605,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                         String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+ MainActivity.searchKeyword+"/m0u/";
                         comboSearchWebViewBrowser1.loadUrl(gooDictionaryUrl);
                         break;
-                    case "Sanseido":
-                        String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
-                        comboSearchWebViewBrowser1.loadUrl(sanseidoUrl);
-                        break;
+                                                                                                    //case "Sanseido":
+                                                                                                    //    String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
+                                                                                                    //    comboSearchWebViewBrowser1.loadUrl(sanseidoUrl);
+                                                                                                    //    break;
                     case "Kotoba Bank":
                         String kotobank= "https://kotobank.jp/word/"+ MainActivity.searchKeyword;
                         comboSearchWebViewBrowser1.loadUrl(kotobank);
@@ -937,6 +941,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+ MainActivity.searchKeyword+".html";
                 comboSearchWebViewBrowser2.loadUrl(businessDictionaryUrl);
                 break;
+            case "Idioms and Slang":
+                String idiomsAndSlangDictionary= "https://www.idiomsandslang.com/?s="+ MainActivity.searchKeyword;
+                comboSearchWebViewBrowser2.loadUrl(idiomsAndSlangDictionary);
+                break;
             case "Slang":
                 String slangDictionary= "http://www.yiym.com/?s="+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(slangDictionary);
@@ -1088,10 +1096,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+ MainActivity.searchKeyword+"/m0u/";
                 comboSearchWebViewBrowser2.loadUrl(gooDictionaryUrl);
                 break;
-            case "Sanseido":
-                String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
-                comboSearchWebViewBrowser2.loadUrl(sanseidoUrl);
-                break;
+                                                                                                    //case "Sanseido":
+                                                                                                    //    String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
+                                                                                                    //    comboSearchWebViewBrowser2.loadUrl(sanseidoUrl);
+                                                                                                    //    break;
             case "Kotoba Bank":
                 String kotobank= "https://kotobank.jp/word/"+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser2.loadUrl(kotobank);
@@ -1424,6 +1432,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String businessDictionaryUrl= "http://www.businessdictionary.com/definition/"+ MainActivity.searchKeyword+".html";
                 comboSearchWebViewBrowser3.loadUrl(businessDictionaryUrl);
                 break;
+            case "Idioms and Slang":
+                String idiomsAndSlangDictionary= "https://www.idiomsandslang.com/?s="+ MainActivity.searchKeyword;
+                comboSearchWebViewBrowser3.loadUrl(idiomsAndSlangDictionary);
+                break;
             case "Slang":
                 String slangDictionary= "http://www.yiym.com/?s="+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(slangDictionary);
@@ -1575,10 +1587,10 @@ public class ComboSearchActivity extends AppCompatActivity {
                 String gooDictionaryUrl= "https://dictionary.goo.ne.jp/srch/jn/"+ MainActivity.searchKeyword+"/m0u/";
                 comboSearchWebViewBrowser3.loadUrl(gooDictionaryUrl);
                 break;
-            case "Sanseido":
-                String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
-                comboSearchWebViewBrowser3.loadUrl(sanseidoUrl);
-                break;
+                                                                                                    //case "Sanseido":
+                                                                                                    //    String sanseidoUrl= "http://www.sanseido.biz/sp/Search?target_words="+ MainActivity.searchKeyword+"&search_type=0&start_index=0&selected_dic=";
+                                                                                                    //    comboSearchWebViewBrowser3.loadUrl(sanseidoUrl);
+                                                                                                    //    break;
             case "Kotoba Bank":
                 String kotobank= "https://kotobank.jp/word/"+ MainActivity.searchKeyword;
                 comboSearchWebViewBrowser3.loadUrl(kotobank);

@@ -110,6 +110,7 @@
         <item>@string/Wordnik</item>
         <item>@string/Wiki_Dictionary</item>
         <item>@string/Business_Dictionary</item>
+        <item>@string/Idioms_and_slang</item>
         <item>@string/Slang</item>
         <item>@string/The_online_slang_dictionary</item>
         <item>@string/Idioms_4_you</item>
@@ -140,7 +141,7 @@
         <item>@string/DA_JP_TW_Dictionary</item>
         <item>@string/DA_TW_JP_Dictionary</item>
         <item>@string/Goo</item>
-        <item>@string/Sanseido</item>
+        <!--        <item>@string/Sanseido</item>-->
         <item>@string/Kotoba_Bank</item>
         <item>@string/J_Logos</item>
         <item>@string/Eijirou</item>
@@ -759,6 +760,7 @@
     <string name="Local_japanese_food_dictionary">Local Japanese Food Dictionary</string>
     <string name="Nassi_gogen_chou">Nassi Gogen Chou</string>
     <string name="Traditional_modern_japanese_food_dictionary">Traditional Modern Japanese Food Dictionary</string>
+    <string name="Idioms_and_slang">Idioms and Slang</string>
 
 </resources>
 
